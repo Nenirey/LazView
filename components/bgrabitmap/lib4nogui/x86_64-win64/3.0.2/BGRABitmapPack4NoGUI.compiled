@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Compiler Value="C:\lazarus\fpc\3.0.2\bin\x86_64-win64\fpc.exe" Date="1252944547"/>
+  <Params Value=" -MObjFPC -Scgi -O3 -OoREGVAR -l -vewnhibq -FuC:\lazarus\packager\units\x86_64-win64 -FuC:\lazarus\components\lazutils\lib\x86_64-win64 -FuC:\Users\Reinier\Documents\LazView\components\bgrabitmap\ -FUC:\Users\Reinier\Documents\LazView\components\bgrabitmap\lib4nogui\x86_64-win64\3.0.2\ -dBGRABITMAP_DONT_USE_LCL bgrabitmappack4nogui.pas"/>
+  <Complete Value="False" MainPPUExists="False"/>
+</CONFIG>

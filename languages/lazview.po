@@ -1,0 +1,553 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+#: tform1.caption
+msgid "LazView"
+msgstr ""
+
+#: tform1.label1.caption
+msgctxt "TFORM1.LABEL1.CAPTION"
+msgid "0/0"
+msgstr ""
+
+#: tform1.label2.caption
+msgctxt "TFORM1.LABEL2.CAPTION"
+msgid "0/0"
+msgstr ""
+
+#: tform1.menuitem1.caption
+msgid "Archivo"
+msgstr ""
+
+#: tform1.menuitem10.caption
+msgid "Abrir"
+msgstr ""
+
+#: tform1.menuitem12.caption
+msgid "Editar"
+msgstr ""
+
+#: tform1.menuitem13.caption
+msgid "Pegar"
+msgstr ""
+
+#: tform1.menuitem14.caption
+msgid "Copiar"
+msgstr ""
+
+#: tform1.menuitem15.caption
+msgid "Efecto"
+msgstr ""
+
+#: tform1.menuitem16.caption
+msgid "Guardar como..."
+msgstr ""
+
+#: tform1.menuitem17.caption
+msgid "Blanco y negro"
+msgstr ""
+
+#: tform1.menuitem2.caption
+msgid "Herramientas"
+msgstr ""
+
+#: tform1.menuitem20.caption
+msgctxt "tform1.menuitem20.caption"
+msgid "Invertir color (RGB)-(BGR)"
+msgstr ""
+
+#: tform1.menuitem21.caption
+msgctxt "tform1.menuitem21.caption"
+msgid "Invertir color (RGB)-(RBG)"
+msgstr ""
+
+#: tform1.menuitem22.caption
+msgctxt "tform1.menuitem22.caption"
+msgid "Invertit color (RGB)-(GRB)"
+msgstr ""
+
+#: tform1.menuitem23.caption
+msgid "Quitar rojo"
+msgstr ""
+
+#: tform1.menuitem24.caption
+msgid "Quitar verde"
+msgstr ""
+
+#: tform1.menuitem25.caption
+msgid "Quitar azul"
+msgstr ""
+
+#: tform1.menuitem27.caption
+msgid "Ruido"
+msgstr ""
+
+#: tform1.menuitem28.caption
+msgid "Television"
+msgstr ""
+
+#: tform1.menuitem29.caption
+msgid "Ver"
+msgstr ""
+
+#: tform1.menuitem3.caption
+msgctxt "TFORM1.MENUITEM3.CAPTION"
+msgid "Salir"
+msgstr ""
+
+#: tform1.menuitem30.caption
+msgid "Vistas previas en miniatura (experimental)"
+msgstr ""
+
+#: tform1.menuitem31.caption
+msgid "Redimensionar..."
+msgstr ""
+
+#: tform1.menuitem33.caption
+msgctxt "tform1.menuitem33.caption"
+msgid "Invertir color (RGB)-(BRG)"
+msgstr ""
+
+#: tform1.menuitem34.caption
+msgctxt "tform1.menuitem34.caption"
+msgid "Invertir color (RGB)-(GBR)"
+msgstr ""
+
+#: tform1.menuitem36.caption
+msgid "Brillo +"
+msgstr ""
+
+#: tform1.menuitem37.caption
+msgid "Brillo -"
+msgstr ""
+
+#: tform1.menuitem39.caption
+msgctxt "tform1.menuitem39.caption"
+msgid "Resaltar rojo"
+msgstr ""
+
+#: tform1.menuitem4.caption
+msgid "Ayuda"
+msgstr ""
+
+#: tform1.menuitem40.caption
+msgctxt "tform1.menuitem40.caption"
+msgid "Resaltar verde"
+msgstr ""
+
+#: tform1.menuitem41.caption
+msgctxt "tform1.menuitem41.caption"
+msgid "Resaltar azul"
+msgstr ""
+
+#: tform1.menuitem44.caption
+msgid "Ir a la imagen numero..."
+msgstr ""
+
+#: tform1.menuitem46.caption
+msgid "Antialiasing"
+msgstr ""
+
+#: tform1.menuitem48.caption
+msgid "Establecer como fondo de escritorio"
+msgstr ""
+
+#: tform1.menuitem49.caption
+msgid "Expandida"
+msgstr ""
+
+#: tform1.menuitem5.caption
+msgid "Acerca de..."
+msgstr ""
+
+#: tform1.menuitem50.caption
+msgid "Centrado"
+msgstr ""
+
+#: tform1.menuitem51.caption
+msgid "Mosaico"
+msgstr ""
+
+#: tform1.menuitem52.caption
+msgid "Ajustado"
+msgstr ""
+
+#: tform1.menuitem53.caption
+msgid "Personalizado..."
+msgstr ""
+
+#: tform1.menuitem54.caption
+msgid "Imagen estirada"
+msgstr ""
+
+#: tform1.menuitem55.caption
+msgctxt "tform1.menuitem55.caption"
+msgid "Ventana de efectos"
+msgstr ""
+
+#: tform1.menuitem56.caption
+msgctxt "tform1.menuitem56.caption"
+msgid "Negativo"
+msgstr ""
+
+#: tform1.menuitem57.caption
+msgid "Suavizado"
+msgstr ""
+
+#: tform1.menuitem58.caption
+msgid "Modo real"
+msgstr ""
+
+#: tform1.menuitem59.caption
+msgid "Mostrar arbol de directorios"
+msgstr ""
+
+#: tform1.menuitem6.caption
+msgid "Espejo horizontal"
+msgstr ""
+
+#: tform1.menuitem60.caption
+msgid "Seleccionar"
+msgstr ""
+
+#: tform1.menuitem61.caption
+msgid "Barra de herramientas"
+msgstr ""
+
+#: tform1.menuitem62.caption
+msgid "Barra de estado"
+msgstr ""
+
+#: tform1.menuitem63.caption
+msgctxt "tform1.menuitem63.caption"
+msgid "Tamaño de las miniaturas"
+msgstr ""
+
+#: tform1.menuitem64.caption
+msgid "32x32"
+msgstr ""
+
+#: tform1.menuitem65.caption
+msgid "64x64"
+msgstr ""
+
+#: tform1.menuitem66.caption
+msgid "128x128"
+msgstr ""
+
+#: tform1.menuitem67.caption
+msgid "Fondo en mosaico"
+msgstr ""
+
+#: tform1.menuitem68.caption
+msgctxt "tform1.menuitem68.caption"
+msgid "Remolino"
+msgstr ""
+
+#: tform1.menuitem7.caption
+msgid "Espejo vertical"
+msgstr ""
+
+#: tform1.menuitem8.caption
+msgctxt "TFORM1.MENUITEM8.CAPTION"
+msgid "Rotar a la izquierda"
+msgstr ""
+
+#: tform1.menuitem9.caption
+msgctxt "TFORM1.MENUITEM9.CAPTION"
+msgid "Rotar a la derecha"
+msgstr ""
+
+#: tform1.statusbar1.panels[0].text
+msgctxt "tform1.statusbar1.panels[0].text"
+msgid "0/0"
+msgstr ""
+
+#: tform1.statusbar1.panels[1].text
+msgid "Resolucion: 0x0"
+msgstr ""
+
+#: tform1.statusbar1.panels[2].text
+msgid "Frame 0/0"
+msgstr ""
+
+#: tform1.statusbar1.panels[3].text
+msgctxt "tform1.statusbar1.panels[3].text"
+msgid "Tamaño: 0"
+msgstr ""
+
+#: tform1.statusbar1.panels[4].text
+msgctxt "TFORM1.STATUSBAR1.PANELS[4].TEXT"
+msgid "Tiempo: 0ms"
+msgstr ""
+
+#: tform1.statusbar1.simpletext
+msgid "Marco 1.0"
+msgstr ""
+
+#: tform1.toolbutton1.hint
+msgid "Anterior"
+msgstr ""
+
+#: tform1.toolbutton10.hint
+msgid "Reducir"
+msgstr ""
+
+#: tform1.toolbutton11.hint
+msgid "Ajustar"
+msgstr ""
+
+#: tform1.toolbutton14.hint
+msgid "Zoom 100%"
+msgstr ""
+
+#: tform1.toolbutton15.hint
+msgid "Recargar imagen de disco"
+msgstr ""
+
+#: tform1.toolbutton18.caption
+msgid "ToolButton18"
+msgstr ""
+
+#: tform1.toolbutton19.caption
+msgid "ToolButton19"
+msgstr ""
+
+#: tform1.toolbutton2.hint
+msgid "Siguiente"
+msgstr ""
+
+#: tform1.toolbutton20.caption
+msgid "ToolButton20"
+msgstr ""
+
+#: tform1.toolbutton21.caption
+msgid "ToolButton21"
+msgstr ""
+
+#: tform1.toolbutton22.caption
+msgid "ToolButton22"
+msgstr ""
+
+#: tform1.toolbutton23.caption
+msgid "ToolButton23"
+msgstr ""
+
+#: tform1.toolbutton24.caption
+msgid "ToolButton24"
+msgstr ""
+
+#: tform1.toolbutton24.hint
+msgid "Estirar"
+msgstr ""
+
+#: tform1.toolbutton25.caption
+msgid "ToolButton25"
+msgstr ""
+
+#: tform1.toolbutton26.caption
+msgid "ToolButton26"
+msgstr ""
+
+#: tform1.toolbutton26.hint
+msgid "Speed down"
+msgstr ""
+
+#: tform1.toolbutton27.caption
+msgid "ToolButton27"
+msgstr ""
+
+#: tform1.toolbutton27.hint
+msgid "Speed up"
+msgstr ""
+
+#: tform1.toolbutton3.hint
+msgid "Pantalla completa"
+msgstr ""
+
+#: tform1.toolbutton4.hint
+msgid "Invertir Horizontalmente"
+msgstr ""
+
+#: tform1.toolbutton5.hint
+msgid "Invertir Verticalmente"
+msgstr ""
+
+#: tform1.toolbutton6.hint
+msgctxt "tform1.toolbutton6.hint"
+msgid "Rotar a la izquierda"
+msgstr ""
+
+#: tform1.toolbutton7.hint
+msgctxt "tform1.toolbutton7.hint"
+msgid "Rotar a la derecha"
+msgstr ""
+
+#: tform1.toolbutton8.hint
+msgctxt "tform1.toolbutton8.hint"
+msgid "Salir"
+msgstr ""
+
+#: tform1.toolbutton9.hint
+msgid "Aumentar"
+msgstr ""
+
+#: tform2.caption
+msgid "Redimensionar"
+msgstr ""
+
+#: tform2.label1.caption
+msgid "Ancho:"
+msgstr ""
+
+#: tform2.label2.caption
+msgid "Alto:"
+msgstr ""
+
+#: tform2.togglebox1.caption
+msgid "]"
+msgstr ""
+
+#: tform3.caption
+msgid "Calidad"
+msgstr ""
+
+#: tform3.label1.caption
+msgid "100"
+msgstr ""
+
+#: tform4.button1.caption
+msgid "Escala de grises"
+msgstr ""
+
+#: tform4.button10.caption
+msgctxt "TFORM4.BUTTON10.CAPTION"
+msgid "RGB -> BRG"
+msgstr ""
+
+#: tform4.button11.caption
+msgid "Suavizar"
+msgstr ""
+
+#: tform4.button12.caption
+msgid "Realzar"
+msgstr ""
+
+#: tform4.button13.caption
+msgctxt "TFORM4.BUTTON13.CAPTION"
+msgid "Negativo"
+msgstr ""
+
+#: tform4.button14.caption
+msgid "Plane (lento)"
+msgstr ""
+
+#: tform4.button15.caption
+msgid "Contorno"
+msgstr ""
+
+#: tform4.button16.caption
+msgid "Cilindro"
+msgstr ""
+
+#: tform4.button17.caption
+msgid "Emboss"
+msgstr ""
+
+#: tform4.button18.caption
+msgid "Emboss high light"
+msgstr ""
+
+#: tform4.button19.caption
+msgid "Normalizar"
+msgstr ""
+
+#: tform4.button2.caption
+msgctxt "TFORM4.BUTTON2.CAPTION"
+msgid "Resaltar rojo"
+msgstr ""
+
+#: tform4.button20.caption
+msgid "Esfera"
+msgstr ""
+
+#: tform4.button21.caption
+msgid "Median"
+msgstr ""
+
+#: tform4.button22.caption
+msgid "Zoom inteligente [3]"
+msgstr ""
+
+#: tform4.button23.caption
+msgctxt "tform4.button23.caption"
+msgid "Remolino"
+msgstr ""
+
+#: tform4.button24.caption
+msgid "Pixelar"
+msgstr ""
+
+#: tform4.button25.caption
+msgid "Test"
+msgstr ""
+
+#: tform4.button3.caption
+msgctxt "TFORM4.BUTTON3.CAPTION"
+msgid "Resaltar verde"
+msgstr ""
+
+#: tform4.button4.caption
+msgctxt "TFORM4.BUTTON4.CAPTION"
+msgid "Resaltar azul"
+msgstr ""
+
+#: tform4.button5.caption
+msgid "Recargar"
+msgstr ""
+
+#: tform4.button6.caption
+msgctxt "TFORM4.BUTTON6.CAPTION"
+msgid "RGB -> BGR"
+msgstr ""
+
+#: tform4.button7.caption
+msgctxt "TFORM4.BUTTON7.CAPTION"
+msgid "RGB -> RBG"
+msgstr ""
+
+#: tform4.button8.caption
+msgctxt "TFORM4.BUTTON8.CAPTION"
+msgid "RGB -> GRB"
+msgstr ""
+
+#: tform4.button9.caption
+msgctxt "TFORM4.BUTTON9.CAPTION"
+msgid "RGB -> GBR"
+msgstr ""
+
+#: tform4.caption
+msgid "Efectos y filtros"
+msgstr ""
+
+#: tform4.groupbox1.caption
+msgid "Change colors"
+msgstr ""
+
+#: tform5.edit1.text
+msgid "0"
+msgstr ""
+
+#: tform5.label1.caption
+msgid "Numero de la imagen:"
+msgstr ""
+
+#: tform6.caption
+msgctxt "tform6.caption"
+msgid "Tamaño de las miniaturas"
+msgstr ""
+
+#: tform6.label1.caption
+msgid "Tamaño de las miniaturas (ancho x alto):"
+msgstr ""
+
