@@ -36,7 +36,7 @@ var
   psw:Longint=1;
   psh:Longint=1;
 implementation
-uses fmain;
+uses Unit1;
 {$R *.lfm}
 
 { TForm2 }

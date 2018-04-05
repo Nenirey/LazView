@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CONFIG>
-  <Compiler Value="C:\lazarus\fpc\3.0.4\bin\i386-win32\fpc.exe" Date="1258650690"/>
-  <Params Value=" -MObjFPC -Scgi -O3 -OoREGVAR -l -vewnhibq -FuC:\lazarus\packager\units\i386-win32 -FuC:\lazarus\components\lazutils\lib\i386-win32 -FuC:\lazarus\lcl\units\i386-win32 -FuC:\lazarus\lcl\units\i386-win32\win32 &quot;-FuC:\Users\Reinier Romero Mir\Documents\LazView\components\bgrabitmap\&quot; &quot;-FUC:\Users\Reinier Romero Mir\Documents\LazView\components\bgrabitmap\lib\i386-win32\3.0.4\&quot; -dLCL -dLCLwin32 bgrabitmappack.pas"/>
-</CONFIG>

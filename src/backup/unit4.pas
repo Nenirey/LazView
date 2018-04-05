@@ -78,7 +78,7 @@ var
 
 implementation
 
-uses fmain;
+uses Unit1;
 
 {$R *.lfm}
 

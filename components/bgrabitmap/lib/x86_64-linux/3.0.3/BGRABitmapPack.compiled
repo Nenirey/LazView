@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CONFIG>
-  <Compiler Value="/usr/bin/fpc" Date="1496649101"/>
-  <Params Value=" -MObjFPC -Scgi -Cg -O3 -OoREGVAR -l -vewnhibq -Fu/home/reinier/.lazarus/lib/units/x86_64-linux -Fu/home/reinier/.lazarus/lib/LazUtils/lib/x86_64-linux -Fu/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux -Fu/home/reinier/.lazarus/lib/units/x86_64-linux/gtk2 -Fu/home/reinier/LazView3/components/bgrabitmap/ -FU/home/reinier/LazView3/components/bgrabitmap/lib/x86_64-linux/3.0.3/ -dLCL -dLCLgtk2 bgrabitmappack.pas"/>
-</CONFIG>

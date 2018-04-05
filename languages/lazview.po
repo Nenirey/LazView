@@ -140,6 +140,10 @@ msgctxt "tform1.menuitem41.caption"
 msgid "Resaltar azul"
 msgstr ""
 
+#: tform1.menuitem43.caption
+msgid "Modo compacto"
+msgstr ""
+
 #: tform1.menuitem44.caption
 msgid "Ir a la imagen numero..."
 msgstr ""

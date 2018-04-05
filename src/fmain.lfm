@@ -1,7 +1,7 @@
-object Form1: TForm1
-  Left = 217
+object frmain: Tfrmain
+  Left = 356
   Height = 480
-  Top = 178
+  Top = 144
   Width = 640
   ActiveControl = ShellTreeView1
   Caption = 'LazView'
@@ -186,7 +186,7 @@ object Form1: TForm1
       Width = 637
       ClientWidth = 637
       ClientHeight = 208
-      object ScrollBox2: TScrollBox
+      object sboxthumb: TScrollBox
         Left = 0
         Height = 208
         Top = 0
@@ -202,10 +202,10 @@ object Form1: TForm1
         Color = clBlack
         ParentColor = False
         TabOrder = 0
-        OnMouseDown = ScrollBox2MouseDown
-        OnMouseLeave = ScrollBox2MouseLeave
-        OnMouseMove = ScrollBox2MouseMove
-        OnMouseUp = ScrollBox2MouseUp
+        OnMouseDown = sboxthumbMouseDown
+        OnMouseLeave = sboxthumbMouseLeave
+        OnMouseMove = sboxthumbMouseMove
+        OnMouseUp = sboxthumbMouseUp
       end
     end
   end
@@ -402,7 +402,7 @@ object Form1: TForm1
       Left = 24
       Top = 2
       ImageIndex = 18
-      OnClick = MenuItem30Click
+      OnClick = mnuShowThumbsClick
     end
     object ToolButton18: TToolButton
       Left = 285
@@ -1493,11 +1493,11 @@ object Form1: TForm1
     end
     object MenuItem29: TMenuItem
       Caption = 'Ver'
-      object MenuItem30: TMenuItem
+      object mnuShowThumbs: TMenuItem
         Caption = 'Vistas previas en miniatura (experimental)'
         Checked = True
         ShortCut = 77
-        OnClick = MenuItem30Click
+        OnClick = mnuShowThumbsClick
       end
       object MenuItem63: TMenuItem
         Caption = 'Tamaño de las miniaturas'
