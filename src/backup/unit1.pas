@@ -1,4 +1,4 @@
-unit fmain;
+unit Unit1;
 
 {$mode objfpc}{$H+}
 
@@ -14,16 +14,16 @@ uses
 
 type
 
-  { Tfrmain }
+  { TForm1 }
 
-  Tfrmain = class(TForm)
+  TForm1 = class(TForm)
     Image1: TImage;
     ImageList1: TImageList;
     Label1: TLabel;
     Label2: TLabel;
     MainMenu1: TMainMenu;
     MenuItem1: TMenuItem;
-    mnufileopen: TMenuItem;
+    MenuItem10: TMenuItem;
     MenuItem11: TMenuItem;
     MenuItem12: TMenuItem;
     MenuItem13: TMenuItem;
@@ -45,7 +45,7 @@ type
     MenuItem28: TMenuItem;
     MenuItem29: TMenuItem;
     MenuItem3: TMenuItem;
-    mnuShowThumbs: TMenuItem;
+    MenuItem30: TMenuItem;
     MenuItem31: TMenuItem;
     MenuItem32: TMenuItem;
     MenuItem33: TMenuItem;
@@ -92,13 +92,13 @@ type
     MenuItem8: TMenuItem;
     MenuItem9: TMenuItem;
     OpenPictureDialog1: TOpenPictureDialog;
-    psVertical: TPairSplitter;
-    pssImagen: TPairSplitterSide;
-    pssThumbs: TPairSplitterSide;
+    PairSplitter1: TPairSplitter;
+    PairSplitterSide1: TPairSplitterSide;
+    PairSplitterSide2: TPairSplitterSide;
     PopupMenu1: TPopupMenu;
     SavePictureDialog1: TSavePictureDialog;
     ScrollBox1: TScrollBox;
-    sboxthumb: TScrollBox;
+    ScrollBox2: TScrollBox;
     Shape1: TShape;
     ShellTreeView1: TShellTreeView;
     Splitter1: TSplitter;
@@ -115,8 +115,8 @@ type
     ToolButton13: TToolButton;
     ToolButton14: TToolButton;
     ToolButton15: TToolButton;
-    tbShowTreeView: TToolButton;
-    tbShowThumbs: TToolButton;
+    ToolButton16: TToolButton;
+    ToolButton17: TToolButton;
     ToolButton18: TToolButton;
     ToolButton19: TToolButton;
     ToolButton2: TToolButton;
@@ -129,8 +129,8 @@ type
     ToolButton26: TToolButton;
     ToolButton27: TToolButton;
     ToolButton3: TToolButton;
-    tbFlipHorizontal: TToolButton;
-    tbFlipVertical: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
     ToolButton6: TToolButton;
     ToolButton7: TToolButton;
     ToolButton8: TToolButton;
@@ -167,7 +167,7 @@ type
     procedure MenuItem27Click(Sender: TObject);
     procedure MenuItem28Click(Sender: TObject);
     procedure MenuItem2Click(Sender: TObject);
-    procedure mnuShowThumbsClick(Sender: TObject);
+    procedure MenuItem30Click(Sender: TObject);
     procedure MenuItem31Click(Sender: TObject);
     procedure MenuItem33Click(Sender: TObject);
     procedure MenuItem34Click(Sender: TObject);
@@ -215,12 +215,12 @@ type
     procedure ScrollBox1MouseWheel(Sender: TObject; Shift: TShiftState;
       WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
     procedure ScrollBox1Paint(Sender: TObject);
-    procedure sboxthumbMouseDown(Sender: TObject; Button: TMouseButton;
+    procedure ScrollBox2MouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
-    procedure sboxthumbMouseLeave(Sender: TObject);
-    procedure sboxthumbMouseMove(Sender: TObject; Shift: TShiftState; X,
+    procedure ScrollBox2MouseLeave(Sender: TObject);
+    procedure ScrollBox2MouseMove(Sender: TObject; Shift: TShiftState; X,
       Y: Integer);
-    procedure sboxthumbMouseUp(Sender: TObject; Button: TMouseButton;
+    procedure ScrollBox2MouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure ShellTreeView1Change(Sender: TObject; Node: TTreeNode);
     procedure ShellTreeView1Click(Sender: TObject);
@@ -240,7 +240,7 @@ type
     procedure ToolButton13Click(Sender: TObject);
     procedure ToolButton14Click(Sender: TObject);
     procedure ToolButton15Click(Sender: TObject);
-    procedure tbShowTreeViewClick(Sender: TObject);
+    procedure ToolButton16Click(Sender: TObject);
     procedure ToolButton18Click(Sender: TObject);
     procedure ToolButton19Click(Sender: TObject);
     procedure ToolButton1Click(Sender: TObject);
@@ -251,8 +251,8 @@ type
     procedure ToolButton27Click(Sender: TObject);
     procedure ToolButton2Click(Sender: TObject);
     procedure ToolButton3Click(Sender: TObject);
-    procedure tbFlipHorizontalClick(Sender: TObject);
-    procedure tbFlipVerticalClick(Sender: TObject);
+    procedure ToolButton4Click(Sender: TObject);
+    procedure ToolButton5Click(Sender: TObject);
     procedure ToolButton6Click(Sender: TObject);
     procedure ToolButton7Click(Sender: TObject);
     procedure ToolButton8Click(Sender: TObject);
@@ -294,7 +294,7 @@ Const
   mosaicsize=10;
 
 var
-  frmain: Tfrmain;
+  Form1: TForm1;
   full,ifgif,startdraw,startselect,compactmode:boolean;
   flist:TStringList;
   nfile,ifile,ndir,idir:LongInt;
@@ -317,7 +317,6 @@ var
   title:string;
   ifallthumbs:boolean;
   realimgwidth,realimgheight:LongInt;
-  inprocessanim:boolean;
   function UTF16LongName(const FileName: String): UnicodeString;
   procedure filterimagen(filter:integer);
   procedure efectimagen(efect:integer;nivel:integer=5000);
@@ -326,7 +325,7 @@ implementation
 
 {$R *.lfm}
 
-{ Tfrmain }
+{ TForm1 }
 
 function UTF16LongName(const FileName: String): UnicodeString;
 var
@@ -344,68 +343,6 @@ begin
       Inc(Temp);
   end;
   if ((Temp - 1)^ = DriveSeparator) then Result:= Result + '\';
-end;
-
-procedure scrollanim;
-var
-  center,i:integer;
-begin
-  inprocessanim:=true;
-  i:=frmain.sboxthumb.HorzScrollBar.Position;
-  center:=(frmain.sboxthumb.Components[ifile] as TControl).Left-Round(frmain.pssThumbs.Width/2)+Round(thumbsize/2)+1;
-  if i<center then
-  begin
-    //ShowMessage('Left');
-    if (center-i)>200 then
-      i:=center;
-    while i<center do
-    begin
-      {$IFDEF WINDOWS}
-      sleep(1);
-      {$ELSE}
-      sleep(10);
-      {$ENDIF}
-      if (center-i)>100 then
-        i:=i+50
-      else
-      begin
-        if (center-i)>20 then
-          i:=i+10
-        else
-          i:=i+1;
-      end;
-      frmain.sboxthumb.HorzScrollBar.Position:=i;
-      Application.ProcessMessages;
-    end;
-  end;
-
-  if i>center then
-  begin
-    //ShowMessage('Right');
-    if i>(center+200) then
-      i:=center;
-    while  i>center do
-    begin
-      {$IFDEF WINDOWS}
-      sleep(1);
-      {$ELSE}
-      sleep(10);
-      {$ENDIF}
-      if i>(center+100) then
-        i:=i-50
-      else
-      begin
-        if i>(center+20) then
-          i:=i-10
-        else
-          i:=i-1;
-      end;
-      frmain.sboxthumb.HorzScrollBar.Position:=i;
-      Application.ProcessMessages;
-    end;
-  end;
-  frmain.sboxthumb.HorzScrollBar.Position:=(frmain.sboxthumb.Components[ifile] as TControl).Left-Round(frmain.pssThumbs.Width/2)+Round(thumbsize/2)+1;
-  inprocessanim:=false;
 end;
 
 procedure rendermosaic;
@@ -442,16 +379,16 @@ begin
         mosaic.Canvas.Pen.Color:=clGray;
       end;
       mosaic.Canvas.Rectangle(x*mosaicsize,y*mosaicsize,x*mosaicsize+mosaicsize,y*mosaicsize+mosaicsize);
-      //frmain.ScrollBox1.Canvas.Draw(0,0,mosaic);
+      //Form1.ScrollBox1.Canvas.Draw(0,0,mosaic);
     end;
   end;
-  frmain.ScrollBox1.Canvas.Draw(0,0,mosaic);
+  Form1.ScrollBox1.Canvas.Draw(0,0,mosaic);
 end;
 
 procedure realmode;
 begin
-  //frmain.MenuItem58.Checked:=true;
-  if Assigned(flist) and frmain.Image1.Visible and modethumb then
+  //Form1.MenuItem58.Checked:=true;
+  if Assigned(flist) and Form1.Image1.Visible and modethumb then
   begin
     loadpicture(carpeta+flist[ifile],true,true,true);
   end;
@@ -512,13 +449,13 @@ begin
   else
   begin
     tmpbitmap:=BGRABitmap.TBGRABitmap.Create(w,h);
-    tmpbitmap.Canvas.CopyRect(Types.Rect(0,0,w,h),frmain.Image1.Picture.Bitmap.Canvas,Types.Rect(0,0,frmain.Image1.Picture.Bitmap.Width,frmain.Image1.Picture.Bitmap.Height));
-    frmain.Image1.Picture.Bitmap.Assign(tmpbitmap);
+    tmpbitmap.Canvas.CopyRect(Types.Rect(0,0,w,h),Form1.Image1.Picture.Bitmap.Canvas,Types.Rect(0,0,Form1.Image1.Picture.Bitmap.Width,Form1.Image1.Picture.Bitmap.Height));
+    Form1.Image1.Picture.Bitmap.Assign(tmpbitmap);
     tmpbitmap.Destroy;
   end;
   realimgwidth:=w;
   realimgheight:=h;
-  frmain.StatusBar1.Panels.Items[1].Text:='Resolucion:'+inttostr(w)+'x'+inttostr(h)+' '+zoomfactor(w,h,frmain.Image1.Width,frmain.Image1.Height)+'%';
+  Form1.StatusBar1.Panels.Items[1].Text:='Resolucion:'+inttostr(w)+'x'+inttostr(h)+' '+zoomfactor(w,h,Form1.Image1.Width,Form1.Image1.Height)+'%';
 end;
 
 procedure setwallpaper(style:string;mosaic:string='0');
@@ -537,8 +474,8 @@ begin
     case style of
     '1':
       begin
-        aw:=frmain.Image1.Picture.Bitmap.Width;
-        ah:=frmain.Image1.Picture.Bitmap.Height;
+        aw:=Form1.Image1.Picture.Bitmap.Width;
+        ah:=Form1.Image1.Picture.Bitmap.Height;
         if (aw-Screen.Width)<=(ah-Screen.Height) then
         begin
           calculateaspectwidth(aw,ah,Screen.Height,nw);
@@ -553,15 +490,15 @@ begin
         wallp:=Graphics.TBitmap.Create;
         wallp.Width:=nw;
         wallp.Height:=nh;
-        if frmain.Image1.Visible then
-          wallp.Canvas.CopyRect(Types.Rect(0,0,nw,nh),frmain.Image1.Picture.Bitmap.Canvas,Types.Rect(0,0,frmain.Image1.Picture.Bitmap.Width,frmain.Image1.Picture.Bitmap.Height));
+        if Form1.Image1.Visible then
+          wallp.Canvas.CopyRect(Types.Rect(0,0,nw,nh),Form1.Image1.Picture.Bitmap.Canvas,Types.Rect(0,0,Form1.Image1.Picture.Bitmap.Width,Form1.Image1.Picture.Bitmap.Height));
         wallp.SaveToFile(wallstr);
         wallp.Destroy;
       end;
       else
       begin
-        if frmain.Image1.Visible then
-          frmain.Image1.Picture.Bitmap.SaveToFile(wallstr);
+        if Form1.Image1.Visible then
+          Form1.Image1.Picture.Bitmap.SaveToFile(wallstr);
       end;
     end;
     wallstr:=GetAppConfigDir(false)+'Wallpaper.bmp';
@@ -583,9 +520,9 @@ end;
 
 procedure refreshthumbs;
 begin
-  frmain.sboxthumb.Visible:=false;
-  frmain.sboxthumb.DestroyComponents;
-  frmain.sboxthumb.Visible:=true;
+  Form1.ScrollBox2.Visible:=false;
+  Form1.ScrollBox2.DestroyComponents;
+  Form1.ScrollBox2.Visible:=true;
 end;
 
 procedure zoomnormal();
@@ -594,19 +531,19 @@ var
 begin
   for x:=0 to 2 do
   begin
-    frmain.Image1.Width:=10;
-    frmain.Image1.Height:=10;
-    frmain.Image1.Top:=0;
-    frmain.Image1.Left:=0;
-    frmain.ScrollBox1.AutoScroll:=false;
-    frmain.ScrollBox1.Enabled:=true;
-    frmain.Image1.AutoSize:=true;
-    frmain.Image1.AutoSize:=false;
-    frmain.Image1.Stretch:=false;
-    frmain.Image1.Align:=alClient;
-    frmain.Image1.Anchors:=[akTop,akLeft,akRight,akBottom];
-    frmain.Image1.Show;
-    frmain.Image1.Cursor:=crDefault;
+    Form1.Image1.Width:=10;
+    Form1.Image1.Height:=10;
+    Form1.Image1.Top:=0;
+    Form1.Image1.Left:=0;
+    Form1.ScrollBox1.AutoScroll:=false;
+    Form1.ScrollBox1.Enabled:=true;
+    Form1.Image1.AutoSize:=true;
+    Form1.Image1.AutoSize:=false;
+    Form1.Image1.Stretch:=false;
+    Form1.Image1.Align:=alClient;
+    Form1.Image1.Anchors:=[akTop,akLeft,akRight,akBottom];
+    Form1.Image1.Show;
+    Form1.Image1.Cursor:=crDefault;
   end;
 end;
 
@@ -616,34 +553,34 @@ var
 begin
   for x:=0 to 2 do
   begin
-    frmain.Image1.Width:=10;
-    frmain.Image1.Height:=10;
-    frmain.Image1.Top:=0;
-    frmain.Image1.Left:=0;
-    frmain.ScrollBox1.AutoScroll:=false;
-    frmain.ScrollBox1.Enabled:=true;
-    frmain.Image1.AutoSize:=true;
-    frmain.Image1.AutoSize:=false;
-    frmain.Image1.Stretch:=true;
-    frmain.Image1.Align:=alClient;
-    frmain.Image1.Anchors:=[akTop,akLeft,akRight,akBottom];
-    frmain.Image1.Show;
-    frmain.Image1.Cursor:=crDefault;
+    Form1.Image1.Width:=10;
+    Form1.Image1.Height:=10;
+    Form1.Image1.Top:=0;
+    Form1.Image1.Left:=0;
+    Form1.ScrollBox1.AutoScroll:=false;
+    Form1.ScrollBox1.Enabled:=true;
+    Form1.Image1.AutoSize:=true;
+    Form1.Image1.AutoSize:=false;
+    Form1.Image1.Stretch:=true;
+    Form1.Image1.Align:=alClient;
+    Form1.Image1.Anchors:=[akTop,akLeft,akRight,akBottom];
+    Form1.Image1.Show;
+    Form1.Image1.Cursor:=crDefault;
   end;
 end;
 
 procedure zoomoriginal();
 begin
   realmode;
-  frmain.Image1.Align:=alNone;
-  //frmain.ScrollBox1.AutoScroll:=true;
-  frmain.ScrollBox1.Enabled:=true;
-  frmain.Image1.Stretch:=true;
-  frmain.Image1.AutoSize:=true;
-  frmain.Image1.Width:=frmain.Image1.Picture.BitMap.Width;
-  frmain.Image1.Height:=frmain.Image1.Picture.BitMap.Height;
-  frmain.Image1.Cursor:=crSizeAll;
-  frmain.StatusBar1.Panels.Items[1].Text:='Resolucion:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
+  Form1.Image1.Align:=alNone;
+  //Form1.ScrollBox1.AutoScroll:=true;
+  Form1.ScrollBox1.Enabled:=true;
+  Form1.Image1.Stretch:=true;
+  Form1.Image1.AutoSize:=true;
+  Form1.Image1.Width:=Form1.Image1.Picture.BitMap.Width;
+  Form1.Image1.Height:=Form1.Image1.Picture.BitMap.Height;
+  Form1.Image1.Cursor:=crSizeAll;
+  Form1.StatusBar1.Panels.Items[1].Text:='Resolucion:'+inttostr(Form1.Image1.Picture.Width)+'x'+inttostr(Form1.Image1.Picture.Height)+' '+zoomfactor(Form1.Image1.Picture.Width,Form1.Image1.Picture.Height,Form1.Image1.Width,Form1.Image1.Height)+'%';
 end;
 
 procedure zoomin(raton:boolean=false);
@@ -653,27 +590,27 @@ begin
   realmode;
   //lx:=Mouse.CursorPos.x;
   //ly:=Mouse.CursorPos.y;
-  lwidth:=frmain.Image1.Width;
-  lheight:=frmain.Image1.Height;
-  if frmain.Image1.Align = alClient then
+  lwidth:=Form1.Image1.Width;
+  lheight:=Form1.Image1.Height;
+  if Form1.Image1.Align = alClient then
   begin
-    //frmain.ScrollBox1.AutoScroll:=true;
-    frmain.ScrollBox1.Enabled:=true;
-    frmain.Image1.Stretch:=true;
-    frmain.Image1.AutoSize:=false;
-    frmain.Image1.Align:=alNone;
-    frmain.Image1.Width:=lwidth;
-    frmain.Image1.Height:=lheight;
+    //Form1.ScrollBox1.AutoScroll:=true;
+    Form1.ScrollBox1.Enabled:=true;
+    Form1.Image1.Stretch:=true;
+    Form1.Image1.AutoSize:=false;
+    Form1.Image1.Align:=alNone;
+    Form1.Image1.Width:=lwidth;
+    Form1.Image1.Height:=lheight;
   end;
-  frmain.Image1.Width:=frmain.Image1.Width+20;
-  frmain.Image1.Height:=frmain.Image1.Height+20;
+  Form1.Image1.Width:=Form1.Image1.Width+20;
+  Form1.Image1.Height:=Form1.Image1.Height+20;
   if raton then
   begin
-    //frmain.Image1.Top:=ly-frmain.Image1.Height-20;
-    //frmain.Image1.Left:=ly+frmain.Image1.Width-20;
+    //Form1.Image1.Top:=ly-Form1.Image1.Height-20;
+    //Form1.Image1.Left:=ly+Form1.Image1.Width-20;
   end;
-  frmain.Image1.Cursor:=crSizeAll;
-  frmain.StatusBar1.Panels.Items[1].Text:='Resolucion:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
+  Form1.Image1.Cursor:=crSizeAll;
+  Form1.StatusBar1.Panels.Items[1].Text:='Resolucion:'+inttostr(Form1.Image1.Picture.Width)+'x'+inttostr(Form1.Image1.Picture.Height)+' '+zoomfactor(Form1.Image1.Picture.Width,Form1.Image1.Picture.Height,Form1.Image1.Width,Form1.Image1.Height)+'%';
 end;
 
 procedure zoomout(raton:boolean=false);
@@ -681,22 +618,22 @@ var
    lwidth,lheight:integer;
 begin
   realmode;
-  lwidth:=frmain.Image1.Width;
-  lheight:=frmain.Image1.Height;
-  if frmain.Image1.Align = alClient then
+  lwidth:=Form1.Image1.Width;
+  lheight:=Form1.Image1.Height;
+  if Form1.Image1.Align = alClient then
   begin
-    //frmain.ScrollBox1.AutoScroll:=true;
-    frmain.ScrollBox1.Enabled:=true;
-    frmain.Image1.Stretch:=true;
-    frmain.Image1.AutoSize:=false;
-    frmain.Image1.Align:=alNone;
-    frmain.Image1.Width:=lwidth;
-    frmain.Image1.Height:=lheight;
+    //Form1.ScrollBox1.AutoScroll:=true;
+    Form1.ScrollBox1.Enabled:=true;
+    Form1.Image1.Stretch:=true;
+    Form1.Image1.AutoSize:=false;
+    Form1.Image1.Align:=alNone;
+    Form1.Image1.Width:=lwidth;
+    Form1.Image1.Height:=lheight;
   end;
-  frmain.Image1.Width:=frmain.Image1.Width-20;
-  frmain.Image1.Height:=frmain.Image1.Height-20;
-  frmain.Image1.Cursor:=crSizeAll;
-  frmain.StatusBar1.Panels.Items[1].Text:='Resolucion:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
+  Form1.Image1.Width:=Form1.Image1.Width-20;
+  Form1.Image1.Height:=Form1.Image1.Height-20;
+  Form1.Image1.Cursor:=crSizeAll;
+  Form1.StatusBar1.Panels.Items[1].Text:='Resolucion:'+inttostr(Form1.Image1.Picture.Width)+'x'+inttostr(Form1.Image1.Picture.Height)+' '+zoomfactor(Form1.Image1.Picture.Width,Form1.Image1.Picture.Height,Form1.Image1.Width,Form1.Image1.Height)+'%';
 end;
 
 procedure loadpicture(fimagen:string;restorezoom:boolean=true;scrollthumbs:boolean=true;realimage:boolean=false);
@@ -717,50 +654,50 @@ begin
   {$ENDIF}
   starttime:=Now();
   try
-    frmain.Caption:='LazView '+fimagen;
-    frmain.Label1.Caption:=inttostr(ifile+1)+'/'+inttostr(nfile)+'  '+fimagen;
-    frmain.Label2.Caption:=inttostr(ifile+1)+'/'+inttostr(nfile)+'  '+fimagen;
-    frmain.StatusBar1.Panels.Items[0].Text:=inttostr(ifile+1)+'/'+inttostr(nfile);
-    frmain.StatusBar1.Panels.Items[3].Text:=' Tamaño:'+FloatTostr(Round(FileSize(wimagen)/1024))+'Kb';
-    if restorezoom and (frmain.ToolButton24.Down=false) then
+    Form1.Caption:='LazView '+fimagen;
+    Form1.Label1.Caption:=inttostr(ifile+1)+'/'+inttostr(nfile)+'  '+fimagen;
+    Form1.Label2.Caption:=inttostr(ifile+1)+'/'+inttostr(nfile)+'  '+fimagen;
+    Form1.StatusBar1.Panels.Items[0].Text:=inttostr(ifile+1)+'/'+inttostr(nfile);
+    Form1.StatusBar1.Panels.Items[3].Text:=' Tamaño:'+FloatTostr(Round(FileSize(wimagen)/1024))+'Kb';
+    if restorezoom and (Form1.ToolButton24.Down=false) then
       zoomnormal()
     else
       zoomstrech();
     if UpperCase(ExtractFileExt(wimagen)) = '.GIF' then
     begin
       ifgif:=true;
-      frmain.Image1.Picture.Clear;
-      frmain.ToolButton19.Enabled:=true;
-      frmain.ToolButton20.Enabled:=true;
-      frmain.ToolButton21.Enabled:=true;
-      frmain.ToolButton26.Enabled:=true;
-      frmain.ToolButton27.Enabled:=true;
+      Form1.Image1.Picture.Clear;
+      Form1.ToolButton19.Enabled:=true;
+      Form1.ToolButton20.Enabled:=true;
+      Form1.ToolButton21.Enabled:=true;
+      Form1.ToolButton26.Enabled:=true;
+      Form1.ToolButton27.Enabled:=true;
     end
     else
     begin
       ifgif:=false;
-      frmain.Timer3.Enabled:=false;
-      frmain.ToolButton19.Enabled:=false;
-      frmain.ToolButton20.Enabled:=false;
-      frmain.ToolButton21.Enabled:=false;
-      frmain.ToolButton26.Enabled:=false;
-      frmain.ToolButton27.Enabled:=false;
-      frmain.StatusBar1.Panels[2].Text:='';
+      Form1.Timer3.Enabled:=false;
+      Form1.ToolButton19.Enabled:=false;
+      Form1.ToolButton20.Enabled:=false;
+      Form1.ToolButton21.Enabled:=false;
+      Form1.ToolButton26.Enabled:=false;
+      Form1.ToolButton27.Enabled:=false;
+      Form1.StatusBar1.Panels[2].Text:='';
     end;
     case UpperCase(ExtractFileExt(fimagen)) of
       '.GIF':
       begin
         BGRAgif:=TBGRAAnimatedGif.Create(wimagen);
-        frmain.Timer3Timer(nil);
+        Form1.Timer3Timer(nil);
         if BGRAGif.Count>1 then
-          frmain.Timer3.Enabled:=true
+          Form1.Timer3.Enabled:=true
         else
-          frmain.Timer3.Enabled:=false;
+          Form1.Timer3.Enabled:=false;
 
-        frmain.StatusBar1.Panels.Items[1].Text:='Resolucion:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
+        Form1.StatusBar1.Panels.Items[1].Text:='Resolucion:'+inttostr(Form1.Image1.Picture.Width)+'x'+inttostr(Form1.Image1.Picture.Height)+' '+zoomfactor(Form1.Image1.Picture.Width,Form1.Image1.Picture.Height,Form1.Image1.Width,Form1.Image1.Height)+'%';
         modethumb:=false;
-        realimgwidth:=frmain.Image1.Picture.Width;
-        realimgheight:=frmain.Image1.Picture.Height;
+        realimgwidth:=Form1.Image1.Picture.Width;
+        realimgheight:=Form1.Image1.Picture.Height;
       end;
       '.JPG','.JPEG','.JPE','.JFIF','.BMP','.PNG','.XPM','.PBM','.PPM','.ICNS','.CUR','.TIF','.TIFF':
       begin
@@ -769,13 +706,13 @@ begin
         bgcolor.blue:=0;
         bgcolor.green:=0;
         bgcolor.red:=0;
-        if frmain.MenuItem58.Checked or realimage then
+        if Form1.MenuItem58.Checked or realimage then
         begin
-          frmain.Image1.Picture.LoadFromStream(streamimage);
-          frmain.StatusBar1.Panels.Items[1].Text:='Resolucion:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
+          Form1.Image1.Picture.LoadFromStream(streamimage);
+          Form1.StatusBar1.Panels.Items[1].Text:='Resolucion:'+inttostr(Form1.Image1.Picture.Width)+'x'+inttostr(Form1.Image1.Picture.Height)+' '+zoomfactor(Form1.Image1.Picture.Width,Form1.Image1.Picture.Height,Form1.Image1.Width,Form1.Image1.Height)+'%';
           modethumb:=false;
-          realimgwidth:=frmain.Image1.Picture.Width;
-          realimgheight:=frmain.Image1.Picture.Height;
+          realimgwidth:=Form1.Image1.Picture.Width;
+          realimgheight:=Form1.Image1.Picture.Height;
         end
         else
         begin
@@ -792,265 +729,262 @@ begin
           streamimage.Position:=0;
           if ((iw>Screen.Width) or (ih>Screen.Height)) then
           begin
-            if (iw-frmain.pssImagen.Width)<=(ih-frmain.pssImagen.Height) then
+            if (iw-Form1.PairSplitterSide1.Width)<=(ih-Form1.PairSplitterSide1.Height) then
             begin
-              th:=frmain.pssImagen.Height;
-              calculateaspectwidth(iw,ih,frmain.Image1.Height,tw);
+              calculateaspectwidth(iw,ih,Form1.PairSplitterSide1.Height,tw);
+              th:=Form1.PairSplitterSide1.Height;
             end
             else
             begin
-              tw:=frmain.pssImagen.Width;
-              calculateaspectheight(iw,ih,frmain.Image1.Width,th);
+              tw:=Form1.PairSplitterSide1.Width;
+              calculateaspectheight(iw,ih,Form1.PairSplitterSide1.Width,th);
             end;
-            frmain.Image1.Picture.Bitmap.Assign(GetStreamThumbnail(streamimage,tw,th, bgcolor, false));
-            frmain.StatusBar1.Panels.Items[1].Text:='*Resolucion:'+inttostr(iw)+'x'+inttostr(ih)+' '+zoomfactor(iw,ih,frmain.Image1.Width,frmain.Image1.Height)+'%';
+            Form1.Image1.Picture.Bitmap.Assign(GetStreamThumbnail(streamimage,tw,th, bgcolor, false));
+            Form1.StatusBar1.Panels.Items[1].Text:='*Resolucion:'+inttostr(iw)+'x'+inttostr(ih)+' '+zoomfactor(iw,ih,Form1.Image1.Width,Form1.Image1.Height)+'%';
             modethumb:=true;
             realimgwidth:=iw;
             realimgheight:=ih;
           end
           else
           begin
-            frmain.Image1.Picture.LoadFromStream(streamimage);
-            frmain.StatusBar1.Panels.Items[1].Text:='Resolucion:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
+            Form1.Image1.Picture.LoadFromStream(streamimage);
+            Form1.StatusBar1.Panels.Items[1].Text:='Resolucion:'+inttostr(Form1.Image1.Picture.Width)+'x'+inttostr(Form1.Image1.Picture.Height)+' '+zoomfactor(Form1.Image1.Picture.Width,Form1.Image1.Picture.Height,Form1.Image1.Width,Form1.Image1.Height)+'%';
             modethumb:=false;
-            realimgwidth:=frmain.Image1.Picture.Width;
-            realimgheight:=frmain.Image1.Picture.Height;
+            realimgwidth:=Form1.Image1.Picture.Width;
+            realimgheight:=Form1.Image1.Picture.Height;
           end;
         end;
         streamimage.Destroy;
       end;
       '.ICO':
       begin
-        frmain.Image1.Picture.LoadFromFile(wimagen);
-        frmain.StatusBar1.Panels.Items[1].Text:='Resolucion:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
+        Form1.Image1.Picture.LoadFromFile(wimagen);
+        Form1.StatusBar1.Panels.Items[1].Text:='Resolucion:'+inttostr(Form1.Image1.Picture.Width)+'x'+inttostr(Form1.Image1.Picture.Height)+' '+zoomfactor(Form1.Image1.Picture.Width,Form1.Image1.Picture.Height,Form1.Image1.Width,Form1.Image1.Height)+'%';
         modethumb:=false;
-        realimgwidth:=frmain.Image1.Picture.Width;
-        realimgheight:=frmain.Image1.Picture.Height;
+        realimgwidth:=Form1.Image1.Picture.Width;
+        realimgheight:=Form1.Image1.Picture.Height;
       end;
       '.PCX','.TGA','.PSD','.XWD':
       begin
         BGRAImage:=BGRABitmap.TBGRABitmap.Create(wimagen);
-        frmain.Image1.Picture.Assign(BGRAImage);
-        frmain.StatusBar1.Panels.Items[1].Text:='Resolucion:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
+        Form1.Image1.Picture.Assign(BGRAImage);
+        Form1.StatusBar1.Panels.Items[1].Text:='Resolucion:'+inttostr(Form1.Image1.Picture.Width)+'x'+inttostr(Form1.Image1.Picture.Height)+' '+zoomfactor(Form1.Image1.Picture.Width,Form1.Image1.Picture.Height,Form1.Image1.Width,Form1.Image1.Height)+'%';
         modethumb:=false;
-        realimgwidth:=frmain.Image1.Picture.Width;
-        realimgheight:=frmain.Image1.Picture.Height;
+        realimgwidth:=Form1.Image1.Picture.Width;
+        realimgheight:=Form1.Image1.Picture.Height;
         BGRAImage.Destroy;
       end;
       else/////Try to load as Image
       begin
         streamimage:=TFileStream.Create(wimagen,fmOpenRead or fmShareDenyNone);
-        frmain.Image1.Picture.LoadFromStream(streamimage);
-        frmain.StatusBar1.Panels.Items[1].Text:='Resolucion:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
+        Form1.Image1.Picture.LoadFromStream(streamimage);
+        Form1.StatusBar1.Panels.Items[1].Text:='Resolucion:'+inttostr(Form1.Image1.Picture.Width)+'x'+inttostr(Form1.Image1.Picture.Height)+' '+zoomfactor(Form1.Image1.Picture.Width,Form1.Image1.Picture.Height,Form1.Image1.Width,Form1.Image1.Height)+'%';
         modethumb:=false;
-        realimgwidth:=frmain.Image1.Picture.Width;
-        realimgheight:=frmain.Image1.Picture.Height;
+        realimgwidth:=Form1.Image1.Picture.Width;
+        realimgheight:=Form1.Image1.Picture.Height;
         streamimage.Destroy;
       end;
     end;
-    frmain.StatusBar1.Panels.Items[4].Text:='Tiempo:'+prettytime(MilliSecondsBetween(Now,starttime));
+    Form1.StatusBar1.Panels.Items[4].Text:='Tiempo:'+prettytime(MilliSecondsBetween(Now,starttime));
 
     ////////****Update buttons and menus****////////////////
-    frmain.tbFlipHorizontal.Enabled:=true;
-    frmain.tbFlipVertical.Enabled:=true;
-    frmain.ToolButton6.Enabled:=true;
-    frmain.ToolButton7.Enabled:=true;
-    frmain.ToolButton9.Enabled:=true;
-    frmain.ToolButton10.Enabled:=true;
-    frmain.ToolButton11.Enabled:=true;
-    frmain.ToolButton14.Enabled:=true;
-    frmain.ToolButton15.Enabled:=true;
-    frmain.MenuItem6.Enabled:=true;
-    frmain.MenuItem7.Enabled:=true;
-    frmain.MenuItem8.Enabled:=true;
-    frmain.MenuItem9.Enabled:=true;
-    frmain.MenuItem16.Enabled:=true;
-    frmain.MenuItem14.Enabled:=true;
-    frmain.MenuItem7.Enabled:=true;
-    frmain.MenuItem8.Enabled:=true;
-    frmain.MenuItem14.Enabled:=true;
-    frmain.MenuItem15.Enabled:=true;
-    frmain.MenuItem31.Enabled:=true;
+    Form1.ToolButton4.Enabled:=true;
+    Form1.ToolButton5.Enabled:=true;
+    Form1.ToolButton6.Enabled:=true;
+    Form1.ToolButton7.Enabled:=true;
+    Form1.ToolButton9.Enabled:=true;
+    Form1.ToolButton10.Enabled:=true;
+    Form1.ToolButton11.Enabled:=true;
+    Form1.ToolButton14.Enabled:=true;
+    Form1.ToolButton15.Enabled:=true;
+    Form1.MenuItem6.Enabled:=true;
+    Form1.MenuItem7.Enabled:=true;
+    Form1.MenuItem8.Enabled:=true;
+    Form1.MenuItem9.Enabled:=true;
+    Form1.MenuItem16.Enabled:=true;
+    Form1.MenuItem14.Enabled:=true;
+    Form1.MenuItem7.Enabled:=true;
+    Form1.MenuItem8.Enabled:=true;
+    Form1.MenuItem14.Enabled:=true;
+    Form1.MenuItem15.Enabled:=true;
+    Form1.MenuItem31.Enabled:=true;
     /////
   except on e:Exception do
     begin
-      frmain.Timer3.Enabled:=false;
-      frmain.Image1.Visible:=true;
+      Form1.Timer3.Enabled:=false;
+      Form1.Image1.Visible:=true;
       ebitmap:=Graphics.TBitmap.Create;
-      ebitmap.Width:=frmain.Image1.Width;
-      ebitmap.Height:=frmain.Image1.Height;
+      ebitmap.Width:=Form1.Image1.Width;
+      ebitmap.Height:=Form1.Image1.Height;
       ebitmap.Canvas.Brush.Color:=clWhite;
       ebitmap.Canvas.Pen.Color:=clRed;
       ebitmap.Canvas.Font.Size:=12;
       ebitmap.Canvas.Font.Color:=clRed;
       th:=ebitmap.Canvas.TextHeight('Error al cargar la imagen:'+e.ToString);
       tw:=ebitmap.Canvas.TextWidth('Error al cargar la imagen:'+e.ToString);
-      ebitmap.Canvas.TextOut(Round((frmain.Image1.Width-tw)/2),Round((frmain.Image1.Height-th)/2),'Error al cargar la imagen:'+e.ToString);
-      frmain.Image1.Picture.Bitmap.Assign(ebitmap);
+      ebitmap.Canvas.TextOut(Round((Form1.Image1.Width-tw)/2),Round((Form1.Image1.Height-th)/2),'Error al cargar la imagen:'+e.ToString);
+      Form1.Image1.Picture.Bitmap.Assign(ebitmap);
       ebitmap.Destroy;
       /////////*****Update buttons and menus****///////////////////
-      frmain.tbFlipHorizontal.Enabled:=false;
-      frmain.tbFlipVertical.Enabled:=false;
-      frmain.ToolButton6.Enabled:=false;
-      frmain.ToolButton7.Enabled:=false;
-      frmain.ToolButton9.Enabled:=false;
-      frmain.ToolButton10.Enabled:=false;
-      frmain.ToolButton11.Enabled:=false;
-      frmain.ToolButton14.Enabled:=false;
-      frmain.ToolButton15.Enabled:=false;
-      frmain.ToolButton19.Enabled:=false;
-      frmain.ToolButton20.Enabled:=false;
-      frmain.ToolButton21.Enabled:=false;
-      frmain.StatusBar1.Panels[2].Text:='';
-      frmain.MenuItem6.Enabled:=false;
-      frmain.MenuItem7.Enabled:=false;
-      frmain.MenuItem8.Enabled:=false;
-      frmain.MenuItem9.Enabled:=false;
-      frmain.MenuItem16.Enabled:=false;
-      frmain.MenuItem14.Enabled:=false;
-      frmain.MenuItem7.Enabled:=false;
-      frmain.MenuItem8.Enabled:=false;
-      frmain.MenuItem14.Enabled:=true;
-      frmain.MenuItem15.Enabled:=false;
-      frmain.MenuItem31.Enabled:=false;
+      Form1.ToolButton4.Enabled:=false;
+      Form1.ToolButton5.Enabled:=false;
+      Form1.ToolButton6.Enabled:=false;
+      Form1.ToolButton7.Enabled:=false;
+      Form1.ToolButton9.Enabled:=false;
+      Form1.ToolButton10.Enabled:=false;
+      Form1.ToolButton11.Enabled:=false;
+      Form1.ToolButton14.Enabled:=false;
+      Form1.ToolButton15.Enabled:=false;
+      Form1.ToolButton19.Enabled:=false;
+      Form1.ToolButton20.Enabled:=false;
+      Form1.ToolButton21.Enabled:=false;
+      Form1.StatusBar1.Panels[2].Text:='';
+      Form1.MenuItem6.Enabled:=false;
+      Form1.MenuItem7.Enabled:=false;
+      Form1.MenuItem8.Enabled:=false;
+      Form1.MenuItem9.Enabled:=false;
+      Form1.MenuItem16.Enabled:=false;
+      Form1.MenuItem14.Enabled:=false;
+      Form1.MenuItem7.Enabled:=false;
+      Form1.MenuItem8.Enabled:=false;
+      Form1.MenuItem14.Enabled:=true;
+      Form1.MenuItem15.Enabled:=false;
+      Form1.MenuItem31.Enabled:=false;
       //////////////
     end;
   end;
-  if frmain.mnuShowThumbs.Checked then
+  if Form1.MenuItem30.Checked then
   begin
-    if scrollthumbs and (frmain.sboxthumb.ComponentCount>ifile) then
+    if scrollthumbs and (Form1.ScrollBox2.ComponentCount>ifile) then
     begin
-      //frmain.sboxthumb.ScrollInView((frmain.sboxthumb.Components[ifile] as TControl));
-      //frmain.sboxthumb.HorzScrollBar.Position:=ifile*(thumbsize+1);
-      //frmain.sboxthumb.HorzScrollBar.Position:=(frmain.sboxthumb.Components[ifile] as TControl).Left-Round(frmain.Width/2)+Round(thumbsize/2)+1;
-      if inprocessanim=false then
-        scrollanim;
+      Form1.ScrollBox2.ScrollInView((Form1.ScrollBox2.Components[ifile] as TControl));
+      //Form1.ScrollBox2.HorzScrollBar.Position:=ifile*(thumbsize+1);
     end;
   end;
-  //if frmain.ToolButton24.Down then
+  //if Form1.ToolButton24.Down then
     //zoomstrech();
 end;
 
 procedure fullsc();
 begin
-  frmain.pssThumbs.OnResize:=nil;
+  Form1.PairSplitterSide2.OnResize:=nil;
   if full = false then
   begin
-    fwidth:=frmain.Width;
-    fheight:=frmain.Height;
-    fxpos:=frmain.Top;
-    fypos:=frmain.Left;
-    frmain.BorderStyle:=bsNone;
-    frmain.ToolBar1.Align:=alNone;
-    frmain.psVertical.Align:=alClient;
-    frmain.StatusBar1.Visible:=false;
-    frmain.Color:=clBlack;
-    frmain.FormStyle:=fsStayOnTop;
-    frmain.Label1.Visible:=true;
-    frmain.Label2.Visible:=true;
-    frmain.MainMenu1.Items.Visible:=false;
-    frmain.Splitter1.Left:=0-frmain.Splitter1.Width;
-    frmain.psVertical.Position:=frmain.psVertical.Height-thumbsize-18;
-    frmain.WindowState:=wsFullScreen;
-    frmain.Timer2.Enabled:=true;
+    fwidth:=Form1.Width;
+    fheight:=Form1.Height;
+    fxpos:=Form1.Top;
+    fypos:=Form1.Left;
+    Form1.BorderStyle:=bsNone;
+    Form1.ToolBar1.Align:=alNone;
+    Form1.PairSplitter1.Align:=alClient;
+    Form1.StatusBar1.Visible:=false;
+    Form1.Color:=clBlack;
+    Form1.FormStyle:=fsStayOnTop;
+    Form1.Label1.Visible:=true;
+    Form1.Label2.Visible:=true;
+    Form1.MainMenu1.Items.Visible:=false;
+    Form1.Splitter1.Left:=0-Form1.Splitter1.Width;
+    Form1.PairSplitter1.Position:=Form1.PairSplitter1.Height-thumbsize-18;
+    Form1.WindowState:=wsFullScreen;
+    Form1.Timer2.Enabled:=true;
     full:=true;
-    if frmain.mnuShowThumbs.Checked then
-      frmain.ToolBar1.Top:=frmain.pssThumbs.Top-frmain.ToolBar1.Height
+    if Form1.MenuItem30.Checked then
+      Form1.ToolBar1.Top:=Form1.PairSplitterSide2.Top-Form1.ToolBar1.Height
     else
-      frmain.ToolBar1.Top:=screen.Height-frmain.ToolBar1.Height;
-    frmain.ToolBar1.Left:=Round((screen.Width-frmain.ToolBar1.Width)/2);
+      Form1.ToolBar1.Top:=screen.Height-Form1.ToolBar1.Height;
+    Form1.ToolBar1.Left:=Round((screen.Width-Form1.ToolBar1.Width)/2);
   end
   else
   begin
-    frmain.Timer2.Enabled:=false;
-    frmain.Width:=fwidth;
-    frmain.Height:=fheight;
-    frmain.WindowState:=wsNormal;
-    frmain.BorderStyle:=bsSizeable;
-    frmain.ToolBar1.Align:=alTop;
-    if frmain.MenuItem61.Checked then
-      frmain.ToolBar1.Visible:=true;
-    frmain.Top:=fxpos;
-    frmain.Left:=fypos;
-    frmain.Width:=fwidth;
-    frmain.Height:=fheight;
-    frmain.Color:=clDefault;
-    frmain.FormStyle:=fsNormal;
-    frmain.Label1.Visible:=false;
-    frmain.Label2.Visible:=false;
+    Form1.Timer2.Enabled:=false;
+    Form1.Width:=fwidth;
+    Form1.Height:=fheight;
+    Form1.WindowState:=wsNormal;
+    Form1.BorderStyle:=bsSizeable;
+    Form1.ToolBar1.Align:=alTop;
+    if Form1.MenuItem61.Checked then
+      Form1.ToolBar1.Visible:=true;
+    Form1.Top:=fxpos;
+    Form1.Left:=fypos;
+    Form1.Width:=fwidth;
+    Form1.Height:=fheight;
+    Form1.Color:=clDefault;
+    Form1.FormStyle:=fsNormal;
+    Form1.Label1.Visible:=false;
+    Form1.Label2.Visible:=false;
     try
-      frmain.MainMenu1.Items.Visible:=true;
+      Form1.MainMenu1.Items.Visible:=true;
     except on e:exception do
 
     end;
-    if frmain.MenuItem59.Checked then
-      frmain.Splitter1.Left:=200;
+    if Form1.MenuItem59.Checked then
+      Form1.Splitter1.Left:=200;
     full:=false;
-    frmain.psVertical.Align:=alNone;
-    frmain.psVertical.Anchors:=[akTop, akLeft, akRight, akBottom];
-    frmain.psVertical.AnchorSideLeft.Control:=frmain.Splitter1;
-    frmain.psVertical.AnchorSideLeft.Side:=asrBottom;
-    if frmain.MenuItem62.Checked then
+    Form1.PairSplitter1.Align:=alNone;
+    Form1.PairSplitter1.Anchors:=[akTop, akLeft, akRight, akBottom];
+    Form1.PairSplitter1.AnchorSideLeft.Control:=Form1.Splitter1;
+    Form1.PairSplitter1.AnchorSideLeft.Side:=asrBottom;
+    if Form1.MenuItem62.Checked then
     begin
-      frmain.StatusBar1.Visible:=true;
-      frmain.psVertical.AnchorSideBottom.Control:=frmain.StatusBar1;
+      Form1.StatusBar1.Visible:=true;
+      Form1.PairSplitter1.AnchorSideBottom.Control:=Form1.StatusBar1;
     end
     else
     begin
-      frmain.psVertical.AnchorSideBottom.Control:=frmain;
-      frmain.psVertical.AnchorSideBottom.Side:=asrBottom;
+      Form1.PairSplitter1.AnchorSideBottom.Control:=Form1;
+      Form1.PairSplitter1.AnchorSideBottom.Side:=asrBottom;
     end;
 
-    if frmain.MenuItem61.Checked=false then
+    if Form1.MenuItem61.Checked=false then
     begin
-      frmain.ToolBar1.Visible:=false;
-      frmain.psVertical.AnchorSideTop.Control:=frmain;
-      frmain.psVertical.AnchorSideTop.Side:=asrTop;
-      frmain.Splitter1.AnchorSideTop.Control:=frmain;
-      frmain.Splitter1.AnchorSideTop.Side:=asrTop;
+      Form1.ToolBar1.Visible:=false;
+      Form1.PairSplitter1.AnchorSideTop.Control:=Form1;
+      Form1.PairSplitter1.AnchorSideTop.Side:=asrTop;
+      Form1.Splitter1.AnchorSideTop.Control:=Form1;
+      Form1.Splitter1.AnchorSideTop.Side:=asrTop;
     end
     else
     begin
-      frmain.ToolBar1.Visible:=true;
-      frmain.psVertical.AnchorSideTop.Control:=frmain.ToolBar1;
-      frmain.psVertical.AnchorSideTop.Side:=asrBottom;
-      frmain.Splitter1.AnchorSideTop.Control:=frmain.ToolBar1;
-      frmain.Splitter1.AnchorSideTop.Side:=asrBottom;
+      Form1.ToolBar1.Visible:=true;
+      Form1.PairSplitter1.AnchorSideTop.Control:=Form1.ToolBar1;
+      Form1.PairSplitter1.AnchorSideTop.Side:=asrBottom;
+      Form1.Splitter1.AnchorSideTop.Control:=Form1.ToolBar1;
+      Form1.Splitter1.AnchorSideTop.Side:=asrBottom;
     end;
 
-    if frmain.MenuItem62.Checked then
+    if Form1.MenuItem62.Checked then
     begin
-      frmain.Splitter1.AnchorSideBottom.Control:=frmain.StatusBar1;
-      frmain.Splitter1.AnchorSideBottom.Side:=asrTop;
+      Form1.Splitter1.AnchorSideBottom.Control:=Form1.StatusBar1;
+      Form1.Splitter1.AnchorSideBottom.Side:=asrTop;
     end
     else
     begin
-      frmain.Splitter1.AnchorSideBottom.Control:=frmain;
-      frmain.Splitter1.AnchorSideBottom.Side:=asrBottom;
+      Form1.Splitter1.AnchorSideBottom.Control:=Form1;
+      Form1.Splitter1.AnchorSideBottom.Side:=asrBottom;
     end;
 
-    frmain.psVertical.AnchorSideRight.Control:=frmain;
-    frmain.psVertical.AnchorSideRight.Side:=asrBottom;
+    Form1.PairSplitter1.AnchorSideRight.Control:=Form1;
+    Form1.PairSplitter1.AnchorSideRight.Side:=asrBottom;
 
-    if frmain.mnuShowThumbs.Checked then
-      frmain.psVertical.Position:=frmain.psVertical.Height-thumbsize-18
+    if Form1.MenuItem30.Checked then
+      Form1.PairSplitter1.Position:=Form1.PairSplitter1.Height-thumbsize-18
     else
-      frmain.psVertical.Position:=frmain.psVertical.Height;
+      Form1.PairSplitter1.Position:=Form1.PairSplitter1.Height;
   end;
-  frmain.pssThumbs.OnResize:=@frmain.PairSplitterSide2Resize;
+  Form1.PairSplitterSide2.OnResize:=@Form1.PairSplitterSide2Resize;
 end;
 
 procedure osd();
 begin
-  if frmain.Label1.Visible then
+  if Form1.Label1.Visible then
   begin
-    frmain.Label1.Visible:=false;
-    frmain.Label2.Visible:=false;
+    Form1.Label1.Visible:=false;
+    Form1.Label2.Visible:=false;
   end
   else
   begin
-    frmain.Label1.Visible:=true;
-    frmain.Label2.Visible:=true;
+    Form1.Label1.Visible:=true;
+    Form1.Label2.Visible:=true;
   end;
 end;
 
@@ -1065,7 +999,7 @@ begin
     try
       loadpicture(carpeta+flist[ifile]);
     except
-      on E:Exception do frmain.StatusBar1.SimpleText:=inttostr(ifile+1)+'/'+inttostr(nfile)+' Formato no soportado!!!';
+      on E:Exception do Form1.StatusBar1.SimpleText:=inttostr(ifile+1)+'/'+inttostr(nfile)+' Formato no soportado!!!';
     end;
   end;
 end;
@@ -1080,7 +1014,7 @@ begin
     try
       loadpicture(carpeta+flist[ifile]);
     except
-      on E:Exception do frmain.StatusBar1.SimpleText:=inttostr(ifile+1)+'/'+inttostr(nfile)+' Formato no soportado!!!';
+      on E:Exception do Form1.StatusBar1.SimpleText:=inttostr(ifile+1)+'/'+inttostr(nfile)+' Formato no soportado!!!';
     end;
   end;
 end;
@@ -1116,8 +1050,8 @@ var
    imgpoint:TPoint;
 begin
   realmode;
-  title:=frmain.Caption;
-  frmain.Caption:='Aplicando efecto espere...';
+  title:=Form1.Caption;
+  Form1.Caption:='Aplicando efecto espere...';
   imgrect.Left:=0;
   imgrect.Top:=0;
   if ifgif and (BGRAGif.Count>1) then
@@ -1141,7 +1075,7 @@ begin
       6:tmpbitmap.Assign(tmpbitmap.FilterEmbossHighLight(true));
       7:tmpbitmap.Assign(tmpbitmap.FilterNormalize);
       8:tmpbitmap.Assign(tmpbitmap.FilterSphere);
-      9:tmpbitmap.Assign(tmpbitmap.FilterTwirl(imgrect,imgpoint,Round(frmain.Image1.Picture.Bitmap.Width/4)));
+      9:tmpbitmap.Assign(tmpbitmap.FilterTwirl(imgrect,imgpoint,Round(Form1.Image1.Picture.Bitmap.Width/4)));
       10:tmpbitmap.Assign(tmpbitmap.FilterPixelate(5,false));
       11:tmpbitmap.Assign(tmpbitmap.FilterMedian(moMediumSmooth));
       12:begin
@@ -1171,47 +1105,47 @@ begin
   end
   else
   begin
-    if frmain.Image1.Visible then
+    if Form1.Image1.Visible then
     begin
-     imgrect.Bottom:=frmain.Image1.Picture.Bitmap.Height;
-     imgrect.Right:=frmain.Image1.Picture.Bitmap.Width;
-     imgpoint:=TPoint.Create(Round(frmain.Image1.Picture.Bitmap.Width/2),Round(frmain.Image1.Picture.Bitmap.Height/2));
+     imgrect.Bottom:=Form1.Image1.Picture.Bitmap.Height;
+     imgrect.Right:=Form1.Image1.Picture.Bitmap.Width;
+     imgpoint:=TPoint.Create(Round(Form1.Image1.Picture.Bitmap.Width/2),Round(Form1.Image1.Picture.Bitmap.Height/2));
      case filter of
-     1:bmp:=BGRABitMap.TBGRABitmap.Create(frmain.Image1.Picture.Bitmap).FilterGrayscale;
-     2:bmp:=BGRABitMap.TBGRABitmap.Create(frmain.Image1.Picture.Bitmap).FilterPlane;
-     3:bmp:=BGRABitMap.TBGRABitmap.Create(frmain.Image1.Picture.Bitmap).FilterContour;
-     4:bmp:=BGRABitMap.TBGRABitmap.Create(frmain.Image1.Picture.Bitmap).FilterCylinder;
-     5:bmp:=BGRABitMap.TBGRABitmap.Create(frmain.Image1.Picture.Bitmap).FilterEmboss(5);
-     6:bmp:=BGRABitMap.TBGRABitmap.Create(frmain.Image1.Picture.Bitmap).FilterEmbossHighLight(true);
-     7:bmp:=BGRABitMap.TBGRABitmap.Create(frmain.Image1.Picture.Bitmap).FilterNormalize;
-     8:bmp:=BGRABitMap.TBGRABitmap.Create(frmain.Image1.Picture.Bitmap).FilterSphere;
-     9:bmp:=BGRABitMap.TBGRABitmap.Create(frmain.Image1.Picture.Bitmap).FilterTwirl(imgrect,imgpoint,Round(frmain.Image1.Picture.Bitmap.Width/4));
-     10:bmp:=BGRABitMap.TBGRABitmap.Create(frmain.Image1.Picture.Bitmap).FilterPixelate(5,false);
-     11:bmp:=BGRABitMap.TBGRABitmap.Create(frmain.Image1.Picture.Bitmap).FilterMedian(moMediumSmooth);
-     12:bmp:=BGRABitMap.TBGRABitmap.Create(frmain.Image1.Picture.Bitmap).FilterSmartZoom3(moMediumSmooth);
+     1:bmp:=BGRABitMap.TBGRABitmap.Create(Form1.Image1.Picture.Bitmap).FilterGrayscale;
+     2:bmp:=BGRABitMap.TBGRABitmap.Create(Form1.Image1.Picture.Bitmap).FilterPlane;
+     3:bmp:=BGRABitMap.TBGRABitmap.Create(Form1.Image1.Picture.Bitmap).FilterContour;
+     4:bmp:=BGRABitMap.TBGRABitmap.Create(Form1.Image1.Picture.Bitmap).FilterCylinder;
+     5:bmp:=BGRABitMap.TBGRABitmap.Create(Form1.Image1.Picture.Bitmap).FilterEmboss(5);
+     6:bmp:=BGRABitMap.TBGRABitmap.Create(Form1.Image1.Picture.Bitmap).FilterEmbossHighLight(true);
+     7:bmp:=BGRABitMap.TBGRABitmap.Create(Form1.Image1.Picture.Bitmap).FilterNormalize;
+     8:bmp:=BGRABitMap.TBGRABitmap.Create(Form1.Image1.Picture.Bitmap).FilterSphere;
+     9:bmp:=BGRABitMap.TBGRABitmap.Create(Form1.Image1.Picture.Bitmap).FilterTwirl(imgrect,imgpoint,Round(Form1.Image1.Picture.Bitmap.Width/4));
+     10:bmp:=BGRABitMap.TBGRABitmap.Create(Form1.Image1.Picture.Bitmap).FilterPixelate(5,false);
+     11:bmp:=BGRABitMap.TBGRABitmap.Create(Form1.Image1.Picture.Bitmap).FilterMedian(moMediumSmooth);
+     12:bmp:=BGRABitMap.TBGRABitmap.Create(Form1.Image1.Picture.Bitmap).FilterSmartZoom3(moMediumSmooth);
      13:begin
-          bmp:=BGRABitMap.TBGRABitmap.Create(frmain.Image1.Picture.Bitmap);
+          bmp:=BGRABitMap.TBGRABitmap.Create(Form1.Image1.Picture.Bitmap);
           bmp.Negative;
         end;
-     14:bmp:=BGRABitMap.TBGRABitmap.Create(frmain.Image1.Picture.Bitmap).FilterSharpen;
-     15:bmp:=BGRABitMap.TBGRABitmap.Create(frmain.Image1.Picture.Bitmap).FilterSmooth;
-     16:bmp:=BGRABitMap.TBGRABitmap.Create(frmain.Image1.Picture.Bitmap).FilterBlurMotion(50,0,false);
-     17:bmp:=BGRABitMap.TBGRABitmap.Create(frmain.Image1.Picture.Bitmap).RotateCW;
-     18:bmp:=BGRABitMap.TBGRABitmap.Create(frmain.Image1.Picture.Bitmap).RotateCCW;
+     14:bmp:=BGRABitMap.TBGRABitmap.Create(Form1.Image1.Picture.Bitmap).FilterSharpen;
+     15:bmp:=BGRABitMap.TBGRABitmap.Create(Form1.Image1.Picture.Bitmap).FilterSmooth;
+     16:bmp:=BGRABitMap.TBGRABitmap.Create(Form1.Image1.Picture.Bitmap).FilterBlurMotion(50,0,false);
+     17:bmp:=BGRABitMap.TBGRABitmap.Create(Form1.Image1.Picture.Bitmap).RotateCW;
+     18:bmp:=BGRABitMap.TBGRABitmap.Create(Form1.Image1.Picture.Bitmap).RotateCCW;
      19:begin
-          bmp:=BGRABitMap.TBGRABitmap.Create(frmain.Image1.Picture.Bitmap);
+          bmp:=BGRABitMap.TBGRABitmap.Create(Form1.Image1.Picture.Bitmap);
           bmp.HorizontalFlip;
         end;
      20:begin
-          bmp:=BGRABitMap.TBGRABitmap.Create(frmain.Image1.Picture.Bitmap);
+          bmp:=BGRABitMap.TBGRABitmap.Create(Form1.Image1.Picture.Bitmap);
           bmp.VerticalFlip;
         end;
      end;
     end;
-    frmain.Image1.Picture.Bitmap.Assign(bmp);
+    Form1.Image1.Picture.Bitmap.Assign(bmp);
     bmp.Free;
   end;
-  frmain.Caption:=title;
+  Form1.Caption:=title;
 end;
 
 procedure efectimagen(efect:integer;nivel:integer=5000);
@@ -1244,8 +1178,8 @@ var
    inzone:boolean;
 begin
   realmode;
-  title:=frmain.Caption;
-  frmain.Caption:='Aplicando efecto porfavor espere...';
+  title:=Form1.Caption;
+  Form1.Caption:='Aplicando efecto porfavor espere...';
   if ifgif and (BGRAGif.Count>1) then
   begin
     tmpgif:=TBGRAAnimatedGif.Create;
@@ -1277,9 +1211,9 @@ begin
           8:tmpbitmap.Colors[xpix,ypix]:=FPColor(BGRAGif.Bitmap.Canvas.Colors[xpix,ypix].blue,BGRAGif.Bitmap.Canvas.Colors[xpix,ypix].red,BGRAGif.Bitmap.Canvas.Colors[xpix,ypix].green,BGRAGif.Bitmap.Canvas.Colors[xpix,ypix].alpha);
           9:tmpbitmap.Colors[xpix,ypix]:=FPColor(BGRAGif.Bitmap.Canvas.Colors[xpix,ypix].green,BGRAGif.Bitmap.Canvas.Colors[xpix,ypix].blue,BGRAGif.Bitmap.Canvas.Colors[xpix,ypix].red,BGRAGif.Bitmap.Canvas.Colors[xpix,ypix].alpha);
           10:begin
-             if frmain.Shape1.Visible then
+             if Form1.Shape1.Visible then
              begin
-              if (xpix>frmain.Shape1.BaseBounds.Left) and (xpix<frmain.Shape1.BaseBounds.Right) and (ypix>frmain.Shape1.BaseBounds.Top) and (ypix<frmain.Shape1.BaseBounds.Bottom) then
+              if (xpix>Form1.Shape1.BaseBounds.Left) and (xpix<Form1.Shape1.BaseBounds.Right) and (ypix>Form1.Shape1.BaseBounds.Top) and (ypix<Form1.Shape1.BaseBounds.Bottom) then
                 inzone:=true
               else
                 inzone:=false;
@@ -1405,10 +1339,10 @@ begin
   else
   begin
     imagen:=TLazIntfImage.Create(0,0);
-    imagen2:=frmain.Image1.Picture.Bitmap.CreateIntfImage;
+    imagen2:=Form1.Image1.Picture.Bitmap.CreateIntfImage;
     imagen.DataDescription:=imagen2.DataDescription;
-    ancho:=frmain.Image1.Picture.Bitmap.Width-1;
-    alto:=frmain.Image1.Picture.Bitmap.Height-1;
+    ancho:=Form1.Image1.Picture.Bitmap.Width-1;
+    alto:=Form1.Image1.Picture.Bitmap.Height-1;
     case efect of
     1,2,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19:imagen.SetSize(ancho+1,alto+1);
     3,4:imagen.SetSize(alto+1,ancho+1);
@@ -1428,9 +1362,9 @@ begin
         8:imagen.Colors[xpix,ypix]:=FPColor(imagen2.Colors[xpix,ypix].blue,imagen2.Colors[xpix,ypix].red,imagen2.Colors[xpix,ypix].green,imagen2.Colors[xpix,ypix].alpha);
         9:imagen.Colors[xpix,ypix]:=FPColor(imagen2.Colors[xpix,ypix].green,imagen2.Colors[xpix,ypix].blue,imagen2.Colors[xpix,ypix].red,imagen2.Colors[xpix,ypix].alpha);
         10:begin
-             if frmain.Shape1.Visible then
+             if Form1.Shape1.Visible then
              begin
-              if (xpix>frmain.Shape1.BaseBounds.Left) and (xpix<frmain.Shape1.BaseBounds.Right) and (ypix>frmain.Shape1.BaseBounds.Top) and (ypix<frmain.Shape1.BaseBounds.Bottom) then
+              if (xpix>Form1.Shape1.BaseBounds.Left) and (xpix<Form1.Shape1.BaseBounds.Right) and (ypix>Form1.Shape1.BaseBounds.Top) and (ypix<Form1.Shape1.BaseBounds.Bottom) then
                 inzone:=true
               else
                 inzone:=false;
@@ -1547,12 +1481,12 @@ begin
         end;
       end;
     end;
-    frmain.Image1.Picture.Bitmap.LoadFromIntfImage(imagen);
-    frmain.Image1.AntialiasingMode:=amOn;
+    Form1.Image1.Picture.Bitmap.LoadFromIntfImage(imagen);
+    Form1.Image1.AntialiasingMode:=amOn;
     imagen.Destroy;
     imagen2.Destroy;
   end;
-  frmain.Caption:=title;
+  Form1.Caption:=title;
 end;
 
 procedure loadfiles(place:string;fname:string);
@@ -1570,10 +1504,10 @@ begin
   wplace:=place;
   {$ENDIF}
   full:=false;
-  fwidth:=frmain.Width;
-  fheight:=frmain.Height;
-  fxpos:=frmain.Top;
-  fypos:=frmain.Left;
+  fwidth:=Form1.Width;
+  fheight:=Form1.Height;
+  fxpos:=Form1.Top;
+  fypos:=Form1.Left;
   nombre:=fname;
   contador:=0;
   nfiletmp:=0;
@@ -1595,7 +1529,7 @@ begin
             else
             begin
               ///Add the file name and the same files width this extencion to try to view
-              if ((Name=fname) or (UpperCase(ExtractFileExt(Name))=UpperCase(ExtractFileExt(fname)))) and (fname<>'') then
+              if (Name=fname) or (UpperCase(ExtractFileExt(Name))=UpperCase(ExtractFileExt(fname))) then
               begin
                 flisttmp.Add(Name);
                 Inc(nfiletmp);
@@ -1632,7 +1566,7 @@ begin
     end;
 
     starting:=false;
-    if (frmain.mnuShowThumbs.Checked) then
+    if (Form1.MenuItem30.Checked) then
     begin
       refreshthumbs;
       ththumbs:=thumbsthread.Create(true);
@@ -1642,77 +1576,77 @@ begin
   end;
   flisttmp.Destroy;
 end;
-procedure Tfrmain.FormCreate(Sender: TObject);
+procedure TForm1.FormCreate(Sender: TObject);
 var
    i:integer;
    ruta:string;
 begin
-  frmain.Image1.Width:=frmain.ScrollBox1.Width;
-  frmain.Image1.Height:=frmain.ScrollBox1.Height;
+  Form1.Image1.Width:=Form1.ScrollBox1.Width;
+  Form1.Image1.Height:=Form1.ScrollBox1.Height;
   ruta:=ExtractFilePath(Application.Params[1]);
   if Application.Params[1] <> '' then
   begin
     loadfiles(ruta,ExtractFileName(Application.Params[1]));
     if DirectoryExists(ruta) then
-      frmain.ShellTreeView1.Path:=ruta;
+      Form1.ShellTreeView1.Path:=ruta;
   end;
-  frmain.ShellTreeView1.Items.AddFirst(nil,'Mis documentos').StateIndex:=29;
-  frmain.ShellTreeView1.Items.AddFirst(nil,'Mis imágenes').StateIndex:=27;
-  frmain.ShellTreeView1.Items.AddFirst(nil,'Escritorio').StateIndex:=28;
-  for i:=3 to frmain.ShellTreeView1.Items.Count-1 do
+  Form1.ShellTreeView1.Items.AddFirst(nil,'Mis documentos').StateIndex:=29;
+  Form1.ShellTreeView1.Items.AddFirst(nil,'Mis imágenes').StateIndex:=27;
+  Form1.ShellTreeView1.Items.AddFirst(nil,'Escritorio').StateIndex:=28;
+  for i:=3 to Form1.ShellTreeView1.Items.Count-1 do
   begin
-    frmain.ShellTreeView1.Items[i].StateIndex:=16;
+    Form1.ShellTreeView1.Items[i].StateIndex:=16;
   end;
-  frmain.ShellTreeView1.OnSelectionChanged:=@ShellTreeView1SelectionChanged;
-  if frmain.MenuItem59.Checked then
-    frmain.Splitter1.Left:=200
+  Form1.ShellTreeView1.OnSelectionChanged:=@ShellTreeView1SelectionChanged;
+  if Form1.MenuItem59.Checked then
+    Form1.Splitter1.Left:=200
   else
-    frmain.Splitter1.Left:=0-frmain.Splitter1.Width;
+    Form1.Splitter1.Left:=0-Form1.Splitter1.Width;
 end;
 
-procedure Tfrmain.FormDestroy(Sender: TObject);
+procedure TForm1.FormDestroy(Sender: TObject);
 begin
   if Assigned(flist) then
     flist.Destroy;
   refreshthumbs;
-  if frmain.Image1.Picture.Bitmap.Empty=false then
-    frmain.Image1.Picture.Clear;
+  if Form1.Image1.Picture.Bitmap.Empty=false then
+    Form1.Image1.Picture.Clear;
 end;
 
-procedure Tfrmain.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+procedure TForm1.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
 
 end;
 
-procedure Tfrmain.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState
+procedure TForm1.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState
   );
 begin
  case Key of
   38://Flecha arriba
    begin
      if Shift=[ssAlt] then
-       frmain.Image1.Top:=frmain.Image1.Top+20
+       Form1.Image1.Top:=FOrm1.Image1.Top+20
      else
        prevfile();
    end;
   39,32://Flecha derecha, espacio
    begin
      if Shift=[ssAlt] then
-       frmain.Image1.Left:=frmain.Image1.Left-20
+       Form1.Image1.Left:=Form1.Image1.Left-20
      else
        nextfile();
    end;
   40://Flecha abajo
    begin
      if Shift=[ssAlt] then
-       frmain.Image1.Top:=frmain.Image1.Top-20
+       Form1.Image1.Top:=Form1.Image1.Top-20
      else
        nextfile();
    end;
   37,8://Flacha izquierda, BackSpace
     begin
       if Shift=[ssAlt] then
-        frmain.Image1.Left:=frmain.Image1.Left+20
+        Form1.Image1.Left:=FOrm1.Image1.Left+20
       else
         prevfile();
     end;
@@ -1790,18 +1724,18 @@ begin
 
 end;
 
-procedure Tfrmain.FormKeyPress(Sender: TObject; var Key: char);
+procedure TForm1.FormKeyPress(Sender: TObject; var Key: char);
 begin
   //ShowMessage(Key);
 end;
 
-procedure Tfrmain.FormMouseDown(Sender: TObject; Button: TMouseButton;
+procedure TForm1.FormMouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
-  if frmain.ToolButton18.Down=false then
+  if Form1.ToolButton18.Down=false then
   begin
-    imgx:=X+frmain.Image1.ClientOrigin.x-frmain.Image1.Left;
-    imgy:=Y+frmain.Image1.ClientOrigin.Y-frmain.Image1.Top;
+    imgx:=X+Form1.Image1.ClientOrigin.x-Form1.Image1.Left;
+    imgy:=Y+Form1.Image1.ClientOrigin.Y-Form1.Image1.Top;
     startdraw:=true;
   end
   else
@@ -1812,40 +1746,40 @@ begin
   end;
 end;
 
-procedure Tfrmain.FormMouseMove(Sender: TObject; Shift: TShiftState; X,
+procedure TForm1.FormMouseMove(Sender: TObject; Shift: TShiftState; X,
   Y: Integer);
 begin
-  if frmain.Image1.Stretch then
-    frmain.Image1.Cursor:=crSizeAll
+  if Form1.Image1.Stretch then
+    Form1.Image1.Cursor:=crSizeAll
   else
-    frmain.Image1.Cursor:=crDefault;
+    Form1.Image1.Cursor:=crDefault;
 
   hidetoolbardelay:=5;
 
-  if frmain.mnuShowThumbs.Checked then
-    frmain.ToolBar1.Top:=frmain.pssThumbs.Top-frmain.ToolBar1.Height
+  if Form1.MenuItem30.Checked then
+    Form1.ToolBar1.Top:=Form1.PairSplitterSide2.Top-Form1.ToolBar1.Height
   else
-    frmain.ToolBar1.Top:=screen.Height-frmain.ToolBar1.Height;
+    Form1.ToolBar1.Top:=screen.Height-Form1.ToolBar1.Height;
 
-  frmain.ToolBar1.Left:=Round((screen.Width-frmain.ToolBar1.Width)/2);
+  Form1.ToolBar1.Left:=Round((screen.Width-Form1.ToolBar1.Width)/2);
 
-  if full and (frmain.ToolBar1.Visible=false) then
-    frmain.ToolBar1.Visible:=true;
+  if full and (Form1.ToolBar1.Visible=false) then
+    Form1.ToolBar1.Visible:=true;
 
   if startdraw and (not startselect) then
   begin
-    frmain.Image1.Anchors:=[];
-    frmain.Image1.Left:=mouse.CursorPos.x-imgx;
-    frmain.Image1.Top:=mouse.CursorPos.y-imgy;
+    Form1.Image1.Anchors:=[];
+    Form1.Image1.Left:=mouse.CursorPos.x-imgx;
+    Form1.Image1.Top:=mouse.CursorPos.y-imgy;
   end;
   if startselect then
   begin
-    frmain.Shape1.Visible:=true;
-    frmain.Shape1.SetBounds(imgx,imgy,X-imgx,Y-imgy);
+    Form1.Shape1.Visible:=true;
+    Form1.Shape1.SetBounds(imgx,imgy,X-imgx,Y-imgy);
   end;
 end;
 
-procedure Tfrmain.FormMouseWheel(Sender: TObject; Shift: TShiftState;
+procedure TForm1.FormMouseWheel(Sender: TObject; Shift: TShiftState;
   WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
 begin
   if WheelDelta>0 then
@@ -1854,60 +1788,60 @@ begin
     zoomout(true);
 end;
 
-procedure Tfrmain.FormResize(Sender: TObject);
+procedure TForm1.FormResize(Sender: TObject);
 begin
-  if frmain.mnuShowThumbs.Checked then
-    frmain.psVertical.Position:=(frmain.psVertical.Height-thumbsize)-18
+  if Form1.MenuItem30.Checked then
+    Form1.PairSplitter1.Position:=(Form1.PairSplitter1.Height-thumbsize)-25
   else
-    frmain.psVertical.Position:=frmain.psVertical.Height;
+    Form1.PairSplitter1.Position:=Form1.PairSplitter1.Height;
 end;
 
-procedure Tfrmain.FormShow(Sender: TObject);
+procedure TForm1.FormShow(Sender: TObject);
 begin
   if Assigned(flist) then
   begin
     if (ifile<flist.Count) then
       loadpicture(carpeta+flist[ifile]);
   end;
-  frmain.pssThumbs.OnResize:=@frmain.PairSplitterSide2Resize;
+  Form1.PairSplitter1.Position:=Form1.PairSplitter1.Height-64-18;
 end;
 
-procedure Tfrmain.FormWindowStateChange(Sender: TObject);
+procedure TForm1.FormWindowStateChange(Sender: TObject);
 begin
-  if Assigned(flist) and modethumb and frmain.Image1.Visible and (ifgif=false) then
+  if Assigned(flist) and modethumb and Form1.Image1.Visible and (ifgif=false) then
   begin
-    if (frmain.MenuItem58.Checked=false) and ((frmain.WindowState=wsMaximized) or (frmain.WindowState=wsNormal) or (frmain.WindowState=wsFullScreen)) then
+    if (Form1.MenuItem58.Checked=false) and ((Form1.WindowState=wsMaximized) or (Form1.WindowState=wsNormal) or (Form1.WindowState=wsFullScreen)) then
       loadpicture(carpeta+flist[ifile],false);
   end;
 end;
 
-procedure Tfrmain.Image1Click(Sender: TObject);
+procedure TForm1.Image1Click(Sender: TObject);
 begin
   if startselect=false then
-    frmain.Shape1.Visible:=false;
+    Form1.Shape1.Visible:=false;
 end;
 
-procedure Tfrmain.Image1DblClick(Sender: TObject);
+procedure TForm1.Image1DblClick(Sender: TObject);
 begin
   fullsc();
 end;
 
 
-procedure Tfrmain.Image1MouseUp(Sender: TObject; Button: TMouseButton;
+procedure TForm1.Image1MouseUp(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
   startdraw:=false;
   startselect:=false;
-  //frmain.Image1.Anchors:=[akTop,akLeft,akRight,akBottom];
+  //Form1.Image1.Anchors:=[akTop,akLeft,akRight,akBottom];
 end;
 
-procedure Tfrmain.Image1Resize(Sender: TObject);
+procedure TForm1.Image1Resize(Sender: TObject);
 begin
 
 end;
 
 
-procedure Tfrmain.MenuItem10Click(Sender: TObject);
+procedure TForm1.MenuItem10Click(Sender: TObject);
 begin
   OpenPictureDialog1.InitialDir:=carpeta;
   OpenPictureDialog1.Execute;
@@ -1916,66 +1850,66 @@ begin
   //if flist.Count>0 then
   //flist.Clear;
     loadfiles(ExtractFilePath(ExpandFileNameUTF8(OpenPictureDialog1.FileName)),ExtractFileName(OpenPictureDialog1.FileName));
-    frmain.ShellTreeView1.OnSelectionChanged:=nil;
+    Form1.ShellTreeView1.OnSelectionChanged:=nil;
     if DirectoryExists(ExtractFilePath(ExpandFileNameUTF8(OpenPictureDialog1.FileName))) then
-      frmain.ShellTreeView1.Path:=ExtractFilePath(ExpandFileNameUTF8(OpenPictureDialog1.FileName));
-    frmain.ShellTreeView1.OnSelectionChanged:=@ShellTreeView1SelectionChanged;
+      Form1.ShellTreeView1.Path:=ExtractFilePath(ExpandFileNameUTF8(OpenPictureDialog1.FileName));
+    Form1.ShellTreeView1.OnSelectionChanged:=@ShellTreeView1SelectionChanged;
   end;
 end;
 
-procedure Tfrmain.MenuItem13Click(Sender: TObject);
+procedure TForm1.MenuItem13Click(Sender: TObject);
 begin
   modethumb:=false;
   if ifgif then
   begin
-    frmain.Timer3.Enabled:=false;
-    frmain.Image1.Visible:=true;
-    frmain.Image1.Picture.Clear;
-    frmain.Image1.Picture.LoadFromClipboardFormat(2);
+    Form1.Timer3.Enabled:=false;
+    Form1.Image1.Visible:=true;
+    Form1.Image1.Picture.Clear;
+    Form1.Image1.Picture.LoadFromClipboardFormat(2);
   end
   else
   begin
-    frmain.Image1.Picture.Clear;
-    frmain.Image1.Picture.LoadFromClipboardFormat(2);
+    Form1.Image1.Picture.Clear;
+    Form1.Image1.Picture.LoadFromClipboardFormat(2);
   end;
-  frmain.tbFlipHorizontal.Enabled:=true;
-  frmain.tbFlipVertical.Enabled:=true;
-  frmain.ToolButton6.Enabled:=true;
-  frmain.ToolButton7.Enabled:=true;
-  frmain.ToolButton9.Enabled:=true;
-  frmain.ToolButton10.Enabled:=true;
-  frmain.ToolButton11.Enabled:=true;
-  frmain.ToolButton14.Enabled:=true;
-  frmain.ToolButton15.Enabled:=true;
-  frmain.MenuItem6.Enabled:=true;
-  frmain.MenuItem7.Enabled:=true;
-  frmain.MenuItem8.Enabled:=true;
-  frmain.MenuItem9.Enabled:=true;
-  frmain.MenuItem16.Enabled:=true;
-  frmain.MenuItem14.Enabled:=true;
-  frmain.MenuItem7.Enabled:=true;
-  frmain.MenuItem8.Enabled:=true;
-  frmain.MenuItem14.Enabled:=true;
-  frmain.MenuItem15.Enabled:=true;
-  frmain.MenuItem31.Enabled:=true;
+  Form1.ToolButton4.Enabled:=true;
+  Form1.ToolButton5.Enabled:=true;
+  Form1.ToolButton6.Enabled:=true;
+  Form1.ToolButton7.Enabled:=true;
+  Form1.ToolButton9.Enabled:=true;
+  Form1.ToolButton10.Enabled:=true;
+  Form1.ToolButton11.Enabled:=true;
+  Form1.ToolButton14.Enabled:=true;
+  Form1.ToolButton15.Enabled:=true;
+  Form1.MenuItem6.Enabled:=true;
+  Form1.MenuItem7.Enabled:=true;
+  Form1.MenuItem8.Enabled:=true;
+  Form1.MenuItem9.Enabled:=true;
+  Form1.MenuItem16.Enabled:=true;
+  Form1.MenuItem14.Enabled:=true;
+  Form1.MenuItem7.Enabled:=true;
+  Form1.MenuItem8.Enabled:=true;
+  Form1.MenuItem14.Enabled:=true;
+  Form1.MenuItem15.Enabled:=true;
+  Form1.MenuItem31.Enabled:=true;
   ifgif:=false;
-  frmain.StatusBar1.Panels.Items[1].Text:='Resolucion:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height);
-  frmain.Caption:='LazView [Clipboard]';
+  Form1.StatusBar1.Panels.Items[1].Text:='Resolucion:'+inttostr(Form1.Image1.Picture.Width)+'x'+inttostr(Form1.Image1.Picture.Height);
+  Form1.Caption:='LazView [Clipboard]';
 end;
 
-procedure Tfrmain.MenuItem14Click(Sender: TObject);
+procedure TForm1.MenuItem14Click(Sender: TObject);
 var
    recorte:TBGRABitmap;
 begin
-  if frmain.Shape1.Visible then
+  if Form1.Shape1.Visible then
   begin
-    recorte:=TBGRABitmap.Create(frmain.Shape1.BaseBounds.Width,frmain.Shape1.BaseBounds.Height);
+    recorte:=TBGRABitmap.Create(Form1.Shape1.BaseBounds.Width,Form1.Shape1.BaseBounds.Height);
   end
   else
-    frmain.Image1.Picture.Bitmap.SaveToClipboardFormat(2);
+    Form1.Image1.Picture.Bitmap.SaveToClipboardFormat(2);
 end;
 
-procedure Tfrmain.MenuItem16Click(Sender: TObject);
+procedure TForm1.MenuItem16Click(Sender: TObject);
 var
    confirmar:boolean=true;
    filtroext:string;
@@ -1984,23 +1918,23 @@ var
    bgrtmp:TBGRABitmap;
 begin
   if Assigned(flist) then
-    frmain.SavePictureDialog1.FileName:=flist[ifile]
+    Form1.SavePictureDialog1.FileName:=flist[ifile]
   else
-    frmain.SavePictureDialog1.FileName:='IMAGEN.BMP';
+    Form1.SavePictureDialog1.FileName:='IMAGEN.BMP';
   for i:=1 to 5 do
   begin
-    frmain.SavePictureDialog1.FilterIndex:=i;
-    //ShowMessage('.'+UpperCase(frmain.SavePictureDialog1.GetFilterExt)+' ---- '+UpperCase(ExtractFileExt(frmain.SavePictureDialog1.FileName)));
-    if UpperCase('.'+frmain.SavePictureDialog1.GetFilterExt)=UpperCase(ExtractFileExt(frmain.SavePictureDialog1.FileName)) then
+    Form1.SavePictureDialog1.FilterIndex:=i;
+    //ShowMessage('.'+UpperCase(Form1.SavePictureDialog1.GetFilterExt)+' ---- '+UpperCase(ExtractFileExt(Form1.SavePictureDialog1.FileName)));
+    if UpperCase('.'+Form1.SavePictureDialog1.GetFilterExt)=UpperCase(ExtractFileExt(Form1.SavePictureDialog1.FileName)) then
       break;
   end;
-  frmain.SavePictureDialog1.Execute;
-  filtroext:=StringReplace(frmain.SavePictureDialog1.GetFilterExt,'*','',[rfReplaceAll]);
+  Form1.SavePictureDialog1.Execute;
+  filtroext:=StringReplace(Form1.SavePictureDialog1.GetFilterExt,'*','',[rfReplaceAll]);
   if filtroext='.' then
-    filtroext:=ExtractFileExt(frmain.SavePictureDialog1.FileName);
-  if frmain.SavePictureDialog1.UserChoice={$IFDEF WINDOWS}1{$ELSE}2{$ENDIF} then
+    filtroext:=ExtractFileExt(Form1.SavePictureDialog1.FileName);
+  if Form1.SavePictureDialog1.UserChoice={$IFDEF WINDOWS}1{$ELSE}2{$ENDIF} then
   begin
-    if FileExists(ExtractFilePath(frmain.SavePictureDialog1.FileName)+pathdelim+ExtractFileName(frmain.SavePictureDialog1.FileName)+'.'+frmain.SavePictureDialog1.GetFilterExt) then
+    if FileExists(ExtractFilePath(Form1.SavePictureDialog1.FileName)+pathdelim+ExtractFileName(Form1.SavePictureDialog1.FileName)+'.'+Form1.SavePictureDialog1.GetFilterExt) then
       confirmar:=(Application.MessageBox('Desea reemplazar la imagen?','Confirmar',MB_ICONQUESTION + MB_YESNO)=IDYES)
     else
     begin
@@ -2008,32 +1942,32 @@ begin
     end;
     if confirmar then
     begin
-      case frmain.SavePictureDialog1.FilterIndex of
+      case Form1.SavePictureDialog1.FilterIndex of
         1:
         begin
           Form3.ShowModal;
           calidadjpg:=Form3.TrackBar1.Position;
-          frmain.Image1.Picture.Jpeg.CompressionQuality:=calidadjpg;
-          frmain.Image1.Refresh;
-          frmain.Image1.Picture.Jpeg.SaveToFile(ExtractFilePath(frmain.SavePictureDialog1.FileName)+pathdelim+ExtractFileName(frmain.SavePictureDialog1.FileName)+'.'+frmain.SavePictureDialog1.GetFilterExt);
+          Form1.Image1.Picture.Jpeg.CompressionQuality:=calidadjpg;
+          Form1.Image1.Refresh;
+          Form1.Image1.Picture.Jpeg.SaveToFile(ExtractFilePath(Form1.SavePictureDialog1.FileName)+pathdelim+ExtractFileName(Form1.SavePictureDialog1.FileName)+'.'+Form1.SavePictureDialog1.GetFilterExt);
         end;
-        2:frmain.Image1.Picture.PNG.SaveToFile(ExtractFilePath(frmain.SavePictureDialog1.FileName)+pathdelim+ExtractFileName(frmain.SavePictureDialog1.FileName)+'.'+frmain.SavePictureDialog1.GetFilterExt);
-        3:frmain.Image1.Picture.Bitmap.SaveToFile(ExtractFilePath(frmain.SavePictureDialog1.FileName)+pathdelim+ExtractFileName(frmain.SavePictureDialog1.FileName)+'.'+frmain.SavePictureDialog1.GetFilterExt);
-        4:frmain.Image1.Picture.Icon.SaveToFile(ExtractFilePath(frmain.SavePictureDialog1.FileName)+pathdelim+ExtractFileName(frmain.SavePictureDialog1.FileName)+'.'+frmain.SavePictureDialog1.GetFilterExt);
+        2:Form1.Image1.Picture.PNG.SaveToFile(ExtractFilePath(Form1.SavePictureDialog1.FileName)+pathdelim+ExtractFileName(Form1.SavePictureDialog1.FileName)+'.'+Form1.SavePictureDialog1.GetFilterExt);
+        3:Form1.Image1.Picture.Bitmap.SaveToFile(ExtractFilePath(Form1.SavePictureDialog1.FileName)+pathdelim+ExtractFileName(Form1.SavePictureDialog1.FileName)+'.'+Form1.SavePictureDialog1.GetFilterExt);
+        4:Form1.Image1.Picture.Icon.SaveToFile(ExtractFilePath(Form1.SavePictureDialog1.FileName)+pathdelim+ExtractFileName(Form1.SavePictureDialog1.FileName)+'.'+Form1.SavePictureDialog1.GetFilterExt);
         5:
          begin
            if ifgif then
            begin
-             BGRAGif.SaveToFile(ExtractFilePath(frmain.SavePictureDialog1.FileName)+pathdelim+ExtractFileName(frmain.SavePictureDialog1.FileName)+'.'+frmain.SavePictureDialog1.GetFilterExt);
+             BGRAGif.SaveToFile(ExtractFilePath(Form1.SavePictureDialog1.FileName)+pathdelim+ExtractFileName(Form1.SavePictureDialog1.FileName)+'.'+Form1.SavePictureDialog1.GetFilterExt);
            end
            else
            begin
              BGRAgif:=TBGRAAnimatedGif.Create;
-             bgrtmp:=TBGRABitmap.Create(frmain.Image1.Picture.Bitmap);
+             bgrtmp:=TBGRABitmap.Create(Form1.Image1.Picture.Bitmap);
              BGRAgif.SetSize(bgrtmp.Width,bgrtmp.Height);
              BGRAgif.InsertFrame(0,bgrtmp,0,0,0,dmKeep,true);
-             frmain.Image1.Picture.Assign(bgrtmp);
-             BGRAGif.SaveToFile(ExtractFilePath(frmain.SavePictureDialog1.FileName)+pathdelim+ExtractFileName(frmain.SavePictureDialog1.FileName)+'.'+frmain.SavePictureDialog1.GetFilterExt);
+             Form1.Image1.Picture.Assign(bgrtmp);
+             BGRAGif.SaveToFile(ExtractFilePath(Form1.SavePictureDialog1.FileName)+pathdelim+ExtractFileName(Form1.SavePictureDialog1.FileName)+'.'+Form1.SavePictureDialog1.GetFilterExt);
              bgrtmp.Destroy;
              BGRAGif.Destroy;
            end;
@@ -2044,149 +1978,148 @@ begin
   end;
 end;
 
-procedure Tfrmain.MenuItem17Click(Sender: TObject);
+procedure TForm1.MenuItem17Click(Sender: TObject);
 begin
   filterimagen(1);
 end;
 
-procedure Tfrmain.MenuItem20Click(Sender: TObject);
+procedure TForm1.MenuItem20Click(Sender: TObject);
 begin
   efectimagen(5);
 end;
 
-procedure Tfrmain.MenuItem21Click(Sender: TObject);
+procedure TForm1.MenuItem21Click(Sender: TObject);
 begin
   efectimagen(6);
 end;
 
-procedure Tfrmain.MenuItem22Click(Sender: TObject);
+procedure TForm1.MenuItem22Click(Sender: TObject);
 begin
   efectimagen(7);;
 end;
 
-procedure Tfrmain.MenuItem23Click(Sender: TObject);
+procedure TForm1.MenuItem23Click(Sender: TObject);
 begin
   efectimagen(15);
 end;
 
-procedure Tfrmain.MenuItem24Click(Sender: TObject);
+procedure TForm1.MenuItem24Click(Sender: TObject);
 begin
   efectimagen(16);
 end;
 
-procedure Tfrmain.MenuItem25Click(Sender: TObject);
+procedure TForm1.MenuItem25Click(Sender: TObject);
 begin
   efectimagen(17);
 end;
 
-procedure Tfrmain.MenuItem27Click(Sender: TObject);
+procedure TForm1.MenuItem27Click(Sender: TObject);
 begin
   efectimagen(18);
 end;
 
-procedure Tfrmain.MenuItem28Click(Sender: TObject);
+procedure TForm1.MenuItem28Click(Sender: TObject);
 begin
   efectimagen(19);
 end;
 
-procedure Tfrmain.MenuItem2Click(Sender: TObject);
+procedure TForm1.MenuItem2Click(Sender: TObject);
 begin
 
 end;
 
-procedure Tfrmain.mnuShowThumbsClick(Sender: TObject);
+procedure TForm1.MenuItem30Click(Sender: TObject);
 begin
-  frmain.mnuShowThumbs.Checked:=not frmain.mnuShowThumbs.Checked;
-  frmain.tbShowThumbs.Down:=frmain.mnuShowThumbs.Checked;
-  showthumbs:=frmain.mnuShowThumbs.Checked;
+
+  Form1.MenuItem30.Checked:=not Form1.MenuItem30.Checked;
+  Form1.ToolButton17.Down:=Form1.MenuItem30.Checked;
+  showthumbs:=Form1.MenuItem30.Checked;
   if showthumbs=false then
   begin
-    frmain.pssThumbs.OnResize:=nil;
-    frmain.psVertical.Position:=frmain.psVertical.Height;
-    frmain.sboxthumb.Visible:=false;
-    frmain.pssThumbs.OnResize:=@frmain.PairSplitterSide2Resize;
+    Form1.PairSplitterSide2.OnResize:=nil;
+    Form1.PairSplitter1.Position:=Form1.PairSplitter1.Height;
+    Form1.ScrollBox2.Visible:=false;
+    Form1.PairSplitterSide2.OnResize:=@Form1.PairSplitterSide2Resize;
     //refreshthumbs;
   end
   else
   begin
-    frmain.sboxthumb.Visible:=true;
-    frmain.psVertical.Position:=frmain.psVertical.Height-64-18;
+    Form1.PairSplitter1.Position:=(Form1.PairSplitter1.Height-thumbsize)-Form1.PairSplitter1.ClientOrigin.x-10-Form1.ScrollBox2.HorzScrollBar.Size;
+    Form1.ScrollBox2.Visible:=true;
     if folderchange then
     begin
-      refreshthumbs;
       ththumbs:=thumbsthread.Create(true);
-      ththumbs.thumbpath:=carpeta;
       ththumbs.Start;
     end;
   end;
 end;
 
-procedure Tfrmain.MenuItem31Click(Sender: TObject);
+procedure TForm1.MenuItem31Click(Sender: TObject);
 begin
-  frresize.SpinEdit1.Value:=realimgwidth;
-  frresize.SpinEdit2.Value:=realimgheight;
-  frresize.ShowModal;
+  Form2.SpinEdit1.Value:=realimgwidth;
+  Form2.SpinEdit2.Value:=realimgheight;
+  Form2.ShowModal;
   if okresize then
-    resizeto(frresize.SpinEdit1.Value,frresize.SpinEdit2.Value);
+    resizeto(Form2.SpinEdit1.Value,Form2.SpinEdit2.Value);
 end;
 
-procedure Tfrmain.MenuItem33Click(Sender: TObject);
+procedure TForm1.MenuItem33Click(Sender: TObject);
 begin
   efectimagen(8);
 end;
 
-procedure Tfrmain.MenuItem34Click(Sender: TObject);
+procedure TForm1.MenuItem34Click(Sender: TObject);
 begin
  efectimagen(9);
 end;
 
-procedure Tfrmain.MenuItem36Click(Sender: TObject);
+procedure TForm1.MenuItem36Click(Sender: TObject);
 begin
   efectimagen(10);
 end;
 
-procedure Tfrmain.MenuItem37Click(Sender: TObject);
+procedure TForm1.MenuItem37Click(Sender: TObject);
 begin
   efectimagen(11);
 end;
 
-procedure Tfrmain.MenuItem39Click(Sender: TObject);
+procedure TForm1.MenuItem39Click(Sender: TObject);
 begin
   efectimagen(12);
 end;
 
-procedure Tfrmain.MenuItem3Click(Sender: TObject);
+procedure TForm1.MenuItem3Click(Sender: TObject);
 begin
   Application.Terminate;
 end;
 
-procedure Tfrmain.MenuItem40Click(Sender: TObject);
+procedure TForm1.MenuItem40Click(Sender: TObject);
 begin
   efectimagen(13);
 end;
 
-procedure Tfrmain.MenuItem41Click(Sender: TObject);
+procedure TForm1.MenuItem41Click(Sender: TObject);
 begin
   efectimagen(14);
 end;
 
-procedure Tfrmain.MenuItem43Click(Sender: TObject);
+procedure TForm1.MenuItem43Click(Sender: TObject);
 begin
   if (full=false) and (compactmode=false) then
   begin
-    fwidth:=frmain.Width;
-    fheight:=frmain.Height;
-    frmain.ToolBar1.Visible:=false;
-    frmain.StatusBar1.Visible:=false;
-    frmain.psVertical.AnchorSideTop.Control:=frmain;
-    frmain.psVertical.AnchorSideTop.Side:=asrTop;
-    frmain.Splitter1.AnchorSideTop.Control:=frmain;
-    frmain.Splitter1.AnchorSideTop.Side:=asrTop;
-    frmain.psVertical.AnchorSideBottom.Control:=frmain;
-    frmain.psVertical.AnchorSideBottom.Side:=asrBottom;
-    frmain.Splitter1.AnchorSideBottom.Control:=frmain;
-    frmain.Splitter1.AnchorSideBottom.Side:=asrBottom;
-    frmain.MainMenu1.Items.Visible:=false;
+    fwidth:=Form1.Width;
+    fheight:=Form1.Height;
+    Form1.ToolBar1.Visible:=false;
+    Form1.StatusBar1.Visible:=false;
+    Form1.PairSplitter1.AnchorSideTop.Control:=Form1;
+    Form1.PairSplitter1.AnchorSideTop.Side:=asrTop;
+    Form1.Splitter1.AnchorSideTop.Control:=Form1;
+    Form1.Splitter1.AnchorSideTop.Side:=asrTop;
+    Form1.PairSplitter1.AnchorSideBottom.Control:=Form1;
+    Form1.PairSplitter1.AnchorSideBottom.Side:=asrBottom;
+    Form1.Splitter1.AnchorSideBottom.Control:=Form1;
+    Form1.Splitter1.AnchorSideBottom.Side:=asrBottom;
+    Form1.MainMenu1.Items.Visible:=false;
     compactmode:=true;
   end
   else
@@ -2200,7 +2133,7 @@ begin
   end;
 end;
 
-procedure Tfrmain.MenuItem44Click(Sender: TObject);
+procedure TForm1.MenuItem44Click(Sender: TObject);
 begin
    Form5.Edit1.Text:=inttostr(ifile+1);
    Form5.ShowModal;
@@ -2214,235 +2147,235 @@ begin
    end;
 end;
 
-procedure Tfrmain.MenuItem46Click(Sender: TObject);
+procedure TForm1.MenuItem46Click(Sender: TObject);
 begin
-  if frmain.Image1.AntialiasingMode=amOn then
+  if Form1.Image1.AntialiasingMode=amOn then
   begin
-    frmain.Image1.AntialiasingMode:=amOff;
-    frmain.MenuItem46.Checked:=false;
+    Form1.Image1.AntialiasingMode:=amOff;
+    Form1.MenuItem46.Checked:=false;
   end
   else
   begin
-    frmain.Image1.AntialiasingMode:=amOn;
-    frmain.MenuItem46.Checked:=true;
+    Form1.Image1.AntialiasingMode:=amOn;
+    Form1.MenuItem46.Checked:=true;
   end;
 end;
 
-procedure Tfrmain.MenuItem49Click(Sender: TObject);
+procedure TForm1.MenuItem49Click(Sender: TObject);
 begin
   setwallpaper('2');
 end;
 
-procedure Tfrmain.MenuItem50Click(Sender: TObject);
+procedure TForm1.MenuItem50Click(Sender: TObject);
 begin
   setwallpaper('0');
 end;
 
-procedure Tfrmain.MenuItem51Click(Sender: TObject);
+procedure TForm1.MenuItem51Click(Sender: TObject);
 begin
   setwallpaper('','1');
 end;
 
-procedure Tfrmain.MenuItem52Click(Sender: TObject);
+procedure TForm1.MenuItem52Click(Sender: TObject);
 begin
   setwallpaper('1');
 end;
 
-procedure Tfrmain.MenuItem53Click(Sender: TObject);
+procedure TForm1.MenuItem53Click(Sender: TObject);
 begin
-  frmain.MenuItem64.Checked:=false;
-  frmain.MenuItem65.Checked:=false;
-  frmain.MenuItem66.Checked:=false;
-  frmain.MenuItem53.Checked:=true;
+  Form1.MenuItem64.Checked:=false;
+  Form1.MenuItem65.Checked:=false;
+  Form1.MenuItem66.Checked:=false;
+  Form1.MenuItem53.Checked:=true;
   Form6.ShowModal;
-  frmain.psVertical.Position:=frmain.psVertical.Height-Form6.SpinEdit1.Value-18;
+  Form1.PairSplitter1.Position:=Form1.PairSplitter1.Height-Form6.SpinEdit1.Value-18;
 end;
 
-procedure Tfrmain.MenuItem54Click(Sender: TObject);
+procedure TForm1.MenuItem54Click(Sender: TObject);
 begin
-  if frmain.ToolButton24.Down then
+  if Form1.ToolButton24.Down then
   begin
-    frmain.ToolButton24.Down:=false;
-    frmain.MenuItem24.Checked:=false;
+    Form1.ToolButton24.Down:=false;
+    Form1.MenuItem24.Checked:=false;
     zoomnormal();
   end
   else
   begin
-    frmain.ToolButton24.Down:=true;
-    frmain.MenuItem24.Checked:=true;
+    Form1.ToolButton24.Down:=true;
+    Form1.MenuItem24.Checked:=true;
     zoomstrech();
   end;
 end;
 
-procedure Tfrmain.MenuItem55Click(Sender: TObject);
+procedure TForm1.MenuItem55Click(Sender: TObject);
 begin
   Form4.Show;
 end;
 
-procedure Tfrmain.MenuItem56Click(Sender: TObject);
+procedure TForm1.MenuItem56Click(Sender: TObject);
 begin
   filterimagen(13);
 end;
 
-procedure Tfrmain.MenuItem57Click(Sender: TObject);
+procedure TForm1.MenuItem57Click(Sender: TObject);
 begin
   filterimagen(15);
 end;
 
-procedure Tfrmain.MenuItem58Click(Sender: TObject);
+procedure TForm1.MenuItem58Click(Sender: TObject);
 begin
-  frmain.MenuItem58.Checked:=not frmain.MenuItem58.Checked;
-  if Assigned(flist) and frmain.Image1.Visible then
+  Form1.MenuItem58.Checked:=not Form1.MenuItem58.Checked;
+  if Assigned(flist) and Form1.Image1.Visible then
   begin
     loadpicture(carpeta+flist[ifile]);
   end;
 end;
 
-procedure Tfrmain.MenuItem59Click(Sender: TObject);
+procedure TForm1.MenuItem59Click(Sender: TObject);
 begin
-  frmain.MenuItem59.Checked:=not frmain.MenuItem59.Checked;
-  frmain.tbShowTreeView.Down:=frmain.MenuItem59.Checked;
-  if frmain.MenuItem59.Checked then
-    frmain.Splitter1.Left:=200
+  Form1.MenuItem59.Checked:=not Form1.MenuItem59.Checked;
+  Form1.ToolButton16.Down:=Form1.MenuItem59.Checked;
+  if Form1.MenuItem59.Checked then
+    Form1.Splitter1.Left:=200
   else
-    frmain.Splitter1.Left:=0-frmain.Splitter1.Width;
-  frmain.ShellTreeView1.Visible:=frmain.MenuItem59.Checked;
-  if frmain.MenuItem61.Checked=false then
+    Form1.Splitter1.Left:=0-Form1.Splitter1.Width;
+  Form1.ShellTreeView1.Visible:=Form1.MenuItem59.Checked;
+  if Form1.MenuItem61.Checked=false then
   begin
-    frmain.ToolBar1.Visible:=false;
-    frmain.Splitter1.AnchorSideTop.Control:=frmain;
-    frmain.Splitter1.AnchorSideTop.Side:=asrTop;
+    Form1.ToolBar1.Visible:=false;
+    Form1.Splitter1.AnchorSideTop.Control:=Form1;
+    Form1.Splitter1.AnchorSideTop.Side:=asrTop;
   end
   else
   begin
-    frmain.ToolBar1.Visible:=true;
-    frmain.Splitter1.AnchorSideTop.Control:=frmain.ToolBar1;
-    frmain.Splitter1.AnchorSideTop.Side:=asrBottom;
+    Form1.ToolBar1.Visible:=true;
+    Form1.Splitter1.AnchorSideTop.Control:=Form1.ToolBar1;
+    Form1.Splitter1.AnchorSideTop.Side:=asrBottom;
   end;
-  if frmain.MenuItem62.Checked then
+  if Form1.MenuItem62.Checked then
   begin
-    frmain.Splitter1.AnchorSideBottom.Control:=frmain.StatusBar1;
-    frmain.Splitter1.AnchorSideBottom.Side:=asrTop;
+    Form1.Splitter1.AnchorSideBottom.Control:=Form1.StatusBar1;
+    Form1.Splitter1.AnchorSideBottom.Side:=asrTop;
   end
   else
   begin
-    frmain.Splitter1.AnchorSideBottom.Control:=frmain;
-    frmain.Splitter1.AnchorSideBottom.Side:=asrBottom;
+    Form1.Splitter1.AnchorSideBottom.Control:=Form1;
+    Form1.Splitter1.AnchorSideBottom.Side:=asrBottom;
   end;
 end;
 
-procedure Tfrmain.MenuItem5Click(Sender: TObject);
+procedure TForm1.MenuItem5Click(Sender: TObject);
 begin
-  ShowMessage('Imagen viewer: LazView'+#13#10+'Version: 0.1'+#13#10+'Created by: nenirey@gmail.com'+#13#10+'CopyLeft: 2018');
+  ShowMessage('Visor de imágenes: LazView'+#13#10+'Version: 1.0'+#13#10+'Creatado por: Reinier Romero Mir'+#13#10+'Correo: nenirey@gmail.com'+#13#10+'Esta aplicacion fue creada en mi tiempo libre y pensada lo mas sencilla posible por lo tanto no ofrece ninguna garantia.');
 end;
 
-procedure Tfrmain.MenuItem61Click(Sender: TObject);
+procedure TForm1.MenuItem61Click(Sender: TObject);
 begin
-  if frmain.ToolBar1.Visible then
+  if Form1.ToolBar1.Visible then
   begin
-    frmain.ToolBar1.Visible:=false;
-    frmain.psVertical.AnchorSideTop.Control:=frmain;
-    frmain.psVertical.AnchorSideTop.Side:=asrTop;
-    frmain.Splitter1.AnchorSideTop.Control:=frmain;
-    frmain.Splitter1.AnchorSideTop.Side:=asrTop;
+    Form1.ToolBar1.Visible:=false;
+    Form1.PairSplitter1.AnchorSideTop.Control:=Form1;
+    Form1.PairSplitter1.AnchorSideTop.Side:=asrTop;
+    Form1.Splitter1.AnchorSideTop.Control:=Form1;
+    Form1.Splitter1.AnchorSideTop.Side:=asrTop;
   end
   else
   begin
-    frmain.ToolBar1.Visible:=true;
-    frmain.psVertical.AnchorSideTop.Control:=frmain.ToolBar1;
-    frmain.psVertical.AnchorSideTop.Side:=asrBottom;
-    frmain.Splitter1.AnchorSideTop.Control:=frmain.ToolBar1;
-    frmain.Splitter1.AnchorSideTop.Side:=asrBottom;
+    Form1.ToolBar1.Visible:=true;
+    Form1.PairSplitter1.AnchorSideTop.Control:=Form1.ToolBar1;
+    Form1.PairSplitter1.AnchorSideTop.Side:=asrBottom;
+    Form1.Splitter1.AnchorSideTop.Control:=Form1.ToolBar1;
+    Form1.Splitter1.AnchorSideTop.Side:=asrBottom;
   end;
-  frmain.MenuItem61.Checked:=frmain.ToolBar1.Visible;
+  Form1.MenuItem61.Checked:=Form1.ToolBar1.Visible;
 end;
 
-procedure Tfrmain.MenuItem62Click(Sender: TObject);
+procedure TForm1.MenuItem62Click(Sender: TObject);
 begin
-  frmain.StatusBar1.Visible:=not frmain.StatusBar1.Visible;
-  frmain.MenuItem62.Checked:=frmain.StatusBar1.Visible;
-  if frmain.StatusBar1.Visible then
+  Form1.StatusBar1.Visible:=not form1.StatusBar1.Visible;
+  Form1.MenuItem62.Checked:=Form1.StatusBar1.Visible;
+  if Form1.StatusBar1.Visible then
   begin
-    frmain.psVertical.AnchorSideBottom.Control:=frmain.StatusBar1;
-    frmain.psVertical.AnchorSideBottom.Side:=asrTop;
+    Form1.PairSplitter1.AnchorSideBottom.Control:=Form1.StatusBar1;
+    Form1.PairSplitter1.AnchorSideBottom.Side:=asrTop;
   end
   else
   begin
-    frmain.psVertical.AnchorSideBottom.Control:=frmain;
-    frmain.psVertical.AnchorSideBottom.Side:=asrBottom;
+    Form1.PairSplitter1.AnchorSideBottom.Control:=Form1;
+    Form1.PairSplitter1.AnchorSideBottom.Side:=asrBottom;
   end;
-  if frmain.MenuItem62.Checked then
+  if Form1.MenuItem62.Checked then
   begin
-    frmain.Splitter1.AnchorSideBottom.Control:=frmain.StatusBar1;
-    frmain.Splitter1.AnchorSideBottom.Side:=asrTop;
+    Form1.Splitter1.AnchorSideBottom.Control:=Form1.StatusBar1;
+    Form1.Splitter1.AnchorSideBottom.Side:=asrTop;
   end
   else
   begin
-    frmain.Splitter1.AnchorSideBottom.Control:=frmain;
-    frmain.Splitter1.AnchorSideBottom.Side:=asrBottom;
+    Form1.Splitter1.AnchorSideBottom.Control:=Form1;
+    Form1.Splitter1.AnchorSideBottom.Side:=asrBottom;
   end;
 end;
 
-procedure Tfrmain.MenuItem64Click(Sender: TObject);
+procedure TForm1.MenuItem64Click(Sender: TObject);
 begin
-  frmain.MenuItem64.Checked:=true;
-  frmain.MenuItem65.Checked:=false;
-  frmain.MenuItem66.Checked:=false;
-  frmain.MenuItem53.Checked:=false;
+  Form1.MenuItem64.Checked:=true;
+  Form1.MenuItem65.Checked:=false;
+  Form1.MenuItem66.Checked:=false;
+  Form1.MenuItem53.Checked:=false;
 
-  frmain.psVertical.Position:=frmain.psVertical.Height-32-18;
+  Form1.PairSplitter1.Position:=Form1.PairSplitter1.Height-32-18;
 end;
 
-procedure Tfrmain.MenuItem65Click(Sender: TObject);
+procedure TForm1.MenuItem65Click(Sender: TObject);
 begin
-  frmain.MenuItem64.Checked:=false;
-  frmain.MenuItem65.Checked:=true;
-  frmain.MenuItem66.Checked:=false;
-  frmain.MenuItem53.Checked:=false;
-  frmain.psVertical.Position:=frmain.psVertical.Height-64-18;
+  Form1.MenuItem64.Checked:=false;
+  Form1.MenuItem65.Checked:=true;
+  Form1.MenuItem66.Checked:=false;
+  Form1.MenuItem53.Checked:=false;
+  Form1.PairSplitter1.Position:=Form1.PairSplitter1.Height-64-18;
 end;
 
-procedure Tfrmain.MenuItem66Click(Sender: TObject);
+procedure TForm1.MenuItem66Click(Sender: TObject);
 begin
-  frmain.MenuItem64.Checked:=false;
-  frmain.MenuItem65.Checked:=false;
-  frmain.MenuItem66.Checked:=true;
-  frmain.MenuItem53.Checked:=false;
-  frmain.psVertical.Position:=frmain.psVertical.Height-128-18;
+  Form1.MenuItem64.Checked:=false;
+  Form1.MenuItem65.Checked:=false;
+  Form1.MenuItem66.Checked:=true;
+  Form1.MenuItem53.Checked:=false;
+  Form1.PairSplitter1.Position:=Form1.PairSplitter1.Height-128-18;
 end;
 
-procedure Tfrmain.MenuItem67Click(Sender: TObject);
+procedure TForm1.MenuItem67Click(Sender: TObject);
 begin
-  if frmain.MenuItem67.Checked then
+  if Form1.MenuItem67.Checked then
   begin
     mosaic.Clear;
-    frmain.ScrollBox1.Repaint;
+    Form1.ScrollBox1.Repaint;
   end
   else
   begin
     mosaic:=Graphics.TBitmap.Create;
     rendermosaic;
   end;
-  frmain.MenuItem67.Checked:=not frmain.MenuItem67.Checked;
-  frmain.Image1.Repaint;
+  Form1.MenuItem67.Checked:=not Form1.MenuItem67.Checked;
+  Form1.Image1.Repaint;
 end;
 
-procedure Tfrmain.MenuItem68Click(Sender: TObject);
+procedure TForm1.MenuItem68Click(Sender: TObject);
 begin
   filterimagen(9);
 end;
 
-procedure Tfrmain.MenuItem69Click(Sender: TObject);
+procedure TForm1.MenuItem69Click(Sender: TObject);
 begin
   try
-    frmain.MainMenu1.Items.Visible:=not frmain.MainMenu1.Items.Visible;
-    frmain.MenuItem69.Checked:=frmain.MainMenu1.Items.Visible;
+    Form1.MainMenu1.Items.Visible:=not Form1.MainMenu1.Items.Visible;
+    Form1.MenuItem69.Checked:=Form1.MainMenu1.Items.Visible;
   except on e:exception do
 
   end;
 end;
 
-procedure Tfrmain.MenuItem6Click(Sender: TObject);
+procedure TForm1.MenuItem6Click(Sender: TObject);
 begin
   if (realimgwidth>256) or ifgif then
     filterimagen(19)
@@ -2450,7 +2383,7 @@ begin
     efectimagen(1);
 end;
 
-procedure Tfrmain.MenuItem7Click(Sender: TObject);
+procedure TForm1.MenuItem7Click(Sender: TObject);
 begin
   if (realimgwidth>256) or ifgif then
     filterimagen(20)
@@ -2458,7 +2391,7 @@ begin
     efectimagen(2);
 end;
 
-procedure Tfrmain.MenuItem8Click(Sender: TObject);
+procedure TForm1.MenuItem8Click(Sender: TObject);
 begin
   if (realimgwidth>256) or ifgif then
     filterimagen(18)
@@ -2466,7 +2399,7 @@ begin
     efectimagen(3);
 end;
 
-procedure Tfrmain.MenuItem9Click(Sender: TObject);
+procedure TForm1.MenuItem9Click(Sender: TObject);
 begin
   if (realimgwidth>256) or ifgif then
     filterimagen(17)
@@ -2474,114 +2407,114 @@ begin
     efectimagen(4);
 end;
 
-procedure Tfrmain.PairSplitter2Resize(Sender: TObject);
+procedure TForm1.PairSplitter2Resize(Sender: TObject);
 begin
 
 end;
 
-procedure Tfrmain.PairSplitterSide2Resize(Sender: TObject);
+procedure TForm1.PairSplitterSide2Resize(Sender: TObject);
 begin
-  thumbsize:=frmain.sboxthumb.Height-18;
-  frmain.Timer4.Enabled:=true;
+  thumbsize:=Form1.ScrollBox2.Height-18;
+  Form1.Timer4.Enabled:=true;
 end;
 
-procedure Tfrmain.PairSplitterSide3Resize(Sender: TObject);
+procedure TForm1.PairSplitterSide3Resize(Sender: TObject);
 begin
-  if frmain.Splitter1.Left<>0 then
+  if Form1.Splitter1.Left<>0 then
   begin
-    frmain.ShellTreeView1.Visible:=true;
-    frmain.MenuItem59.Checked:=true;
+    Form1.ShellTreeView1.Visible:=true;
+    Form1.MenuItem59.Checked:=true;
   end;
 end;
 
-procedure Tfrmain.PopupMenu1Popup(Sender: TObject);
+procedure TForm1.PopupMenu1Popup(Sender: TObject);
 var
    i,s:integer;
    mi:TMenuItem;
    sm:TMenuItem;
 begin
- if frmain.PopupMenu1.Items.Count<2 then
+ if Form1.PopupMenu1.Items.Count<2 then
  begin
-   for i:=0 to frmain.MainMenu1.Items.Count-1 do
+   for i:=0 to Form1.MainMenu1.Items.Count-1 do
    begin
-     mi:=TMenuItem.Create(frmain.PopupMenu1);
-     mi.Caption:=frmain.MainMenu1.Items[i].Caption;
-     frmain.PopupMenu1.Items.Add(mi);
-     for s:=0 to frmain.MainMenu1.Items[i].Count-1 do
+     mi:=TMenuItem.Create(Form1.PopupMenu1);
+     mi.Caption:=Form1.MainMenu1.Items[i].Caption;
+     Form1.PopupMenu1.Items.Add(mi);
+     for s:=0 to Form1.MainMenu1.Items[i].Count-1 do
      begin
-       sm:=TMenuItem.Create(frmain.PopupMenu1);
-       sm.Caption:=frmain.MainMenu1.Items[i].Items[s].Caption;
-       sm.OnClick:=frmain.MainMenu1.Items[i].Items[s].OnClick;
-       sm.Checked:=frmain.MainMenu1.Items[i].Items[s].Checked;
-       sm.Enabled:=frmain.MainMenu1.Items[i].Items[s].Enabled;
-       frmain.PopupMenu1.Items[i].Add(sm);
+       sm:=TMenuItem.Create(Form1.PopupMenu1);
+       sm.Caption:=Form1.MainMenu1.Items[i].Items[s].Caption;
+       sm.OnClick:=Form1.MainMenu1.Items[i].Items[s].OnClick;
+       sm.Checked:=Form1.MainMenu1.Items[i].Items[s].Checked;
+       sm.Enabled:=Form1.MainMenu1.Items[i].Items[s].Enabled;
+       Form1.PopupMenu1.Items[i].Add(sm);
      end;
    end;
  end;
-  for i:=0 to frmain.MainMenu1.Items.Count-1 do
+  for i:=0 to Form1.MainMenu1.Items.Count-1 do
   begin
-    for s:=0 to frmain.MainMenu1.Items[i].Count-1 do
+    for s:=0 to Form1.MainMenu1.Items[i].Count-1 do
     begin
-      frmain.PopupMenu1.Items[i].Items[s].Caption:=frmain.MainMenu1.Items[i].Items[s].Caption;
-      frmain.PopupMenu1.Items[i].Items[s].Checked:=frmain.MainMenu1.Items[i].Items[s].Checked;
-      frmain.PopupMenu1.Items[i].Items[s].Enabled:=frmain.MainMenu1.Items[i].Items[s].Enabled;
+      Form1.PopupMenu1.Items[i].Items[s].Caption:=Form1.MainMenu1.Items[i].Items[s].Caption;
+      Form1.PopupMenu1.Items[i].Items[s].Checked:=Form1.MainMenu1.Items[i].Items[s].Checked;
+      Form1.PopupMenu1.Items[i].Items[s].Enabled:=Form1.MainMenu1.Items[i].Items[s].Enabled;
     end;
   end;
 end;
 
-procedure Tfrmain.ScrollBox1MouseDown(Sender: TObject; Button: TMouseButton;
+procedure TForm1.ScrollBox1MouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
 
 end;
 
-procedure Tfrmain.ScrollBox1MouseMove(Sender: TObject; Shift: TShiftState; X,
+procedure TForm1.ScrollBox1MouseMove(Sender: TObject; Shift: TShiftState; X,
   Y: Integer);
 begin
 
 end;
 
-procedure Tfrmain.ScrollBox1MouseWheel(Sender: TObject; Shift: TShiftState;
+procedure TForm1.ScrollBox1MouseWheel(Sender: TObject; Shift: TShiftState;
   WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
 begin
 
 end;
 
-procedure Tfrmain.ScrollBox1Paint(Sender: TObject);
+procedure TForm1.ScrollBox1Paint(Sender: TObject);
 begin
-  if frmain.MenuItem67.Checked then
-    frmain.ScrollBox1.Canvas.Draw(0,0,mosaic);
+  if Form1.MenuItem67.Checked then
+    Form1.ScrollBox1.Canvas.Draw(0,0,mosaic);
 end;
 
-procedure Tfrmain.sboxthumbMouseDown(Sender: TObject; Button: TMouseButton;
+procedure TForm1.ScrollBox2MouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
   mosaicmousedown:=true;
-  mosaicscrollposition:=frmain.sboxthumb.HorzScrollBar.Position;
+  mosaicscrollposition:=Form1.ScrollBox2.HorzScrollBar.Position;
   mosaicmouseposition:=X;
 end;
 
-procedure Tfrmain.sboxthumbMouseLeave(Sender: TObject);
+procedure TForm1.ScrollBox2MouseLeave(Sender: TObject);
 begin
   mosaicmousedown:=false;
 end;
 
-procedure Tfrmain.sboxthumbMouseMove(Sender: TObject; Shift: TShiftState; X,
+procedure TForm1.ScrollBox2MouseMove(Sender: TObject; Shift: TShiftState; X,
   Y: Integer);
 begin
   if mosaicmousedown then
   begin
-    frmain.sboxthumb.HorzScrollBar.Position:=mosaicscrollposition-(X-mosaicmouseposition);
+    Form1.ScrollBox2.HorzScrollBar.Position:=mosaicscrollposition-(X-mosaicmouseposition);
   end;
 end;
 
-procedure Tfrmain.sboxthumbMouseUp(Sender: TObject; Button: TMouseButton;
+procedure TForm1.ScrollBox2MouseUp(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
   mosaicmousedown:=false;
 end;
 
-procedure Tfrmain.ShellTreeView1Change(Sender: TObject; Node: TTreeNode);
+procedure TForm1.ShellTreeView1Change(Sender: TObject; Node: TTreeNode);
 begin
   if Node.Parent=nil then
   begin
@@ -2589,31 +2522,31 @@ begin
       0:
        begin
          {$IFDEF WINDOWS}
-         frmain.ShellTreeView1.Path:=GetWindowsSpecialDir(CSIDL_DESKTOPDIRECTORY);
+         Form1.ShellTreeView1.Path:=GetWindowsSpecialDir(CSIDL_DESKTOPDIRECTORY);
          {$ENDIF}
        end;
       1:
        begin
          {$IFDEF WINDOWS}
-         frmain.ShellTreeView1.Path:=GetWindowsSpecialDir(CSIDL_MYPICTURES);
+         Form1.ShellTreeView1.Path:=GetWindowsSpecialDir(CSIDL_MYPICTURES);
          {$ENDIF}
        end;
        2:
        begin
          {$IFDEF WINDOWS}
-         frmain.ShellTreeView1.Path:=GetWindowsSpecialDir(CSIDL_PERSONAL);
+         Form1.ShellTreeView1.Path:=GetWindowsSpecialDir(CSIDL_PERSONAL);
          {$ENDIF}
        end;
     end;
   end;
 end;
 
-procedure Tfrmain.ShellTreeView1Click(Sender: TObject);
+procedure TForm1.ShellTreeView1Click(Sender: TObject);
 begin
 
 end;
 
-procedure Tfrmain.ShellTreeView1Expanded(Sender: TObject; Node: TTreeNode);
+procedure TForm1.ShellTreeView1Expanded(Sender: TObject; Node: TTreeNode);
 var
    i:integer;
 begin
@@ -2621,15 +2554,15 @@ begin
     Node.Items[i].StateIndex:=16;
 end;
 
-procedure Tfrmain.ShellTreeView1SelectionChanged(Sender: TObject);
+procedure TForm1.ShellTreeView1SelectionChanged(Sender: TObject);
 begin
-  if DirectoryExists(frmain.ShellTreeView1.Path) then
+  if DirectoryExists(Form1.ShellTreeView1.Path) then
   begin
-    loadfiles(frmain.ShellTreeView1.Path,'');
+    loadfiles(Form1.ShellTreeView1.Path,'');
   end;
 end;
 
-procedure Tfrmain.Timer1Timer(Sender: TObject);
+procedure TForm1.Timer1Timer(Sender: TObject);
 begin
   if nfile>0 then
   begin
@@ -2650,177 +2583,177 @@ begin
     try
       loadpicture(carpeta+flist[ifile]);
     except
-      on E:Exception do frmain.StatusBar1.SimpleText:=inttostr(ifile+1)+'/'+inttostr(nfile)+' Formato no soportado!!!';
+      on E:Exception do Form1.StatusBar1.SimpleText:=inttostr(ifile+1)+'/'+inttostr(nfile)+' Formato no soportado!!!';
     end;
   end;
 end;
 
-procedure Tfrmain.Timer2Timer(Sender: TObject);
+procedure TForm1.Timer2Timer(Sender: TObject);
 begin
   if hidetoolbardelay>0 then
     Dec(hidetoolbardelay);
   if full and (hidetoolbardelay=0) then
   begin
-    frmain.ToolBar1.Visible:=false;
-    frmain.Image1.Cursor:=crNone;
+    Form1.ToolBar1.Visible:=false;
+    Form1.Image1.Cursor:=crNone;
   end;
 end;
 
-procedure Tfrmain.Timer3Timer(Sender: TObject);
+procedure TForm1.Timer3Timer(Sender: TObject);
 begin
   if Assigned(BGRAGif) then
   begin
-    frmain.Image1.Picture.Bitmap.Assign(BGRAgif.Bitmap);
-    frmain.Timer3.Interval:=BGRAgif.FrameDelayMs[BGRAGif.CurrentImage];
-    frmain.StatusBar1.Panels[2].Text:='Frame '+inttostr(BGRAGif.CurrentImage+1)+'/'+inttostr(BGRAGif.Count);
+    Form1.Image1.Picture.Bitmap.Assign(BGRAgif.Bitmap);
+    Form1.Timer3.Interval:=BGRAgif.FrameDelayMs[BGRAGif.CurrentImage];
+    Form1.StatusBar1.Panels[2].Text:='Frame '+inttostr(BGRAGif.CurrentImage+1)+'/'+inttostr(BGRAGif.Count);
   end;
 end;
 
-procedure Tfrmain.Timer4Timer(Sender: TObject);
+procedure TForm1.Timer4Timer(Sender: TObject);
 begin
   refreshthumbs;
   ththumbs:=thumbsthread.Create(true);
   ththumbs.thumbpath:=carpeta;
   ththumbs.Start;
-  frmain.Timer4.Enabled:=false;
+  Form1.Timer4.Enabled:=false;
 end;
 
-procedure Tfrmain.ToolBar1Click(Sender: TObject);
+procedure TForm1.ToolBar1Click(Sender: TObject);
 begin
 
 end;
 
-procedure Tfrmain.ToolBar1MouseLeave(Sender: TObject);
+procedure TForm1.ToolBar1MouseLeave(Sender: TObject);
 begin
   if full then
-    frmain.Timer2.Enabled:=true;
+    Form1.Timer2.Enabled:=true;
 end;
 
-procedure Tfrmain.ToolBar1MouseMove(Sender: TObject; Shift: TShiftState; X,
+procedure TForm1.ToolBar1MouseMove(Sender: TObject; Shift: TShiftState; X,
   Y: Integer);
 begin
-  frmain.Timer2.Enabled:=false;
+  Form1.Timer2.Enabled:=false;
 end;
 
-procedure Tfrmain.ToolButton10Click(Sender: TObject);
+procedure TForm1.ToolButton10Click(Sender: TObject);
 begin
   zoomout();
 end;
 
-procedure Tfrmain.ToolButton11Click(Sender: TObject);
+procedure TForm1.ToolButton11Click(Sender: TObject);
 begin
   zoomnormal();
 end;
 
-procedure Tfrmain.ToolButton12Click(Sender: TObject);
+procedure TForm1.ToolButton12Click(Sender: TObject);
 begin
-  frmain.Timer1.Enabled:=not frmain.Timer1.Enabled;
-  if frmain.Timer1.Enabled then
-    frmain.ToolButton12.ImageIndex:=12
+  Form1.Timer1.Enabled:=not Form1.Timer1.Enabled;
+  if form1.Timer1.Enabled then
+    Form1.ToolButton12.ImageIndex:=12
   else
-    frmain.ToolButton12.ImageIndex:=13;
+    Form1.ToolButton12.ImageIndex:=13;
 end;
 
-procedure Tfrmain.ToolButton13Click(Sender: TObject);
+procedure TForm1.ToolButton13Click(Sender: TObject);
 begin
   aleatorio:=not aleatorio;
-  frmain.ToolButton13.Down:=aleatorio;
+  Form1.ToolButton13.Down:=aleatorio;
 end;
 
-procedure Tfrmain.ToolButton14Click(Sender: TObject);
+procedure TForm1.ToolButton14Click(Sender: TObject);
 begin
   zoomoriginal();
 end;
 
-procedure Tfrmain.ToolButton15Click(Sender: TObject);
+procedure TForm1.ToolButton15Click(Sender: TObject);
 begin
   loadpicture(carpeta+flist[ifile]);
 end;
 
-procedure Tfrmain.tbShowTreeViewClick(Sender: TObject);
+procedure TForm1.ToolButton16Click(Sender: TObject);
 begin
-  frmain.pssThumbs.OnResize:=nil;
-  frmain.MenuItem59.Checked:=not frmain.MenuItem59.Checked;
-  frmain.tbShowTreeView.Down:=frmain.MenuItem59.Checked;
-  if frmain.MenuItem59.Checked then
-    frmain.Splitter1.Left:=200
+  Form1.PairSplitterSide2.OnResize:=nil;
+  Form1.MenuItem59.Checked:=not Form1.MenuItem59.Checked;
+  Form1.ToolButton16.Down:=Form1.MenuItem59.Checked;
+  if Form1.MenuItem59.Checked then
+    Form1.Splitter1.Left:=200
   else
-    frmain.Splitter1.Left:=0-frmain.Splitter1.Width;
-  frmain.ShellTreeView1.Visible:=frmain.MenuItem59.Checked;
-  frmain.pssThumbs.OnResize:=@frmain.PairSplitterSide2Resize;
+    Form1.Splitter1.Left:=0-Form1.Splitter1.Width;
+  Form1.ShellTreeView1.Visible:=Form1.MenuItem59.Checked;
+  Form1.PairSplitterSide2.OnResize:=@Form1.PairSplitterSide2Resize;
 end;
 
-procedure Tfrmain.ToolButton18Click(Sender: TObject);
+procedure TForm1.ToolButton18Click(Sender: TObject);
 begin
-  frmain.MenuItem60.Checked:=not frmain.MenuItem60.Checked;
-  frmain.ToolButton18.Down:=frmain.MenuItem60.Checked;
-  if frmain.MenuItem60.Checked then
-    frmain.Image1.Cursor:=crCross
+  Form1.MenuItem60.Checked:=not Form1.MenuItem60.Checked;
+  Form1.ToolButton18.Down:=Form1.MenuItem60.Checked;
+  if Form1.MenuItem60.Checked then
+    Form1.Image1.Cursor:=crCross
   else
   begin
-    if frmain.Image1.Stretch then
-      frmain.Image1.Cursor:=crSizeAll
+    if Form1.Image1.Stretch then
+      Form1.Image1.Cursor:=crSizeAll
     else
-      frmain.Image1.Cursor:=crDefault;
-    frmain.Shape1.Hide;
+      Form1.Image1.Cursor:=crDefault;
+    Form1.Shape1.Hide;
   end;
 end;
 
-procedure Tfrmain.ToolButton19Click(Sender: TObject);
+procedure TForm1.ToolButton19Click(Sender: TObject);
 begin
   BGRAGif.Pause;
-  frmain.Timer3.Enabled:=false;
+  Form1.Timer3.Enabled:=false;
   if BGRAGif.CurrentImage>0 then
     BGRAGif.CurrentImage:=BGRAGif.CurrentImage-1
   else
     BGRAGif.CurrentImage:=BGRAGif.Count-1;
-  frmain.ToolButton21.ImageIndex:=21;
-  frmain.Timer3Timer(nil);
+  Form1.ToolButton21.ImageIndex:=21;
+  Form1.Timer3Timer(nil);
 end;
 
-procedure Tfrmain.ToolButton1Click(Sender: TObject);
+procedure TForm1.ToolButton1Click(Sender: TObject);
 begin
    prevfile();
 end;
 
-procedure Tfrmain.ToolButton20Click(Sender: TObject);
+procedure TForm1.ToolButton20Click(Sender: TObject);
 begin
   BGRAGif.Pause;
-  frmain.Timer3.Enabled:=false;
+  Form1.Timer3.Enabled:=false;
   if BGRAGif.CurrentImage<BGRAGif.Count-1 then
     BGRAGif.CurrentImage:=BGRAGif.CurrentImage+1
   else
     BGRAGif.CurrentImage:=0;
-  frmain.ToolButton21.ImageIndex:=21;
-  frmain.Timer3Timer(nil);
+  Form1.ToolButton21.ImageIndex:=21;
+  Form1.Timer3Timer(nil);
 end;
 
-procedure Tfrmain.ToolButton21Click(Sender: TObject);
+procedure TForm1.ToolButton21Click(Sender: TObject);
 begin
   if BGRAGif.Paused then
   begin
-    frmain.ToolButton21.ImageIndex:=21;
+    Form1.ToolButton21.ImageIndex:=21;
     BGRAGif.Resume;
   end
   else
   begin
-    frmain.ToolButton21.ImageIndex:=22;
+    Form1.ToolButton21.ImageIndex:=22;
     BGRAGif.Pause;
   end;
-  frmain.Timer3.Enabled:=not BGRAGif.Paused;
+  Form1.Timer3.Enabled:=not BGRAGif.Paused;
 end;
 
-procedure Tfrmain.ToolButton24Click(Sender: TObject);
+procedure TForm1.ToolButton24Click(Sender: TObject);
 begin
-  frmain.MenuItem54.Checked:=not frmain.MenuItem54.Checked;
-  frmain.ToolButton24.Down:=frmain.MenuItem54.Checked;
-  if frmain.ToolButton24.Down then
+  Form1.MenuItem54.Checked:=not Form1.MenuItem54.Checked;
+  Form1.ToolButton24.Down:=Form1.MenuItem54.Checked;
+  if Form1.ToolButton24.Down then
     zoomstrech()
   else
     zoomnormal();
 end;
 
-procedure Tfrmain.ToolButton26Click(Sender: TObject);
+procedure TForm1.ToolButton26Click(Sender: TObject);
 var
    i:integer;
 begin
@@ -2828,7 +2761,7 @@ begin
     BGRAGif.FrameDelayMs[i]:=BGRAGif.FrameDelayMs[i]+10;
 end;
 
-procedure Tfrmain.ToolButton27Click(Sender: TObject);
+procedure TForm1.ToolButton27Click(Sender: TObject);
   var
    i:integer;
 begin
@@ -2841,23 +2774,23 @@ begin
   end
 end;
 
-procedure Tfrmain.ToolButton2Click(Sender: TObject);
+procedure TForm1.ToolButton2Click(Sender: TObject);
 begin
    nextfile();
 end;
 
-procedure Tfrmain.ToolButton3Click(Sender: TObject);
+procedure TForm1.ToolButton3Click(Sender: TObject);
 begin
   fullsc();
 end;
 
-procedure Tfrmain.tbFlipHorizontalClick(Sender: TObject);
+procedure TForm1.ToolButton4Click(Sender: TObject);
 begin
  filterimagen(19);
   //efectimagen(1);
 end;
 
-procedure Tfrmain.tbFlipVerticalClick(Sender: TObject);
+procedure TForm1.ToolButton5Click(Sender: TObject);
 begin
   if (realimgwidth>256) or ifgif then
     filterimagen(20)
@@ -2865,7 +2798,7 @@ begin
     efectimagen(2);
 end;
 
-procedure Tfrmain.ToolButton6Click(Sender: TObject);
+procedure TForm1.ToolButton6Click(Sender: TObject);
 begin
   if (realimgwidth>256) or ifgif then
     filterimagen(18)
@@ -2873,7 +2806,7 @@ begin
     efectimagen(3);
 end;
 
-procedure Tfrmain.ToolButton7Click(Sender: TObject);
+procedure TForm1.ToolButton7Click(Sender: TObject);
 begin
   if (realimgwidth>256) or ifgif then
     filterimagen(17)
@@ -2881,12 +2814,12 @@ begin
     efectimagen(4);
 end;
 
-procedure Tfrmain.ToolButton8Click(Sender: TObject);
+procedure TForm1.ToolButton8Click(Sender: TObject);
 begin
   Application.Terminate;
 end;
 
-procedure Tfrmain.ToolButton9Click(Sender: TObject);
+procedure TForm1.ToolButton9Click(Sender: TObject);
 begin
   zoomin();
 end;
@@ -2902,15 +2835,15 @@ procedure thumbsthread.refreshthumbs;
 var
    i:integer;
 begin
-  while frmain.sboxthumb.ControlCount>flist.Count do
+  while Form1.ScrollBox2.ControlCount>flist.Count do
   begin
-    frmain.sboxthumb.DestroyComponents;
+    Form1.ScrollBox2.DestroyComponents;
   end;
-  for i:=0 to frmain.sboxthumb.ControlCount-1 do
+  for i:=0 to Form1.ScrollBox2.ControlCount-1 do
   begin
-    (frmain.sboxthumb.Controls[i] as TImage).Picture.Clear;
-    (frmain.sboxthumb.Controls[i] as TImage).Hint:=flist[i];
-    (frmain.sboxthumb.Controls[i] as TImage).Tag:=i;
+    (Form1.ScrollBox2.Controls[i] as TImage).Picture.Clear;
+    (Form1.ScrollBox2.Controls[i] as TImage).Hint:=flist[i];
+    (Form1.ScrollBox2.Controls[i] as TImage).Tag:=i;
   end;
 end;
 
@@ -2932,8 +2865,8 @@ begin
   bgcolor.blue:=0;
   bgcolor.green:=0;
   bgcolor.red:=0;
-  //if carpeta=thumbpath then
-  //begin
+  if carpeta=thumbpath then
+  begin
     try
     thumb:=Graphics.TBitMap.Create;
     thumb.Width:=thumbsize;
@@ -2946,10 +2879,9 @@ begin
     thumb.Canvas.CopyRect(Types.Rect(2,2,thumbsize-2,thumbsize-2),thumbtmp.Bitmap.Canvas,Types.Rect(0,0,thumbtmp.Bitmap.Width,thumbtmp.Bitmap.Height));
     thumbtmp.Destroy;
     {ShowMessage('Imagen #: '+inttostr(thumbindex)+#13+
-    'Left: '+inttostr((frmain.sboxthumb.Controls[thumbindex] as TImage).Left)+#13+
-    'Scroll: '+inttostr(frmain.sboxthumb.HorzScrollBar.Position)+#13+
-    'Scroll+Form width: '+inttostr(frmain.sboxthumb.HorzScrollBar.Position+frmain.Width));}
-    (frmain.sboxthumb.Controls[thumbindex] as TImage).Picture.Bitmap.Assign(thumb);
+    'Left: '+inttostr((Form1.ScrollBox2.Controls[thumbindex] as TImage).Left)+#13+
+    'Scroll: '+inttostr(Form1.ScrollBox2.HorzScrollBar.Position));}
+    (Form1.ScrollBox2.Controls[thumbindex] as TImage).Picture.Bitmap.Assign(thumb);
     //This is wrong but is workin for linux and windows
     {$IFDEF LINUX}
     Application.ProcessMessages;
@@ -2965,10 +2897,10 @@ begin
       th:=thumb.Canvas.TextHeight('Error:'+e.ToString);
       tw:=thumb.Canvas.TextWidth('Error:'+e.ToString);
       thumb.Canvas.TextOut(Round((thumbsize-tw)/2),Round((thumbsize-th)/2),'Error:'+e.ToString);
-      (frmain.sboxthumb.Controls[thumbindex] as TImage).Picture.Bitmap.Assign(thumb);
+      (Form1.ScrollBox2.Controls[thumbindex] as TImage).Picture.Bitmap.Assign(thumb);
     end;
     end;
-  //end;
+  end;
 end;
 
 procedure thumbsthread.createallimages;
@@ -2979,27 +2911,27 @@ var
 begin
   if ifallthumbs=false then
   begin
-    if flist.Count>=frmain.sboxthumb.ControlCount  then
+    if flist.Count>=Form1.ScrollBox2.ControlCount  then
       mayor:=flist.Count
     else
-      mayor:=frmain.sboxthumb.ControlCount;
+      mayor:=Form1.ScrollBox2.ControlCount;
     for i:=0 to mayor-1 do
     begin
-      if i>frmain.sboxthumb.ControlCount-1 then
+      if i>Form1.ScrollBox2.ControlCount-1 then
       begin
-        thumbimages:=tthumbimage.Create(frmain.sboxthumb);
-        thumbimages.Width:=frmain.sboxthumb.Height-18;
-        thumbimages.Height:=frmain.sboxthumb.Height-18;
-        thumbimages.Left:=(frmain.sboxthumb.Height+1)*i;
+        thumbimages:=tthumbimage.Create(Form1.ScrollBox2);
+        thumbimages.Width:=Form1.ScrollBox2.Height-18;
+        thumbimages.Height:=Form1.ScrollBox2.Height-18;
+        thumbimages.Left:=(Form1.ScrollBox2.Height+1)*i;
         thumbimages.Stretch:=true;
         thumbimages.Center:=true;
         thumbimages.AutoSize:=false;
         thumbimages.Hint:=flist[i];
         thumbimages.ShowHint:=true;
         thumbimages.Tag:=i;
-        //thumbimages.AnchorSideTop.Control:=frmain.sboxthumb;
+        //thumbimages.AnchorSideTop.Control:=Form1.ScrollBox2;
         //thumbimages.AnchorSideTop.Side:=asrTop;
-        //thumbimages.AnchorSideBottom.Control:=frmain.pssThumbs;
+        //thumbimages.AnchorSideBottom.Control:=Form1.PairSplitterSide2;
         //thumbimages.Anchors:=[akBottom,akTop];
         thumbimages.OnClick:=@thumbimages.thumbclick;
         thumbimages.OnMouseDown:=@thumbimages.thumbmousedown;
@@ -3007,18 +2939,16 @@ begin
         thumbimages.OnMouseMove:=@thumbimages.thumbmousemove;
         thumbimages.OnMouseUp:=@thumbimages.thumbmouseup;
         thumbimages.Show;
-        frmain.sboxthumb.InsertControl(thumbimages);
+        Form1.ScrollBox2.InsertControl(thumbimages);
       end;
     end;
-    //frmain.pssThumbs.OnResize:=nil;
+    Form1.PairSplitterSide2.OnResize:=nil;
     //This is for force update the scrollbar
-    frmain.sboxthumb.Visible:=false;
-    frmain.sboxthumb.Visible:=true;
-    frmain.sboxthumb.AutoSize:=true;
-    //frmain.sboxthumb.ScrollInView((frmain.sboxthumb.Components[ifile] as TControl));
-    //frmain.sboxthumb.HorzScrollBar.Position:=(frmain.sboxthumb.Components[ifile] as TControl).Left-Round(frmain.Width/2)+Round(thumbsize/2)+1;
-    if inprocessanim=false then
-      scrollanim;
+    Form1.ScrollBox2.Visible:=false;
+    Form1.ScrollBox2.Visible:=true;
+    Form1.PairSplitterSide2.OnResize:=@Form1.PairSplitterSide2Resize;
+    Form1.ScrollBox2.AutoSize:=true;
+    Form1.ScrollBox2.ScrollInView((Form1.ScrollBox2.Components[ifile] as TControl));
   end;
   ifallthumbs:=true;
 end;
@@ -3040,44 +2970,46 @@ begin
       //try
         if i<flist.Count then
         begin
-          if frmain.sboxthumb.HorzScrollBar.ScrollPos<>0 then
+          if Form1.ScrollBox2.HorzScrollBar.ScrollPos<>0 then
           begin
             //*** This is for update first the visible thumbs ***//
             ///// Determine the first visible thumb
             try
-              icenter:=frmain.sboxthumb.ControlAtPos(Types.Point(Round(frmain.sboxthumb.Width/2),Round(frmain.sboxthumb.Height/2)),[capfAllowDisabled]).Tag;
+              icenter:=Form1.ScrollBox2.ControlAtPos(Types.Point(Round(Form1.ScrollBox2.Width/2),Round(Form1.ScrollBox2.Height/2)),[capfAllowDisabled]).Tag;
             except on e:exception do
-              icenter:=frmain.sboxthumb.ControlCount-1;
+              icenter:=Form1.ScrollBox2.ControlCount-1;
             end;
             for n:=icenter downto 0 do
             begin
-              if frmain.sboxthumb.Controls[n].Left>=frmain.sboxthumb.HorzScrollBar.Position then
+              if Form1.ScrollBox2.Controls[n].Left>=Form1.ScrollBox2.HorzScrollBar.Position then
                 minv:=n
               else
                 break;
             end;
-            if minv>0 then
-              minv:=minv-1;
 
             ///// Determine the last visible thumb
-            for n:=icenter to frmain.sboxthumb.ControlCount-1 do
+            {$IFDEF WINDOWS}//Search for non platform depending
+            for n:=icenter to Form1.ScrollBox2.ControlCount-1 do
             begin
-             if frmain.sboxthumb.Controls[n].Left>(frmain.sboxthumb.HorzScrollBar.Position+frmain.width) then
-             begin
-                maxv:=n;
+              if Form1.ScrollBox2.Controls[n].ClientOrigin.x<(Form1.ClientOrigin.x+Form1.Width) then
+                maxv:=n
+              else
                 break;
-             end;
             end;
-            if maxv>frmain.sboxthumb.ControlCount-1 then
-              maxv:=frmain.sboxthumb.ControlCount-1;
+            if maxv>Form1.ScrollBox2.ControlCount-1 then
+              maxv:=Form1.ScrollBox2.ControlCount-1;
+            {$ELSE}
+             maxv:=Form1.ScrollBox2.ControlCount-1;
+            {$ENDIF}
+
             ////////Update the visible thumbs
-            //frmain.Caption:='minv:'+inttostr(minv)+'maxv:'+inttostr(maxv);
+            Form1.Caption:='minv:'+inttostr(minv)+'maxv:'+inttostr(maxv);
             for n:=minv to maxv do
             begin
-              if (frmain.sboxthumb.Controls[n] as TImage).Picture.Bitmap.Empty then
+              if (Form1.ScrollBox2.Controls[n] as TImage).Picture.Bitmap.Empty then
               begin
                 iname:=flist[n];
-                thumbindex:=(frmain.sboxthumb.Controls[n] as TImage).Tag;
+                thumbindex:=(Form1.ScrollBox2.Controls[n] as TImage).Tag;
                 {$IFDEF LINUX}
                 Synchronize(@showthumbs);
                 {$ELSE}
@@ -3088,10 +3020,10 @@ begin
           end;
 
 
-          if (frmain.sboxthumb.Controls[i] as TImage).Picture.Bitmap.Empty then
+          if (Form1.ScrollBox2.Controls[i] as TImage).Picture.Bitmap.Empty then
           begin
             iname:=flist[i];
-            thumbindex:=(frmain.sboxthumb.Controls[i] as TImage).Tag;
+            thumbindex:=(Form1.ScrollBox2.Controls[i] as TImage).Tag;
             {$IFDEF LINUX}
             Synchronize(@showthumbs);
             {$ELSE}
@@ -3121,7 +3053,7 @@ procedure tthumbimage.thumbmousedown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
   mosaicmousedown:=true;
-  mosaicscrollposition:=frmain.sboxthumb.HorzScrollBar.Position;
+  mosaicscrollposition:=Form1.ScrollBox2.HorzScrollBar.Position;
   mosaicmouseposition:=Mouse.CursorPos.x;
 end;
 
@@ -3134,7 +3066,7 @@ procedure tthumbimage.thumbmousemove(Sender: TObject; Shift: TShiftState; X,  Y:
 begin
   if mosaicmousedown then
   begin
-    frmain.sboxthumb.HorzScrollBar.Position:=mosaicscrollposition-(X-mosaicmouseposition);
+    Form1.ScrollBox2.HorzScrollBar.Position:=mosaicscrollposition-(X-mosaicmouseposition);
   end;
 end;
 

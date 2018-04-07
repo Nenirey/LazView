@@ -1,12 +1,12 @@
 object frmain: Tfrmain
   Left = 432
-  Height = 464
+  Height = 480
   Top = 93
-  Width = 685
+  Width = 640
   ActiveControl = ShellTreeView1
   Caption = 'LazView'
-  ClientHeight = 441
-  ClientWidth = 685
+  ClientHeight = 457
+  ClientWidth = 640
   KeyPreview = True
   Menu = MainMenu1
   OnClose = FormClose
@@ -26,8 +26,8 @@ object frmain: Tfrmain
   object StatusBar1: TStatusBar
     Left = 0
     Height = 21
-    Top = 420
-    Width = 685
+    Top = 436
+    Width = 640
     Panels = <    
       item
         Text = '0/0'
@@ -62,27 +62,27 @@ object frmain: Tfrmain
     AnchorSideBottom.Control = StatusBar1
     Cursor = crVSplit
     Left = 3
-    Height = 396
+    Height = 412
     Top = 24
-    Width = 682
+    Width = 637
     Anchors = [akTop, akLeft, akRight, akBottom]
     Color = clBlack
-    Position = 360
+    Position = 349
     SplitterType = pstVertical
     object pssImagen: TPairSplitterSide
       Cursor = crArrow
       Left = 0
-      Height = 360
+      Height = 349
       Top = 0
-      Width = 682
-      ClientWidth = 682
-      ClientHeight = 360
+      Width = 637
+      ClientWidth = 637
+      ClientHeight = 349
       OnMouseMove = FormMouseMove
       object ScrollBox1: TScrollBox
         Left = 0
-        Height = 360
+        Height = 349
         Top = 0
-        Width = 682
+        Width = 637
         HorzScrollBar.Increment = 29
         HorzScrollBar.Page = 297
         HorzScrollBar.Smooth = True
@@ -93,8 +93,8 @@ object frmain: Tfrmain
         VertScrollBar.Tracking = True
         Align = alClient
         BorderStyle = bsNone
-        ClientHeight = 360
-        ClientWidth = 682
+        ClientHeight = 349
+        ClientWidth = 637
         Enabled = False
         Color = clBlack
         ParentColor = False
@@ -107,9 +107,9 @@ object frmain: Tfrmain
         OnPaint = ScrollBox1Paint
         object Image1: TImage
           Left = 0
-          Height = 360
+          Height = 349
           Top = 0
-          Width = 682
+          Width = 637
           AntialiasingMode = amOn
           Align = alClient
           Center = True
@@ -132,7 +132,7 @@ object frmain: Tfrmain
           Left = 0
           Height = 22
           Top = 0
-          Width = 682
+          Width = 637
           Anchors = [akTop, akLeft, akRight]
           Caption = '0/0'
           Font.Color = clBlack
@@ -151,7 +151,7 @@ object frmain: Tfrmain
           Left = 2
           Height = 22
           Top = 2
-          Width = 679
+          Width = 634
           Anchors = [akTop, akLeft, akRight]
           BorderSpacing.Left = 2
           BorderSpacing.Top = 2
@@ -181,16 +181,16 @@ object frmain: Tfrmain
     object pssThumbs: TPairSplitterSide
       Cursor = crArrow
       Left = 0
-      Height = 31
-      Top = 365
-      Width = 682
-      ClientWidth = 682
-      ClientHeight = 31
+      Height = 58
+      Top = 354
+      Width = 637
+      ClientWidth = 637
+      ClientHeight = 58
       object sboxthumb: TScrollBox
         Left = 0
-        Height = 31
+        Height = 58
         Top = 0
-        Width = 682
+        Width = 637
         HorzScrollBar.Increment = 1
         HorzScrollBar.Page = 1
         HorzScrollBar.Smooth = True
@@ -216,7 +216,7 @@ object frmain: Tfrmain
     AnchorSideBottom.Control = Splitter1
     AnchorSideBottom.Side = asrBottom
     Left = 0
-    Height = 396
+    Height = 412
     Top = 24
     Width = 1
     Anchors = [akTop, akLeft, akRight, akBottom]
@@ -242,7 +242,7 @@ object frmain: Tfrmain
     AnchorSideTop.Side = asrBottom
     AnchorSideBottom.Control = StatusBar1
     Left = -2
-    Height = 396
+    Height = 412
     Top = 24
     Width = 5
     Align = alNone
@@ -257,7 +257,7 @@ object frmain: Tfrmain
     Left = 0
     Height = 24
     Top = 0
-    Width = 685
+    Width = 640
     Anchors = [akTop]
     AutoSize = True
     Images = ImageList1
