@@ -10,9 +10,9 @@ uses
 
 type
 
-  { TForm2 }
+  { Tfrresize }
 
-  TForm2 = class(TForm)
+  Tfrresize = class(TForm)
     ButtonPanel1: TButtonPanel;
     Label1: TLabel;
     Label2: TLabel;
@@ -31,7 +31,7 @@ type
   end;
 
 var
-  Form2: TForm2;
+  frresize: Tfrresize;
   okresize:boolean=false;
   psw:Longint=1;
   psh:Longint=1;
@@ -39,58 +39,58 @@ implementation
 uses fmain;
 {$R *.lfm}
 
-{ TForm2 }
+{ Tfrresize }
 
 
-procedure TForm2.SpinEdit1Change(Sender: TObject);
+procedure Tfrresize.SpinEdit1Change(Sender: TObject);
 var
   nsh:Longint;
 begin
   //psw=ancho actual, psh=alto actual
   psw:=realimgwidth;
-  if (Form2.ToggleBox1.State=cbChecked) then
+  if (frresize.ToggleBox1.State=cbChecked) then
   begin
-    Form2.SpinEdit2.OnChange:=nil;
+    frresize.SpinEdit2.OnChange:=nil;
     //nsh=
-    nsh:=Form2.SpinEdit1.Value*psh div psw;
-    Form2.SpinEdit2.Value:=nsh;
-    Form2.SpinEdit2.OnChange:=@Form2.SpinEdit2Change;
+    nsh:=frresize.SpinEdit1.Value*psh div psw;
+    frresize.SpinEdit2.Value:=nsh;
+    frresize.SpinEdit2.OnChange:=@frresize.SpinEdit2Change;
   end;
 end;
 
 
-procedure TForm2.SpinEdit2Change(Sender: TObject);
+procedure Tfrresize.SpinEdit2Change(Sender: TObject);
 var
   nsh:Longint;
 begin
   psh:=realimgheight;
-  if (Form2.ToggleBox1.State=cbChecked) then
+  if (frresize.ToggleBox1.State=cbChecked) then
   begin
-    Form2.SpinEdit1.OnChange:=nil;
-    nsh:=Form2.SpinEdit2.Value*psw div psh;
-    Form2.SpinEdit1.Value:=nsh;
-    Form2.SpinEdit1.OnChange:=@Form2.SpinEdit1Change;
+    frresize.SpinEdit1.OnChange:=nil;
+    nsh:=frresize.SpinEdit2.Value*psw div psh;
+    frresize.SpinEdit1.Value:=nsh;
+    frresize.SpinEdit1.OnChange:=@frresize.SpinEdit1Change;
   end;
 end;
 
-procedure TForm2.FormCreate(Sender: TObject);
+procedure Tfrresize.FormCreate(Sender: TObject);
 begin
   okresize:=false;
-  psw:=Form2.SpinEdit1.Value;
-  psh:=Form2.SpinEdit2.Value;
+  psw:=frresize.SpinEdit1.Value;
+  psh:=frresize.SpinEdit2.Value;
 end;
 
-procedure TForm2.FormShow(Sender: TObject);
+procedure Tfrresize.FormShow(Sender: TObject);
 begin
   okresize:=false;
-  psw:=Form2.SpinEdit1.Value;
-  psh:=Form2.SpinEdit2.Value;
+  psw:=frresize.SpinEdit1.Value;
+  psh:=frresize.SpinEdit2.Value;
 end;
 
-procedure TForm2.OKButtonClick(Sender: TObject);
+procedure Tfrresize.OKButtonClick(Sender: TObject);
 begin
 okresize:=true;
-Form2.Close;
+frresize.Close;
 end;
 
 end.

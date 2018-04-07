@@ -1,7 +1,7 @@
 object frmain: Tfrmain
-  Left = 356
+  Left = 432
   Height = 480
-  Top = 144
+  Top = 93
   Width = 640
   ActiveControl = ShellTreeView1
   Caption = 'LazView'
@@ -22,7 +22,6 @@ object frmain: Tfrmain
   OnWindowStateChange = FormWindowStateChange
   Position = poDesktopCenter
   LCLVersion = '1.8.0.4'
-  WindowState = wsMaximized
   object StatusBar1: TStatusBar
     Left = 0
     Height = 23
@@ -52,7 +51,7 @@ object frmain: Tfrmain
     SimpleText = 'Marco 1.0'
     SimplePanel = False
   end
-  object PairSplitter1: TPairSplitter
+  object psVertical: TPairSplitter
     AnchorSideLeft.Control = Splitter1
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = ToolBar1
@@ -67,20 +66,20 @@ object frmain: Tfrmain
     Width = 637
     Anchors = [akTop, akLeft, akRight, akBottom]
     Color = clBlack
-    Position = 200
+    Position = 349
     SplitterType = pstVertical
-    object PairSplitterSide1: TPairSplitterSide
+    object pssImagen: TPairSplitterSide
       Cursor = crArrow
       Left = 0
-      Height = 200
+      Height = 349
       Top = 0
       Width = 637
       ClientWidth = 637
-      ClientHeight = 200
+      ClientHeight = 349
       OnMouseMove = FormMouseMove
       object ScrollBox1: TScrollBox
         Left = 0
-        Height = 200
+        Height = 349
         Top = 0
         Width = 637
         HorzScrollBar.Increment = 29
@@ -93,7 +92,7 @@ object frmain: Tfrmain
         VertScrollBar.Tracking = True
         Align = alClient
         BorderStyle = bsNone
-        ClientHeight = 200
+        ClientHeight = 349
         ClientWidth = 637
         Enabled = False
         Color = clBlack
@@ -107,7 +106,7 @@ object frmain: Tfrmain
         OnPaint = ScrollBox1Paint
         object Image1: TImage
           Left = 0
-          Height = 200
+          Height = 349
           Top = 0
           Width = 637
           AntialiasingMode = amOn
@@ -130,7 +129,7 @@ object frmain: Tfrmain
           AnchorSideRight.Control = ScrollBox1
           AnchorSideRight.Side = asrBottom
           Left = 0
-          Height = 19
+          Height = 21
           Top = 0
           Width = 637
           Anchors = [akTop, akLeft, akRight]
@@ -149,7 +148,7 @@ object frmain: Tfrmain
           AnchorSideRight.Control = ScrollBox1
           AnchorSideRight.Side = asrBottom
           Left = 2
-          Height = 19
+          Height = 21
           Top = 2
           Width = 634
           Anchors = [akTop, akLeft, akRight]
@@ -178,17 +177,17 @@ object frmain: Tfrmain
         end
       end
     end
-    object PairSplitterSide2: TPairSplitterSide
+    object pssThumbs: TPairSplitterSide
       Cursor = crArrow
       Left = 0
-      Height = 208
-      Top = 205
+      Height = 59
+      Top = 354
       Width = 637
       ClientWidth = 637
-      ClientHeight = 208
+      ClientHeight = 59
       object sboxthumb: TScrollBox
         Left = 0
-        Height = 208
+        Height = 59
         Top = 0
         Width = 637
         HorzScrollBar.Increment = 1
@@ -290,29 +289,29 @@ object frmain: Tfrmain
       ImageIndex = 2
       OnClick = ToolButton3Click
     end
-    object ToolButton4: TToolButton
+    object tbFlipHorizontal: TToolButton
       Left = 47
-      Hint = 'Invertir Horizontalmente'
+      Hint = 'Flip horizontal'
       Top = 2
       Enabled = False
       ImageIndex = 3
-      OnClick = ToolButton4Click
+      OnClick = tbFlipHorizontalClick
       ParentShowHint = False
       ShowHint = True
     end
-    object ToolButton5: TToolButton
+    object tbFlipVertical: TToolButton
       Left = 70
-      Hint = 'Invertir Verticalmente'
+      Hint = 'Flip vertical'
       Top = 2
       Enabled = False
       ImageIndex = 4
-      OnClick = ToolButton5Click
+      OnClick = tbFlipVerticalClick
       ParentShowHint = False
       ShowHint = True
     end
     object ToolButton6: TToolButton
       Left = 93
-      Hint = 'Rotar a la izquierda'
+      Hint = 'Flip left'
       Top = 2
       Enabled = False
       ImageIndex = 5
@@ -322,7 +321,7 @@ object frmain: Tfrmain
     end
     object ToolButton7: TToolButton
       Left = 116
-      Hint = 'Rotar a la derecha'
+      Hint = 'Flip right'
       Top = 2
       Enabled = False
       ImageIndex = 6
@@ -392,17 +391,23 @@ object frmain: Tfrmain
       ImageIndex = 15
       OnClick = ToolButton15Click
     end
-    object ToolButton16: TToolButton
+    object tbShowTreeView: TToolButton
       Left = 1
+      Hint = 'Show tree view'
       Top = 2
       ImageIndex = 17
-      OnClick = ToolButton16Click
+      OnClick = tbShowTreeViewClick
+      ParentShowHint = False
+      ShowHint = True
     end
-    object ToolButton17: TToolButton
+    object tbShowThumbs: TToolButton
       Left = 24
+      Hint = 'Show miniatures'
       Top = 2
       ImageIndex = 18
       OnClick = mnuShowThumbsClick
+      ParentShowHint = False
+      ShowHint = True
     end
     object ToolButton18: TToolButton
       Left = 285

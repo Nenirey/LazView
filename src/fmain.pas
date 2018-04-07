@@ -92,9 +92,9 @@ type
     MenuItem8: TMenuItem;
     MenuItem9: TMenuItem;
     OpenPictureDialog1: TOpenPictureDialog;
-    PairSplitter1: TPairSplitter;
-    PairSplitterSide1: TPairSplitterSide;
-    PairSplitterSide2: TPairSplitterSide;
+    psVertical: TPairSplitter;
+    pssImagen: TPairSplitterSide;
+    pssThumbs: TPairSplitterSide;
     PopupMenu1: TPopupMenu;
     SavePictureDialog1: TSavePictureDialog;
     ScrollBox1: TScrollBox;
@@ -115,8 +115,8 @@ type
     ToolButton13: TToolButton;
     ToolButton14: TToolButton;
     ToolButton15: TToolButton;
-    ToolButton16: TToolButton;
-    ToolButton17: TToolButton;
+    tbShowTreeView: TToolButton;
+    tbShowThumbs: TToolButton;
     ToolButton18: TToolButton;
     ToolButton19: TToolButton;
     ToolButton2: TToolButton;
@@ -129,8 +129,8 @@ type
     ToolButton26: TToolButton;
     ToolButton27: TToolButton;
     ToolButton3: TToolButton;
-    ToolButton4: TToolButton;
-    ToolButton5: TToolButton;
+    tbFlipHorizontal: TToolButton;
+    tbFlipVertical: TToolButton;
     ToolButton6: TToolButton;
     ToolButton7: TToolButton;
     ToolButton8: TToolButton;
@@ -240,7 +240,7 @@ type
     procedure ToolButton13Click(Sender: TObject);
     procedure ToolButton14Click(Sender: TObject);
     procedure ToolButton15Click(Sender: TObject);
-    procedure ToolButton16Click(Sender: TObject);
+    procedure tbShowTreeViewClick(Sender: TObject);
     procedure ToolButton18Click(Sender: TObject);
     procedure ToolButton19Click(Sender: TObject);
     procedure ToolButton1Click(Sender: TObject);
@@ -251,8 +251,8 @@ type
     procedure ToolButton27Click(Sender: TObject);
     procedure ToolButton2Click(Sender: TObject);
     procedure ToolButton3Click(Sender: TObject);
-    procedure ToolButton4Click(Sender: TObject);
-    procedure ToolButton5Click(Sender: TObject);
+    procedure tbFlipHorizontalClick(Sender: TObject);
+    procedure tbFlipVerticalClick(Sender: TObject);
     procedure ToolButton6Click(Sender: TObject);
     procedure ToolButton7Click(Sender: TObject);
     procedure ToolButton8Click(Sender: TObject);
@@ -352,7 +352,7 @@ var
 begin
   inprocessanim:=true;
   i:=frmain.sboxthumb.HorzScrollBar.Position;
-  center:=(frmain.sboxthumb.Components[ifile] as TControl).Left-Round(frmain.Width/2)+Round(thumbsize/2)+1;
+  center:=(frmain.sboxthumb.Components[ifile] as TControl).Left-Round(frmain.pssThumbs.Width/2)+Round(thumbsize/2)+1;
   if i<center then
   begin
     //ShowMessage('Left');
@@ -396,7 +396,7 @@ begin
       Application.ProcessMessages;
     end;
   end;
-  frmain.sboxthumb.HorzScrollBar.Position:=(frmain.sboxthumb.Components[ifile] as TControl).Left-Round(frmain.Width/2)+Round(thumbsize/2)+1;
+  frmain.sboxthumb.HorzScrollBar.Position:=(frmain.sboxthumb.Components[ifile] as TControl).Left-Round(frmain.pssThumbs.Width/2)+Round(thumbsize/2)+1;
   inprocessanim:=false;
 end;
 
@@ -784,14 +784,14 @@ begin
           streamimage.Position:=0;
           if ((iw>Screen.Width) or (ih>Screen.Height)) then
           begin
-            if (iw-frmain.PairSplitterSide1.Width)<=(ih-frmain.PairSplitterSide1.Height) then
+            if (iw-frmain.pssImagen.Width)<=(ih-frmain.pssImagen.Height) then
             begin
-              th:=frmain.PairSplitterSide1.Height;
+              th:=frmain.pssImagen.Height;
               calculateaspectwidth(iw,ih,frmain.Image1.Height,tw);
             end
             else
             begin
-              tw:=frmain.PairSplitterSide1.Width;
+              tw:=frmain.pssImagen.Width;
               calculateaspectheight(iw,ih,frmain.Image1.Width,th);
             end;
             frmain.Image1.Picture.Bitmap.Assign(GetStreamThumbnail(streamimage,tw,th, bgcolor, false));
@@ -843,8 +843,8 @@ begin
     frmain.StatusBar1.Panels.Items[4].Text:='Tiempo:'+prettytime(MilliSecondsBetween(Now,starttime));
 
     ////////****Update buttons and menus****////////////////
-    frmain.ToolButton4.Enabled:=true;
-    frmain.ToolButton5.Enabled:=true;
+    frmain.tbFlipHorizontal.Enabled:=true;
+    frmain.tbFlipVertical.Enabled:=true;
     frmain.ToolButton6.Enabled:=true;
     frmain.ToolButton7.Enabled:=true;
     frmain.ToolButton9.Enabled:=true;
@@ -881,8 +881,8 @@ begin
       frmain.Image1.Picture.Bitmap.Assign(ebitmap);
       ebitmap.Destroy;
       /////////*****Update buttons and menus****///////////////////
-      frmain.ToolButton4.Enabled:=false;
-      frmain.ToolButton5.Enabled:=false;
+      frmain.tbFlipHorizontal.Enabled:=false;
+      frmain.tbFlipVertical.Enabled:=false;
       frmain.ToolButton6.Enabled:=false;
       frmain.ToolButton7.Enabled:=false;
       frmain.ToolButton9.Enabled:=false;
@@ -925,7 +925,7 @@ end;
 
 procedure fullsc();
 begin
-  frmain.PairSplitterSide2.OnResize:=nil;
+  frmain.pssThumbs.OnResize:=nil;
   if full = false then
   begin
     fwidth:=frmain.Width;
@@ -934,7 +934,7 @@ begin
     fypos:=frmain.Left;
     frmain.BorderStyle:=bsNone;
     frmain.ToolBar1.Align:=alNone;
-    frmain.PairSplitter1.Align:=alClient;
+    frmain.psVertical.Align:=alClient;
     frmain.StatusBar1.Visible:=false;
     frmain.Color:=clBlack;
     frmain.FormStyle:=fsStayOnTop;
@@ -942,12 +942,12 @@ begin
     frmain.Label2.Visible:=true;
     frmain.MainMenu1.Items.Visible:=false;
     frmain.Splitter1.Left:=0-frmain.Splitter1.Width;
-    frmain.PairSplitter1.Position:=frmain.PairSplitter1.Height-thumbsize-18;
+    frmain.psVertical.Position:=frmain.psVertical.Height-thumbsize-18;
     frmain.WindowState:=wsFullScreen;
     frmain.Timer2.Enabled:=true;
     full:=true;
     if frmain.mnuShowThumbs.Checked then
-      frmain.ToolBar1.Top:=frmain.PairSplitterSide2.Top-frmain.ToolBar1.Height
+      frmain.ToolBar1.Top:=frmain.pssThumbs.Top-frmain.ToolBar1.Height
     else
       frmain.ToolBar1.Top:=screen.Height-frmain.ToolBar1.Height;
     frmain.ToolBar1.Left:=Round((screen.Width-frmain.ToolBar1.Width)/2);
@@ -978,34 +978,34 @@ begin
     if frmain.MenuItem59.Checked then
       frmain.Splitter1.Left:=200;
     full:=false;
-    frmain.PairSplitter1.Align:=alNone;
-    frmain.PairSplitter1.Anchors:=[akTop, akLeft, akRight, akBottom];
-    frmain.PairSplitter1.AnchorSideLeft.Control:=frmain.Splitter1;
-    frmain.PairSplitter1.AnchorSideLeft.Side:=asrBottom;
+    frmain.psVertical.Align:=alNone;
+    frmain.psVertical.Anchors:=[akTop, akLeft, akRight, akBottom];
+    frmain.psVertical.AnchorSideLeft.Control:=frmain.Splitter1;
+    frmain.psVertical.AnchorSideLeft.Side:=asrBottom;
     if frmain.MenuItem62.Checked then
     begin
       frmain.StatusBar1.Visible:=true;
-      frmain.PairSplitter1.AnchorSideBottom.Control:=frmain.StatusBar1;
+      frmain.psVertical.AnchorSideBottom.Control:=frmain.StatusBar1;
     end
     else
     begin
-      frmain.PairSplitter1.AnchorSideBottom.Control:=frmain;
-      frmain.PairSplitter1.AnchorSideBottom.Side:=asrBottom;
+      frmain.psVertical.AnchorSideBottom.Control:=frmain;
+      frmain.psVertical.AnchorSideBottom.Side:=asrBottom;
     end;
 
     if frmain.MenuItem61.Checked=false then
     begin
       frmain.ToolBar1.Visible:=false;
-      frmain.PairSplitter1.AnchorSideTop.Control:=frmain;
-      frmain.PairSplitter1.AnchorSideTop.Side:=asrTop;
+      frmain.psVertical.AnchorSideTop.Control:=frmain;
+      frmain.psVertical.AnchorSideTop.Side:=asrTop;
       frmain.Splitter1.AnchorSideTop.Control:=frmain;
       frmain.Splitter1.AnchorSideTop.Side:=asrTop;
     end
     else
     begin
       frmain.ToolBar1.Visible:=true;
-      frmain.PairSplitter1.AnchorSideTop.Control:=frmain.ToolBar1;
-      frmain.PairSplitter1.AnchorSideTop.Side:=asrBottom;
+      frmain.psVertical.AnchorSideTop.Control:=frmain.ToolBar1;
+      frmain.psVertical.AnchorSideTop.Side:=asrBottom;
       frmain.Splitter1.AnchorSideTop.Control:=frmain.ToolBar1;
       frmain.Splitter1.AnchorSideTop.Side:=asrBottom;
     end;
@@ -1021,15 +1021,15 @@ begin
       frmain.Splitter1.AnchorSideBottom.Side:=asrBottom;
     end;
 
-    frmain.PairSplitter1.AnchorSideRight.Control:=frmain;
-    frmain.PairSplitter1.AnchorSideRight.Side:=asrBottom;
+    frmain.psVertical.AnchorSideRight.Control:=frmain;
+    frmain.psVertical.AnchorSideRight.Side:=asrBottom;
 
     if frmain.mnuShowThumbs.Checked then
-      frmain.PairSplitter1.Position:=frmain.PairSplitter1.Height-thumbsize-18
+      frmain.psVertical.Position:=frmain.psVertical.Height-thumbsize-18
     else
-      frmain.PairSplitter1.Position:=frmain.PairSplitter1.Height;
+      frmain.psVertical.Position:=frmain.psVertical.Height;
   end;
-  frmain.PairSplitterSide2.OnResize:=@frmain.PairSplitterSide2Resize;
+  frmain.pssThumbs.OnResize:=@frmain.PairSplitterSide2Resize;
 end;
 
 procedure osd();
@@ -1815,7 +1815,7 @@ begin
   hidetoolbardelay:=5;
 
   if frmain.mnuShowThumbs.Checked then
-    frmain.ToolBar1.Top:=frmain.PairSplitterSide2.Top-frmain.ToolBar1.Height
+    frmain.ToolBar1.Top:=frmain.pssThumbs.Top-frmain.ToolBar1.Height
   else
     frmain.ToolBar1.Top:=screen.Height-frmain.ToolBar1.Height;
 
@@ -1849,9 +1849,9 @@ end;
 procedure Tfrmain.FormResize(Sender: TObject);
 begin
   if frmain.mnuShowThumbs.Checked then
-    frmain.PairSplitter1.Position:=(frmain.PairSplitter1.Height-thumbsize)-25
+    frmain.psVertical.Position:=(frmain.psVertical.Height-thumbsize)-18
   else
-    frmain.PairSplitter1.Position:=frmain.PairSplitter1.Height;
+    frmain.psVertical.Position:=frmain.psVertical.Height;
 end;
 
 procedure Tfrmain.FormShow(Sender: TObject);
@@ -1861,8 +1861,7 @@ begin
     if (ifile<flist.Count) then
       loadpicture(carpeta+flist[ifile]);
   end;
-  if showthumbs then
-    frmain.PairSplitter1.Position:=frmain.PairSplitter1.Height-64-18;
+  frmain.pssThumbs.OnResize:=@frmain.PairSplitterSide2Resize;
 end;
 
 procedure Tfrmain.FormWindowStateChange(Sender: TObject);
@@ -1931,8 +1930,8 @@ begin
     frmain.Image1.Picture.Clear;
     frmain.Image1.Picture.LoadFromClipboardFormat(2);
   end;
-  frmain.ToolButton4.Enabled:=true;
-  frmain.ToolButton5.Enabled:=true;
+  frmain.tbFlipHorizontal.Enabled:=true;
+  frmain.tbFlipVertical.Enabled:=true;
   frmain.ToolButton6.Enabled:=true;
   frmain.ToolButton7.Enabled:=true;
   frmain.ToolButton9.Enabled:=true;
@@ -2090,20 +2089,20 @@ end;
 procedure Tfrmain.mnuShowThumbsClick(Sender: TObject);
 begin
   frmain.mnuShowThumbs.Checked:=not frmain.mnuShowThumbs.Checked;
-  frmain.ToolButton17.Down:=frmain.mnuShowThumbs.Checked;
+  frmain.tbShowThumbs.Down:=frmain.mnuShowThumbs.Checked;
   showthumbs:=frmain.mnuShowThumbs.Checked;
   if showthumbs=false then
   begin
-    frmain.PairSplitterSide2.OnResize:=nil;
-    frmain.PairSplitter1.Position:=frmain.PairSplitter1.Height;
+    frmain.pssThumbs.OnResize:=nil;
+    frmain.psVertical.Position:=frmain.psVertical.Height;
     frmain.sboxthumb.Visible:=false;
-    frmain.PairSplitterSide2.OnResize:=@frmain.PairSplitterSide2Resize;
+    frmain.pssThumbs.OnResize:=@frmain.PairSplitterSide2Resize;
     //refreshthumbs;
   end
   else
   begin
     frmain.sboxthumb.Visible:=true;
-    frmain.PairSplitter1.Position:=frmain.PairSplitter1.Height-64-18;
+    frmain.psVertical.Position:=frmain.psVertical.Height-64-18;
     if folderchange then
     begin
       refreshthumbs;
@@ -2116,11 +2115,11 @@ end;
 
 procedure Tfrmain.MenuItem31Click(Sender: TObject);
 begin
-  Form2.SpinEdit1.Value:=realimgwidth;
-  Form2.SpinEdit2.Value:=realimgheight;
-  Form2.ShowModal;
+  frresize.SpinEdit1.Value:=realimgwidth;
+  frresize.SpinEdit2.Value:=realimgheight;
+  frresize.ShowModal;
   if okresize then
-    resizeto(Form2.SpinEdit1.Value,Form2.SpinEdit2.Value);
+    resizeto(frresize.SpinEdit1.Value,frresize.SpinEdit2.Value);
 end;
 
 procedure Tfrmain.MenuItem33Click(Sender: TObject);
@@ -2171,12 +2170,12 @@ begin
     fheight:=frmain.Height;
     frmain.ToolBar1.Visible:=false;
     frmain.StatusBar1.Visible:=false;
-    frmain.PairSplitter1.AnchorSideTop.Control:=frmain;
-    frmain.PairSplitter1.AnchorSideTop.Side:=asrTop;
+    frmain.psVertical.AnchorSideTop.Control:=frmain;
+    frmain.psVertical.AnchorSideTop.Side:=asrTop;
     frmain.Splitter1.AnchorSideTop.Control:=frmain;
     frmain.Splitter1.AnchorSideTop.Side:=asrTop;
-    frmain.PairSplitter1.AnchorSideBottom.Control:=frmain;
-    frmain.PairSplitter1.AnchorSideBottom.Side:=asrBottom;
+    frmain.psVertical.AnchorSideBottom.Control:=frmain;
+    frmain.psVertical.AnchorSideBottom.Side:=asrBottom;
     frmain.Splitter1.AnchorSideBottom.Control:=frmain;
     frmain.Splitter1.AnchorSideBottom.Side:=asrBottom;
     frmain.MainMenu1.Items.Visible:=false;
@@ -2248,7 +2247,7 @@ begin
   frmain.MenuItem66.Checked:=false;
   frmain.MenuItem53.Checked:=true;
   Form6.ShowModal;
-  frmain.PairSplitter1.Position:=frmain.PairSplitter1.Height-Form6.SpinEdit1.Value-18;
+  frmain.psVertical.Position:=frmain.psVertical.Height-Form6.SpinEdit1.Value-18;
 end;
 
 procedure Tfrmain.MenuItem54Click(Sender: TObject);
@@ -2294,7 +2293,7 @@ end;
 procedure Tfrmain.MenuItem59Click(Sender: TObject);
 begin
   frmain.MenuItem59.Checked:=not frmain.MenuItem59.Checked;
-  frmain.ToolButton16.Down:=frmain.MenuItem59.Checked;
+  frmain.tbShowTreeView.Down:=frmain.MenuItem59.Checked;
   if frmain.MenuItem59.Checked then
     frmain.Splitter1.Left:=200
   else
@@ -2334,16 +2333,16 @@ begin
   if frmain.ToolBar1.Visible then
   begin
     frmain.ToolBar1.Visible:=false;
-    frmain.PairSplitter1.AnchorSideTop.Control:=frmain;
-    frmain.PairSplitter1.AnchorSideTop.Side:=asrTop;
+    frmain.psVertical.AnchorSideTop.Control:=frmain;
+    frmain.psVertical.AnchorSideTop.Side:=asrTop;
     frmain.Splitter1.AnchorSideTop.Control:=frmain;
     frmain.Splitter1.AnchorSideTop.Side:=asrTop;
   end
   else
   begin
     frmain.ToolBar1.Visible:=true;
-    frmain.PairSplitter1.AnchorSideTop.Control:=frmain.ToolBar1;
-    frmain.PairSplitter1.AnchorSideTop.Side:=asrBottom;
+    frmain.psVertical.AnchorSideTop.Control:=frmain.ToolBar1;
+    frmain.psVertical.AnchorSideTop.Side:=asrBottom;
     frmain.Splitter1.AnchorSideTop.Control:=frmain.ToolBar1;
     frmain.Splitter1.AnchorSideTop.Side:=asrBottom;
   end;
@@ -2356,13 +2355,13 @@ begin
   frmain.MenuItem62.Checked:=frmain.StatusBar1.Visible;
   if frmain.StatusBar1.Visible then
   begin
-    frmain.PairSplitter1.AnchorSideBottom.Control:=frmain.StatusBar1;
-    frmain.PairSplitter1.AnchorSideBottom.Side:=asrTop;
+    frmain.psVertical.AnchorSideBottom.Control:=frmain.StatusBar1;
+    frmain.psVertical.AnchorSideBottom.Side:=asrTop;
   end
   else
   begin
-    frmain.PairSplitter1.AnchorSideBottom.Control:=frmain;
-    frmain.PairSplitter1.AnchorSideBottom.Side:=asrBottom;
+    frmain.psVertical.AnchorSideBottom.Control:=frmain;
+    frmain.psVertical.AnchorSideBottom.Side:=asrBottom;
   end;
   if frmain.MenuItem62.Checked then
   begin
@@ -2383,7 +2382,7 @@ begin
   frmain.MenuItem66.Checked:=false;
   frmain.MenuItem53.Checked:=false;
 
-  frmain.PairSplitter1.Position:=frmain.PairSplitter1.Height-32-18;
+  frmain.psVertical.Position:=frmain.psVertical.Height-32-18;
 end;
 
 procedure Tfrmain.MenuItem65Click(Sender: TObject);
@@ -2392,7 +2391,7 @@ begin
   frmain.MenuItem65.Checked:=true;
   frmain.MenuItem66.Checked:=false;
   frmain.MenuItem53.Checked:=false;
-  frmain.PairSplitter1.Position:=frmain.PairSplitter1.Height-64-18;
+  frmain.psVertical.Position:=frmain.psVertical.Height-64-18;
 end;
 
 procedure Tfrmain.MenuItem66Click(Sender: TObject);
@@ -2401,7 +2400,7 @@ begin
   frmain.MenuItem65.Checked:=false;
   frmain.MenuItem66.Checked:=true;
   frmain.MenuItem53.Checked:=false;
-  frmain.PairSplitter1.Position:=frmain.PairSplitter1.Height-128-18;
+  frmain.psVertical.Position:=frmain.psVertical.Height-128-18;
 end;
 
 procedure Tfrmain.MenuItem67Click(Sender: TObject);
@@ -2730,17 +2729,17 @@ begin
   loadpicture(carpeta+flist[ifile]);
 end;
 
-procedure Tfrmain.ToolButton16Click(Sender: TObject);
+procedure Tfrmain.tbShowTreeViewClick(Sender: TObject);
 begin
-  frmain.PairSplitterSide2.OnResize:=nil;
+  frmain.pssThumbs.OnResize:=nil;
   frmain.MenuItem59.Checked:=not frmain.MenuItem59.Checked;
-  frmain.ToolButton16.Down:=frmain.MenuItem59.Checked;
+  frmain.tbShowTreeView.Down:=frmain.MenuItem59.Checked;
   if frmain.MenuItem59.Checked then
     frmain.Splitter1.Left:=200
   else
     frmain.Splitter1.Left:=0-frmain.Splitter1.Width;
   frmain.ShellTreeView1.Visible:=frmain.MenuItem59.Checked;
-  frmain.PairSplitterSide2.OnResize:=@frmain.PairSplitterSide2Resize;
+  frmain.pssThumbs.OnResize:=@frmain.PairSplitterSide2Resize;
 end;
 
 procedure Tfrmain.ToolButton18Click(Sender: TObject);
@@ -2844,13 +2843,13 @@ begin
   fullsc();
 end;
 
-procedure Tfrmain.ToolButton4Click(Sender: TObject);
+procedure Tfrmain.tbFlipHorizontalClick(Sender: TObject);
 begin
  filterimagen(19);
   //efectimagen(1);
 end;
 
-procedure Tfrmain.ToolButton5Click(Sender: TObject);
+procedure Tfrmain.tbFlipVerticalClick(Sender: TObject);
 begin
   if (realimgwidth>256) or ifgif then
     filterimagen(20)
@@ -2991,7 +2990,7 @@ begin
         thumbimages.Tag:=i;
         //thumbimages.AnchorSideTop.Control:=frmain.sboxthumb;
         //thumbimages.AnchorSideTop.Side:=asrTop;
-        //thumbimages.AnchorSideBottom.Control:=frmain.PairSplitterSide2;
+        //thumbimages.AnchorSideBottom.Control:=frmain.pssThumbs;
         //thumbimages.Anchors:=[akBottom,akTop];
         thumbimages.OnClick:=@thumbimages.thumbclick;
         thumbimages.OnMouseDown:=@thumbimages.thumbmousedown;
@@ -3002,11 +3001,10 @@ begin
         frmain.sboxthumb.InsertControl(thumbimages);
       end;
     end;
-    frmain.PairSplitterSide2.OnResize:=nil;
+    //frmain.pssThumbs.OnResize:=nil;
     //This is for force update the scrollbar
     frmain.sboxthumb.Visible:=false;
     frmain.sboxthumb.Visible:=true;
-    frmain.PairSplitterSide2.OnResize:=@frmain.PairSplitterSide2Resize;
     frmain.sboxthumb.AutoSize:=true;
     //frmain.sboxthumb.ScrollInView((frmain.sboxthumb.Components[ifile] as TControl));
     //frmain.sboxthumb.HorzScrollBar.Position:=(frmain.sboxthumb.Components[ifile] as TControl).Left-Round(frmain.Width/2)+Round(thumbsize/2)+1;

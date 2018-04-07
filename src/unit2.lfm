@@ -1,7 +1,7 @@
-object Form2: TForm2
-  Left = 518
+object frresize: Tfrresize
+  Left = 574
   Height = 112
-  Top = 254
+  Top = 279
   Width = 207
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog

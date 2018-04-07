@@ -18,7 +18,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="1"/>
-      <BuildNr Value="2023"/>
+      <BuildNr Value="2042"/>
       <Language Value="040A"/>
       <StringTable Comments="Pequeño visor de imagenes" CompanyName="Independiente" FileDescription="Visor de imágenes LazView" InternalName="lazview" LegalCopyright="R.Mir" LegalTrademarks="Reinier Romero Mir (c)" OriginalFilename="lazview" ProductName="LazView" ProductVersion="0.1"/>
     </VersionInfo>
@@ -86,7 +86,7 @@
       <Unit1>
         <Filename Value="unit2.pas"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="Form2"/>
+        <ComponentName Value="frresize"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Unit2"/>
