@@ -208,6 +208,7 @@ type
     procedure PairSplitterSide2Resize(Sender: TObject);
     procedure PairSplitterSide3Resize(Sender: TObject);
     procedure PopupMenu1Popup(Sender: TObject);
+    procedure sboxthumbPaint(Sender: TObject);
     procedure ScrollBox1MouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure ScrollBox1MouseMove(Sender: TObject; Shift: TShiftState; X,
@@ -446,6 +447,7 @@ begin
     end;
   end;
   frmain.ScrollBox1.Canvas.Draw(0,0,mosaic);
+  frmain.sboxthumb.Canvas.Draw(0,0,mosaic);
 end;
 
 procedure realmode;
@@ -2417,11 +2419,13 @@ begin
   begin
     mosaic.Clear;
     frmain.ScrollBox1.Repaint;
+    frmain.sboxthumb.Repaint;
   end
   else
   begin
     mosaic:=Graphics.TBitmap.Create;
     rendermosaic;
+    frmain.sboxthumb.Repaint;
   end;
   frmain.MenuItem67.Checked:=not frmain.MenuItem67.Checked;
   frmain.Image1.Repaint;
@@ -2527,6 +2531,12 @@ begin
       frmain.PopupMenu1.Items[i].Items[s].Enabled:=frmain.MainMenu1.Items[i].Items[s].Enabled;
     end;
   end;
+end;
+
+procedure Tfrmain.sboxthumbPaint(Sender: TObject);
+begin
+  if frmain.MenuItem67.Checked then
+    frmain.sboxthumb.Canvas.Draw(frmain.sboxthumb.HorzScrollBar.Position,0,mosaic);
 end;
 
 procedure Tfrmain.ScrollBox1MouseDown(Sender: TObject; Button: TMouseButton;

@@ -11,6 +11,7 @@
 @del /Q win64\lazview*.exe
 @del /Q win32\lazview*.old
 @del /Q win64\lazview*.old
+@del /Q src\*.bak
 @del /Q lazview*.old
 @del /Q lazview*.exe
 @del /Q lazview*.dbg

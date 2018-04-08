@@ -206,6 +206,7 @@ object frmain: Tfrmain
         OnMouseLeave = sboxthumbMouseLeave
         OnMouseMove = sboxthumbMouseMove
         OnMouseUp = sboxthumbMouseUp
+        OnPaint = sboxthumbPaint
       end
     end
   end
