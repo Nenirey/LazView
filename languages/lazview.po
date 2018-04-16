@@ -732,6 +732,11 @@ msgctxt "tfrmain.menuitem3.caption"
 msgid "Salir"
 msgstr ""
 
+#: tfrmain.menuitem30.caption
+msgctxt "tfrmain.menuitem30.caption"
+msgid "Print"
+msgstr ""
+
 #: tfrmain.menuitem31.caption
 msgctxt "tfrmain.menuitem31.caption"
 msgid "Redimensionar..."
@@ -1074,6 +1079,15 @@ msgstr ""
 #: tfrmain.toolbutton3.hint
 msgctxt "tfrmain.toolbutton3.hint"
 msgid "Pantalla completa"
+msgstr ""
+
+#: tfrmain.toolbutton4.caption
+msgid "ToolButton4"
+msgstr ""
+
+#: tfrmain.toolbutton4.hint
+msgctxt "tfrmain.toolbutton4.hint"
+msgid "Print"
 msgstr ""
 
 #: tfrmain.toolbutton6.hint

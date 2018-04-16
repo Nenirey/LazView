@@ -3,14 +3,14 @@
   <ProjectSession>
     <Version Value="10"/>
     <BuildModes Active="Release"/>
-    <Units Count="8">
+    <Units Count="9">
       <Unit0>
         <Filename Value="lazview.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="LazView"/>
         <EditorIndex Value="2"/>
         <WindowIndex Value="1"/>
-        <CursorPos X="35" Y="19"/>
+        <CursorPos X="35" Y="20"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -93,7 +93,7 @@
         <UnitName Value="Unit6"/>
         <EditorIndex Value="6"/>
         <WindowIndex Value="1"/>
-        <UsageCount Value="74"/>
+        <UsageCount Value="83"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit6>
@@ -105,12 +105,20 @@
         <ResourceBaseClass Value="Form"/>
         <IsVisibleTab Value="True"/>
         <WindowIndex Value="1"/>
-        <TopLine Value="2416"/>
-        <CursorPos X="30" Y="2428"/>
-        <UsageCount Value="30"/>
+        <TopLine Value="1972"/>
+        <CursorPos X="39" Y="1991"/>
+        <UsageCount Value="39"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit7>
+      <Unit8>
+        <Filename Value="../components/bgrabitmap/bgrabitmaptypes.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="BGRABitmapTypes"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="1"/>
+        <UsageCount Value="21"/>
+      </Unit8>
     </Units>
     <JumpHistory HistoryIndex="-1"/>
   </ProjectSession>

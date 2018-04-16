@@ -1,11 +1,11 @@
 object frmain: Tfrmain
-  Left = 432
+  Left = 292
   Height = 464
-  Top = 93
+  Top = 152
   Width = 685
   ActiveControl = ShellTreeView1
   Caption = 'LazView'
-  ClientHeight = 441
+  ClientHeight = 444
   ClientWidth = 685
   KeyPreview = True
   Menu = MainMenu1
@@ -21,12 +21,12 @@ object frmain: Tfrmain
   OnShow = FormShow
   OnWindowStateChange = FormWindowStateChange
   Position = poDesktopCenter
-  LCLVersion = '1.8.0.3'
+  LCLVersion = '1.8.0.4'
   WindowState = wsMaximized
   object StatusBar1: TStatusBar
     Left = 0
-    Height = 21
-    Top = 420
+    Height = 23
+    Top = 421
     Width = 685
     Panels = <    
       item
@@ -62,7 +62,7 @@ object frmain: Tfrmain
     AnchorSideBottom.Control = StatusBar1
     Cursor = crVSplit
     Left = 3
-    Height = 396
+    Height = 397
     Top = 24
     Width = 682
     Anchors = [akTop, akLeft, akRight, akBottom]
@@ -130,7 +130,7 @@ object frmain: Tfrmain
           AnchorSideRight.Control = ScrollBox1
           AnchorSideRight.Side = asrBottom
           Left = 0
-          Height = 22
+          Height = 19
           Top = 0
           Width = 682
           Anchors = [akTop, akLeft, akRight]
@@ -149,7 +149,7 @@ object frmain: Tfrmain
           AnchorSideRight.Control = ScrollBox1
           AnchorSideRight.Side = asrBottom
           Left = 2
-          Height = 22
+          Height = 19
           Top = 2
           Width = 679
           Anchors = [akTop, akLeft, akRight]
@@ -181,14 +181,14 @@ object frmain: Tfrmain
     object pssThumbs: TPairSplitterSide
       Cursor = crArrow
       Left = 0
-      Height = 31
+      Height = 32
       Top = 365
       Width = 682
       ClientWidth = 682
-      ClientHeight = 31
+      ClientHeight = 32
       object sboxthumb: TScrollBox
         Left = 0
-        Height = 31
+        Height = 32
         Top = 0
         Width = 682
         HorzScrollBar.Increment = 1
@@ -217,9 +217,9 @@ object frmain: Tfrmain
     AnchorSideBottom.Control = Splitter1
     AnchorSideBottom.Side = asrBottom
     Left = 0
-    Height = 396
+    Height = 397
     Top = 24
-    Width = 1
+    Width = 0
     Anchors = [akTop, akLeft, akRight, akBottom]
     BackgroundColor = clDefault
     BorderStyle = bsNone
@@ -243,7 +243,7 @@ object frmain: Tfrmain
     AnchorSideTop.Side = asrBottom
     AnchorSideBottom.Control = StatusBar1
     Left = -2
-    Height = 396
+    Height = 397
     Top = 24
     Width = 5
     Align = alNone
@@ -267,7 +267,7 @@ object frmain: Tfrmain
     OnMouseLeave = ToolBar1MouseLeave
     OnMouseMove = ToolBar1MouseMove
     object ToolButton1: TToolButton
-      Left = 331
+      Left = 354
       Hint = 'Anterior'
       Top = 2
       ImageIndex = 0
@@ -276,7 +276,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object ToolButton2: TToolButton
-      Left = 354
+      Left = 377
       Hint = 'Siguiente'
       Top = 2
       ImageIndex = 1
@@ -285,14 +285,14 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object ToolButton3: TToolButton
-      Left = 139
+      Left = 162
       Hint = 'Pantalla completa'
       Top = 2
       ImageIndex = 2
       OnClick = ToolButton3Click
     end
     object tbFlipHorizontal: TToolButton
-      Left = 47
+      Left = 70
       Hint = 'Flip horizontal'
       Top = 2
       Enabled = False
@@ -302,7 +302,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbFlipVertical: TToolButton
-      Left = 70
+      Left = 93
       Hint = 'Flip vertical'
       Top = 2
       Enabled = False
@@ -312,7 +312,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object ToolButton6: TToolButton
-      Left = 93
+      Left = 116
       Hint = 'Flip left'
       Top = 2
       Enabled = False
@@ -322,7 +322,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object ToolButton7: TToolButton
-      Left = 116
+      Left = 139
       Hint = 'Flip right'
       Top = 2
       Enabled = False
@@ -332,14 +332,14 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object ToolButton8: TToolButton
-      Left = 554
+      Left = 577
       Hint = 'Salir'
       Top = 2
       ImageIndex = 7
       OnClick = ToolButton8Click
     end
     object ToolButton9: TToolButton
-      Left = 162
+      Left = 185
       Hint = 'Aumentar'
       Top = 2
       Enabled = False
@@ -347,7 +347,7 @@ object frmain: Tfrmain
       OnClick = ToolButton9Click
     end
     object ToolButton10: TToolButton
-      Left = 185
+      Left = 208
       Hint = 'Reducir'
       Top = 2
       Enabled = False
@@ -355,7 +355,7 @@ object frmain: Tfrmain
       OnClick = ToolButton10Click
     end
     object ToolButton11: TToolButton
-      Left = 254
+      Left = 277
       Hint = 'Ajustar'
       Top = 2
       Enabled = False
@@ -363,19 +363,19 @@ object frmain: Tfrmain
       OnClick = ToolButton11Click
     end
     object ToolButton12: TToolButton
-      Left = 377
+      Left = 400
       Top = 2
       ImageIndex = 13
       OnClick = ToolButton12Click
     end
     object ToolButton13: TToolButton
-      Left = 400
+      Left = 423
       Top = 2
       ImageIndex = 11
       OnClick = ToolButton13Click
     end
     object ToolButton14: TToolButton
-      Left = 208
+      Left = 231
       Hint = 'Zoom 100%'
       Top = 2
       Enabled = False
@@ -386,7 +386,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object ToolButton15: TToolButton
-      Left = 308
+      Left = 331
       Hint = 'Recargar imagen de disco'
       Top = 2
       Enabled = False
@@ -412,14 +412,14 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object ToolButton18: TToolButton
-      Left = 285
+      Left = 308
       Top = 2
       Caption = 'ToolButton18'
       ImageIndex = 23
       OnClick = ToolButton18Click
     end
     object ToolButton19: TToolButton
-      Left = 454
+      Left = 477
       Top = 2
       Caption = 'ToolButton19'
       Enabled = False
@@ -427,7 +427,7 @@ object frmain: Tfrmain
       OnClick = ToolButton19Click
     end
     object ToolButton20: TToolButton
-      Left = 500
+      Left = 523
       Top = 2
       Caption = 'ToolButton20'
       Enabled = False
@@ -435,7 +435,7 @@ object frmain: Tfrmain
       OnClick = ToolButton20Click
     end
     object ToolButton21: TToolButton
-      Left = 477
+      Left = 500
       Top = 2
       Caption = 'ToolButton21'
       Enabled = False
@@ -443,21 +443,21 @@ object frmain: Tfrmain
       OnClick = ToolButton21Click
     end
     object ToolButton22: TToolButton
-      Left = 423
+      Left = 446
       Height = 22
       Top = 2
       Caption = 'ToolButton22'
       Style = tbsSeparator
     end
     object ToolButton23: TToolButton
-      Left = 546
+      Left = 569
       Height = 22
       Top = 2
       Caption = 'ToolButton23'
       Style = tbsSeparator
     end
     object ToolButton24: TToolButton
-      Left = 231
+      Left = 254
       Hint = 'Estirar'
       Top = 2
       Caption = 'ToolButton24'
@@ -465,14 +465,14 @@ object frmain: Tfrmain
       OnClick = ToolButton24Click
     end
     object ToolButton25: TToolButton
-      Left = 277
+      Left = 300
       Height = 22
       Top = 2
       Caption = 'ToolButton25'
       Style = tbsSeparator
     end
     object ToolButton26: TToolButton
-      Left = 431
+      Left = 454
       Hint = 'Speed down'
       Top = 2
       Caption = 'ToolButton26'
@@ -481,7 +481,7 @@ object frmain: Tfrmain
       OnClick = ToolButton26Click
     end
     object ToolButton27: TToolButton
-      Left = 523
+      Left = 546
       Hint = 'Speed up'
       Top = 2
       Caption = 'ToolButton27'
@@ -489,12 +489,22 @@ object frmain: Tfrmain
       ImageIndex = 26
       OnClick = ToolButton27Click
     end
+    object ToolButton4: TToolButton
+      Left = 47
+      Hint = 'Print'
+      Top = 2
+      Caption = 'ToolButton4'
+      ImageIndex = 30
+      OnClick = ToolButton4Click
+      ParentShowHint = False
+      ShowHint = True
+    end
   end
   object ImageList1: TImageList
     left = 8
-    top = 208
+    top = 207
     Bitmap = {
-      4C691E0000001000000010000000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      4C691F0000001000000010000000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF0004733A6404753BC5FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF0004733A0C04743BAC298B59F604733AFFFFFFFF00FFFF
@@ -1454,7 +1464,39 @@ object frmain: Tfrmain
       D300469AD3004699D1004BABF0004AA9EDFF389DE7F0173E5A490000001F163E
       5A493FA0E7F045A7ECFF3CA3EB06000000000000000000000000000000000000
       0000000000000000000000000000000000330000002F00000006000000000000
-      00060000002F0000003300000001
+      00060000002F0000003300000001FFFFFF00FFFFFF00FFFFFF00E8CEB9C3D7AA
+      7CCDC88C50FEC88C4FFFCA9155F7CB9055F7C5894DFEDDAF8DC1FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00C5884DFAF7F2
+      ECFFF8F4EEFFF8F3EDFFF8F3EDFFF8F2ECFFF2E6D7FFE2B27DFFDB9569F6FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00C88D52F6F9F5
+      F1FFFCE3CDFFFBE3CDFFF9E0C8FFF8DCC2FFFDFBF8FFFCE6CDFFE2B684FFD5A8
+      84C5FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00C88D51F7F9F5
+      F1FFFCE3CFFFFCE4CFFFFAE1CAFFF9DDC4FFF4E9DFFFF7F2ECFFF5EFE9FFC380
+      48FBFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00C68C4FF9F9F4
+      F0FFFCE6D3FFFDE7D3FFFBE3CDFFFAE0C8FFF5D6BBFFF3D4B5FFF8F4F0FFC485
+      4AF9FFFFFF00FFFFFF00FFFFFF00FFFFFF00CECECEC2878787F4C5894CFFF9F4
+      EFFFFEE7D7FFFDE7D5FFFCE6D2FFFBE1CCFFF8DCC2FFF6DABDFFFAF4EFFFC483
+      48FF616161F4BCBCBCC2FFFFFF00DDDDDDCD9A9A9AFFCCCCCCFFC78B4EFFF9F4
+      EDFFFEE8D8FFFEE8D7FFFDE5D3FFFCE4D1FFFAE0C7FFF9DDC3FFFAF4EDFFC785
+      4AFFC3C3C3FF747474FFCDCDCDCD979797DAD2D2D2FFE8E8E8FF7D7D7DFF7D7D
+      7DFF7D7D7DFF7D7D7DFF7D7D7DFF7D7D7DFF7D7D7DFF7D7D7DFF7D7D7DFF7D7D
+      7DFFE8E8E8FFC4C4C4FF6D6D6DE1848484F9FCFCFCFFFCFCFCFFCBCBCBFFF2F2
+      F2FFF2F2F2FFF2F2F2FFF2F2F2FFF2F2F2FFF2F2F2FFF2F2F2FFF2F2F2FFC6C6
+      C6FFFCFCFCFFFCFCFCFF717171FE7E7E7EFFF9F9F9FFF9F9F9FFABABABFFDFDF
+      DFFFCBCBCBFFCBCBCBFFCBCBCBFFCBCBCBFFCBCBCBFFCBCBCBFFDFDFDFFFA3A3
+      A3FFF9F9F9FFF9F9F9FF616161FF7A7A7AFFD7D7D7FFD7D7D7FF979797FFD8D8
+      D8FFBFBFBFFFBFBFBFFFBFBFBFFFBFBFBFFFBFBFBFFFBFBFBFFFD7D7D7FF8E8E
+      8EFFD7D7D7FFD7D7D7FF3F3F3FFF757575FFBBBBBBFFBBBBBBFF8D8D8DFFD4D4
+      D4FFB9B9B9FFB9B9B9FFB9B9B9FFB9B9B9FFB9B9B9FFB9B9B9FFD3D3D3FF8383
+      83FFBBBBBBFFBBBBBBFF2A2A2AFF707070FFB5B5B5FFB5B5B5FF959595FF8181
+      81FF818181FF797979FF6E6E6EFF616161FF525252FF434343FF424242FF6E6E
+      6EFFB5B5B5FFB5B5B5FF252525FF6B6B6BFDA7A7A7FFB5B5B5FF818181FFAFAC
+      AAFFC5C0BDFFC5C0BDFFC5C0BDFFC5C0BDFFC5C0BDFFC5C0BDFFADAAA8FF2C2C
+      2CFFB5B5B5FF9B9B9BFF232323FFA1A1A1C27A7A7ADA585858FFC79561FFF9F7
+      F6FFF9F1ECFFF9F1EBFFF8F0E9FFF7EDE6FFF4EAE1FFF2E8DEFFFAF8F6FFC794
+      61FF242424FF4B4B4BD9969696BFFFFFFF00FFFFFF00FFFFFF00C89662FDCA98
+      65FFCA9765FFCA9765FFCA9765FFCA9764FFC99764FFC99764FFCA9865FFC895
+      62FDFFFFFF00FFFFFF00FFFFFF00
     }
   end
   object MainMenu1: TMainMenu
@@ -1472,6 +1514,11 @@ object frmain: Tfrmain
         Enabled = False
         ShortCut = 16455
         OnClick = MenuItem16Click
+      end
+      object MenuItem30: TMenuItem
+        Caption = 'Print'
+        ShortCut = 16464
+        OnClick = ToolButton4Click
       end
       object MenuItem11: TMenuItem
         Caption = '-'

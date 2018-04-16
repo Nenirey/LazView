@@ -8,9 +8,9 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, ComCtrls,
   StdCtrls, Menus, ExtDlgs, LazFileUtils, FileUtil, IntfGraphics,
   types, LCLType, PairSplitter, ShellCtrls, FPImage, Unit2, Unit3, Unit4, Unit5, Unit6,
-  LazUTF8{$IFDEF WINDOWS}, Registry, Windows, Windirs{$ENDIF},
+  LazUTF8, PrintersDlgs{$IFDEF WINDOWS}, Registry, Windows, Windirs{$ENDIF},
   BGRABitmapTypes, BGRABitmap, BGRAThumbnail, BGRAAnimatedGif,
-  DateUtils, Math, ImgSize, BGRAGifFormat;
+  DateUtils, Math, ImgSize, BGRAGifFormat, Printers;
 
 type
 
@@ -23,6 +23,8 @@ type
     Label2: TLabel;
     MainMenu1: TMainMenu;
     MenuItem1: TMenuItem;
+    MenuItem10: TMenuItem;
+    MenuItem30: TMenuItem;
     mnufileopen: TMenuItem;
     MenuItem11: TMenuItem;
     MenuItem12: TMenuItem;
@@ -131,6 +133,7 @@ type
     ToolButton3: TToolButton;
     tbFlipHorizontal: TToolButton;
     tbFlipVertical: TToolButton;
+    ToolButton4: TToolButton;
     ToolButton6: TToolButton;
     ToolButton7: TToolButton;
     ToolButton8: TToolButton;
@@ -254,6 +257,7 @@ type
     procedure ToolButton3Click(Sender: TObject);
     procedure tbFlipHorizontalClick(Sender: TObject);
     procedure tbFlipVerticalClick(Sender: TObject);
+    procedure ToolButton4Click(Sender: TObject);
     procedure ToolButton6Click(Sender: TObject);
     procedure ToolButton7Click(Sender: TObject);
     procedure ToolButton8Click(Sender: TObject);
@@ -1217,25 +1221,25 @@ begin
 end;
 
 procedure efectimagen(efect:integer;nivel:integer=5000);
-////////efect 1:Flip Horizontal
+////////Efect 1:Flip Horizontal
 ////////      2:Flip Vertical
 ////////      3:Flip Left
 ////////      4:Flip Right
-///////       5:BGR Color
-///////       6:RBG Color
-///////       7:GRB Color
-///////       8:BRG Color
-///////       9:GBR Color
-///////       10:Bright+
-///////       11:Bright-
-///////       12:GrayAndRed
-///////       13:GrayAndGreen
-///////       14:GrayAndBlue
-///////       15:QuitRed
-///////       16:QuitGreen
-///////       17:QuitBlue
-///////       18:Noise
-///////       19:Tv
+////////      5:BGR Color
+////////      6:RBG Color
+////////      7:GRB Color
+////////      8:BRG Color
+////////      9:GBR Color
+////////      10:Bright+
+////////      11:Bright-
+////////      12:GrayAndRed
+////////      13:GrayAndGreen
+////////      14:GrayAndBlue
+////////      15:QuitRed
+////////      16:QuitGreen
+////////      17:QuitBlue
+////////      18:Noise
+////////      19:Tv
 var
    imagen:TLazIntfImage=nil;
    imagen2:TLazIntfImage=nil;
@@ -1967,11 +1971,25 @@ end;
 
 procedure Tfrmain.MenuItem14Click(Sender: TObject);
 var
-   recorte:TBGRABitmap;
+   clipbitmap:Graphics.TBitmap;
+   cuadro:TRect;
+   cuadro2:TRect;
 begin
   if frmain.Shape1.Visible then
   begin
-    recorte:=TBGRABitmap.Create(frmain.Shape1.BaseBounds.Width,frmain.Shape1.BaseBounds.Height);
+    clipbitmap:=Graphics.TBitmap.Create;
+    clipbitmap.Width:=frmain.Shape1.Width;
+    clipbitmap.Height:=frmain.Shape1.Height;
+    cuadro.Left:=frmain.Shape1.Left;
+    cuadro.Right:=frmain.Shape1.Left+frmain.Shape1.Width;
+    cuadro.Top:=frmain.Shape1.Top;
+    cuadro.Bottom:=frmain.Shape1.Top+frmain.Shape1.Height;
+    cuadro2.Top:=0;
+    cuadro2.Left:=0;
+    cuadro2.Right:=frmain.Shape1.Width;
+    cuadro2.Bottom:=frmain.Shape1.Height;
+    clipbitmap.Canvas.CopyRect(cuadro2,frmain.Image1.Picture.Bitmap.Canvas,cuadro);
+    clipbitmap.SaveToClipboardFormat(2);
   end
   else
     frmain.Image1.Picture.Bitmap.SaveToClipboardFormat(2);
@@ -2420,12 +2438,14 @@ begin
     mosaic.Clear;
     frmain.ScrollBox1.Repaint;
     frmain.sboxthumb.Repaint;
+    frmain.psVertical.Color:=clNone;
   end
   else
   begin
     mosaic:=Graphics.TBitmap.Create;
     rendermosaic;
     frmain.sboxthumb.Repaint;
+    frmain.psVertical.Color:=clWhite;
   end;
   frmain.MenuItem67.Checked:=not frmain.MenuItem67.Checked;
   frmain.Image1.Repaint;
@@ -2875,6 +2895,35 @@ begin
     efectimagen(2);
 end;
 
+procedure Tfrmain.ToolButton4Click(Sender: TObject);
+var
+   MyPrinter : TPrinter;
+   myBitMap : Graphics.TBitmap;
+   tmpbgra:TBGRABitMap;
+   bgcolor:TBGRAPixel;
+begin
+    bgcolor.alpha:=0;
+    bgcolor.red:=255;
+    bgcolor.green:=255;
+    bgcolor.blue:=255;
+    tmpbgra:=TBGRABitMap.Create(printer.PageWidth,printer.PageHeight);
+    tmpbgra.Assign(frmain.Image1.Picture.Bitmap);
+    myBitMap := Graphics.TBitMap.Create;
+    myBitMap.Width := printer.PageWidth;
+    myBitMap.Height := printer.PageHeight;
+    myBitMap.Assign(GetBitMapThumbnail(tmpbgra,printer.PageWidth,printer.PageHeight, bgcolor, false));
+    MyPrinter := Printer;
+    MyPrinter.BeginDoc;
+    myPrinter.Canvas.CopyRect(Classes.Rect(0, 0, myPrinter.PaperSize.Width, myPrinter.PaperSize.Height),
+    myBitMap.Canvas, Classes.Rect(0, 0, myBitMap.Width, myBitMap.Height));
+    MyPrinter.EndDoc;
+    myBitMap.Free;
+    tmpbgra.Free;
+end;
+
+
+
+
 procedure Tfrmain.ToolButton6Click(Sender: TObject);
 begin
   if (realimgwidth>256) or ifgif then
@@ -2949,7 +2998,7 @@ begin
     thumb.Width:=thumbsize;
     thumb.Height:=thumbsize;
     thumbtmp:=TPicture.Create();
-    streamimage:=TFileStream.Create(wthumb,fmOpenRead or fmShareDenyNone);
+    streamimage:=TFileStream.Create(wthumb, fmOpenRead or fmShareDenyNone);
     thumbtmp.Bitmap.Assign(GetStreamThumbnail(streamimage,thumbsize,thumbsize, bgcolor, false));
     streamimage.Free;
     thumb.Canvas.Rectangle(0,0,thumbsize,thumbsize);
