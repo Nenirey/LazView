@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, ComCtrls,
   StdCtrls, Menus, ExtDlgs, LazFileUtils, FileUtil, IntfGraphics,
   types, LCLType, PairSplitter, ShellCtrls, FPImage, Unit2, Unit3, Unit4, Unit5, Unit6,
-  LazUTF8, PrintersDlgs{$IFDEF WINDOWS}, Registry, Windows, Windirs{$ENDIF},
+  LazUTF8, print{$IFDEF WINDOWS}, Registry, Windows, Windirs{$ENDIF},
   BGRABitmapTypes, BGRABitmap, BGRAThumbnail, BGRAAnimatedGif,
   DateUtils, Math, ImgSize, BGRAGifFormat, Printers;
 
@@ -1674,6 +1674,7 @@ begin
     frmain.Splitter1.Left:=200
   else
     frmain.Splitter1.Left:=0-frmain.Splitter1.Width;
+  starting:=false;
 end;
 
 procedure Tfrmain.FormDestroy(Sender: TObject);
@@ -1973,22 +1974,17 @@ procedure Tfrmain.MenuItem14Click(Sender: TObject);
 var
    clipbitmap:Graphics.TBitmap;
    cuadro:TRect;
-   cuadro2:TRect;
 begin
   if frmain.Shape1.Visible then
   begin
     clipbitmap:=Graphics.TBitmap.Create;
     clipbitmap.Width:=frmain.Shape1.Width;
     clipbitmap.Height:=frmain.Shape1.Height;
-    cuadro.Left:=frmain.Shape1.Left;
-    cuadro.Right:=frmain.Shape1.Left+frmain.Shape1.Width;
-    cuadro.Top:=frmain.Shape1.Top;
-    cuadro.Bottom:=frmain.Shape1.Top+frmain.Shape1.Height;
-    cuadro2.Top:=0;
-    cuadro2.Left:=0;
-    cuadro2.Right:=frmain.Shape1.Width;
-    cuadro2.Bottom:=frmain.Shape1.Height;
-    clipbitmap.Canvas.CopyRect(cuadro2,frmain.Image1.Picture.Bitmap.Canvas,cuadro);
+    cuadro.Top:=2;
+    cuadro.Left:=2;
+    cuadro.Right:=frmain.Shape1.Width-2;
+    cuadro.Bottom:=frmain.Shape1.Height-2;
+    clipbitmap.Canvas.CopyRect(cuadro,frmain.Shape1.Canvas,cuadro);
     clipbitmap.SaveToClipboardFormat(2);
   end
   else
@@ -2901,7 +2897,29 @@ var
    myBitMap : Graphics.TBitmap;
    tmpbgra:TBGRABitMap;
    bgcolor:TBGRAPixel;
+   i:integer;
 begin
+  for i:=0 to printer.Printers.Count-1 do
+    frprint.cbPrinter.AddItem(printer.Printers[i],nil);
+  frprint.cbPrinter.ItemIndex:=printer.PrinterIndex;
+  for i:=0 to printer.PaperSize.SupportedPapers.Count-1 do
+    frprint.cbSheel.AddItem(printer.PaperSize.SupportedPapers[i],nil);
+  frprint.cbSheel.ItemIndex:=frprint.cbSheel.Items.IndexOf(printer.PaperSize.DefaultPaperName);
+  if printer.Orientation=poLandscape then
+    frprint.rbVertical.Checked:=false
+  else
+    frprint.rbHorizontal.Checked:=true;
+  frprint.speCopys.Value:=1;
+  frprint.ShowModal;
+  if frprint.accept then
+  begin
+    if frprint.rbHorizontal.Checked then
+      printer.Orientation:=poLandscape
+    else
+      printer.Orientation:=poPortrait;
+    printer.Copies:=frprint.speCopys.Value;
+    printer.PrinterIndex:=frprint.cbPrinter.ItemIndex;
+    printer.PaperSize.PaperName:=frprint.cbSheel.Items[frprint.cbSheel.ItemIndex];
     bgcolor.alpha:=0;
     bgcolor.red:=255;
     bgcolor.green:=255;
@@ -2919,6 +2937,7 @@ begin
     MyPrinter.EndDoc;
     myBitMap.Free;
     tmpbgra.Free;
+  end;
 end;
 
 

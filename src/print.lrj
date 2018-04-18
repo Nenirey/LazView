@@ -1,0 +1,8 @@
+{"version":1,"strings":[
+{"hash":5738580,"name":"tfrprint.caption","sourcebytes":[80,114,105,110,116],"value":"Print"},
+{"hash":151365930,"name":"tfrprint.lblprint.caption","sourcebytes":[80,114,105,110,116,101,114,58],"value":"Printer:"},
+{"hash":94288890,"name":"tfrprint.lblsheel.caption","sourcebytes":[83,104,101,101,108,58],"value":"Sheel:"},
+{"hash":18001132,"name":"tfrprint.rbhorizontal.caption","sourcebytes":[72,111,114,105,122,111,110,116,97,108],"value":"Horizontal"},
+{"hash":211483836,"name":"tfrprint.rbvertical.caption","sourcebytes":[86,101,114,116,105,99,97,108],"value":"Vertical"},
+{"hash":78020714,"name":"tfrprint.lblcopys.caption","sourcebytes":[67,111,112,121,115,58],"value":"Copys:"}
+]}
