@@ -9,6 +9,10 @@
       <ResourceType Value="res"/>
       <UseXPManifest Value="True"/>
       <Icon Value="0"/>
+      <Resources Count="2">
+        <Resource_0 FileName="..\curright.cur" Type="CURSOR" ResourceName="CURRIGHT"/>
+        <Resource_1 FileName="..\curleft.cur" Type="CURSOR" ResourceName="CURLEFT"/>
+      </Resources>
     </General>
     <i18n>
       <EnableI18N Value="True"/>
@@ -18,7 +22,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="1"/>
-      <BuildNr Value="2136"/>
+      <BuildNr Value="2180"/>
       <Language Value="040A"/>
       <StringTable Comments="Pequeño visor de imagenes" CompanyName="Independiente" FileDescription="Visor de imágenes LazView" InternalName="lazview" LegalCopyright="R.Mir" LegalTrademarks="Reinier Romero Mir (c)" OriginalFilename="lazview" ProductName="LazView" ProductVersion="0.1"/>
     </VersionInfo>

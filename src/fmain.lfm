@@ -1,7 +1,7 @@
 object frmain: Tfrmain
-  Left = 292
+  Left = 256
   Height = 464
-  Top = 152
+  Top = 149
   Width = 685
   ActiveControl = ShellTreeView1
   Caption = 'LazView'
@@ -1549,7 +1549,6 @@ object frmain: Tfrmain
       Caption = 'Ver'
       object mnuShowThumbs: TMenuItem
         Caption = 'Vistas previas en miniatura (experimental)'
-        Checked = True
         ShortCut = 77
         OnClick = mnuShowThumbsClick
       end
@@ -1630,12 +1629,14 @@ object frmain: Tfrmain
         Caption = 'Espejo horizontal'
         Enabled = False
         ShortCut = 72
+        ShortCutKey2 = 8264
         OnClick = MenuItem6Click
       end
       object MenuItem7: TMenuItem
         Caption = 'Espejo vertical'
         Enabled = False
         ShortCut = 86
+        ShortCutKey2 = 8278
         OnClick = MenuItem7Click
       end
       object MenuItem18: TMenuItem
@@ -1645,12 +1646,14 @@ object frmain: Tfrmain
         Caption = 'Rotar a la izquierda'
         Enabled = False
         ShortCut = 76
+        ShortCutKey2 = 8268
         OnClick = MenuItem8Click
       end
       object MenuItem9: TMenuItem
         Caption = 'Rotar a la derecha'
         Enabled = False
         ShortCut = 82
+        ShortCutKey2 = 8274
         OnClick = MenuItem9Click
       end
       object MenuItem19: TMenuItem

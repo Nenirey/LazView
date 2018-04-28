@@ -10,7 +10,7 @@ uses
   types, LCLType, PairSplitter, ShellCtrls, FPImage, Unit2, Unit3, Unit4, Unit5, Unit6,
   LazUTF8, print{$IFDEF WINDOWS}, Registry, Windows, Windirs{$ENDIF},
   BGRABitmapTypes, BGRABitmap, BGRAThumbnail, BGRAAnimatedGif,
-  DateUtils, Math, ImgSize, BGRAGifFormat, Printers;
+  DateUtils, Math, ImgSize, BGRAGifFormat, Printers, BGRAReadPCX, LCLintf;
 
 type
 
@@ -714,6 +714,7 @@ var
    starttime:TDateTime;
    bgcolor:TBGRAPixel;
    BGRAImage:BGRABitmap.TBGRABitmap;
+   fpcustomimg:TFPCustomImage;
    wimagen:UnicodeString;
 begin
   {$IFDEF WINDOWS}
@@ -768,7 +769,7 @@ begin
         realimgwidth:=frmain.Image1.Picture.Width;
         realimgheight:=frmain.Image1.Picture.Height;
       end;
-      '.JPG','.JPEG','.JPE','.JFIF','.BMP','.PNG','.XPM','.PBM','.PPM','.ICNS','.CUR','.TIF','.TIFF':
+      '.JPG','.JPEG','.JPE','.JFIF','.BMP','.PNG','.XPM','.PBM','.PPM','.PCX','.ICNS','.CUR','.TIF','.TIFF':
       begin
         streamimage:=TFileStream.Create(wimagen,fmOpenRead or fmShareDenyNone);
         bgcolor.alpha:=255;
@@ -789,6 +790,11 @@ begin
           '.jpg','.jpe','.jpeg':ImgSize.GetJPGSize(streamimage,iw,ih);
           '.png','.pne':ImgSize.GetPNGSize(streamimage,iw,ih);
           '.bmp':ImgSize.GetBMPSize(streamimage,iw,ih);
+          '.pcx'://Force thumb while found a pcx read way
+          begin
+            iw:=Screen.Width+1;
+            ih:=Screen.Height+1;
+          end;
           else
           begin
             iw:=0;
@@ -809,8 +815,11 @@ begin
               calculateaspectheight(iw,ih,frmain.Image1.Width,th);
             end;
             frmain.Image1.Picture.Bitmap.Assign(GetStreamThumbnail(streamimage,tw,th, bgcolor, false));
+            if LowerCase(ExtractFileExt(fimagen))='.pcx' then
+              modethumb:=false
+            else
+              modethumb:=true;
             frmain.StatusBar1.Panels.Items[1].Text:='*Resolucion:'+inttostr(iw)+'x'+inttostr(ih)+' '+zoomfactor(iw,ih,frmain.Image1.Width,frmain.Image1.Height)+'%';
-            modethumb:=true;
             realimgwidth:=iw;
             realimgheight:=ih;
           end
@@ -833,7 +842,7 @@ begin
         realimgwidth:=frmain.Image1.Picture.Width;
         realimgheight:=frmain.Image1.Picture.Height;
       end;
-      '.PCX','.TGA','.PSD','.XWD':
+      '.TGA','.PSD','.XWD':
       begin
         BGRAImage:=BGRABitmap.TBGRABitmap.Create(wimagen);
         frmain.Image1.Picture.Assign(BGRAImage);
@@ -1652,6 +1661,7 @@ procedure Tfrmain.FormCreate(Sender: TObject);
 var
    i:integer;
    ruta:string;
+   curleft,curright:TCursorImage;
 begin
   frmain.Image1.Width:=frmain.ScrollBox1.Width;
   frmain.Image1.Height:=frmain.ScrollBox1.Height;
@@ -1675,6 +1685,12 @@ begin
   else
     frmain.Splitter1.Left:=0-frmain.Splitter1.Width;
   starting:=false;
+  curleft:=TCursorImage.Create;
+  curright:=TCursorImage.Create;
+  curleft.LoadFromResourceName(HInstance,'curleft');
+  curright.LoadFromResourceName(HInstance,'curright');
+  Screen.Cursors[1]:=curleft.ReleaseHandle;
+  Screen.Cursors[2]:=curright.ReleaseHandle;
 end;
 
 procedure Tfrmain.FormDestroy(Sender: TObject);
@@ -1850,6 +1866,15 @@ begin
     frmain.Shape1.Visible:=true;
     frmain.Shape1.SetBounds(imgx,imgy,X-imgx,Y-imgy);
   end;
+  if compactmode then
+  begin
+  if x>Round(frmain.Width/2) then
+    frmain.Image1.Cursor:=2
+  else
+    frmain.Image1.Cursor:=1;
+  end
+  else
+    frmain.Image1.Cursor:=crDefault;
 end;
 
 procedure Tfrmain.FormMouseWheel(Sender: TObject; Shift: TShiftState;
@@ -1892,6 +1917,19 @@ procedure Tfrmain.Image1Click(Sender: TObject);
 begin
   if startselect=false then
     frmain.Shape1.Visible:=false;
+  if compactmode then
+  begin
+    if frmain.Image1.Cursor=2 then
+    begin
+      nextfile();
+      frmain.Image1.Cursor:=2;
+    end
+    else
+    begin
+      prevfile();
+      frmain.Image1.Cursor:=1;
+    end;
+  end;
 end;
 
 procedure Tfrmain.Image1DblClick(Sender: TObject);
@@ -2127,13 +2165,13 @@ begin
   begin
     frmain.sboxthumb.Visible:=true;
     frmain.psVertical.Position:=frmain.psVertical.Height-64-18;
-    if folderchange then
+    {if folderchange then
     begin
       refreshthumbs;
       ththumbs:=thumbsthread.Create(true);
       ththumbs.thumbpath:=carpeta;
       ththumbs.Start;
-    end;
+    end;}
   end;
 end;
 
@@ -2879,13 +2917,15 @@ end;
 
 procedure Tfrmain.tbFlipHorizontalClick(Sender: TObject);
 begin
- filterimagen(19);
-  //efectimagen(1);
+ if ((realimgwidth>256) or ifgif) and ((LCLintf.GetKeyState( VK_SHIFT ) <> -128) and (LCLintf.GetKeyState( VK_SHIFT ) <> -127)) then
+   filterimagen(19)
+ else
+   efectimagen(1);
 end;
 
 procedure Tfrmain.tbFlipVerticalClick(Sender: TObject);
 begin
-  if (realimgwidth>256) or ifgif then
+  if ((realimgwidth>256) or ifgif) and ((LCLintf.GetKeyState( VK_SHIFT ) <> -128) and (LCLintf.GetKeyState( VK_SHIFT ) <> -127)) then
     filterimagen(20)
   else
     efectimagen(2);
@@ -2945,7 +2985,7 @@ end;
 
 procedure Tfrmain.ToolButton6Click(Sender: TObject);
 begin
-  if (realimgwidth>256) or ifgif then
+  if ((realimgwidth>256) or ifgif) and ((LCLintf.GetKeyState( VK_SHIFT ) <> -128) and (LCLintf.GetKeyState( VK_SHIFT ) <> -127)) then
     filterimagen(18)
   else
     efectimagen(3);
@@ -2953,7 +2993,7 @@ end;
 
 procedure Tfrmain.ToolButton7Click(Sender: TObject);
 begin
-  if (realimgwidth>256) or ifgif then
+  if ((realimgwidth>256) or ifgif) and ((LCLintf.GetKeyState( VK_SHIFT ) <> -128) and (LCLintf.GetKeyState( VK_SHIFT ) <> -127)) then
     filterimagen(17)
   else
     efectimagen(4);
@@ -3177,11 +3217,6 @@ begin
             {$ENDIF}
           end;
         end;
-      //except on e:exception do
-      //begin
-
-      //end;
-      //end;
     end
     else
       break;

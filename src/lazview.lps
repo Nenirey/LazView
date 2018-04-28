@@ -3,15 +3,16 @@
   <ProjectSession>
     <Version Value="10"/>
     <BuildModes Active="Release"/>
-    <Units Count="11">
+    <Units Count="10">
       <Unit0>
         <Filename Value="lazview.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="LazView"/>
-        <EditorIndex Value="-1"/>
+        <EditorIndex Value="1"/>
         <WindowIndex Value="1"/>
         <CursorPos Y="27"/>
         <UsageCount Value="200"/>
+        <Loaded Value="True"/>
       </Unit0>
       <Unit1>
         <Filename Value="unit2.pas"/>
@@ -22,8 +23,8 @@
         <UnitName Value="Unit2"/>
         <EditorIndex Value="2"/>
         <WindowIndex Value="1"/>
-        <TopLine Value="20"/>
-        <CursorPos X="3" Y="34"/>
+        <TopLine Value="70"/>
+        <CursorPos Y="96"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -78,7 +79,6 @@
         <UnitName Value="ImgSize"/>
         <EditorIndex Value="7"/>
         <WindowIndex Value="1"/>
-        <TopLine Value="167"/>
         <CursorPos X="49" Y="177"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
@@ -92,7 +92,7 @@
         <UnitName Value="Unit6"/>
         <EditorIndex Value="6"/>
         <WindowIndex Value="1"/>
-        <UsageCount Value="89"/>
+        <UsageCount Value="105"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit6>
@@ -104,9 +104,9 @@
         <ResourceBaseClass Value="Form"/>
         <IsVisibleTab Value="True"/>
         <WindowIndex Value="1"/>
-        <TopLine Value="1651"/>
-        <CursorPos X="19" Y="1663"/>
-        <UsageCount Value="45"/>
+        <TopLine Value="1910"/>
+        <CursorPos X="30" Y="1930"/>
+        <UsageCount Value="61"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit7>
@@ -116,7 +116,7 @@
         <UnitName Value="BGRABitmapTypes"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="1"/>
-        <UsageCount Value="27"/>
+        <UsageCount Value="43"/>
       </Unit8>
       <Unit9>
         <Filename Value="print.pas"/>
@@ -124,145 +124,14 @@
         <ComponentName Value="frprint"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="8"/>
         <WindowIndex Value="1"/>
-        <TopLine Value="9"/>
         <CursorPos X="21" Y="36"/>
-        <UsageCount Value="24"/>
+        <UsageCount Value="40"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit9>
-      <Unit10>
-        <Filename Value="../../../../../lazarus/lcl/printers.pas"/>
-        <UnitName Value="Printers"/>
-        <EditorIndex Value="-1"/>
-        <WindowIndex Value="1"/>
-        <TopLine Value="16"/>
-        <CursorPos X="3" Y="30"/>
-        <UsageCount Value="11"/>
-      </Unit10>
     </Units>
-    <JumpHistory Count="30" HistoryIndex="28">
-      <Position1>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="2902" Column="32" TopLine="2895"/>
-      </Position1>
-      <Position2>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="1851" Column="54" TopLine="1824"/>
-      </Position2>
-      <Position3>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="2901" Column="33" TopLine="2894"/>
-      </Position3>
-      <Position4>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="2900" Column="6" TopLine="2891"/>
-      </Position4>
-      <Position5>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="2899" Column="6" TopLine="2890"/>
-      </Position5>
-      <Position6>
-        <Filename Value="print.pas"/>
-        <Caret Line="8" Column="20"/>
-      </Position6>
-      <Position7>
-        <Filename Value="print.pas"/>
-        <Caret Line="28" Column="23" TopLine="6"/>
-      </Position7>
-      <Position8>
-        <Filename Value="print.pas"/>
-        <Caret Line="38" Column="17" TopLine="14"/>
-      </Position8>
-      <Position9>
-        <Filename Value="print.pas"/>
-        <Caret Line="49" Column="16" TopLine="22"/>
-      </Position9>
-      <Position10>
-        <Filename Value="print.pas"/>
-        <Caret Line="25" Column="26" TopLine="18"/>
-      </Position10>
-      <Position11>
-        <Filename Value="print.pas"/>
-        <Caret Line="30" Column="3" TopLine="21"/>
-      </Position11>
-      <Position12>
-        <Filename Value="print.pas"/>
-        <Caret Line="26" Column="28" TopLine="11"/>
-      </Position12>
-      <Position13>
-        <Filename Value="print.pas"/>
-        <Caret Line="30" Column="21" TopLine="12"/>
-      </Position13>
-      <Position14>
-        <Filename Value="print.pas"/>
-        <Caret Line="31" Column="21" TopLine="12"/>
-      </Position14>
-      <Position15>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="2904" Column="20" TopLine="2895"/>
-      </Position15>
-      <Position16>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="2906" Column="40" TopLine="2892"/>
-      </Position16>
-      <Position17>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="2911" Column="39" TopLine="2898"/>
-      </Position17>
-      <Position18>
-        <Filename Value="print.pas"/>
-        <Caret Line="32" Column="21" TopLine="4"/>
-      </Position18>
-      <Position19>
-        <Filename Value="print.pas"/>
-        <Caret Line="33" Column="21" TopLine="6"/>
-      </Position19>
-      <Position20>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="2907" Column="19" TopLine="2898"/>
-      </Position20>
-      <Position21>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="2917" Column="28" TopLine="2901"/>
-      </Position21>
-      <Position22>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="2907" Column="26" TopLine="2893"/>
-      </Position22>
-      <Position23>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="2910" Column="41" TopLine="2898"/>
-      </Position23>
-      <Position24>
-        <Filename Value="print.pas"/>
-        <Caret Line="34" Column="21" TopLine="7"/>
-      </Position24>
-      <Position25>
-        <Filename Value="print.pas"/>
-        <Caret Line="35" Column="21" TopLine="8"/>
-      </Position25>
-      <Position26>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="2911" Column="28" TopLine="2901"/>
-      </Position26>
-      <Position27>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="1924" Column="10" TopLine="1913"/>
-      </Position27>
-      <Position28>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="1628" Column="8" TopLine="1617"/>
-      </Position28>
-      <Position29>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="1656" Column="3" TopLine="1651"/>
-      </Position29>
-      <Position30>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="1873" Column="3" TopLine="1871"/>
-      </Position30>
-    </JumpHistory>
+    <JumpHistory HistoryIndex="-1"/>
   </ProjectSession>
 </CONFIG>
