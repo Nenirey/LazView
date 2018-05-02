@@ -1823,15 +1823,15 @@ procedure Tfrmain.FormMouseDown(Sender: TObject; Button: TMouseButton;
 begin
   if frmain.ToolButton18.Down=false then
   begin
+    startdraw:=true;
     imgx:=X+frmain.Image1.ClientOrigin.x-frmain.Image1.Left;
     imgy:=Y+frmain.Image1.ClientOrigin.Y-frmain.Image1.Top;
-    startdraw:=true;
   end
   else
   begin
+    startselect:=true;
     imgx:=X;
     imgy:=Y;
-    startselect:=true;
   end;
 end;
 
@@ -1866,15 +1866,22 @@ begin
     frmain.Shape1.Visible:=true;
     frmain.Shape1.SetBounds(imgx,imgy,X-imgx,Y-imgy);
   end;
-  if compactmode then
+  if (compactmode or full) and (frmain.Image1.Stretch=false) and (startselect=false) then
   begin
-  if x>Round(frmain.Width/2) then
-    frmain.Image1.Cursor:=2
-  else
-    frmain.Image1.Cursor:=1;
+    if x>(frmain.Width/3)*2 then
+      frmain.Image1.Cursor:=2;
+    if x<(frmain.Width/3) then
+      frmain.Image1.Cursor:=1;
+    if (x<(frmain.Width/3)*2) and (x>(frmain.Width/3)) then
+      frmain.Image1.Cursor:=crDefault;
   end
   else
-    frmain.Image1.Cursor:=crDefault;
+  begin
+    if frmain.Image1.Stretch then
+      frmain.Image1.Cursor:=crSizeAll
+    else
+      frmain.Image1.Cursor:=crDefault;
+  end;
 end;
 
 procedure Tfrmain.FormMouseWheel(Sender: TObject; Shift: TShiftState;
@@ -1917,14 +1924,14 @@ procedure Tfrmain.Image1Click(Sender: TObject);
 begin
   if startselect=false then
     frmain.Shape1.Visible:=false;
-  if compactmode then
+  if (compactmode or full) and (frmain.Image1.Stretch=false) and (startselect=false) then
   begin
     if frmain.Image1.Cursor=2 then
     begin
       nextfile();
       frmain.Image1.Cursor:=2;
-    end
-    else
+    end;
+    if frmain.Image1.Cursor=1 then
     begin
       prevfile();
       frmain.Image1.Cursor:=1;
@@ -1934,6 +1941,7 @@ end;
 
 procedure Tfrmain.Image1DblClick(Sender: TObject);
 begin
+ if frmain.Image1.Cursor=crDefault then
   fullsc();
 end;
 
@@ -1983,6 +1991,7 @@ begin
     frmain.Image1.Picture.Clear;
     frmain.Image1.Picture.LoadFromClipboardFormat(2);
   end;
+  zoomnormal();
   frmain.tbFlipHorizontal.Enabled:=true;
   frmain.tbFlipVertical.Enabled:=true;
   frmain.ToolButton6.Enabled:=true;
@@ -2003,6 +2012,7 @@ begin
   frmain.MenuItem14.Enabled:=true;
   frmain.MenuItem15.Enabled:=true;
   frmain.MenuItem31.Enabled:=true;
+  frmain.Shape1.Visible:=false;
   ifgif:=false;
   frmain.StatusBar1.Panels.Items[1].Text:='Resolucion:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height);
   frmain.Caption:='LazView [Clipboard]';
@@ -2780,7 +2790,29 @@ procedure Tfrmain.ToolButton12Click(Sender: TObject);
 begin
   frmain.Timer1.Enabled:=not frmain.Timer1.Enabled;
   if frmain.Timer1.Enabled then
-    frmain.ToolButton12.ImageIndex:=12
+  begin
+    frmain.ToolButton12.ImageIndex:=12;
+    fwidth:=frmain.Width;
+    fheight:=frmain.Height;
+    fxpos:=frmain.Top;
+    fypos:=frmain.Left;
+    frmain.BorderStyle:=bsNone;
+    frmain.ToolBar1.Align:=alNone;
+    frmain.psVertical.Align:=alClient;
+    frmain.StatusBar1.Visible:=false;
+    frmain.Color:=clBlack;
+    frmain.FormStyle:=fsStayOnTop;
+    frmain.Label1.Visible:=false;
+    frmain.Label2.Visible:=false;
+    frmain.MainMenu1.Items.Visible:=false;
+    frmain.Splitter1.Left:=0-frmain.Splitter1.Width;
+    frmain.psVertical.Position:=frmain.psVertical.Height-thumbsize-18;
+    frmain.WindowState:=wsFullScreen;
+    frmain.Timer2.Enabled:=true;
+    full:=true;
+    frmain.ToolBar1.Top:=screen.Height-frmain.ToolBar1.Height;
+    frmain.ToolBar1.Left:=Round((screen.Width-frmain.ToolBar1.Width)/2);
+  end
   else
     frmain.ToolButton12.ImageIndex:=13;
 end;

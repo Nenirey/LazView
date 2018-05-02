@@ -983,17 +983,25 @@ msgstr ""
 
 #: tfrmain.toolbutton1.hint
 msgctxt "tfrmain.toolbutton1.hint"
-msgid "Anterior"
+msgid "Prev image"
 msgstr ""
 
 #: tfrmain.toolbutton10.hint
 msgctxt "tfrmain.toolbutton10.hint"
-msgid "Reducir"
+msgid "Zoom -"
 msgstr ""
 
 #: tfrmain.toolbutton11.hint
 msgctxt "tfrmain.toolbutton11.hint"
-msgid "Ajustar"
+msgid "Adjust image"
+msgstr ""
+
+#: tfrmain.toolbutton12.hint
+msgid "Start presentation"
+msgstr ""
+
+#: tfrmain.toolbutton13.hint
+msgid "Random presentation"
 msgstr ""
 
 #: tfrmain.toolbutton14.hint
@@ -1003,7 +1011,7 @@ msgstr ""
 
 #: tfrmain.toolbutton15.hint
 msgctxt "tfrmain.toolbutton15.hint"
-msgid "Recargar imagen de disco"
+msgid "Reload image"
 msgstr ""
 
 #: tfrmain.toolbutton18.caption
@@ -1011,14 +1019,22 @@ msgctxt "tfrmain.toolbutton18.caption"
 msgid "ToolButton18"
 msgstr ""
 
+#: tfrmain.toolbutton18.hint
+msgid "Selection tool"
+msgstr ""
+
 #: tfrmain.toolbutton19.caption
 msgctxt "tfrmain.toolbutton19.caption"
 msgid "ToolButton19"
 msgstr ""
 
+#: tfrmain.toolbutton19.hint
+msgid "Prev frame"
+msgstr ""
+
 #: tfrmain.toolbutton2.hint
 msgctxt "tfrmain.toolbutton2.hint"
-msgid "Siguiente"
+msgid "Next image"
 msgstr ""
 
 #: tfrmain.toolbutton20.caption
@@ -1026,9 +1042,17 @@ msgctxt "tfrmain.toolbutton20.caption"
 msgid "ToolButton20"
 msgstr ""
 
+#: tfrmain.toolbutton20.hint
+msgid "Next frame"
+msgstr ""
+
 #: tfrmain.toolbutton21.caption
 msgctxt "tfrmain.toolbutton21.caption"
 msgid "ToolButton21"
+msgstr ""
+
+#: tfrmain.toolbutton21.hint
+msgid "Play/Pause animation"
 msgstr ""
 
 #: tfrmain.toolbutton22.caption
@@ -1048,7 +1072,7 @@ msgstr ""
 
 #: tfrmain.toolbutton24.hint
 msgctxt "tfrmain.toolbutton24.hint"
-msgid "Estirar"
+msgid "Large"
 msgstr ""
 
 #: tfrmain.toolbutton25.caption
@@ -1078,7 +1102,7 @@ msgstr ""
 
 #: tfrmain.toolbutton3.hint
 msgctxt "tfrmain.toolbutton3.hint"
-msgid "Pantalla completa"
+msgid "Full screen"
 msgstr ""
 
 #: tfrmain.toolbutton4.caption
@@ -1100,12 +1124,37 @@ msgstr ""
 
 #: tfrmain.toolbutton8.hint
 msgctxt "tfrmain.toolbutton8.hint"
-msgid "Salir"
+msgid "Exit"
 msgstr ""
 
 #: tfrmain.toolbutton9.hint
 msgctxt "tfrmain.toolbutton9.hint"
-msgid "Aumentar"
+msgid "Zoom +"
+msgstr ""
+
+#: tfrprint.caption
+msgctxt "tfrprint.caption"
+msgid "Print"
+msgstr ""
+
+#: tfrprint.lblcopys.caption
+msgid "Copys:"
+msgstr ""
+
+#: tfrprint.lblprint.caption
+msgid "Printer:"
+msgstr ""
+
+#: tfrprint.lblsheel.caption
+msgid "Sheel:"
+msgstr ""
+
+#: tfrprint.rbhorizontal.caption
+msgid "Horizontal"
+msgstr ""
+
+#: tfrprint.rbvertical.caption
+msgid "Vertical"
 msgstr ""
 
 #: tfrresize.caption

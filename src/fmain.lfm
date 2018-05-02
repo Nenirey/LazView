@@ -1,7 +1,7 @@
 object frmain: Tfrmain
-  Left = 256
+  Left = 494
   Height = 464
-  Top = 149
+  Top = 142
   Width = 685
   ActiveControl = ShellTreeView1
   Caption = 'LazView'
@@ -267,8 +267,8 @@ object frmain: Tfrmain
     OnMouseLeave = ToolBar1MouseLeave
     OnMouseMove = ToolBar1MouseMove
     object ToolButton1: TToolButton
-      Left = 354
-      Hint = 'Anterior'
+      Left = 285
+      Hint = 'Prev image'
       Top = 2
       ImageIndex = 0
       OnClick = ToolButton1Click
@@ -276,8 +276,8 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object ToolButton2: TToolButton
-      Left = 377
-      Hint = 'Siguiente'
+      Left = 331
+      Hint = 'Next image'
       Top = 2
       ImageIndex = 1
       OnClick = ToolButton2Click
@@ -286,10 +286,12 @@ object frmain: Tfrmain
     end
     object ToolButton3: TToolButton
       Left = 162
-      Hint = 'Pantalla completa'
+      Hint = 'Full screen'
       Top = 2
       ImageIndex = 2
       OnClick = ToolButton3Click
+      ParentShowHint = False
+      ShowHint = True
     end
     object tbFlipHorizontal: TToolButton
       Left = 70
@@ -333,46 +335,60 @@ object frmain: Tfrmain
     end
     object ToolButton8: TToolButton
       Left = 577
-      Hint = 'Salir'
+      Hint = 'Exit'
       Top = 2
       ImageIndex = 7
       OnClick = ToolButton8Click
+      ParentShowHint = False
+      ShowHint = True
     end
     object ToolButton9: TToolButton
       Left = 185
-      Hint = 'Aumentar'
+      Hint = 'Zoom +'
       Top = 2
       Enabled = False
       ImageIndex = 8
       OnClick = ToolButton9Click
+      ParentShowHint = False
+      ShowHint = True
     end
     object ToolButton10: TToolButton
       Left = 208
-      Hint = 'Reducir'
+      Hint = 'Zoom -'
       Top = 2
       Enabled = False
       ImageIndex = 9
       OnClick = ToolButton10Click
+      ParentShowHint = False
+      ShowHint = True
     end
     object ToolButton11: TToolButton
-      Left = 277
-      Hint = 'Ajustar'
+      Left = 423
+      Hint = 'Adjust image'
       Top = 2
       Enabled = False
       ImageIndex = 10
       OnClick = ToolButton11Click
+      ParentShowHint = False
+      ShowHint = True
     end
     object ToolButton12: TToolButton
-      Left = 400
+      Left = 308
+      Hint = 'Start presentation'
       Top = 2
       ImageIndex = 13
       OnClick = ToolButton12Click
+      ParentShowHint = False
+      ShowHint = True
     end
     object ToolButton13: TToolButton
-      Left = 423
+      Left = 354
+      Hint = 'Random presentation'
       Top = 2
       ImageIndex = 11
       OnClick = ToolButton13Click
+      ParentShowHint = False
+      ShowHint = True
     end
     object ToolButton14: TToolButton
       Left = 231
@@ -386,12 +402,14 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object ToolButton15: TToolButton
-      Left = 331
-      Hint = 'Recargar imagen de disco'
+      Left = 400
+      Hint = 'Reload image'
       Top = 2
       Enabled = False
       ImageIndex = 15
       OnClick = ToolButton15Click
+      ParentShowHint = False
+      ShowHint = True
     end
     object tbShowTreeView: TToolButton
       Left = 1
@@ -412,35 +430,47 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object ToolButton18: TToolButton
-      Left = 308
+      Left = 377
+      Hint = 'Selection tool'
       Top = 2
       Caption = 'ToolButton18'
       ImageIndex = 23
       OnClick = ToolButton18Click
+      ParentShowHint = False
+      ShowHint = True
     end
     object ToolButton19: TToolButton
       Left = 477
+      Hint = 'Prev frame'
       Top = 2
       Caption = 'ToolButton19'
       Enabled = False
       ImageIndex = 19
       OnClick = ToolButton19Click
+      ParentShowHint = False
+      ShowHint = True
     end
     object ToolButton20: TToolButton
       Left = 523
+      Hint = 'Next frame'
       Top = 2
       Caption = 'ToolButton20'
       Enabled = False
       ImageIndex = 20
       OnClick = ToolButton20Click
+      ParentShowHint = False
+      ShowHint = True
     end
     object ToolButton21: TToolButton
       Left = 500
+      Hint = 'Play/Pause animation'
       Top = 2
       Caption = 'ToolButton21'
       Enabled = False
       ImageIndex = 21
       OnClick = ToolButton21Click
+      ParentShowHint = False
+      ShowHint = True
     end
     object ToolButton22: TToolButton
       Left = 446
@@ -458,14 +488,16 @@ object frmain: Tfrmain
     end
     object ToolButton24: TToolButton
       Left = 254
-      Hint = 'Estirar'
+      Hint = 'Large'
       Top = 2
       Caption = 'ToolButton24'
       ImageIndex = 24
       OnClick = ToolButton24Click
+      ParentShowHint = False
+      ShowHint = True
     end
     object ToolButton25: TToolButton
-      Left = 300
+      Left = 277
       Height = 22
       Top = 2
       Caption = 'ToolButton25'
@@ -479,6 +511,8 @@ object frmain: Tfrmain
       Enabled = False
       ImageIndex = 25
       OnClick = ToolButton26Click
+      ParentShowHint = False
+      ShowHint = True
     end
     object ToolButton27: TToolButton
       Left = 546
@@ -488,6 +522,8 @@ object frmain: Tfrmain
       Enabled = False
       ImageIndex = 26
       OnClick = ToolButton27Click
+      ParentShowHint = False
+      ShowHint = True
     end
     object ToolButton4: TToolButton
       Left = 47
