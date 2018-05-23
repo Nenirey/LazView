@@ -920,6 +920,10 @@ msgctxt "tfrmain.menuitem7.caption"
 msgid "Espejo vertical"
 msgstr ""
 
+#: tfrmain.menuitem70.caption
+msgid "Delete"
+msgstr ""
+
 #: tfrmain.menuitem8.caption
 msgctxt "tfrmain.menuitem8.caption"
 msgid "Rotar a la izquierda"

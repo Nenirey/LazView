@@ -1,0 +1,418 @@
+object Form4: TForm4
+  Left = 586
+  Height = 401
+  Top = 284
+  Width = 369
+  ActiveControl = Button1
+  Caption = 'Efectos y filtros'
+  ClientHeight = 401
+  ClientWidth = 369
+  FormStyle = fsStayOnTop
+  LCLVersion = '1.8.0.4'
+  object Button1: TButton
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 262
+    Height = 23
+    Top = 5
+    Width = 102
+    Anchors = [akTop, akRight]
+    AutoSize = True
+    BorderSpacing.Top = 5
+    BorderSpacing.Right = 5
+    Caption = 'Escala de grises'
+    OnClick = Button1Click
+    TabOrder = 0
+  end
+  object Button2: TButton
+    AnchorSideTop.Control = Button1
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 276
+    Height = 23
+    Top = 33
+    Width = 88
+    Anchors = [akTop, akRight]
+    AutoSize = True
+    BorderSpacing.Top = 5
+    BorderSpacing.Right = 5
+    Caption = 'Resaltar rojo'
+    OnClick = Button2Click
+    TabOrder = 1
+  end
+  object TrackBar1: TTrackBar
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Button2
+    AnchorSideTop.Side = asrCenter
+    AnchorSideRight.Control = Button2
+    Left = 5
+    Height = 25
+    Top = 32
+    Width = 271
+    Max = 60000
+    Position = 5000
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Left = 5
+    TabOrder = 2
+  end
+  object TrackBar2: TTrackBar
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Button3
+    AnchorSideTop.Side = asrCenter
+    AnchorSideRight.Control = TrackBar1
+    AnchorSideRight.Side = asrBottom
+    Left = 5
+    Height = 25
+    Top = 55
+    Width = 271
+    Max = 60000
+    Position = 5000
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Left = 5
+    TabOrder = 3
+  end
+  object Button3: TButton
+    AnchorSideLeft.Control = TrackBar2
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = Button2
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 276
+    Height = 23
+    Top = 56
+    Width = 88
+    Anchors = [akTop, akLeft, akRight]
+    AutoSize = True
+    BorderSpacing.Right = 5
+    Caption = 'Resaltar verde'
+    OnClick = Button3Click
+    TabOrder = 4
+  end
+  object TrackBar3: TTrackBar
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Button4
+    AnchorSideTop.Side = asrCenter
+    AnchorSideRight.Control = Button4
+    Left = 5
+    Height = 25
+    Top = 78
+    Width = 271
+    Max = 60000
+    Position = 5000
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Left = 5
+    TabOrder = 5
+  end
+  object Button4: TButton
+    AnchorSideTop.Control = Button3
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 276
+    Height = 23
+    Top = 79
+    Width = 88
+    Anchors = [akTop, akRight]
+    AutoSize = True
+    BorderSpacing.Right = 5
+    Caption = 'Resaltar azul'
+    OnClick = Button4Click
+    TabOrder = 6
+  end
+  object Button5: TButton
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    Left = 5
+    Height = 23
+    Top = 5
+    Width = 70
+    AutoSize = True
+    BorderSpacing.Left = 5
+    BorderSpacing.Top = 5
+    Caption = 'Recargar'
+    OnClick = Button5Click
+    TabOrder = 7
+  end
+  object Button11: TButton
+    AnchorSideLeft.Control = Button13
+    AnchorSideTop.Control = Button20
+    AnchorSideTop.Side = asrBottom
+    Left = 159
+    Height = 25
+    Top = 234
+    Width = 75
+    BorderSpacing.Top = 3
+    Caption = 'Suavizar'
+    OnClick = Button11Click
+    TabOrder = 8
+  end
+  object Button12: TButton
+    AnchorSideLeft.Control = Button11
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = Button11
+    Left = 237
+    Height = 25
+    Top = 234
+    Width = 75
+    BorderSpacing.Left = 3
+    Caption = 'Realzar'
+    OnClick = Button12Click
+    TabOrder = 9
+  end
+  object Button13: TButton
+    AnchorSideLeft.Control = GroupBox1
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = GroupBox1
+    Left = 159
+    Height = 25
+    Top = 117
+    Width = 75
+    BorderSpacing.Left = 25
+    BorderSpacing.Top = 12
+    Caption = 'Negativo'
+    OnClick = Button13Click
+    TabOrder = 10
+  end
+  object Button14: TButton
+    AnchorSideLeft.Control = Button13
+    AnchorSideTop.Control = Button22
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Button22
+    AnchorSideRight.Side = asrBottom
+    Left = 159
+    Height = 25
+    Top = 290
+    Width = 153
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Top = 3
+    Caption = 'Plane (lento)'
+    OnClick = Button14Click
+    TabOrder = 11
+  end
+  object Button15: TButton
+    AnchorSideLeft.Control = Button13
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = Button13
+    Left = 237
+    Height = 25
+    Top = 117
+    Width = 75
+    BorderSpacing.Left = 3
+    Caption = 'Contorno'
+    OnClick = Button15Click
+    TabOrder = 12
+  end
+  object Button16: TButton
+    AnchorSideLeft.Control = Button13
+    AnchorSideTop.Control = Button13
+    AnchorSideTop.Side = asrBottom
+    Left = 159
+    Height = 25
+    Top = 145
+    Width = 75
+    BorderSpacing.Top = 3
+    Caption = 'Cilindro'
+    OnClick = Button16Click
+    TabOrder = 13
+  end
+  object Button17: TButton
+    AnchorSideLeft.Control = Button16
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = Button16
+    Left = 237
+    Height = 25
+    Top = 145
+    Width = 75
+    BorderSpacing.Left = 3
+    Caption = 'Emboss'
+    OnClick = Button17Click
+    TabOrder = 14
+  end
+  object Button18: TButton
+    AnchorSideLeft.Control = Button13
+    AnchorSideTop.Control = Button16
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Button17
+    AnchorSideRight.Side = asrBottom
+    Left = 159
+    Height = 30
+    Top = 173
+    Width = 153
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Top = 3
+    Caption = 'Emboss high light'
+    OnClick = Button18Click
+    TabOrder = 15
+  end
+  object Button19: TButton
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = GroupBox1
+    AnchorSideTop.Side = asrBottom
+    Left = 5
+    Height = 25
+    Top = 320
+    Width = 88
+    BorderSpacing.Left = 5
+    BorderSpacing.Top = 5
+    Caption = 'Normalizar'
+    OnClick = Button19Click
+    TabOrder = 16
+  end
+  object Button20: TButton
+    AnchorSideLeft.Control = Button13
+    AnchorSideTop.Control = Button18
+    AnchorSideTop.Side = asrBottom
+    Left = 159
+    Height = 25
+    Top = 206
+    Width = 75
+    BorderSpacing.Top = 3
+    Caption = 'Esfera'
+    OnClick = Button20Click
+    TabOrder = 17
+  end
+  object Button21: TButton
+    AnchorSideLeft.Control = Button20
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = Button20
+    Left = 237
+    Height = 25
+    Top = 206
+    Width = 75
+    BorderSpacing.Left = 3
+    Caption = 'Median'
+    OnClick = Button21Click
+    TabOrder = 18
+  end
+  object Button22: TButton
+    AnchorSideLeft.Control = Button13
+    AnchorSideTop.Control = Button11
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Button12
+    AnchorSideRight.Side = asrBottom
+    Left = 159
+    Height = 25
+    Top = 262
+    Width = 153
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Top = 3
+    Caption = 'Zoom inteligente [3]'
+    OnClick = Button22Click
+    TabOrder = 19
+  end
+  object GroupBox1: TGroupBox
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Button4
+    AnchorSideTop.Side = asrBottom
+    Left = 5
+    Height = 210
+    Top = 105
+    Width = 129
+    BorderSpacing.Left = 5
+    BorderSpacing.Top = 3
+    Caption = 'Change colors'
+    ClientHeight = 192
+    ClientWidth = 125
+    TabOrder = 20
+    object Button6: TButton
+      AnchorSideLeft.Control = GroupBox1
+      AnchorSideTop.Control = GroupBox1
+      Left = 5
+      Height = 23
+      Top = 5
+      Width = 84
+      AutoSize = True
+      BorderSpacing.Left = 5
+      BorderSpacing.Top = 5
+      Caption = 'RGB -> BGR'
+      OnClick = Button6Click
+      TabOrder = 0
+    end
+    object Button7: TButton
+      AnchorSideLeft.Control = GroupBox1
+      AnchorSideTop.Control = Button6
+      AnchorSideTop.Side = asrBottom
+      Left = 5
+      Height = 23
+      Top = 28
+      Width = 84
+      AutoSize = True
+      BorderSpacing.Left = 5
+      Caption = 'RGB -> RBG'
+      OnClick = Button7Click
+      TabOrder = 1
+    end
+    object Button8: TButton
+      AnchorSideLeft.Control = GroupBox1
+      AnchorSideTop.Control = Button7
+      AnchorSideTop.Side = asrBottom
+      Left = 5
+      Height = 23
+      Top = 51
+      Width = 84
+      AutoSize = True
+      BorderSpacing.Left = 5
+      Caption = 'RGB -> GRB'
+      OnClick = Button8Click
+      TabOrder = 2
+    end
+    object Button9: TButton
+      AnchorSideLeft.Control = GroupBox1
+      AnchorSideTop.Control = Button8
+      AnchorSideTop.Side = asrBottom
+      Left = 5
+      Height = 23
+      Top = 74
+      Width = 84
+      AutoSize = True
+      BorderSpacing.Left = 5
+      Caption = 'RGB -> GBR'
+      OnClick = Button9Click
+      TabOrder = 3
+    end
+    object Button10: TButton
+      AnchorSideLeft.Control = GroupBox1
+      AnchorSideTop.Control = Button9
+      AnchorSideTop.Side = asrBottom
+      Left = 5
+      Height = 23
+      Top = 97
+      Width = 84
+      AutoSize = True
+      BorderSpacing.Left = 5
+      Caption = 'RGB -> BRG'
+      OnClick = Button10Click
+      TabOrder = 4
+    end
+  end
+  object Button23: TButton
+    Left = 160
+    Height = 25
+    Top = 328
+    Width = 152
+    Caption = 'Remolino'
+    OnClick = Button23Click
+    TabOrder = 21
+  end
+  object Button24: TButton
+    Left = 160
+    Height = 25
+    Top = 360
+    Width = 152
+    Caption = 'Pixelar'
+    OnClick = Button24Click
+    TabOrder = 22
+  end
+  object Button25: TButton
+    Left = 5
+    Height = 25
+    Top = 360
+    Width = 75
+    Caption = 'Test'
+    OnClick = Button25Click
+    TabOrder = 23
+  end
+end

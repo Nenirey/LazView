@@ -2168,10 +2168,8 @@ begin
     SysUtils.DeleteFile(flist[ifile]);
     flist.Delete(ifile);
     if ifile>1 then
-    begin
       ifile:=ifile-1;
-      loadpicture(carpeta+flist[ifile]);
-    end;
+    loadpicture(carpeta+flist[ifile]);
     if showthumbs then
     begin
       refreshthumbs;
