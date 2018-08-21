@@ -1,4 +1,4 @@
 {"version":1,"strings":[
-{"hash":206266323,"name":"tform6.caption","sourcebytes":[84,97,109,97,195,177,111,32,100,101,32,108,97,115,32,109,105,110,105,97,116,117,114,97,115],"value":"Tama\u00F1o de las miniaturas"},
-{"hash":223077210,"name":"tform6.label1.caption","sourcebytes":[84,97,109,97,195,177,111,32,100,101,32,108,97,115,32,109,105,110,105,97,116,117,114,97,115,32,40,97,110,99,104,111,32,120,32,97,108,116,111,41,58],"value":"Tama\u00F1o de las miniaturas (ancho x alto):"}
+{"hash":2364117,"name":"tform6.caption","sourcebytes":[84,104,117,109,98,110,97,105,108,32,115,105,122,101],"value":"Thumbnail size"},
+{"hash":214085337,"name":"tform6.label1.caption","sourcebytes":[84,104,117,109,98,110,97,105,108,32,115,105,122,101,32,40,119,105,116,104,32,120,32,104,101,105,103,104,116,41],"value":"Thumbnail size (with x height)"}
 ]}

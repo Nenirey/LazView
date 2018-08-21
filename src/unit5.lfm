@@ -3,23 +3,22 @@ object Form5: TForm5
   Height = 84
   Top = 349
   Width = 201
-  Caption = 'Ir a la imagen numero...'
+  Caption = 'Go to image number...'
   ClientHeight = 84
   ClientWidth = 201
   OnShow = FormShow
   Position = poDesktopCenter
-  LCLVersion = '1.6.0.2'
-  Visible = False
+  LCLVersion = '1.8.4.0'
   object Edit1: TEdit
     AnchorSideLeft.Control = Label1
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 158
-    Height = 28
+    Left = 123
+    Height = 23
     Top = 10
-    Width = 33
+    Width = 68
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Top = 10
     BorderSpacing.Right = 10
@@ -32,17 +31,17 @@ object Form5: TForm5
     AnchorSideTop.Control = Edit1
     AnchorSideTop.Side = asrCenter
     Left = 10
-    Height = 20
+    Height = 15
     Top = 14
-    Width = 148
+    Width = 113
     BorderSpacing.Left = 10
-    Caption = 'Numero de la imagen:'
+    Caption = 'Go to image number:'
     ParentColor = False
   end
   object ButtonPanel1: TButtonPanel
     Left = 6
-    Height = 38
-    Top = 40
+    Height = 34
+    Top = 44
     Width = 189
     OKButton.Name = 'OKButton'
     OKButton.DefaultCaption = True

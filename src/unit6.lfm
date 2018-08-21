@@ -1,12 +1,12 @@
 object Form6: TForm6
-  Left = 498
+  Left = 519
   Height = 97
-  Top = 298
+  Top = 302
   Width = 306
-  Caption = 'Tamaño de las miniaturas'
+  Caption = 'Thumbnail size'
   ClientHeight = 97
   ClientWidth = 306
-  LCLVersion = '1.8.0.1'
+  LCLVersion = '1.8.4.0'
   object ButtonPanel1: TButtonPanel
     Left = 6
     Height = 34
@@ -28,7 +28,7 @@ object Form6: TForm6
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = Label1
     AnchorSideTop.Side = asrCenter
-    Left = 233
+    Left = 179
     Height = 23
     Top = 16
     Width = 59
@@ -45,10 +45,10 @@ object Form6: TForm6
     Left = 20
     Height = 15
     Top = 20
-    Width = 213
+    Width = 159
     BorderSpacing.Left = 20
     BorderSpacing.Top = 20
-    Caption = 'Tamaño de las miniaturas (ancho x alto):'
+    Caption = 'Thumbnail size (with x height)'
     ParentColor = False
   end
 end

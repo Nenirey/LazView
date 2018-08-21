@@ -1,7 +1,7 @@
 object frmain: Tfrmain
-  Left = 275
+  Left = 251
   Height = 536
-  Top = 105
+  Top = 118
   Width = 819
   ActiveControl = ShellTreeView1
   AllowDropFiles = True
@@ -11,6 +11,7 @@ object frmain: Tfrmain
   KeyPreview = True
   Menu = MainMenu1
   OnClose = FormClose
+  OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnDblClick = Image1DblClick
   OnDestroy = FormDestroy
@@ -26,7 +27,6 @@ object frmain: Tfrmain
   OnWindowStateChange = FormWindowStateChange
   Position = poDesktopCenter
   LCLVersion = '1.8.4.0'
-  WindowState = wsMaximized
   object StatusBar1: TStatusBar
     Left = 0
     Height = 23
@@ -38,7 +38,7 @@ object frmain: Tfrmain
         Width = 100
       end    
       item
-        Text = 'Resolucion: 0x0'
+        Text = 'Resolution: 0x0'
         Width = 200
       end    
       item
@@ -46,11 +46,11 @@ object frmain: Tfrmain
         Width = 90
       end    
       item
-        Text = 'Tamaño: 0'
+        Text = 'Size: 0'
         Width = 120
       end    
       item
-        Text = 'Tiempo: 0ms'
+        Text = 'Time: 0ms'
         Width = 110
       end    
       item
@@ -2003,12 +2003,12 @@ object frmain: Tfrmain
           Caption = '-'
         end
         object MenuItem36: TMenuItem
-          Caption = 'Brillo +'
+          Caption = 'Brightness +'
           ShortCut = 190
           OnClick = MenuItem36Click
         end
         object MenuItem37: TMenuItem
-          Caption = 'Brillo -'
+          Caption = 'Brightness -'
           ShortCut = 188
           OnClick = MenuItem37Click
         end

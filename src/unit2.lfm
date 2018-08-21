@@ -1,39 +1,39 @@
 object frresize: Tfrresize
-  Left = 574
+  Left = 553
   Height = 112
-  Top = 279
+  Top = 296
   Width = 207
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
-  Caption = 'Redimensionar'
+  Caption = 'Resize'
   ClientHeight = 112
   ClientWidth = 207
   OnCreate = FormCreate
   OnShow = FormShow
   Position = poScreenCenter
-  LCLVersion = '1.8.0.4'
+  LCLVersion = '1.8.4.0'
   object Label1: TLabel
     AnchorSideTop.Control = SpinEdit1
     AnchorSideTop.Side = asrCenter
     AnchorSideRight.Control = SpinEdit1
-    Left = 44
-    Height = 13
+    Left = 43
+    Height = 15
     Top = 14
-    Width = 34
+    Width = 35
     Anchors = [akTop, akRight]
-    Caption = 'Ancho:'
+    Caption = 'Width:'
     ParentColor = False
   end
   object Label2: TLabel
     AnchorSideTop.Control = SpinEdit2
     AnchorSideTop.Side = asrCenter
     AnchorSideRight.Control = SpinEdit2
-    Left = 55
-    Height = 13
-    Top = 45
-    Width = 23
+    Left = 39
+    Height = 15
+    Top = 47
+    Width = 39
     Anchors = [akTop, akRight]
-    Caption = 'Alto:'
+    Caption = 'Height:'
     ParentColor = False
   end
   object ButtonPanel1: TButtonPanel
@@ -62,9 +62,10 @@ object frresize: Tfrresize
     AnchorSideBottom.Control = SpinEdit2
     AnchorSideBottom.Side = asrBottom
     Left = 128
-    Height = 32
+    Height = 36
+    Hint = 'keep aspect ratio'
     Top = 20
-    Width = 22
+    Width = 24
     Anchors = [akTop, akLeft, akBottom]
     AutoSize = True
     BorderSpacing.Top = 10
@@ -72,6 +73,8 @@ object frresize: Tfrresize
     BorderSpacing.Bottom = 10
     Caption = ']'
     Checked = True
+    ParentShowHint = False
+    ShowHint = True
     State = cbChecked
     TabOrder = 1
   end
@@ -80,7 +83,7 @@ object frresize: Tfrresize
     AnchorSideLeft.Side = asrCenter
     AnchorSideTop.Control = Owner
     Left = 78
-    Height = 21
+    Height = 23
     Top = 10
     Width = 50
     BorderSpacing.Top = 10
@@ -94,8 +97,8 @@ object frresize: Tfrresize
     AnchorSideTop.Control = SpinEdit1
     AnchorSideTop.Side = asrBottom
     Left = 78
-    Height = 21
-    Top = 41
+    Height = 23
+    Top = 43
     Width = 50
     BorderSpacing.Top = 10
     MaxValue = 9999999

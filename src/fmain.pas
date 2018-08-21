@@ -10,7 +10,7 @@ uses
   types, LCLType, PairSplitter, ShellCtrls, FPImage, Unit2, Unit3, Unit4, Unit5, Unit6,
   LazUTF8, print{$IFDEF WINDOWS}, Registry, Windows, Windirs{$ENDIF},
   BGRABitmapTypes, BGRABitmap, BGRAThumbnail, BGRAAnimatedGif,
-  DateUtils, Math, ImgSize, BGRAGifFormat, Printers, BGRAReadPCX, LCLintf, fexif;
+  DateUtils, Math, ImgSize, BGRAGifFormat, Printers, BGRAReadPCX, LCLintf, fexif, INIFiles;
 
 type
 
@@ -145,6 +145,7 @@ type
     ToolButton8: TToolButton;
     ToolButton9: TToolButton;
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormDragDrop(Sender, Source: TObject; X, Y: Integer);
@@ -350,6 +351,59 @@ uses
 
 { Tfrmain }
 
+procedure saveconfig;
+var
+   iniconfigfile:TMEMINIFile;
+begin
+  iniconfigfile:=TMEMINIFile.Create(GetAppConfigDir(false)+'lazview.ini');
+  case frmain.WindowState of
+  wsMaximized:
+    begin
+      iniconfigfile.WriteString('Config','mainwindowstate','wsMaximized');
+    end;
+  wsNormal:
+    begin
+      iniconfigfile.WriteString('Config','mainwindowstate','wsNormal');
+      iniconfigfile.WriteInteger('Config','mainwindowxpos',frmain.Left);
+      iniconfigfile.WriteInteger('Config','mainwindowypos',frmain.Top);
+      iniconfigfile.WriteInteger('Config','mainwindowwidth',frmain.Width);
+      iniconfigfile.WriteInteger('Config','mainwindowheight',frmain.Height);
+    end;
+  wsFullScreen:
+    begin
+      iniconfigfile.WriteString('Config','mainwindowstate','wsFullScreen');
+    end;
+  end;
+  iniconfigfile.UpdateFile;
+  iniconfigfile.Free;
+end;
+
+procedure loadconfig;
+var
+   iniconfigfile:TMEMINIFile;
+begin
+  iniconfigfile:=TMEMINIFile.Create(GetAppConfigDir(false)+'lazview.ini');
+  case iniconfigfile.ReadString('Config','mainwindowstate','wsMaximized') of
+  'wsMaximized':
+    begin
+      frmain.WindowState:=wsMaximized;
+    end;
+  'wsNormal':
+    begin
+      frmain.WindowState:=wsNormal;
+      frmain.Left:=iniconfigfile.ReadInteger('Config','mainwindowxpos',frmain.Left);
+      frmain.Top:=iniconfigfile.ReadInteger('Config','mainwindowypos',frmain.Top);
+      frmain.Width:=iniconfigfile.ReadInteger('Config','mainwindowwidth',frmain.Width);
+      frmain.Height:=iniconfigfile.ReadInteger('Config','mainwindowheight',frmain.Height);
+    end;
+  'wsFullScreen':
+    begin
+      frmain.WindowState:=wsFullScreen;
+    end;
+  end;
+  iniconfigfile.Free;
+end;
+
 function UTF16LongName(const FileName: String): UnicodeString;
 var
   Temp: PWideChar;
@@ -541,7 +595,7 @@ begin
   end;
   realimgwidth:=w;
   realimgheight:=h;
-  frmain.StatusBar1.Panels.Items[1].Text:='Resolucion:'+inttostr(w)+'x'+inttostr(h)+' '+zoomfactor(w,h,frmain.Image1.Width,frmain.Image1.Height)+'%';
+  frmain.StatusBar1.Panels.Items[1].Text:='Resolution:'+inttostr(w)+'x'+inttostr(h)+' '+zoomfactor(w,h,frmain.Image1.Width,frmain.Image1.Height)+'%';
 end;
 
 procedure setwallpaper(style:string;mosaic:string='0');
@@ -666,7 +720,7 @@ begin
   frmain.Image1.Width:=frmain.Image1.Picture.BitMap.Width;
   frmain.Image1.Height:=frmain.Image1.Picture.BitMap.Height;
   frmain.Image1.Cursor:=crSizeAll;
-  frmain.StatusBar1.Panels.Items[1].Text:='Resolucion:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
+  frmain.StatusBar1.Panels.Items[1].Text:='Resolution:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
 end;
 
 procedure zoomin(raton:boolean=false);
@@ -696,7 +750,7 @@ begin
     //frmain.Image1.Left:=ly+frmain.Image1.Width-20;
   end;
   frmain.Image1.Cursor:=crSizeAll;
-  frmain.StatusBar1.Panels.Items[1].Text:='Resolucion:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
+  frmain.StatusBar1.Panels.Items[1].Text:='Resolution:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
 end;
 
 procedure zoomout(raton:boolean=false);
@@ -719,7 +773,7 @@ begin
   frmain.Image1.Width:=frmain.Image1.Width-20;
   frmain.Image1.Height:=frmain.Image1.Height-20;
   frmain.Image1.Cursor:=crSizeAll;
-  frmain.StatusBar1.Panels.Items[1].Text:='Resolucion:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
+  frmain.StatusBar1.Panels.Items[1].Text:='Resolution:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
 end;
 
 procedure loadpicture(fimagen:string;restorezoom:boolean=true;scrollthumbs:boolean=true;realimage:boolean=false);
@@ -747,7 +801,7 @@ begin
     frmain.Label1.Caption:=inttostr(ifile+1)+'/'+inttostr(nfile)+'  '+fimagen;
     frmain.Label2.Caption:=inttostr(ifile+1)+'/'+inttostr(nfile)+'  '+fimagen;
     frmain.StatusBar1.Panels.Items[0].Text:=inttostr(ifile+1)+'/'+inttostr(nfile);
-    frmain.StatusBar1.Panels.Items[3].Text:=' Tamaño:'+FloatTostr(Round(FileSize(wimagen)/1024))+'Kb';
+    frmain.StatusBar1.Panels.Items[3].Text:=' Size:'+FloatTostr(Round(FileSize(wimagen)/1024))+'Kb';
     if restorezoom and (frmain.ToolButton24.Down=false) then
       zoomnormal()
     else
@@ -793,7 +847,7 @@ begin
         else
           frmain.Timer3.Enabled:=false;
 
-        frmain.StatusBar1.Panels.Items[1].Text:='Resolucion:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
+        frmain.StatusBar1.Panels.Items[1].Text:='Resolution:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
         modethumb:=false;
         realimgwidth:=frmain.Image1.Picture.Width;
         realimgheight:=frmain.Image1.Picture.Height;
@@ -808,7 +862,7 @@ begin
         if frmain.MenuItem58.Checked or realimage then
         begin
           frmain.Image1.Picture.LoadFromStream(streamimage);
-          frmain.StatusBar1.Panels.Items[1].Text:='Resolucion:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
+          frmain.StatusBar1.Panels.Items[1].Text:='Resolution:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
           modethumb:=false;
           realimgwidth:=frmain.Image1.Picture.Width;
           realimgheight:=frmain.Image1.Picture.Height;
@@ -848,14 +902,14 @@ begin
               modethumb:=false
             else
               modethumb:=true;
-            frmain.StatusBar1.Panels.Items[1].Text:='*Resolucion:'+inttostr(iw)+'x'+inttostr(ih)+' '+zoomfactor(iw,ih,frmain.Image1.Width,frmain.Image1.Height)+'%';
+            frmain.StatusBar1.Panels.Items[1].Text:='*Resolution:'+inttostr(iw)+'x'+inttostr(ih)+' '+zoomfactor(iw,ih,frmain.Image1.Width,frmain.Image1.Height)+'%';
             realimgwidth:=iw;
             realimgheight:=ih;
           end
           else
           begin
             frmain.Image1.Picture.LoadFromStream(streamimage);
-            frmain.StatusBar1.Panels.Items[1].Text:='Resolucion:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
+            frmain.StatusBar1.Panels.Items[1].Text:='Resolution:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
             modethumb:=false;
             realimgwidth:=frmain.Image1.Picture.Width;
             realimgheight:=frmain.Image1.Picture.Height;
@@ -866,7 +920,7 @@ begin
       '.ICO':
       begin
         frmain.Image1.Picture.LoadFromFile(wimagen);
-        frmain.StatusBar1.Panels.Items[1].Text:='Resolucion:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
+        frmain.StatusBar1.Panels.Items[1].Text:='Resolution:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
         modethumb:=false;
         realimgwidth:=frmain.Image1.Picture.Width;
         realimgheight:=frmain.Image1.Picture.Height;
@@ -875,7 +929,7 @@ begin
       begin
         BGRAImage:=BGRABitmap.TBGRABitmap.Create(wimagen);
         frmain.Image1.Picture.Assign(BGRAImage);
-        frmain.StatusBar1.Panels.Items[1].Text:='Resolucion:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
+        frmain.StatusBar1.Panels.Items[1].Text:='Resolution:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
         modethumb:=false;
         realimgwidth:=frmain.Image1.Picture.Width;
         realimgheight:=frmain.Image1.Picture.Height;
@@ -885,14 +939,14 @@ begin
       begin
         streamimage:=TFileStream.Create(wimagen,fmOpenRead or fmShareDenyNone);
         frmain.Image1.Picture.LoadFromStream(streamimage);
-        frmain.StatusBar1.Panels.Items[1].Text:='Resolucion:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
+        frmain.StatusBar1.Panels.Items[1].Text:='Resolution:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
         modethumb:=false;
         realimgwidth:=frmain.Image1.Picture.Width;
         realimgheight:=frmain.Image1.Picture.Height;
         streamimage.Destroy;
       end;
     end;
-    frmain.StatusBar1.Panels.Items[4].Text:='Tiempo:'+prettytime(MilliSecondsBetween(Now,starttime));
+    frmain.StatusBar1.Panels.Items[4].Text:='Time:'+prettytime(MilliSecondsBetween(Now,starttime));
     ////////****Update buttons and menus****////////////////
     frmain.tbFlipHorizontal.Enabled:=true;
     frmain.tbFlipVertical.Enabled:=true;
@@ -1752,7 +1806,11 @@ end;
 
 procedure Tfrmain.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
+  saveconfig;
+end;
 
+procedure Tfrmain.FormCloseQuery(Sender: TObject; var CanClose: boolean);
+begin
 end;
 
 procedure Tfrmain.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState
@@ -1793,6 +1851,7 @@ begin
     end;
   27,81://Escape, Q
     begin
+      saveconfig;
       Application.Terminate;
     end;
   72://Letra H
@@ -1951,6 +2010,7 @@ end;
 
 procedure Tfrmain.FormShow(Sender: TObject);
 begin
+  loadconfig;
   if Assigned(flist) then
   begin
     if (ifile<flist.Count) then
@@ -2062,7 +2122,7 @@ begin
   frmain.MenuItem31.Enabled:=true;
   frmain.Shape1.Visible:=false;
   ifgif:=false;
-  frmain.StatusBar1.Panels.Items[1].Text:='Resolucion:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height);
+  frmain.StatusBar1.Panels.Items[1].Text:='Resolution:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height);
   frmain.Caption:='LazView [Clipboard]';
 end;
 
@@ -3181,6 +3241,7 @@ end;
 
 procedure Tfrmain.ToolButton8Click(Sender: TObject);
 begin
+  saveconfig;
   Application.Terminate;
 end;
 

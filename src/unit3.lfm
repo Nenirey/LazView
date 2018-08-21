@@ -1,16 +1,16 @@
 object Form3: TForm3
-  Left = 366
+  Left = 467
   Height = 126
-  Top = 372
+  Top = 361
   Width = 213
   ActiveControl = TrackBar1
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
-  Caption = 'Calidad'
+  Caption = 'Quality'
   ClientHeight = 126
   ClientWidth = 213
   FormStyle = fsStayOnTop
-  LCLVersion = '1.8.0.1'
+  LCLVersion = '1.8.4.0'
   object TrackBar1: TTrackBar
     AnchorSideLeft.Control = Owner
     AnchorSideLeft.Side = asrCenter

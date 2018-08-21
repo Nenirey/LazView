@@ -3,7 +3,7 @@ msgstr "Content-Type: text/plain; charset=UTF-8"
 
 #: tform3.caption
 msgid "Quality"
-msgstr "Calidad"
+msgstr ""
 
 #: tform3.label1.caption
 msgid "100"
@@ -11,7 +11,7 @@ msgstr ""
 
 #: tform4.button1.caption
 msgid "Grayscale"
-msgstr ""
+msgstr "Escala de grises"
 
 #: tform4.button10.caption
 msgid "RGB -> BRG"
@@ -20,28 +20,28 @@ msgstr ""
 #: tform4.button11.caption
 msgctxt "tform4.button11.caption"
 msgid "Smooth"
-msgstr ""
+msgstr "Suavizar"
 
 #: tform4.button12.caption
 msgid "Sharpen"
-msgstr ""
+msgstr "Realzar"
 
 #: tform4.button13.caption
 msgctxt "tform4.button13.caption"
 msgid "Negative"
-msgstr ""
+msgstr "Negativo"
 
 #: tform4.button14.caption
 msgid "Plane (slow)"
-msgstr ""
+msgstr "Plano (lento)"
 
 #: tform4.button15.caption
 msgid "Contour"
-msgstr ""
+msgstr "Contorno"
 
 #: tform4.button16.caption
 msgid "Cylinder"
-msgstr ""
+msgstr "Cilindro"
 
 #: tform4.button17.caption
 msgid "Emboss"
@@ -53,16 +53,16 @@ msgstr ""
 
 #: tform4.button19.caption
 msgid "Normalize"
-msgstr ""
+msgstr "Normalizar"
 
 #: tform4.button2.caption
 msgctxt "tform4.button2.caption"
 msgid "Highlight red"
-msgstr ""
+msgstr "Resaltar rojo"
 
 #: tform4.button20.caption
 msgid "Sphere"
-msgstr ""
+msgstr "Esfera"
 
 #: tform4.button21.caption
 msgid "Median"
@@ -70,34 +70,34 @@ msgstr ""
 
 #: tform4.button22.caption
 msgid "Smart zoom 3"
-msgstr ""
+msgstr "Zoom inteligente 3"
 
 #: tform4.button23.caption
 msgid "Twirl"
-msgstr ""
+msgstr "Remolino"
 
 #: tform4.button24.caption
 msgid "Pixelate"
-msgstr ""
+msgstr "Pixelar"
 
 #: tform4.button25.caption
 msgid "Test"
-msgstr ""
+msgstr "Prueba"
 
 #: tform4.button3.caption
 msgctxt "tform4.button3.caption"
 msgid "Highlight green"
-msgstr ""
+msgstr "Resaltar verde"
 
 #: tform4.button4.caption
 msgctxt "tform4.button4.caption"
 msgid "Highlight blue"
-msgstr ""
+msgstr "Resaltar azul"
 
 #: tform4.button5.caption
 msgctxt "tform4.button5.caption"
 msgid "Reload image"
-msgstr ""
+msgstr "Recargar imagen"
 
 #: tform4.button6.caption
 msgid "RGB -> BGR"
@@ -117,15 +117,15 @@ msgstr ""
 
 #: tform4.caption
 msgid "Efects"
-msgstr ""
+msgstr "Efectos"
 
 #: tform4.groupbox1.caption
 msgid "Change colors"
-msgstr ""
+msgstr "Cambiar colores"
 
 #: tform5.caption
 msgid "Go to image number..."
-msgstr ""
+msgstr "Ir a la imagen numero..."
 
 #: tform5.edit1.text
 msgid "0"
@@ -133,15 +133,15 @@ msgstr ""
 
 #: tform5.label1.caption
 msgid "Go to image number:"
-msgstr ""
+msgstr "r a la imagen numero:"
 
 #: tform6.caption
 msgid "Thumbnail size"
-msgstr ""
+msgstr "Tamaño de las miniauturas"
 
 #: tform6.label1.caption
 msgid "Thumbnail size (with x height)"
-msgstr ""
+msgstr "Tamaño de las miniauturas (ancho y alto)"
 
 #: tfrexif.caption
 msgctxt "tfrexif.caption"
@@ -164,7 +164,7 @@ msgstr ""
 
 #: tfrmain.menuitem1.caption
 msgid "&File"
-msgstr ""
+msgstr "&Archivo"
 
 #: tfrmain.menuitem10.caption
 msgid "Open"
