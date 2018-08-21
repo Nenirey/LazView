@@ -8,7 +8,7 @@ uses
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
   Forms, printer4lazarus, fmain, Unit2, Unit3, Unit4, Unit5, ImgSize, Unit6,
-  BGRABitmapTypes, print;
+  BGRABitmapTypes, print, fexif;
 
 {$R *.res}
 
@@ -23,6 +23,7 @@ begin
   Application.CreateForm(TForm5, Form5);
   Application.CreateForm(TForm6, Form6);
   Application.CreateForm(Tfrprint, frprint);
+  Application.CreateForm(Tfrexif, frexif);
   Application.Run;
 end.
 

@@ -624,6 +624,11 @@ msgstr ""
 msgid "Tamaño de las miniaturas (ancho x alto):"
 msgstr ""
 
+#: tfrexif.caption
+msgctxt "tfrexif.caption"
+msgid "EXIF"
+msgstr ""
+
 #: tfrmain.caption
 msgctxt "tfrmain.caption"
 msgid "LazView"
@@ -640,96 +645,96 @@ msgid "0/0"
 msgstr ""
 
 #: tfrmain.menuitem1.caption
-msgid "&Archivo"
+msgid "&File"
 msgstr ""
 
 #: tfrmain.menuitem10.caption
 msgctxt "tfrmain.menuitem10.caption"
-msgid "Abrir"
+msgid "Open"
 msgstr ""
 
 #: tfrmain.menuitem12.caption
-msgid "&Editar"
+msgid "&Edit"
 msgstr ""
 
 #: tfrmain.menuitem13.caption
 msgctxt "tfrmain.menuitem13.caption"
-msgid "Pegar"
+msgid "Paste"
 msgstr ""
 
 #: tfrmain.menuitem14.caption
 msgctxt "tfrmain.menuitem14.caption"
-msgid "Copiar"
+msgid "Copy"
 msgstr ""
 
 #: tfrmain.menuitem15.caption
 msgctxt "tfrmain.menuitem15.caption"
-msgid "Efecto"
+msgid "Efect"
 msgstr ""
 
 #: tfrmain.menuitem16.caption
 msgctxt "tfrmain.menuitem16.caption"
-msgid "Guardar como..."
+msgid "Save as..."
 msgstr ""
 
 #: tfrmain.menuitem17.caption
 msgctxt "tfrmain.menuitem17.caption"
-msgid "Blanco y negro"
+msgid "Greyscale"
 msgstr ""
 
 #: tfrmain.menuitem2.caption
 msgctxt "tfrmain.menuitem2.caption"
-msgid "Herramientas"
+msgid "&Tools"
 msgstr ""
 
 #: tfrmain.menuitem20.caption
 msgctxt "tfrmain.menuitem20.caption"
-msgid "Invertir color (RGB)-(BGR)"
+msgid "Invert color (RGB)-(BGR)"
 msgstr ""
 
 #: tfrmain.menuitem21.caption
 msgctxt "tfrmain.menuitem21.caption"
-msgid "Invertir color (RGB)-(RBG)"
+msgid "Invert color (RGB)-(RBG)"
 msgstr ""
 
 #: tfrmain.menuitem22.caption
 msgctxt "tfrmain.menuitem22.caption"
-msgid "Invertit color (RGB)-(GRB)"
+msgid "Invert color (RGB)-(GRB)"
 msgstr ""
 
 #: tfrmain.menuitem23.caption
 msgctxt "tfrmain.menuitem23.caption"
-msgid "Quitar rojo"
+msgid "Quit red"
 msgstr ""
 
 #: tfrmain.menuitem24.caption
 msgctxt "tfrmain.menuitem24.caption"
-msgid "Quitar verde"
+msgid "Quit green"
 msgstr ""
 
 #: tfrmain.menuitem25.caption
 msgctxt "tfrmain.menuitem25.caption"
-msgid "Quitar azul"
+msgid "Quit blue"
 msgstr ""
 
 #: tfrmain.menuitem27.caption
 msgctxt "tfrmain.menuitem27.caption"
-msgid "Ruido"
+msgid "Noise"
 msgstr ""
 
 #: tfrmain.menuitem28.caption
 msgctxt "tfrmain.menuitem28.caption"
-msgid "Television"
+msgid "TV"
 msgstr ""
 
 #: tfrmain.menuitem29.caption
 msgctxt "tfrmain.menuitem29.caption"
-msgid "Ver"
+msgid "&View"
 msgstr ""
 
 #: tfrmain.menuitem3.caption
 msgctxt "tfrmain.menuitem3.caption"
-msgid "Salir"
+msgid "Exit"
 msgstr ""
 
 #: tfrmain.menuitem30.caption
@@ -739,17 +744,17 @@ msgstr ""
 
 #: tfrmain.menuitem31.caption
 msgctxt "tfrmain.menuitem31.caption"
-msgid "Redimensionar..."
+msgid "Resize..."
 msgstr ""
 
 #: tfrmain.menuitem33.caption
 msgctxt "tfrmain.menuitem33.caption"
-msgid "Invertir color (RGB)-(BRG)"
+msgid "Invert color (RGB)-(BRG)"
 msgstr ""
 
 #: tfrmain.menuitem34.caption
 msgctxt "tfrmain.menuitem34.caption"
-msgid "Invertir color (RGB)-(GBR)"
+msgid "Invert color (RGB)-(GBR)"
 msgstr ""
 
 #: tfrmain.menuitem36.caption
@@ -764,31 +769,31 @@ msgstr ""
 
 #: tfrmain.menuitem39.caption
 msgctxt "tfrmain.menuitem39.caption"
-msgid "Resaltar rojo"
+msgid "Highlight red"
 msgstr ""
 
 #: tfrmain.menuitem4.caption
-msgid "&Ayuda"
+msgid "&Help"
 msgstr ""
 
 #: tfrmain.menuitem40.caption
 msgctxt "tfrmain.menuitem40.caption"
-msgid "Resaltar verde"
+msgid "Highlight green"
 msgstr ""
 
 #: tfrmain.menuitem41.caption
 msgctxt "tfrmain.menuitem41.caption"
-msgid "Resaltar azul"
+msgid "Highlight blue"
 msgstr ""
 
 #: tfrmain.menuitem43.caption
 msgctxt "tfrmain.menuitem43.caption"
-msgid "Modo compacto"
+msgid "Compact mode"
 msgstr ""
 
 #: tfrmain.menuitem44.caption
 msgctxt "tfrmain.menuitem44.caption"
-msgid "Ir a la imagen numero..."
+msgid "Go to number image..."
 msgstr ""
 
 #: tfrmain.menuitem46.caption
@@ -798,92 +803,92 @@ msgstr ""
 
 #: tfrmain.menuitem48.caption
 msgctxt "tfrmain.menuitem48.caption"
-msgid "Establecer como fondo de escritorio"
+msgid "Set as desktop image"
 msgstr ""
 
 #: tfrmain.menuitem49.caption
 msgctxt "tfrmain.menuitem49.caption"
-msgid "Expandida"
+msgid "Expand"
 msgstr ""
 
 #: tfrmain.menuitem5.caption
 msgctxt "tfrmain.menuitem5.caption"
-msgid "Acerca de..."
+msgid "About..."
 msgstr ""
 
 #: tfrmain.menuitem50.caption
 msgctxt "tfrmain.menuitem50.caption"
-msgid "Centrado"
+msgid "Center"
 msgstr ""
 
 #: tfrmain.menuitem51.caption
 msgctxt "tfrmain.menuitem51.caption"
-msgid "Mosaico"
+msgid "Mosaic"
 msgstr ""
 
 #: tfrmain.menuitem52.caption
 msgctxt "tfrmain.menuitem52.caption"
-msgid "Ajustado"
+msgid "Strech"
 msgstr ""
 
 #: tfrmain.menuitem53.caption
 msgctxt "tfrmain.menuitem53.caption"
-msgid "Personalizado..."
+msgid "Custom..."
 msgstr ""
 
 #: tfrmain.menuitem54.caption
 msgctxt "tfrmain.menuitem54.caption"
-msgid "Imagen estirada"
+msgid "Strech image"
 msgstr ""
 
 #: tfrmain.menuitem55.caption
 msgctxt "tfrmain.menuitem55.caption"
-msgid "Ventana de efectos"
+msgid "Efect window"
 msgstr ""
 
 #: tfrmain.menuitem56.caption
 msgctxt "tfrmain.menuitem56.caption"
-msgid "Negativo"
+msgid "Negative"
 msgstr ""
 
 #: tfrmain.menuitem57.caption
 msgctxt "tfrmain.menuitem57.caption"
-msgid "Suavizado"
+msgid "Smooth"
 msgstr ""
 
 #: tfrmain.menuitem58.caption
 msgctxt "tfrmain.menuitem58.caption"
-msgid "Modo real"
+msgid "Real mode"
 msgstr ""
 
 #: tfrmain.menuitem59.caption
 msgctxt "tfrmain.menuitem59.caption"
-msgid "Mostrar arbol de directorios"
+msgid "Tree view"
 msgstr ""
 
 #: tfrmain.menuitem6.caption
 msgctxt "tfrmain.menuitem6.caption"
-msgid "Espejo horizontal"
+msgid "Flip horizontal"
 msgstr ""
 
 #: tfrmain.menuitem60.caption
 msgctxt "tfrmain.menuitem60.caption"
-msgid "Seleccionar"
+msgid "Select"
 msgstr ""
 
 #: tfrmain.menuitem61.caption
 msgctxt "tfrmain.menuitem61.caption"
-msgid "Barra de herramientas"
+msgid "Tool bar"
 msgstr ""
 
 #: tfrmain.menuitem62.caption
 msgctxt "tfrmain.menuitem62.caption"
-msgid "Barra de estado"
+msgid "Status bar"
 msgstr ""
 
 #: tfrmain.menuitem63.caption
 msgctxt "tfrmain.menuitem63.caption"
-msgid "Tamaño de las miniaturas"
+msgid "Thumbail size"
 msgstr ""
 
 #: tfrmain.menuitem64.caption
@@ -903,12 +908,12 @@ msgstr ""
 
 #: tfrmain.menuitem67.caption
 msgctxt "tfrmain.menuitem67.caption"
-msgid "Fondo en mosaico"
+msgid "Mosaic background"
 msgstr ""
 
 #: tfrmain.menuitem68.caption
 msgctxt "tfrmain.menuitem68.caption"
-msgid "Remolino"
+msgid "Swirl"
 msgstr ""
 
 #: tfrmain.menuitem69.caption
@@ -917,26 +922,31 @@ msgstr ""
 
 #: tfrmain.menuitem7.caption
 msgctxt "tfrmain.menuitem7.caption"
-msgid "Espejo vertical"
+msgid "Flip vertical"
 msgstr ""
 
 #: tfrmain.menuitem70.caption
 msgid "Delete"
 msgstr ""
 
+#: tfrmain.menuitem72.caption
+msgctxt "tfrmain.menuitem72.caption"
+msgid "EXIF"
+msgstr ""
+
 #: tfrmain.menuitem8.caption
 msgctxt "tfrmain.menuitem8.caption"
-msgid "Rotar a la izquierda"
+msgid "Rotate left"
 msgstr ""
 
 #: tfrmain.menuitem9.caption
 msgctxt "tfrmain.menuitem9.caption"
-msgid "Rotar a la derecha"
+msgid "Rotate right"
 msgstr ""
 
 #: tfrmain.mnushowthumbs.caption
 msgctxt "tfrmain.mnushowthumbs.caption"
-msgid "Vistas previas en miniatura (experimental)"
+msgid "Thumbail panel"
 msgstr ""
 
 #: tfrmain.statusbar1.panels[0].text
@@ -964,17 +974,47 @@ msgctxt "tfrmain.statusbar1.panels[4].text"
 msgid "Tiempo: 0ms"
 msgstr ""
 
+#: tfrmain.statusbar1.panels[5].text
+msgid "EXIF:"
+msgstr ""
+
 #: tfrmain.statusbar1.simpletext
 msgctxt "tfrmain.statusbar1.simpletext"
 msgid "Marco 1.0"
 msgstr ""
 
+#: tfrmain.tbfirstimage.caption
+msgid "tbFirstImage"
+msgstr ""
+
+#: tfrmain.tbfirstimage.hint
+msgid "First image"
+msgstr ""
+
 #: tfrmain.tbfliphorizontal.hint
+msgctxt "tfrmain.tbfliphorizontal.hint"
 msgid "Flip horizontal"
 msgstr ""
 
 #: tfrmain.tbflipvertical.hint
+msgctxt "tfrmain.tbflipvertical.hint"
 msgid "Flip vertical"
+msgstr ""
+
+#: tfrmain.tbinformation.caption
+msgid "tbInformation"
+msgstr ""
+
+#: tfrmain.tbinformation.hint
+msgid "Information"
+msgstr ""
+
+#: tfrmain.tblastimage.caption
+msgid "tbLastImage"
+msgstr ""
+
+#: tfrmain.tblastimage.hint
+msgid "Last image"
 msgstr ""
 
 #: tfrmain.tbshowthumbs.hint

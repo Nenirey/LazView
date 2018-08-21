@@ -1,18 +1,22 @@
 object frmain: Tfrmain
-  Left = 494
-  Height = 464
-  Top = 142
-  Width = 685
+  Left = 275
+  Height = 536
+  Top = 105
+  Width = 819
   ActiveControl = ShellTreeView1
+  AllowDropFiles = True
   Caption = 'LazView'
-  ClientHeight = 444
-  ClientWidth = 685
+  ClientHeight = 516
+  ClientWidth = 819
   KeyPreview = True
   Menu = MainMenu1
   OnClose = FormClose
   OnCreate = FormCreate
   OnDblClick = Image1DblClick
   OnDestroy = FormDestroy
+  OnDragDrop = FormDragDrop
+  OnDragOver = FormDragOver
+  OnDropFiles = FormDropFiles
   OnKeyDown = FormKeyDown
   OnKeyPress = FormKeyPress
   OnMouseDown = FormMouseDown
@@ -21,13 +25,13 @@ object frmain: Tfrmain
   OnShow = FormShow
   OnWindowStateChange = FormWindowStateChange
   Position = poDesktopCenter
-  LCLVersion = '1.8.2.0'
+  LCLVersion = '1.8.4.0'
   WindowState = wsMaximized
   object StatusBar1: TStatusBar
     Left = 0
     Height = 23
-    Top = 421
-    Width = 685
+    Top = 493
+    Width = 819
     Panels = <    
       item
         Text = '0/0'
@@ -47,6 +51,10 @@ object frmain: Tfrmain
       end    
       item
         Text = 'Tiempo: 0ms'
+        Width = 110
+      end    
+      item
+        Text = 'EXIF:'
         Width = 50
       end>
     SimpleText = 'Marco 1.0'
@@ -62,9 +70,9 @@ object frmain: Tfrmain
     AnchorSideBottom.Control = StatusBar1
     Cursor = crVSplit
     Left = 3
-    Height = 397
+    Height = 469
     Top = 24
-    Width = 682
+    Width = 816
     Anchors = [akTop, akLeft, akRight, akBottom]
     Color = clBlack
     Position = 360
@@ -74,15 +82,15 @@ object frmain: Tfrmain
       Left = 0
       Height = 360
       Top = 0
-      Width = 682
-      ClientWidth = 682
+      Width = 816
+      ClientWidth = 816
       ClientHeight = 360
       OnMouseMove = FormMouseMove
       object ScrollBox1: TScrollBox
         Left = 0
         Height = 360
         Top = 0
-        Width = 682
+        Width = 816
         HorzScrollBar.Increment = 29
         HorzScrollBar.Page = 297
         HorzScrollBar.Smooth = True
@@ -94,7 +102,7 @@ object frmain: Tfrmain
         Align = alClient
         BorderStyle = bsNone
         ClientHeight = 360
-        ClientWidth = 682
+        ClientWidth = 816
         Enabled = False
         Color = clBlack
         ParentColor = False
@@ -109,7 +117,7 @@ object frmain: Tfrmain
           Left = 0
           Height = 360
           Top = 0
-          Width = 682
+          Width = 816
           AntialiasingMode = amOn
           Align = alClient
           Center = True
@@ -132,7 +140,7 @@ object frmain: Tfrmain
           Left = 0
           Height = 21
           Top = 0
-          Width = 682
+          Width = 816
           Anchors = [akTop, akLeft, akRight]
           Caption = '0/0'
           Font.Color = clBlack
@@ -151,7 +159,7 @@ object frmain: Tfrmain
           Left = 2
           Height = 21
           Top = 2
-          Width = 679
+          Width = 813
           Anchors = [akTop, akLeft, akRight]
           BorderSpacing.Left = 2
           BorderSpacing.Top = 2
@@ -181,16 +189,16 @@ object frmain: Tfrmain
     object pssThumbs: TPairSplitterSide
       Cursor = crArrow
       Left = 0
-      Height = 32
+      Height = 104
       Top = 365
-      Width = 682
-      ClientWidth = 682
-      ClientHeight = 32
+      Width = 816
+      ClientWidth = 816
+      ClientHeight = 104
       object sboxthumb: TScrollBox
         Left = 0
-        Height = 32
+        Height = 104
         Top = 0
-        Width = 682
+        Width = 816
         HorzScrollBar.Increment = 1
         HorzScrollBar.Page = 1
         HorzScrollBar.Smooth = True
@@ -217,7 +225,7 @@ object frmain: Tfrmain
     AnchorSideBottom.Control = Splitter1
     AnchorSideBottom.Side = asrBottom
     Left = 0
-    Height = 397
+    Height = 469
     Top = 24
     Width = 0
     Anchors = [akTop, akLeft, akRight, akBottom]
@@ -243,7 +251,7 @@ object frmain: Tfrmain
     AnchorSideTop.Side = asrBottom
     AnchorSideBottom.Control = StatusBar1
     Left = -2
-    Height = 397
+    Height = 469
     Top = 24
     Width = 5
     Align = alNone
@@ -258,7 +266,7 @@ object frmain: Tfrmain
     Left = 0
     Height = 24
     Top = 0
-    Width = 685
+    Width = 819
     Anchors = [akTop]
     AutoSize = True
     Images = ImageList1
@@ -267,7 +275,7 @@ object frmain: Tfrmain
     OnMouseLeave = ToolBar1MouseLeave
     OnMouseMove = ToolBar1MouseMove
     object ToolButton1: TToolButton
-      Left = 285
+      Left = 308
       Hint = 'Prev image'
       Top = 2
       ImageIndex = 0
@@ -276,7 +284,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object ToolButton2: TToolButton
-      Left = 331
+      Left = 354
       Hint = 'Next image'
       Top = 2
       ImageIndex = 1
@@ -334,7 +342,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object ToolButton8: TToolButton
-      Left = 577
+      Left = 646
       Hint = 'Exit'
       Top = 2
       ImageIndex = 7
@@ -363,7 +371,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object ToolButton11: TToolButton
-      Left = 423
+      Left = 469
       Hint = 'Adjust image'
       Top = 2
       Enabled = False
@@ -373,7 +381,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object ToolButton12: TToolButton
-      Left = 308
+      Left = 331
       Hint = 'Start presentation'
       Top = 2
       ImageIndex = 13
@@ -382,7 +390,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object ToolButton13: TToolButton
-      Left = 354
+      Left = 400
       Hint = 'Random presentation'
       Top = 2
       ImageIndex = 11
@@ -402,7 +410,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object ToolButton15: TToolButton
-      Left = 400
+      Left = 446
       Hint = 'Reload image'
       Top = 2
       Enabled = False
@@ -430,7 +438,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object ToolButton18: TToolButton
-      Left = 377
+      Left = 423
       Hint = 'Selection tool'
       Top = 2
       Caption = 'ToolButton18'
@@ -440,7 +448,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object ToolButton19: TToolButton
-      Left = 477
+      Left = 546
       Hint = 'Prev frame'
       Top = 2
       Caption = 'ToolButton19'
@@ -451,7 +459,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object ToolButton20: TToolButton
-      Left = 523
+      Left = 592
       Hint = 'Next frame'
       Top = 2
       Caption = 'ToolButton20'
@@ -462,7 +470,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object ToolButton21: TToolButton
-      Left = 500
+      Left = 569
       Hint = 'Play/Pause animation'
       Top = 2
       Caption = 'ToolButton21'
@@ -473,14 +481,14 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object ToolButton22: TToolButton
-      Left = 446
+      Left = 515
       Height = 22
       Top = 2
       Caption = 'ToolButton22'
       Style = tbsSeparator
     end
     object ToolButton23: TToolButton
-      Left = 569
+      Left = 638
       Height = 22
       Top = 2
       Caption = 'ToolButton23'
@@ -504,7 +512,7 @@ object frmain: Tfrmain
       Style = tbsSeparator
     end
     object ToolButton26: TToolButton
-      Left = 454
+      Left = 523
       Hint = 'Speed down'
       Top = 2
       Caption = 'ToolButton26'
@@ -515,7 +523,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object ToolButton27: TToolButton
-      Left = 546
+      Left = 615
       Hint = 'Speed up'
       Top = 2
       Caption = 'ToolButton27'
@@ -535,12 +543,42 @@ object frmain: Tfrmain
       ParentShowHint = False
       ShowHint = True
     end
+    object tbFirstImage: TToolButton
+      Left = 285
+      Hint = 'First image'
+      Top = 2
+      Caption = 'tbFirstImage'
+      ImageIndex = 31
+      OnClick = tbFirstImageClick
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object tbLastImage: TToolButton
+      Left = 377
+      Hint = 'Last image'
+      Top = 2
+      Caption = 'tbLastImage'
+      ImageIndex = 32
+      OnClick = tbLastImageClick
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object tbInformation: TToolButton
+      Left = 492
+      Hint = 'Information'
+      Top = 2
+      Caption = 'tbInformation'
+      ImageIndex = 35
+      OnClick = tbInformationClick
+      ParentShowHint = False
+      ShowHint = True
+    end
   end
   object ImageList1: TImageList
     left = 8
     top = 207
     Bitmap = {
-      4C691F0000001000000010000000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      4C69240000001000000010000000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF0004733A6404753BC5FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF0004733A0C04743BAC298B59F604733AFFFFFFFF00FFFF
@@ -1532,21 +1570,181 @@ object frmain: Tfrmain
       F6FFF9F1ECFFF9F1EBFFF8F0E9FFF7EDE6FFF4EAE1FFF2E8DEFFFAF8F6FFC794
       61FF242424FF4B4B4BD9969696BFFFFFFF00FFFFFF00FFFFFF00C89662FDCA98
       65FFCA9765FFCA9765FFCA9765FFCA9764FFC99764FFC99764FFCA9865FFC895
-      62FDFFFFFF00FFFFFF00FFFFFF00
+      62FDFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00EAAB80FFEAAB
+      80FFE8A97EFFE6A677BFFFFFFF00FFFFFF00FFFFFF00FFFFFF00D98D5387D989
+      50F4FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00E8AB80FFF2CE
+      B4FFEEC1A2FFE2A070BFFFFFFF00FFFFFF00FFFFFF00D8894C87D9894AFED884
+      45FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00E6A677FFF0CB
+      B0FFECBE9DFFE19B65BFFFFFFF00FFFFFF00D6854A8EDF9D69FFE7B490FFD27B
+      39FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00E2A070FFEFC8
+      ABFFEAB996FFDF925CBFFFFFFF00D684479EDF9A66FFE7B58FFFE6B28DFFCF74
+      2CFFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00E19B65FFEDC4
+      A5FFE8B48FFFD98B52BFD48041A4DD9764FFE6B590FFE2A97EFFE4AD85FFCD6B
+      1EFFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00DF925CFFEBC0
+      9EFFE9BB98FFD68443F8E1A273FFE6B38EFFE1A779FFDD9C6BFFE1A87EFFC862
+      1AFFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00D98B52FFE9BB
+      98FFE6B38EFFD27B39ECDE9E6DFFE4AE86FFDFA171FFDB9762FFDFA376FFC659
+      18FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00D88445FFE8B6
+      91FFE1A477FFCF742CC0CB691EACD38144FFE0A77AFFDA9763FFDE9F70FFC052
+      17FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00D27B39FFE5B1
+      8AFFDE9D6DFFCD6B1EBFFFFFFF00C45A19A9D0773DFFDD9F6EFFDC9B6AFFBD4A
+      16FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00CF742CFFE3AC
+      83FFDB9765FFC8621ABFFFFFFF00FFFFFF00BD4A16A2CA6B38FFDA9763FFBB41
+      14FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00CD6B1EFFE1A8
+      7BFFD8915EFFC65918BFFFFFFF00FFFFFF00FFFFFF00B63E14A0C66433FFB73C
+      13FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00C8621AFFC65C
+      19FFC45518FFC05217BFFFFFFF00FFFFFF00FFFFFF00FFFFFF00B233129BB639
+      12FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00E8AB80F4E8A9
+      7E87FFFFFF00FFFFFF00FFFFFF00FFFFFF00E19B65BFDF9560FFDD9059FFD98B
+      52FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00E8AB80FFE8A7
+      7BFEE2A27287FFFFFF00FFFFFF00FFFFFF00DF925CBFE7B38BFFEABC9AFFD884
+      45FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00E6A677FFEFC8
+      ADFFE8B088FFDF97628EFFFFFF00FFFFFF00D98B52BFE4AE84FFE8B794FFD27B
+      39FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00E2A070FFEFC8
+      ABFFEEC3A6FFE5A67AFFD8894E9EFFFFFF00D88445BFE3A87BFFE6B28DFFCF74
+      2CFFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00E19B65FFEDC4
+      A5FFEABA97FFEABE9EFFDF9D69FFD17B39A4D27B39BFE0A273FFE4AD85FFCD6B
+      1EFFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00DF925CFFEBC0
+      9EFFE6B087FFE6B189FFE8B792FFDF9D6EFFCF722AF8E2AB81FFE1A87EFFC862
+      1AFFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00D98B52FFE9BB
+      98FFE3AA7FFFE3AB82FFE5B28BFFDD9966FFCD6B1EECDFA374FFDFA376FFC659
+      18FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00D88445FFE8B6
+      91FFE3A97FFFE4B189FFD6874BFFC8631AACC8621AC0D9925EFFDE9F70FFC052
+      17FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00D27B39FFE5B1
+      8AFFE4AE86FFD68546FFC6601AA9FFFFFF00C65918BFD68B57FFDC9B6AFFBD4A
+      16FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00CF742CFFE3AC
+      83FFD38144FFC65C19A2FFFFFF00FFFFFF00C05217BFD48553FFDA9763FFBB41
+      14FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00CD6B1EFFD381
+      42FFC45919A0FFFFFF00FFFFFF00FFFFFF00BD4A16BFD2804EFFD8945EFFB73C
+      13FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00C8621AFFC055
+      189BFFFFFF00FFFFFF00FFFFFF00FFFFFF00BB4114BFB93E14FFB73A13FFB639
+      12FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00E8AB
+      80F4E8A97E87FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00EAAB
+      80FFE8A97CFEE2A27487FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00E6A7
+      79FFEFC8ADFFE8B087FFDD95608EFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00E2A0
+      6EFFEEC7A8FFEDC2A3FFE3A475FFD684479EFFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00E197
+      62FFECC1A1FFE8B792FFE9BB99FFDD9761FFCD722CA4FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00DB8E
+      53FFEABB99FFE3AA80FFE3AB81FFE4B18AFFD6884BFFC6621AE2FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00D684
+      43FFE7B590FFE0A374FFE0A477FFE2AB81FFD37F43FFC65919B3FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00D277
+      35FFE4AF87FFDFA172FFE1A97CFFD07A3FFFC05318ACB7451504FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00CD6E
+      23FFE1A87EFFE0A679FFD0773DFFBD5017A9FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00C962
+      1AFFDFA375FFCF743CFFBD4A16A2FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00C459
+      18FFCC713BFFB94515A0FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00C04E
+      16FFB741149BFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00E19B6B87E19965F4FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00DF996587E19762FEDD9059FFFFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00DD95608EE5A67AFFEABD9AFFD9874AFFFFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00DB905A9EE3A475FFE9BB99FFE8B995FFD47C3AFFFFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00D98D53A4E0A071FFE9BB99FFE5AF86FFE6B28DFFCF722AFFFFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00D989
+      50E2E09D6BFFE8B895FFE3AB81FFDFA172FFE3AD83FFC9651BFFFFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00D680
+      41B3DC955FFFE5B38BFFE0A477FFDC9A67FFE1A67AFFC65C19FFFFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00CB70
+      2A04CD6E27ACD68548FFE1A97CFFDB9866FFDEA171FFC05217FFFFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00C45C19A9D0773DFFDD9F6EFFDC9B69FFBD4715FFFFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00BD4A16A2C96B37FFDA9562FFB94014FFFFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00B43913A0C45F31FFB73913FFFFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00B030119BB43312FFFFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00D898
+      5223D4964D7DD2924CDBCD8C45F3CB8B41F3C98B40DBC78B407DC5873D23FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00D6974F53D191
+      49E6D0A06AFFE0BFA0FFE3C5AEFFE3C5AEFFDFBC9FFFC89762FFBD7D35E6BC7E
+      3553FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00D4964D53CF8D47F4D9B2
+      8CFFE6CDB8FFE0BA9DFFD7AB85FFD6A982FFD9B391FFE1C2ABFFD4AE86FFB16B
+      35F4B16F3553FFFFFF00FFFFFF00FFFFFF00D2934C22CE8E47E5D9B28CFFE6CA
+      B3FFD6A97DFFD1A579FFE2C4A8FFE1C3A8FFD0A276FFD1A477FFDDBDA2FFD0AC
+      85FFAB6635E5A9653522FFFFFF00FFFFFF00CE91477ECD9C68FFE7CBB4FFD4A5
+      7AFFD0A077FFCF9E74FFFBF8F5FFFBF8F5FFCB9E71FFCB9D71FFCDA177FFDFC0
+      A5FFB98A5BFFA45C347EFFFFFF00FFFFFF00CB8E41DBE0BC9FFFDBB393FFCFA0
+      75FFCD9E72FFCB9C71FFDDBFA3FFDDBFA2FFC5996BFFC5996BFFC4986BFFD1AB
+      85FFD8BA97FF9E5635DBFFFFFF00FFFFFF00C5853BF6E4C9B0FFD0A37AFFCC9D
+      71FFC79A6CFFC5986BFFFFFFFFFFFFFFFEFFC39669FFC19468FFC29468FFC398
+      6DFFDFC5ABFF955334F6FFFFFF00FFFFFF00BF7E35F6E3C7AFFFD0A276FFC599
+      6BFFC4976AFFC49669FFEEE0D4FFFBF7F4FFBF9066FFBE8F65FFBE8F64FFBE92
+      69FFDFC6AAFF925034F6FFFFFF00FFFFFF00BC7E35DBDBBC9CFFD5AD89FFC798
+      6CFFC39569FFC19367FFEDDFD3FFFAF7F4FFBB8B63FFB98A63FFB88A62FFC59D
+      78FFD2B893FF905135DBFFFFFF00FFFFFF00B878357EBF915EFFE0C2A8FFC596
+      6CFFC29169FFE1CBB8FFFEFDFCFFFFFFFEFFEADCD0FFB4855EFFB3855EFFD4B5
+      99FFAE7B56FF8F51357EFFFFFF00FFFFFF00AF703522AB6935E5CFAA81FFDABC
+      A2FFBE9166FFBA8C62FFB7895FFFB3845EFFB1835DFFB0835CFFCDAA8DFFC6A5
+      79FF895034E589503522FFFFFF00FFFFFF00FFFFFF00A76234539F5533F4CBA7
+      7DFFD8BB9FFFC39C77FFB68A62FFB48660FFBE9672FFD1B397FFC5A377FF844F
+      35F489503553FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF009F5634539955
+      34E6B28057FFD5B793FFDBC3A6FFDAC3A6FFD2B490FFAB7A52FF864F34E68850
+      3553FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF009754
+      35239453347D925234DB8A5034F3884F34F3895035DB8950357D84503623FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00
     }
   end
   object MainMenu1: TMainMenu
     left = 40
     top = 208
     object MenuItem1: TMenuItem
-      Caption = '&Archivo'
+      Caption = '&File'
       object MenuItem10: TMenuItem
-        Caption = 'Abrir'
+        Caption = 'Open'
         ShortCut = 16449
         OnClick = MenuItem10Click
       end
       object MenuItem16: TMenuItem
-        Caption = 'Guardar como...'
+        Caption = 'Save as...'
         Enabled = False
         ShortCut = 16455
         OnClick = MenuItem16Click
@@ -1568,36 +1766,36 @@ object frmain: Tfrmain
         Caption = '-'
       end
       object MenuItem3: TMenuItem
-        Caption = 'Salir'
+        Caption = 'Exit'
         OnClick = MenuItem3Click
       end
     end
     object MenuItem12: TMenuItem
-      Caption = '&Editar'
+      Caption = '&Edit'
       object MenuItem14: TMenuItem
-        Caption = 'Copiar'
+        Caption = 'Copy'
         Enabled = False
         ShortCut = 16451
         OnClick = MenuItem14Click
       end
       object MenuItem13: TMenuItem
-        Caption = 'Pegar'
+        Caption = 'Paste'
         ShortCut = 16470
         OnClick = MenuItem13Click
       end
       object MenuItem60: TMenuItem
-        Caption = 'Seleccionar'
+        Caption = 'Select'
       end
     end
     object MenuItem29: TMenuItem
-      Caption = 'Ver'
+      Caption = '&View'
       object mnuShowThumbs: TMenuItem
-        Caption = 'Vistas previas en miniatura (experimental)'
+        Caption = 'Thumbail panel'
         ShortCut = 77
         OnClick = mnuShowThumbsClick
       end
       object MenuItem63: TMenuItem
-        Caption = 'Tamaño de las miniaturas'
+        Caption = 'Thumbail size'
         object MenuItem64: TMenuItem
           Caption = '32x32'
           OnClick = MenuItem64Click
@@ -1612,22 +1810,22 @@ object frmain: Tfrmain
           OnClick = MenuItem66Click
         end
         object MenuItem53: TMenuItem
-          Caption = 'Personalizado...'
+          Caption = 'Custom...'
           OnClick = MenuItem53Click
         end
       end
       object MenuItem59: TMenuItem
-        Caption = 'Mostrar arbol de directorios'
+        Caption = 'Tree view'
         ShortCut = 84
         OnClick = MenuItem59Click
       end
       object MenuItem61: TMenuItem
-        Caption = 'Barra de herramientas'
+        Caption = 'Tool bar'
         Checked = True
         OnClick = MenuItem61Click
       end
       object MenuItem62: TMenuItem
-        Caption = 'Barra de estado'
+        Caption = 'Status bar'
         Checked = True
         OnClick = MenuItem62Click
       end
@@ -1637,16 +1835,16 @@ object frmain: Tfrmain
         OnClick = MenuItem69Click
       end
       object MenuItem67: TMenuItem
-        Caption = 'Fondo en mosaico'
+        Caption = 'Mosaic background'
         OnClick = MenuItem67Click
       end
       object MenuItem43: TMenuItem
-        Caption = 'Modo compacto'
+        Caption = 'Compact mode'
         ShortCut = 67
         OnClick = MenuItem43Click
       end
       object MenuItem44: TMenuItem
-        Caption = 'Ir a la imagen numero...'
+        Caption = 'Go to number image...'
         OnClick = MenuItem44Click
       end
       object MenuItem45: TMenuItem
@@ -1658,26 +1856,26 @@ object frmain: Tfrmain
         OnClick = MenuItem46Click
       end
       object MenuItem58: TMenuItem
-        Caption = 'Modo real'
+        Caption = 'Real mode'
         OnClick = MenuItem58Click
       end
       object MenuItem54: TMenuItem
-        Caption = 'Imagen estirada'
+        Caption = 'Strech image'
         OnClick = MenuItem54Click
       end
     end
     object MenuItem2: TMenuItem
-      Caption = 'Herramientas'
+      Caption = '&Tools'
       OnClick = MenuItem2Click
       object MenuItem6: TMenuItem
-        Caption = 'Espejo horizontal'
+        Caption = 'Flip horizontal'
         Enabled = False
         ShortCut = 72
         ShortCutKey2 = 8264
         OnClick = MenuItem6Click
       end
       object MenuItem7: TMenuItem
-        Caption = 'Espejo vertical'
+        Caption = 'Flip vertical'
         Enabled = False
         ShortCut = 86
         ShortCutKey2 = 8278
@@ -1687,14 +1885,14 @@ object frmain: Tfrmain
         Caption = '-'
       end
       object MenuItem8: TMenuItem
-        Caption = 'Rotar a la izquierda'
+        Caption = 'Rotate left'
         Enabled = False
         ShortCut = 76
         ShortCutKey2 = 8268
         OnClick = MenuItem8Click
       end
       object MenuItem9: TMenuItem
-        Caption = 'Rotar a la derecha'
+        Caption = 'Rotate right'
         Enabled = False
         ShortCut = 82
         ShortCutKey2 = 8274
@@ -1704,7 +1902,7 @@ object frmain: Tfrmain
         Caption = '-'
       end
       object MenuItem31: TMenuItem
-        Caption = 'Redimensionar...'
+        Caption = 'Resize...'
         ShortCut = 83
         OnClick = MenuItem31Click
       end
@@ -1712,30 +1910,30 @@ object frmain: Tfrmain
         Caption = '-'
       end
       object MenuItem15: TMenuItem
-        Caption = 'Efecto'
+        Caption = 'Efect'
         Enabled = False
         object MenuItem20: TMenuItem
-          Caption = 'Invertir color (RGB)-(BGR)'
+          Caption = 'Invert color (RGB)-(BGR)'
           ShortCut = 49
           OnClick = MenuItem20Click
         end
         object MenuItem21: TMenuItem
-          Caption = 'Invertir color (RGB)-(RBG)'
+          Caption = 'Invert color (RGB)-(RBG)'
           ShortCut = 50
           OnClick = MenuItem21Click
         end
         object MenuItem22: TMenuItem
-          Caption = 'Invertit color (RGB)-(GRB)'
+          Caption = 'Invert color (RGB)-(GRB)'
           ShortCut = 51
           OnClick = MenuItem22Click
         end
         object MenuItem34: TMenuItem
-          Caption = 'Invertir color (RGB)-(GBR)'
+          Caption = 'Invert color (RGB)-(GBR)'
           ShortCut = 52
           OnClick = MenuItem34Click
         end
         object MenuItem33: TMenuItem
-          Caption = 'Invertir color (RGB)-(BRG)'
+          Caption = 'Invert color (RGB)-(BRG)'
           ShortCut = 53
           OnClick = MenuItem33Click
         end
@@ -1743,17 +1941,17 @@ object frmain: Tfrmain
           Caption = '-'
         end
         object MenuItem23: TMenuItem
-          Caption = 'Quitar rojo'
+          Caption = 'Quit red'
           ShortCut = 55
           OnClick = MenuItem23Click
         end
         object MenuItem24: TMenuItem
-          Caption = 'Quitar verde'
+          Caption = 'Quit green'
           ShortCut = 56
           OnClick = MenuItem24Click
         end
         object MenuItem25: TMenuItem
-          Caption = 'Quitar azul'
+          Caption = 'Quit blue'
           ShortCut = 57
           OnClick = MenuItem25Click
         end
@@ -1761,44 +1959,44 @@ object frmain: Tfrmain
           Caption = '-'
         end
         object MenuItem17: TMenuItem
-          Caption = 'Blanco y negro'
+          Caption = 'Greyscale'
           ShortCut = 48
           OnClick = MenuItem17Click
         end
         object MenuItem56: TMenuItem
-          Caption = 'Negativo'
+          Caption = 'Negative'
           OnClick = MenuItem56Click
         end
         object MenuItem57: TMenuItem
-          Caption = 'Suavizado'
+          Caption = 'Smooth'
           OnClick = MenuItem57Click
         end
         object MenuItem27: TMenuItem
-          Caption = 'Ruido'
+          Caption = 'Noise'
           ShortCut = 192
           OnClick = MenuItem27Click
         end
         object MenuItem28: TMenuItem
-          Caption = 'Television'
+          Caption = 'TV'
           OnClick = MenuItem28Click
         end
         object MenuItem68: TMenuItem
-          Caption = 'Remolino'
+          Caption = 'Swirl'
           OnClick = MenuItem68Click
         end
         object MenuItem42: TMenuItem
           Caption = '-'
         end
         object MenuItem39: TMenuItem
-          Caption = 'Resaltar rojo'
+          Caption = 'Highlight red'
           OnClick = MenuItem39Click
         end
         object MenuItem40: TMenuItem
-          Caption = 'Resaltar verde'
+          Caption = 'Highlight green'
           OnClick = MenuItem40Click
         end
         object MenuItem41: TMenuItem
-          Caption = 'Resaltar azul'
+          Caption = 'Highlight blue'
           OnClick = MenuItem41Click
         end
         object MenuItem35: TMenuItem
@@ -1816,36 +2014,40 @@ object frmain: Tfrmain
         end
       end
       object MenuItem55: TMenuItem
-        Caption = 'Ventana de efectos'
+        Caption = 'Efect window'
         OnClick = MenuItem55Click
       end
       object MenuItem47: TMenuItem
         Caption = '-'
       end
       object MenuItem48: TMenuItem
-        Caption = 'Establecer como fondo de escritorio'
+        Caption = 'Set as desktop image'
         object MenuItem52: TMenuItem
-          Caption = 'Ajustado'
+          Caption = 'Strech'
           OnClick = MenuItem52Click
         end
         object MenuItem50: TMenuItem
-          Caption = 'Centrado'
+          Caption = 'Center'
           OnClick = MenuItem50Click
         end
         object MenuItem51: TMenuItem
-          Caption = 'Mosaico'
+          Caption = 'Mosaic'
           OnClick = MenuItem51Click
         end
         object MenuItem49: TMenuItem
-          Caption = 'Expandida'
+          Caption = 'Expand'
           OnClick = MenuItem49Click
         end
       end
+      object MenuItem72: TMenuItem
+        Caption = 'EXIF'
+        OnClick = MenuItem72Click
+      end
     end
     object MenuItem4: TMenuItem
-      Caption = '&Ayuda'
+      Caption = '&Help'
       object MenuItem5: TMenuItem
-        Caption = 'Acerca de...'
+        Caption = 'About...'
         OnClick = MenuItem5Click
       end
     end

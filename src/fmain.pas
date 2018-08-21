@@ -10,7 +10,7 @@ uses
   types, LCLType, PairSplitter, ShellCtrls, FPImage, Unit2, Unit3, Unit4, Unit5, Unit6,
   LazUTF8, print{$IFDEF WINDOWS}, Registry, Windows, Windirs{$ENDIF},
   BGRABitmapTypes, BGRABitmap, BGRAThumbnail, BGRAAnimatedGif,
-  DateUtils, Math, ImgSize, BGRAGifFormat, Printers, BGRAReadPCX, LCLintf;
+  DateUtils, Math, ImgSize, BGRAGifFormat, Printers, BGRAReadPCX, LCLintf, fexif;
 
 type
 
@@ -27,6 +27,7 @@ type
     MenuItem30: TMenuItem;
     MenuItem70: TMenuItem;
     MenuItem71: TMenuItem;
+    MenuItem72: TMenuItem;
     mnufileopen: TMenuItem;
     MenuItem11: TMenuItem;
     MenuItem12: TMenuItem;
@@ -121,6 +122,7 @@ type
     ToolButton15: TToolButton;
     tbShowTreeView: TToolButton;
     tbShowThumbs: TToolButton;
+    tbLastImage: TToolButton;
     ToolButton18: TToolButton;
     ToolButton19: TToolButton;
     ToolButton2: TToolButton;
@@ -136,6 +138,8 @@ type
     tbFlipHorizontal: TToolButton;
     tbFlipVertical: TToolButton;
     ToolButton4: TToolButton;
+    tbFirstImage: TToolButton;
+    tbInformation: TToolButton;
     ToolButton6: TToolButton;
     ToolButton7: TToolButton;
     ToolButton8: TToolButton;
@@ -143,6 +147,10 @@ type
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure FormDragDrop(Sender, Source: TObject; X, Y: Integer);
+    procedure FormDragOver(Sender, Source: TObject; X, Y: Integer;
+      State: TDragState; var Accept: Boolean);
+    procedure FormDropFiles(Sender: TObject; const FileNames: array of String);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormKeyPress(Sender: TObject; var Key: char);
     procedure FormMouseDown(Sender: TObject; Button: TMouseButton;
@@ -173,6 +181,7 @@ type
     procedure MenuItem28Click(Sender: TObject);
     procedure MenuItem2Click(Sender: TObject);
     procedure MenuItem70Click(Sender: TObject);
+    procedure MenuItem72Click(Sender: TObject);
     procedure mnuShowThumbsClick(Sender: TObject);
     procedure MenuItem31Click(Sender: TObject);
     procedure MenuItem33Click(Sender: TObject);
@@ -233,6 +242,9 @@ type
     procedure ShellTreeView1Click(Sender: TObject);
     procedure ShellTreeView1Expanded(Sender: TObject; Node: TTreeNode);
     procedure ShellTreeView1SelectionChanged(Sender: TObject);
+    procedure tbFirstImageClick(Sender: TObject);
+    procedure tbInformationClick(Sender: TObject);
+    procedure tbLastImageClick(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure Timer2Timer(Sender: TObject);
     procedure Timer3Timer(Sender: TObject);
@@ -332,6 +344,8 @@ var
   procedure loadpicture(fimagen:string;restorezoom:boolean=true;scrollthumbs:boolean=true;realimage:boolean=false);
 implementation
 
+uses
+  dGlobal, dMetadata;
 {$R *.lfm}
 
 { Tfrmain }
@@ -717,14 +731,16 @@ var
    starttime:TDateTime;
    bgcolor:TBGRAPixel;
    BGRAImage:BGRABitmap.TBGRABitmap;
-   fpcustomimg:TFPCustomImage;
+   //fpcustomimg:TFPCustomImage;
    wimagen:UnicodeString;
+   ImgData: TImgData;
 begin
   {$IFDEF WINDOWS}
   wimagen:=UTF16LongName(fimagen);
   {$ELSE}
   wimagen:=fimagen;
   {$ENDIF}
+  frmain.StatusBar1.Panels.Items[5].Text:='';
   starttime:=Now();
   try
     frmain.Caption:='LazView '+fimagen;
@@ -756,6 +772,16 @@ begin
       frmain.ToolButton26.Enabled:=false;
       frmain.ToolButton27.Enabled:=false;
       frmain.StatusBar1.Panels[2].Text:='';
+    end;
+    ////EXIF information
+    ImgData:= TImgData.Create();
+    if ImgData.ProcessFile(fimagen) then
+    begin
+      if ImgData.HasEXIF then
+      begin
+        frmain.StatusBar1.Panels.Items[5].Text:=FormatDateTime(ISO_DATETIME_FORMAT, ImgData.ExifObj.GetImgDateTime);
+      end;
+      ImgData.Free;
     end;
     case UpperCase(ExtractFileExt(fimagen)) of
       '.GIF':
@@ -867,7 +893,6 @@ begin
       end;
     end;
     frmain.StatusBar1.Panels.Items[4].Text:='Tiempo:'+prettytime(MilliSecondsBetween(Now,starttime));
-
     ////////****Update buttons and menus****////////////////
     frmain.tbFlipHorizontal.Enabled:=true;
     frmain.tbFlipVertical.Enabled:=true;
@@ -1705,6 +1730,26 @@ begin
     frmain.Image1.Picture.Clear;
 end;
 
+procedure Tfrmain.FormDragDrop(Sender, Source: TObject; X, Y: Integer);
+begin
+
+end;
+
+procedure Tfrmain.FormDragOver(Sender, Source: TObject; X, Y: Integer;
+  State: TDragState; var Accept: Boolean);
+begin
+  Accept:=true;
+end;
+
+procedure Tfrmain.FormDropFiles(Sender: TObject;
+  const FileNames: array of String);
+begin
+  if DirectoryExists(FileNames[0]) then
+    loadfiles(FileNames[0],'')
+  else
+    loadpicture(FileNames[0]);
+end;
+
 procedure Tfrmain.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
 
@@ -2180,6 +2225,68 @@ begin
       ththumbs.Start;
     end;
   end;
+end;
+
+procedure Tfrmain.MenuItem72Click(Sender: TObject);
+var
+   imgdata:TImgData;
+   i:integer;
+begin
+ frexif.ValueListEditor1.Clean;
+ ImgData:= TImgData.Create();
+ if ImgData.ProcessFile(carpeta+flist[ifile]) then
+ begin
+   if ImgData.HasEXIF then
+   begin
+     {frexif.ValueListEditor1.InsertRow('Artist',ImgData.ExifObj.Artist,true);
+     frexif.ValueListEditor1.InsertRow('Camera make',ImgData.ExifObj.CameraMake,true);
+     frexif.ValueListEditor1.InsertRow('Camera model',ImgData.ExifObj.CameraModel,true);
+     frexif.ValueListEditor1.InsertRow('Copyright',ImgData.ExifObj.Copyright,true);
+     frexif.ValueListEditor1.InsertRow('Comment',ImgData.ExifObj.ExifComment,true);
+     frexif.ValueListEditor1.InsertRow('Picture DateTime',FormatDateTime(ISO_DATETIME_FORMAT, ImgData.ExifObj.GetImgDateTime),true);
+     frexif.ValueListEditor1.InsertRow('DateTime Digitized',FormatDateTime(ISO_DATETIME_FORMAT,ImgData.ExifObj.DateTimeDigitized),true);
+     frexif.ValueListEditor1.InsertRow('DateTime Modified',FormatDateTime(ISO_DATETIME_FORMAT,ImgData.ExifObj.DateTimeModified),true);
+     frexif.ValueListEditor1.InsertRow('DateTime Original',FormatDateTime(ISO_DATETIME_FORMAT,ImgData.ExifObj.DateTimeOriginal),true);
+     frexif.ValueListEditor1.InsertRow('EXIF Version',ImgData.ExifObj.ExifVersion,true);
+     frexif.ValueListEditor1.InsertRow('GPS Latitude',floattostr(ImgData.ExifObj.GPSLatitude),true);
+     frexif.ValueListEditor1.InsertRow('GPS Longitude',floattostr(ImgData.ExifObj.GPSLongitude),true);
+     frexif.ValueListEditor1.InsertRow('Description',ImgData.ExifObj.ImageDescription,true);
+     frexif.ValueListEditor1.InsertRow('Maker note',ImgData.ExifObj.MakerNote,true);
+     frexif.ValueListEditor1.InsertRow('Name',ImgData.ExifObj.msName,true);
+     frexif.ValueListEditor1.InsertRow('Orientation',ImgData.ExifObj.ThumbTagValueAsString['Orientation'],true);
+     frexif.ValueListEditor1.InsertRow('Compression',ImgData.ExifObj.ThumbTagValueAsString['Compression'],true);
+     frexif.ValueListEditor1.InsertRow('Thumb width',ImgData.ExifObj.ThumbTagValueAsString['Image Width'],true);
+     frexif.ValueListEditor1.InsertRow('Thumb height',ImgData.ExifObj.ThumbTagValueAsString['Image Length'],true);
+     frexif.ValueListEditor1.InsertRow('XResolution',ImgData.ExifObj.ThumbTagValueAsString['XResolution'],true);
+     frexif.ValueListEditor1.InsertRow('YResolution',ImgData.ExifObj.ThumbTagValueAsString['YResolution'],true);
+     frexif.ValueListEditor1.InsertRow('Resolution Unit',ImgData.ExifObj.ThumbTagValueAsString['Resolution Unit'],true);
+     frexif.ValueListEditor1.InsertRow('JPEGInterchange Format',ImgData.ExifObj.ThumbTagValueAsString['JPEGInterchange Format'],true);
+     frexif.ValueListEditor1.InsertRow('JPEGInterchange Format Length',ImgData.ExifObj.ThumbTagValueAsString['JPEGInterchange Format Length'],true);
+     frexif.ValueListEditor1.InsertRow('Bits Per Sample',ImgData.ExifObj.ThumbTagValueAsString['Bits Per Sample'],true);
+     frexif.ValueListEditor1.InsertRow('Tracer',ImgData.ExifObj.msTraceStr,true);
+     frexif.ValueListEditor1.InsertRow('ThumbTrace',ImgData.ExifObj.ThumbTrace,true);
+     frexif.ValueListEditor1.InsertRow('Real Width',inttostr(ImgData.ExifObj.Width),true);
+     frexif.ValueListEditor1.InsertRow('Real Height',inttostr(ImgData.ExifObj.Height),true);}
+     for i:=0 to ImgData.ExifObj.TagCount-1 do
+     begin
+       frexif.ValueListEditor1.InsertRow(ImgData.ExifObj.TagByIndex[i].Name,ImgData.ExifObj.TagByIndex[i].Data,true);
+     end;
+     if ImgData.ExifObj.FlashUsed=1 then
+       frexif.ValueListEditor1.InsertRow('Use flash','Yes',true)
+     else
+       frexif.ValueListEditor1.InsertRow('Use flash','No',true);
+     if ImgData.ExifObj.HasThumbnail then
+       frexif.ValueListEditor1.InsertRow('Thumbnail','Yes',true)
+     else
+       frexif.ValueListEditor1.InsertRow('Thumbnail','No',true);
+     for i:=0 to ImgData.ExifObj.ThumbTagCount-1 do
+     begin
+       frexif.ValueListEditor1.InsertRow(ImgData.ExifObj.ThumbTagByIndex[i].Name,ImgData.ExifObj.ThumbTagByIndex[i].Data,true);
+     end;
+   end;
+   ImgData.Free;
+ end;
+  frexif.ShowModal;
 end;
 
 procedure Tfrmain.mnuShowThumbsClick(Sender: TObject);
@@ -2725,6 +2832,23 @@ begin
   begin
     loadfiles(frmain.ShellTreeView1.Path,'');
   end;
+end;
+
+procedure Tfrmain.tbFirstImageClick(Sender: TObject);
+begin
+  ifile:=0;
+  loadpicture(carpeta+flist[0]);
+end;
+
+procedure Tfrmain.tbInformationClick(Sender: TObject);
+begin
+  frmain.MenuItem72Click(nil);
+end;
+
+procedure Tfrmain.tbLastImageClick(Sender: TObject);
+begin
+  ifile:=flist.Count-1;
+  loadpicture(carpeta+flist[flist.Count-1]);
 end;
 
 procedure Tfrmain.Timer1Timer(Sender: TObject);

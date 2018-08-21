@@ -151,7 +151,9 @@ type
     function FineResample(NewWidth, NewHeight: integer): TBGRACustomBitmap;
     function SimpleStretch(NewWidth, NewHeight: integer): TBGRACustomBitmap;
     function CheckEmpty: boolean; override;
+    function CheckIsZero: boolean; override;
     function GetHasTransparentPixels: boolean; override;
+    function GetHasSemiTransparentPixels: boolean; override;
     function GetAverageColor: TColor; override;
     function GetAveragePixel: TBGRAPixel; override;
 
@@ -206,8 +208,6 @@ type
       AFillColor: TBGRAPixel; AOptions: TArcOptions; ADrawChord: boolean = false; ATexture: IBGRAScanner = nil); override;
 
   public
-    {** Cursor hotspot and Xor mask }
-
     {** Provides a canvas with opacity and antialiasing }
     property CanvasBGRA: TBGRACanvas read GetCanvasBGRA;
     {** Provides a canvas with 2d transformation and similar to HTML5. }
@@ -378,21 +378,21 @@ type
         is out of bounds, the image is repeated.
       * ''AResampleFilter'' specifies how pixels must be interpolated. Accepted
         values are ''rfBox'', ''rfLinear'', ''rfHalfCosine'' and ''rfCosine'' }
-    function GetPixelCycle(x, y: single; AResampleFilter: TResampleFilter = rfLinear): TBGRAPixel; override;
+    function GetPixelCycle(x, y: single; AResampleFilter: TResampleFilter = rfLinear): TBGRAPixel; override; overload;
     {** Similar to previous ''GetPixel'' function, but the fractional part of
         the coordinate is supplied with a number from 0 to 255. The actual
         coordinate is (''x'' + ''fracX256''/256, ''y'' + ''fracY256''/256) }
-    function GetPixelCycle256(x, y, fracX256,fracY256: int32or64; AResampleFilter: TResampleFilter = rfLinear): TBGRAPixel; override;
+    function GetPixelCycle256(x, y, fracX256,fracY256: int32or64; AResampleFilter: TResampleFilter = rfLinear): TBGRAPixel; override; overload;
     {** Computes the value of the pixel at a floating point coordiante
         by interpolating the values of the pixels around it. ''repeatX'' and
         ''repeatY'' specifies if the image is to be repeated or not.
       * ''AResampleFilter'' specifies how pixels must be interpolated. Accepted
         values are ''rfBox'', ''rfLinear'', ''rfHalfCosine'' and ''rfCosine'' }
-    function GetPixelCycle(x, y: single; AResampleFilter: TResampleFilter; repeatX: boolean; repeatY: boolean): TBGRAPixel; override;
+    function GetPixelCycle(x, y: single; AResampleFilter: TResampleFilter; repeatX: boolean; repeatY: boolean): TBGRAPixel; override; overload;
     {** Similar to previous ''GetPixel'' function, but the fractional part of
         the coordinate is supplied with a number from 0 to 255. The actual
         coordinate is (''x'' + ''fracX256''/256, ''y'' + ''fracY256''/256) }
-    function GetPixelCycle256(x, y, fracX256,fracY256: int32or64; AResampleFilter: TResampleFilter; repeatX: boolean; repeatY: boolean): TBGRAPixel; override;
+    function GetPixelCycle256(x, y, fracX256,fracY256: int32or64; AResampleFilter: TResampleFilter; repeatX: boolean; repeatY: boolean): TBGRAPixel; override; overload;
 
     {==== Drawing lines and polylines (integer coordinates) ====}
     {* These functions do not take into account current pen style/cap/join.
@@ -701,11 +701,11 @@ type
       If align is taCenter, (x,y) is at the top and middle of the text.
       If align is taRightJustify, (x,y) is the top-right corner.
       The value of FontOrientation is taken into account, so that the text may be rotated. }
-    procedure TextOut(x, y: single; sUTF8: string; c: TBGRAPixel; align: TAlignment); override; overload;
+    procedure TextOut(x, y: single; sUTF8: string; c: TBGRAPixel; align: TAlignment; ARightToLeft: boolean); override; overload;
 
     { Same as above functions, except that the text is filled using texture.
       The value of FontOrientation is taken into account, so that the text may be rotated. }
-    procedure TextOut(x, y: single; sUTF8: string; texture: IBGRAScanner; align: TAlignment); override; overload;
+    procedure TextOut(x, y: single; sUTF8: string; texture: IBGRAScanner; align: TAlignment; ARightToLeft: boolean); override; overload;
 
     { Same as above, except that the orientation is specified, overriding the value of the property FontOrientation. }
     procedure TextOutAngle(x, y: single; orientationTenthDegCCW: integer; sUTF8: string; c: TBGRAPixel; align: TAlignment); override; overload;
@@ -723,6 +723,11 @@ type
     { Returns the total size of the string provided using the current font.
       Orientation is not taken into account, so that the width is along the text.  }
     function TextSize(sUTF8: string): TSize; override;
+
+    { Returns the total size of a paragraph i.e. with word break }
+    function TextSize(sUTF8: string; AMaxWidth: integer): TSize; override;
+    function TextSize(sUTF8: string; AMaxWidth: integer; ARightToLeft: boolean): TSize; override;
+    function TextFitInfo(sUTF8: string; AMaxWidth: integer): integer; override;
 
     {Spline}
     function ComputeClosedSpline(const APoints: array of TPointF; AStyle: TSplineStyle): ArrayOfTPointF; override;
@@ -790,7 +795,7 @@ type
     {BGRA bitmap functions}
     procedure CrossFade(ARect: TRect; Source1, Source2: IBGRAScanner; AFadePosition: byte; mode: TDrawMode = dmDrawWithTransparency); override;
     procedure CrossFade(ARect: TRect; Source1, Source2: IBGRAScanner; AFadeMask: IBGRAScanner; mode: TDrawMode = dmDrawWithTransparency); override;
-    procedure PutImage(x, y: integer; Source: TBGRACustomBitmap; mode: TDrawMode; AOpacity: byte = 255); override;
+    procedure PutImage(x, y: integer; Source: TBGRACustomBitmap; mode: TDrawMode; AOpacity: byte = 255); override; overload;
     procedure PutImageAffine(AMatrix: TAffineMatrix; Source: TBGRACustomBitmap; AOutputBounds: TRect; AResampleFilter: TResampleFilter; AMode: TDrawMode; AOpacity: Byte=255); override; overload;
     function GetImageAffineBounds(AMatrix: TAffineMatrix; ASourceBounds: TRect; AClipOutput: boolean = true): TRect; override; overload;
     function IsAffineRoughlyTranslation(AMatrix: TAffineMatrix; ASourceBounds: TRect): boolean; override;
@@ -829,6 +834,7 @@ type
     procedure GrayscaleToAlpha; override;
     procedure AlphaToGrayscale; override;
     procedure ApplyMask(mask: TBGRACustomBitmap; ARect: TRect; AMaskRectTopLeft: TPoint); override; overload;
+    function GetMaskFromAlpha: TBGRACustomBitmap; override;
     procedure ApplyGlobalOpacity(alpha: byte); override;
     procedure ApplyGlobalOpacity(ABounds: TRect; alpha: byte); override;
     procedure ConvertToLinearRGB; override;
@@ -942,7 +948,10 @@ end;
 procedure TBitmapTracker.Changed(Sender: TObject);
 begin
   if FUser <> nil then
+  begin
     FUser.FBitmapModified := True;
+    FUser.FAlphaCorrectionNeeded := true;
+  end;
   inherited Changed(Sender);
 end;
 
@@ -966,6 +975,29 @@ begin
     Inc(p,2);
   end;
   if Odd(NbPixels) and (p^.alpha <> 0) then
+  begin
+    Result := false;
+    exit;
+  end;
+  Result := True;
+end;
+
+function TBGRADefaultBitmap.CheckIsZero: boolean;
+var
+  i: integer;
+  p: PBGRAPixel;
+begin
+  p := Data;
+  for i := (NbPixels shr 1) - 1 downto 0 do
+  begin
+    if PInt64(p)^ <> 0 then
+    begin
+      Result := False;
+      exit;
+    end;
+    Inc(p,2);
+  end;
+  if Odd(NbPixels) and (PDWord(p)^ <> 0) then
   begin
     Result := false;
     exit;
@@ -1062,12 +1094,16 @@ end;
 
 procedure TBGRADefaultBitmap.SetArrowEndSize(AValue: TPointF);
 begin
+  {$PUSH}{$OPTIMIZATION OFF}
   GetArrow.EndSize := AValue;
+  {$POP}
 end;
 
 procedure TBGRADefaultBitmap.SetArrowStartSize(AValue: TPointF);
 begin
+  {$PUSH}{$OPTIMIZATION OFF}
   GetArrow.StartSize := AValue;
+  {$POP}
 end;
 
 function TBGRADefaultBitmap.GetArrowEndOffset: single;
@@ -2005,7 +2041,12 @@ end;
 
 function TBGRADefaultBitmap.GetCanvas: TCanvas;
 begin
-  Result := Bitmap.Canvas;
+  if FDataModified or (FBitmap = nil) then
+  begin
+    RebuildBitmap;
+    FDataModified := False;
+  end;
+  Result := FBitmap.Canvas;
 end;
 
 function TBGRADefaultBitmap.GetCanvasFP: TFPImageCanvas;
@@ -3823,16 +3864,16 @@ begin
 end;
 
 procedure TBGRADefaultBitmap.TextOut(x, y: single; sUTF8: string;
-  texture: IBGRAScanner; align: TAlignment);
+  texture: IBGRAScanner; align: TAlignment; ARightToLeft: boolean);
 begin
-  FontRenderer.TextOut(self,x,y,CleanTextOutString(sUTF8),texture,align);
+  FontRenderer.TextOut(self,x,y,CleanTextOutString(sUTF8),texture,align, ARightToLeft);
 end;
 
 procedure TBGRADefaultBitmap.TextOut(x, y: single; sUTF8: string;
-  c: TBGRAPixel; align: TAlignment);
+  c: TBGRAPixel; align: TAlignment; ARightToLeft: boolean);
 begin
   with (PointF(x,y)-GetFontAnchorRotatedOffset) do
-    FontRenderer.TextOut(self,x,y,CleanTextOutString(sUTF8),c,align);
+    FontRenderer.TextOut(self,x,y,CleanTextOutString(sUTF8),c,align, ARightToLeft);
 end;
 
 procedure TBGRADefaultBitmap.TextRect(ARect: TRect; x, y: integer;
@@ -3854,6 +3895,23 @@ end;
 function TBGRADefaultBitmap.TextSize(sUTF8: string): TSize;
 begin
   result := FontRenderer.TextSize(sUTF8);
+end;
+
+function TBGRADefaultBitmap.TextSize(sUTF8: string; AMaxWidth: integer): TSize;
+begin
+  result := FontRenderer.TextSize(sUTF8, AMaxWidth, GetFontRightToLeftFor(sUTF8));
+end;
+
+function TBGRADefaultBitmap.TextSize(sUTF8: string; AMaxWidth: integer;
+  ARightToLeft: boolean): TSize;
+begin
+  result := FontRenderer.TextSize(sUTF8, AMaxWidth, ARightToLeft);
+end;
+
+function TBGRADefaultBitmap.TextFitInfo(sUTF8: string; AMaxWidth: integer
+  ): integer;
+begin
+  result := FontRenderer.TextFitInfo(sUTF8, AMaxWidth);
 end;
 
 {---------------------------- Curves ----------------------------------------}
@@ -4965,10 +5023,12 @@ begin
   ABitmap.FontStyle := FontStyle;
   ABitmap.FontAntialias := FontAntialias;
   ABitmap.FontOrientation := FontOrientation;
+  ABitmap.FontBidiMode:= FontBidiMode;
   ABitmap.LineCap := LineCap;
   ABitmap.JoinStyle := JoinStyle;
   ABitmap.FillMode := FillMode;
   ABitmap.ClipRect := ClipRect;
+  ABitmap.HotSpot := HotSpot;
 end;
 
 { Check if two bitmaps have the same content }
@@ -5240,6 +5300,24 @@ begin
     Inc(p);
   end;
   Result := False;
+end;
+
+function TBGRADefaultBitmap.GetHasSemiTransparentPixels: boolean;
+var
+  n: integer;
+  p: PBGRAPixel;
+begin
+  p := Data;
+  for n := NbPixels - 1 downto 0 do
+  begin
+    if (p^.alpha > 0) and (p^.alpha < 255) then
+    begin
+      result := true;
+      exit;
+    end;
+    inc(p);
+  end;
+  result := false;
 end;
 
 function TBGRADefaultBitmap.GetAverageColor: TColor;
@@ -5614,6 +5692,24 @@ begin
     end;
   end;
   InvalidateBitmap;
+end;
+
+function TBGRADefaultBitmap.GetMaskFromAlpha: TBGRACustomBitmap;
+var y,x: integer;
+  psrc, pdest: PBGRAPixel;
+begin
+  result := BGRABitmapFactory.Create(Width,Height);
+  for y := 0 to self.Height-1 do
+  begin
+    psrc := self.ScanLine[y];
+    pdest := result.ScanLine[y];
+    for x := 0 to self.Width-1 do
+    begin
+      pdest^ := BGRA(psrc^.alpha,psrc^.alpha,psrc^.alpha);
+      inc(psrc);
+      inc(pdest);
+    end;
+  end;
 end;
 
 procedure TBGRADefaultBitmap.ApplyGlobalOpacity(alpha: byte);
