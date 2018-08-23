@@ -1,7 +1,7 @@
 object frmain: Tfrmain
-  Left = 251
+  Left = 285
   Height = 536
-  Top = 118
+  Top = 122
   Width = 819
   ActiveControl = ShellTreeView1
   AllowDropFiles = True
@@ -11,7 +11,6 @@ object frmain: Tfrmain
   KeyPreview = True
   Menu = MainMenu1
   OnClose = FormClose
-  OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnDblClick = Image1DblClick
   OnDestroy = FormDestroy
@@ -127,7 +126,6 @@ object frmain: Tfrmain
           OnMouseMove = FormMouseMove
           OnMouseUp = Image1MouseUp
           OnMouseWheel = FormMouseWheel
-          OnResize = Image1Resize
           ParentShowHint = False
           PopupMenu = PopupMenu1
           Proportional = True
@@ -274,30 +272,30 @@ object frmain: Tfrmain
     OnClick = ToolBar1Click
     OnMouseLeave = ToolBar1MouseLeave
     OnMouseMove = ToolBar1MouseMove
-    object ToolButton1: TToolButton
+    object tbPrevImage: TToolButton
       Left = 308
       Hint = 'Prev image'
       Top = 2
       ImageIndex = 0
-      OnClick = ToolButton1Click
+      OnClick = tbPrevImageClick
       ParentShowHint = False
       ShowHint = True
     end
-    object ToolButton2: TToolButton
+    object tbNextImage: TToolButton
       Left = 354
       Hint = 'Next image'
       Top = 2
       ImageIndex = 1
-      OnClick = ToolButton2Click
+      OnClick = tbNextImageClick
       ParentShowHint = False
       ShowHint = True
     end
-    object ToolButton3: TToolButton
+    object tbFullScreen: TToolButton
       Left = 162
       Hint = 'Full screen'
       Top = 2
       ImageIndex = 2
-      OnClick = ToolButton3Click
+      OnClick = tbFullScreenClick
       ParentShowHint = False
       ShowHint = True
     end
@@ -321,101 +319,101 @@ object frmain: Tfrmain
       ParentShowHint = False
       ShowHint = True
     end
-    object ToolButton6: TToolButton
+    object tbRotateLeft: TToolButton
       Left = 116
       Hint = 'Flip left'
       Top = 2
       Enabled = False
       ImageIndex = 5
-      OnClick = ToolButton6Click
+      OnClick = tbRotateLeftClick
       ParentShowHint = False
       ShowHint = True
     end
-    object ToolButton7: TToolButton
+    object tbRotateRight: TToolButton
       Left = 139
       Hint = 'Flip right'
       Top = 2
       Enabled = False
       ImageIndex = 6
-      OnClick = ToolButton7Click
+      OnClick = tbRotateRightClick
       ParentShowHint = False
       ShowHint = True
     end
-    object ToolButton8: TToolButton
+    object tbExit: TToolButton
       Left = 646
       Hint = 'Exit'
       Top = 2
       ImageIndex = 7
-      OnClick = ToolButton8Click
+      OnClick = tbExitClick
       ParentShowHint = False
       ShowHint = True
     end
-    object ToolButton9: TToolButton
+    object tbZoomIn: TToolButton
       Left = 185
       Hint = 'Zoom +'
       Top = 2
       Enabled = False
       ImageIndex = 8
-      OnClick = ToolButton9Click
+      OnClick = tbZoomInClick
       ParentShowHint = False
       ShowHint = True
     end
-    object ToolButton10: TToolButton
+    object tbZoomOut: TToolButton
       Left = 208
       Hint = 'Zoom -'
       Top = 2
       Enabled = False
       ImageIndex = 9
-      OnClick = ToolButton10Click
+      OnClick = tbZoomOutClick
       ParentShowHint = False
       ShowHint = True
     end
-    object ToolButton11: TToolButton
+    object tbAdjust: TToolButton
       Left = 469
       Hint = 'Adjust image'
       Top = 2
       Enabled = False
       ImageIndex = 10
-      OnClick = ToolButton11Click
+      OnClick = tbAdjustClick
       ParentShowHint = False
       ShowHint = True
     end
-    object ToolButton12: TToolButton
+    object tbPlayShow: TToolButton
       Left = 331
       Hint = 'Start presentation'
       Top = 2
       ImageIndex = 13
-      OnClick = ToolButton12Click
+      OnClick = tbPlayShowClick
       ParentShowHint = False
       ShowHint = True
     end
-    object ToolButton13: TToolButton
+    object tbRandom: TToolButton
       Left = 400
       Hint = 'Random presentation'
       Top = 2
       ImageIndex = 11
-      OnClick = ToolButton13Click
+      OnClick = tbRandomClick
       ParentShowHint = False
       ShowHint = True
     end
-    object ToolButton14: TToolButton
+    object tbZoom100: TToolButton
       Left = 231
       Hint = 'Zoom 100%'
       Top = 2
       Enabled = False
       ImageIndex = 14
-      OnClick = ToolButton14Click
+      OnClick = tbZoom100Click
       ParentShowHint = False
       ShowCaption = False
       ShowHint = True
     end
-    object ToolButton15: TToolButton
+    object tbReload: TToolButton
       Left = 446
       Hint = 'Reload image'
       Top = 2
       Enabled = False
       ImageIndex = 15
-      OnClick = ToolButton15Click
+      OnClick = tbReloadClick
       ParentShowHint = False
       ShowHint = True
     end
@@ -437,46 +435,46 @@ object frmain: Tfrmain
       ParentShowHint = False
       ShowHint = True
     end
-    object ToolButton18: TToolButton
+    object tbSelect: TToolButton
       Left = 423
       Hint = 'Selection tool'
       Top = 2
-      Caption = 'ToolButton18'
+      Caption = 'tbSelect'
       ImageIndex = 23
-      OnClick = ToolButton18Click
+      OnClick = tbSelectClick
       ParentShowHint = False
       ShowHint = True
     end
-    object ToolButton19: TToolButton
+    object tbPrevFrame: TToolButton
       Left = 546
       Hint = 'Prev frame'
       Top = 2
-      Caption = 'ToolButton19'
+      Caption = 'tbPrevFrame'
       Enabled = False
       ImageIndex = 19
-      OnClick = ToolButton19Click
+      OnClick = tbPrevFrameClick
       ParentShowHint = False
       ShowHint = True
     end
-    object ToolButton20: TToolButton
+    object tbNextFrame: TToolButton
       Left = 592
       Hint = 'Next frame'
       Top = 2
-      Caption = 'ToolButton20'
+      Caption = 'tbNextFrame'
       Enabled = False
       ImageIndex = 20
-      OnClick = ToolButton20Click
+      OnClick = tbNextFrameClick
       ParentShowHint = False
       ShowHint = True
     end
-    object ToolButton21: TToolButton
+    object tbPauseAnim: TToolButton
       Left = 569
       Hint = 'Play/Pause animation'
       Top = 2
-      Caption = 'ToolButton21'
+      Caption = 'tbPauseAnim'
       Enabled = False
       ImageIndex = 21
-      OnClick = ToolButton21Click
+      OnClick = tbPauseAnimClick
       ParentShowHint = False
       ShowHint = True
     end
@@ -494,13 +492,13 @@ object frmain: Tfrmain
       Caption = 'ToolButton23'
       Style = tbsSeparator
     end
-    object ToolButton24: TToolButton
+    object tbStrech: TToolButton
       Left = 254
       Hint = 'Large'
       Top = 2
-      Caption = 'ToolButton24'
+      Caption = 'tbStrech'
       ImageIndex = 24
-      OnClick = ToolButton24Click
+      OnClick = tbStrechClick
       ParentShowHint = False
       ShowHint = True
     end
@@ -511,35 +509,35 @@ object frmain: Tfrmain
       Caption = 'ToolButton25'
       Style = tbsSeparator
     end
-    object ToolButton26: TToolButton
+    object tbSlowAnim: TToolButton
       Left = 523
       Hint = 'Speed down'
       Top = 2
-      Caption = 'ToolButton26'
+      Caption = 'tbSlowAnim'
       Enabled = False
       ImageIndex = 25
-      OnClick = ToolButton26Click
+      OnClick = tbSlowAnimClick
       ParentShowHint = False
       ShowHint = True
     end
-    object ToolButton27: TToolButton
+    object tbFastAnim: TToolButton
       Left = 615
       Hint = 'Speed up'
       Top = 2
-      Caption = 'ToolButton27'
+      Caption = 'tbFastAnim'
       Enabled = False
       ImageIndex = 26
-      OnClick = ToolButton27Click
+      OnClick = tbFastAnimClick
       ParentShowHint = False
       ShowHint = True
     end
-    object ToolButton4: TToolButton
+    object tbPrint: TToolButton
       Left = 47
       Hint = 'Print'
       Top = 2
-      Caption = 'ToolButton4'
+      Caption = 'tbPrint'
       ImageIndex = 30
-      OnClick = ToolButton4Click
+      OnClick = tbPrintClick
       ParentShowHint = False
       ShowHint = True
     end
@@ -1736,319 +1734,326 @@ object frmain: Tfrmain
   object MainMenu1: TMainMenu
     left = 40
     top = 208
-    object MenuItem1: TMenuItem
+    object mnuFile: TMenuItem
       Caption = '&File'
-      object MenuItem10: TMenuItem
+      object mnuOpen: TMenuItem
         Caption = 'Open'
         ShortCut = 16449
-        OnClick = MenuItem10Click
+        OnClick = mnuOpenClick
       end
-      object MenuItem16: TMenuItem
+      object mnuSaveAs: TMenuItem
         Caption = 'Save as...'
         Enabled = False
         ShortCut = 16455
-        OnClick = MenuItem16Click
+        OnClick = mnuSaveAsClick
       end
-      object MenuItem30: TMenuItem
+      object mnuPrint: TMenuItem
         Caption = 'Print'
         ShortCut = 16464
-        OnClick = ToolButton4Click
+        OnClick = tbPrintClick
       end
       object MenuItem71: TMenuItem
         Caption = '-'
       end
-      object MenuItem70: TMenuItem
+      object mnuDeleteFile: TMenuItem
         Caption = 'Delete'
         ShortCut = 8238
-        OnClick = MenuItem70Click
+        OnClick = mnuDeleteFileClick
       end
       object MenuItem11: TMenuItem
         Caption = '-'
       end
-      object MenuItem3: TMenuItem
+      object mnuExit: TMenuItem
         Caption = 'Exit'
-        OnClick = MenuItem3Click
+        OnClick = mnuExitClick
       end
     end
-    object MenuItem12: TMenuItem
+    object mnuEdit: TMenuItem
       Caption = '&Edit'
-      object MenuItem14: TMenuItem
+      object mnuCopy: TMenuItem
         Caption = 'Copy'
         Enabled = False
         ShortCut = 16451
-        OnClick = MenuItem14Click
+        OnClick = mnuCopyClick
       end
-      object MenuItem13: TMenuItem
+      object mnuPaste: TMenuItem
         Caption = 'Paste'
         ShortCut = 16470
-        OnClick = MenuItem13Click
+        OnClick = mnuPasteClick
       end
-      object MenuItem60: TMenuItem
+      object mnuSelect: TMenuItem
         Caption = 'Select'
       end
     end
-    object MenuItem29: TMenuItem
+    object mnuView: TMenuItem
       Caption = '&View'
       object mnuShowThumbs: TMenuItem
         Caption = 'Thumbail panel'
         ShortCut = 77
         OnClick = mnuShowThumbsClick
       end
-      object MenuItem63: TMenuItem
+      object mnuThumbSize: TMenuItem
         Caption = 'Thumbail size'
-        object MenuItem64: TMenuItem
+        object mnuThumb32: TMenuItem
           Caption = '32x32'
-          OnClick = MenuItem64Click
+          OnClick = mnuThumb32Click
         end
-        object MenuItem65: TMenuItem
+        object mnuThumb64: TMenuItem
           Caption = '64x64'
           Checked = True
-          OnClick = MenuItem65Click
+          OnClick = mnuThumb64Click
         end
-        object MenuItem66: TMenuItem
+        object mnuThumb128: TMenuItem
           Caption = '128x128'
-          OnClick = MenuItem66Click
+          OnClick = mnuThumb128Click
         end
-        object MenuItem53: TMenuItem
+        object mnuThumbCustom: TMenuItem
           Caption = 'Custom...'
-          OnClick = MenuItem53Click
+          OnClick = mnuThumbCustomClick
         end
       end
-      object MenuItem59: TMenuItem
+      object mnuTreeView: TMenuItem
         Caption = 'Tree view'
         ShortCut = 84
-        OnClick = MenuItem59Click
+        OnClick = mnuTreeViewClick
       end
-      object MenuItem61: TMenuItem
+      object mnuToolBar: TMenuItem
         Caption = 'Tool bar'
         Checked = True
-        OnClick = MenuItem61Click
+        OnClick = mnuToolBarClick
       end
-      object MenuItem62: TMenuItem
+      object mnuStatusBar: TMenuItem
         Caption = 'Status bar'
         Checked = True
-        OnClick = MenuItem62Click
+        OnClick = mnuStatusBarClick
       end
-      object MenuItem69: TMenuItem
+      object mnuMenus: TMenuItem
         Caption = 'Menus'
         Checked = True
-        OnClick = MenuItem69Click
+        OnClick = mnuMenusClick
       end
-      object MenuItem67: TMenuItem
+      object mnuMosaic: TMenuItem
         Caption = 'Mosaic background'
-        OnClick = MenuItem67Click
+        OnClick = mnuMosaicClick
       end
-      object MenuItem43: TMenuItem
+      object mnuCompact: TMenuItem
         Caption = 'Compact mode'
         ShortCut = 67
-        OnClick = MenuItem43Click
+        OnClick = mnuCompactClick
       end
-      object MenuItem44: TMenuItem
+      object mnuGoTo: TMenuItem
         Caption = 'Go to number image...'
-        OnClick = MenuItem44Click
+        OnClick = mnuGoToClick
       end
       object MenuItem45: TMenuItem
         Caption = '-'
       end
-      object MenuItem46: TMenuItem
+      object mnuAntialiasing: TMenuItem
         Caption = 'Antialiasing'
         Checked = True
-        OnClick = MenuItem46Click
+        OnClick = mnuAntialiasingClick
       end
-      object MenuItem58: TMenuItem
+      object mnuRealMode: TMenuItem
         Caption = 'Real mode'
-        OnClick = MenuItem58Click
+        OnClick = mnuRealModeClick
       end
-      object MenuItem54: TMenuItem
+      object mnuStrech: TMenuItem
         Caption = 'Strech image'
-        OnClick = MenuItem54Click
+        OnClick = mnuStrechClick
+      end
+      object mnuAlwaysOnTop: TMenuItem
+        Caption = 'Always on top'
+        OnClick = mnuAlwaysOnTopClick
+      end
+      object mnuLanguage: TMenuItem
+        Caption = 'Language'
       end
     end
-    object MenuItem2: TMenuItem
+    object mnuTools: TMenuItem
       Caption = '&Tools'
-      OnClick = MenuItem2Click
-      object MenuItem6: TMenuItem
+      OnClick = mnuToolsClick
+      object mnuFlipH: TMenuItem
         Caption = 'Flip horizontal'
         Enabled = False
         ShortCut = 72
         ShortCutKey2 = 8264
-        OnClick = MenuItem6Click
+        OnClick = mnuFlipHClick
       end
-      object MenuItem7: TMenuItem
+      object mnuFlipV: TMenuItem
         Caption = 'Flip vertical'
         Enabled = False
         ShortCut = 86
         ShortCutKey2 = 8278
-        OnClick = MenuItem7Click
+        OnClick = mnuFlipVClick
       end
       object MenuItem18: TMenuItem
         Caption = '-'
       end
-      object MenuItem8: TMenuItem
+      object mnuRotateL: TMenuItem
         Caption = 'Rotate left'
         Enabled = False
         ShortCut = 76
         ShortCutKey2 = 8268
-        OnClick = MenuItem8Click
+        OnClick = mnuRotateLClick
       end
-      object MenuItem9: TMenuItem
+      object mnuRotateR: TMenuItem
         Caption = 'Rotate right'
         Enabled = False
         ShortCut = 82
         ShortCutKey2 = 8274
-        OnClick = MenuItem9Click
+        OnClick = mnuRotateRClick
       end
       object MenuItem19: TMenuItem
         Caption = '-'
       end
-      object MenuItem31: TMenuItem
+      object mnuResize: TMenuItem
         Caption = 'Resize...'
         ShortCut = 83
-        OnClick = MenuItem31Click
+        OnClick = mnuResizeClick
       end
       object MenuItem32: TMenuItem
         Caption = '-'
       end
-      object MenuItem15: TMenuItem
-        Caption = 'Efect'
+      object mnuEffects: TMenuItem
+        Caption = 'Effects'
         Enabled = False
-        object MenuItem20: TMenuItem
+        object mnuBGR: TMenuItem
           Caption = 'Invert color (RGB)-(BGR)'
           ShortCut = 49
-          OnClick = MenuItem20Click
+          OnClick = mnuBGRClick
         end
-        object MenuItem21: TMenuItem
+        object mnuRBG: TMenuItem
           Caption = 'Invert color (RGB)-(RBG)'
           ShortCut = 50
-          OnClick = MenuItem21Click
+          OnClick = mnuRBGClick
         end
-        object MenuItem22: TMenuItem
+        object mnuGRB: TMenuItem
           Caption = 'Invert color (RGB)-(GRB)'
           ShortCut = 51
-          OnClick = MenuItem22Click
+          OnClick = mnuGRBClick
         end
-        object MenuItem34: TMenuItem
+        object mnuGBR: TMenuItem
           Caption = 'Invert color (RGB)-(GBR)'
           ShortCut = 52
-          OnClick = MenuItem34Click
+          OnClick = mnuGBRClick
         end
-        object MenuItem33: TMenuItem
+        object mnuBRG: TMenuItem
           Caption = 'Invert color (RGB)-(BRG)'
           ShortCut = 53
-          OnClick = MenuItem33Click
+          OnClick = mnuBRGClick
         end
         object MenuItem26: TMenuItem
           Caption = '-'
         end
-        object MenuItem23: TMenuItem
+        object mnuQuitRed: TMenuItem
           Caption = 'Quit red'
           ShortCut = 55
-          OnClick = MenuItem23Click
+          OnClick = mnuQuitRedClick
         end
-        object MenuItem24: TMenuItem
+        object mnuQuitGreen: TMenuItem
           Caption = 'Quit green'
           ShortCut = 56
-          OnClick = MenuItem24Click
+          OnClick = mnuQuitGreenClick
         end
-        object MenuItem25: TMenuItem
+        object mnuQuitBlue: TMenuItem
           Caption = 'Quit blue'
           ShortCut = 57
-          OnClick = MenuItem25Click
+          OnClick = mnuQuitBlueClick
         end
         object MenuItem38: TMenuItem
           Caption = '-'
         end
-        object MenuItem17: TMenuItem
+        object mnuGrayscale: TMenuItem
           Caption = 'Greyscale'
           ShortCut = 48
-          OnClick = MenuItem17Click
+          OnClick = mnuGrayscaleClick
         end
-        object MenuItem56: TMenuItem
+        object mnuNegative: TMenuItem
           Caption = 'Negative'
-          OnClick = MenuItem56Click
+          OnClick = mnuNegativeClick
         end
-        object MenuItem57: TMenuItem
+        object mnuSmooth: TMenuItem
           Caption = 'Smooth'
-          OnClick = MenuItem57Click
+          OnClick = mnuSmoothClick
         end
-        object MenuItem27: TMenuItem
+        object mnuNoise: TMenuItem
           Caption = 'Noise'
           ShortCut = 192
-          OnClick = MenuItem27Click
+          OnClick = mnuNoiseClick
         end
-        object MenuItem28: TMenuItem
+        object mnuTv: TMenuItem
           Caption = 'TV'
-          OnClick = MenuItem28Click
+          OnClick = mnuTvClick
         end
-        object MenuItem68: TMenuItem
+        object mnuSwirl: TMenuItem
           Caption = 'Swirl'
-          OnClick = MenuItem68Click
+          OnClick = mnuSwirlClick
         end
         object MenuItem42: TMenuItem
           Caption = '-'
         end
-        object MenuItem39: TMenuItem
+        object mnuHighlightRed: TMenuItem
           Caption = 'Highlight red'
-          OnClick = MenuItem39Click
+          OnClick = mnuHighlightRedClick
         end
-        object MenuItem40: TMenuItem
+        object mnuHighlightGreen: TMenuItem
           Caption = 'Highlight green'
-          OnClick = MenuItem40Click
+          OnClick = mnuHighlightGreenClick
         end
-        object MenuItem41: TMenuItem
+        object mnuHighlightBlue: TMenuItem
           Caption = 'Highlight blue'
-          OnClick = MenuItem41Click
+          OnClick = mnuHighlightBlueClick
         end
         object MenuItem35: TMenuItem
           Caption = '-'
         end
-        object MenuItem36: TMenuItem
+        object mnuBrightPlus: TMenuItem
           Caption = 'Brightness +'
           ShortCut = 190
-          OnClick = MenuItem36Click
+          OnClick = mnuBrightPlusClick
         end
-        object MenuItem37: TMenuItem
+        object mnuBrightLess: TMenuItem
           Caption = 'Brightness -'
           ShortCut = 188
-          OnClick = MenuItem37Click
+          OnClick = mnuBrightLessClick
         end
       end
-      object MenuItem55: TMenuItem
-        Caption = 'Efect window'
-        OnClick = MenuItem55Click
+      object mnuWindowEffects: TMenuItem
+        Caption = 'Effects window'
+        OnClick = mnuWindowEffectsClick
       end
       object MenuItem47: TMenuItem
         Caption = '-'
       end
-      object MenuItem48: TMenuItem
+      object mnuDesktopImage: TMenuItem
         Caption = 'Set as desktop image'
-        object MenuItem52: TMenuItem
+        object mnuDesktopStrech: TMenuItem
           Caption = 'Strech'
-          OnClick = MenuItem52Click
+          OnClick = mnuDesktopStrechClick
         end
-        object MenuItem50: TMenuItem
+        object mnuDesktopCenter: TMenuItem
           Caption = 'Center'
-          OnClick = MenuItem50Click
+          OnClick = mnuDesktopCenterClick
         end
-        object MenuItem51: TMenuItem
+        object mnuDesktopMosaic: TMenuItem
           Caption = 'Mosaic'
-          OnClick = MenuItem51Click
+          OnClick = mnuDesktopMosaicClick
         end
-        object MenuItem49: TMenuItem
+        object mnuDesktopExpand: TMenuItem
           Caption = 'Expand'
-          OnClick = MenuItem49Click
+          OnClick = mnuDesktopExpandClick
         end
       end
-      object MenuItem72: TMenuItem
+      object mnuEXIF: TMenuItem
         Caption = 'EXIF'
-        OnClick = MenuItem72Click
+        OnClick = mnuEXIFClick
       end
     end
-    object MenuItem4: TMenuItem
+    object mnuHelp: TMenuItem
       Caption = '&Help'
-      object MenuItem5: TMenuItem
+      object mnuAbout: TMenuItem
         Caption = 'About...'
-        OnClick = MenuItem5Click
+        OnClick = mnuAboutClick
       end
     end
   end

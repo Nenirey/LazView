@@ -6,6 +6,7 @@
 @rmdir /S /Q src\backup\
 @rmdir /S /Q components\bgrabitmap\lib\
 @rmdir /S /Q components\bgrabitmap\lib4nogui\
+@rmdir /S /Q components\dexif\lib
 @del /Q win32\lazview.dbg
 @del /Q win32\lazview*.exe
 @del /Q win64\lazview*.exe

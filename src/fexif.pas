@@ -5,7 +5,7 @@ unit fexif;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ValEdit;
+  Forms, ValEdit;
 
 type
 

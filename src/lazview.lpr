@@ -6,9 +6,8 @@ uses
   {$IFDEF UNIX}
   cthreads, cmem,
   {$ENDIF}
-  Interfaces, // this includes the LCL widgetset
-  Forms, printer4lazarus, fmain, Unit2, Unit3, Unit4, Unit5, ImgSize, Unit6,
-  BGRABitmapTypes, print, fexif;
+  Forms, Interfaces, fmain, fresize, fquality, feffects, fgoto, fthumbsize,
+  print, fexif;
 
 {$R *.res}
 
@@ -18,10 +17,10 @@ begin
   Application.Initialize;
   Application.CreateForm(Tfrmain, frmain);
   Application.CreateForm(Tfrresize, frresize);
-  Application.CreateForm(TForm3, Form3);
-  Application.CreateForm(TForm4, Form4);
-  Application.CreateForm(TForm5, Form5);
-  Application.CreateForm(TForm6, Form6);
+  Application.CreateForm(TFrquality, frquality);
+  Application.CreateForm(Tfreffect, freffect);
+  Application.CreateForm(Tfrgoto, frgoto);
+  Application.CreateForm(Tfrthumbsize, frthumbsize);
   Application.CreateForm(Tfrprint, frprint);
   Application.CreateForm(Tfrexif, frexif);
   Application.Run;

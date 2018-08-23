@@ -7,10 +7,10 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, ComCtrls,
   StdCtrls, Menus, ExtDlgs, LazFileUtils, FileUtil, IntfGraphics,
-  types, LCLType, PairSplitter, ShellCtrls, FPImage, Unit2, Unit3, Unit4, Unit5, Unit6,
+  types, LCLType, PairSplitter, ShellCtrls, FPImage, fresize, fquality, feffects, fgoto, fthumbsize,
   LazUTF8, print{$IFDEF WINDOWS}, Registry, Windows, Windirs{$ENDIF},
   BGRABitmapTypes, BGRABitmap, BGRAThumbnail, BGRAAnimatedGif,
-  DateUtils, Math, ImgSize, BGRAGifFormat, Printers, BGRAReadPCX, LCLintf, fexif, INIFiles;
+  DateUtils, Math, ImgSize, BGRAGifFormat, Printers, LCLintf, fexif, INIFiles, LCLTranslator;
 
 type
 
@@ -22,80 +22,82 @@ type
     Label1: TLabel;
     Label2: TLabel;
     MainMenu1: TMainMenu;
-    MenuItem1: TMenuItem;
-    MenuItem10: TMenuItem;
-    MenuItem30: TMenuItem;
-    MenuItem70: TMenuItem;
+    mnuAlwaysOnTop: TMenuItem;
+    mnuLanguage: TMenuItem;
+    mnuFile: TMenuItem;
+    mnuOpen: TMenuItem;
+    mnuPrint: TMenuItem;
+    mnuDeleteFile: TMenuItem;
     MenuItem71: TMenuItem;
-    MenuItem72: TMenuItem;
+    mnuEXIF: TMenuItem;
     mnufileopen: TMenuItem;
     MenuItem11: TMenuItem;
-    MenuItem12: TMenuItem;
-    MenuItem13: TMenuItem;
-    MenuItem14: TMenuItem;
-    MenuItem15: TMenuItem;
-    MenuItem16: TMenuItem;
-    MenuItem17: TMenuItem;
+    mnuEdit: TMenuItem;
+    mnuPaste: TMenuItem;
+    mnuCopy: TMenuItem;
+    mnuEffects: TMenuItem;
+    mnuSaveAs: TMenuItem;
+    mnuGrayscale: TMenuItem;
     MenuItem18: TMenuItem;
     MenuItem19: TMenuItem;
-    MenuItem2: TMenuItem;
-    MenuItem20: TMenuItem;
-    MenuItem21: TMenuItem;
-    MenuItem22: TMenuItem;
-    MenuItem23: TMenuItem;
-    MenuItem24: TMenuItem;
-    MenuItem25: TMenuItem;
+    mnuTools: TMenuItem;
+    mnuBGR: TMenuItem;
+    mnuRBG: TMenuItem;
+    mnuGRB: TMenuItem;
+    mnuQuitRed: TMenuItem;
+    mnuQuitGreen: TMenuItem;
+    mnuQuitBlue: TMenuItem;
     MenuItem26: TMenuItem;
-    MenuItem27: TMenuItem;
-    MenuItem28: TMenuItem;
-    MenuItem29: TMenuItem;
-    MenuItem3: TMenuItem;
+    mnuNoise: TMenuItem;
+    mnuTv: TMenuItem;
+    mnuView: TMenuItem;
+    mnuExit: TMenuItem;
     mnuShowThumbs: TMenuItem;
-    MenuItem31: TMenuItem;
+    mnuResize: TMenuItem;
     MenuItem32: TMenuItem;
-    MenuItem33: TMenuItem;
-    MenuItem34: TMenuItem;
+    mnuBRG: TMenuItem;
+    mnuGBR: TMenuItem;
     MenuItem35: TMenuItem;
-    MenuItem36: TMenuItem;
-    MenuItem37: TMenuItem;
+    mnuBrightPlus: TMenuItem;
+    mnuBrightLess: TMenuItem;
     MenuItem38: TMenuItem;
-    MenuItem39: TMenuItem;
-    MenuItem4: TMenuItem;
-    MenuItem40: TMenuItem;
-    MenuItem41: TMenuItem;
+    mnuHighlightRed: TMenuItem;
+    mnuHelp: TMenuItem;
+    mnuHighlightGreen: TMenuItem;
+    mnuHighlightBlue: TMenuItem;
     MenuItem42: TMenuItem;
-    MenuItem43: TMenuItem;
-    MenuItem44: TMenuItem;
+    mnuCompact: TMenuItem;
+    mnuGoTo: TMenuItem;
     MenuItem45: TMenuItem;
-    MenuItem46: TMenuItem;
+    mnuAntialiasing: TMenuItem;
     MenuItem47: TMenuItem;
-    MenuItem48: TMenuItem;
-    MenuItem49: TMenuItem;
-    MenuItem5: TMenuItem;
-    MenuItem50: TMenuItem;
-    MenuItem51: TMenuItem;
-    MenuItem52: TMenuItem;
-    MenuItem53: TMenuItem;
-    MenuItem54: TMenuItem;
-    MenuItem55: TMenuItem;
-    MenuItem56: TMenuItem;
-    MenuItem57: TMenuItem;
-    MenuItem58: TMenuItem;
-    MenuItem59: TMenuItem;
-    MenuItem6: TMenuItem;
-    MenuItem60: TMenuItem;
-    MenuItem61: TMenuItem;
-    MenuItem62: TMenuItem;
-    MenuItem63: TMenuItem;
-    MenuItem64: TMenuItem;
-    MenuItem65: TMenuItem;
-    MenuItem66: TMenuItem;
-    MenuItem67: TMenuItem;
-    MenuItem68: TMenuItem;
-    MenuItem69: TMenuItem;
-    MenuItem7: TMenuItem;
-    MenuItem8: TMenuItem;
-    MenuItem9: TMenuItem;
+    mnuDesktopImage: TMenuItem;
+    mnuDesktopExpand: TMenuItem;
+    mnuAbout: TMenuItem;
+    mnuDesktopCenter: TMenuItem;
+    mnuDesktopMosaic: TMenuItem;
+    mnuDesktopStrech: TMenuItem;
+    mnuThumbCustom: TMenuItem;
+    mnuStrech: TMenuItem;
+    mnuWindowEffects: TMenuItem;
+    mnuNegative: TMenuItem;
+    mnuSmooth: TMenuItem;
+    mnuRealMode: TMenuItem;
+    mnuTreeView: TMenuItem;
+    mnuFlipH: TMenuItem;
+    mnuSelect: TMenuItem;
+    mnuToolBar: TMenuItem;
+    mnuStatusBar: TMenuItem;
+    mnuThumbSize: TMenuItem;
+    mnuThumb32: TMenuItem;
+    mnuThumb64: TMenuItem;
+    mnuThumb128: TMenuItem;
+    mnuMosaic: TMenuItem;
+    mnuSwirl: TMenuItem;
+    mnuMenus: TMenuItem;
+    mnuFlipV: TMenuItem;
+    mnuRotateL: TMenuItem;
+    mnuRotateR: TMenuItem;
     OpenPictureDialog1: TOpenPictureDialog;
     psVertical: TPairSplitter;
     pssImagen: TPairSplitterSide;
@@ -113,39 +115,38 @@ type
     Timer3: TTimer;
     Timer4: TTimer;
     ToolBar1: TToolBar;
-    ToolButton1: TToolButton;
-    ToolButton10: TToolButton;
-    ToolButton11: TToolButton;
-    ToolButton12: TToolButton;
-    ToolButton13: TToolButton;
-    ToolButton14: TToolButton;
-    ToolButton15: TToolButton;
+    tbPrevImage: TToolButton;
+    tbZoomOut: TToolButton;
+    tbAdjust: TToolButton;
+    tbPlayShow: TToolButton;
+    tbRandom: TToolButton;
+    tbZoom100: TToolButton;
+    tbReload: TToolButton;
     tbShowTreeView: TToolButton;
     tbShowThumbs: TToolButton;
     tbLastImage: TToolButton;
-    ToolButton18: TToolButton;
-    ToolButton19: TToolButton;
-    ToolButton2: TToolButton;
-    ToolButton20: TToolButton;
-    ToolButton21: TToolButton;
+    tbSelect: TToolButton;
+    tbPrevFrame: TToolButton;
+    tbNextImage: TToolButton;
+    tbNextFrame: TToolButton;
+    tbPauseAnim: TToolButton;
     ToolButton22: TToolButton;
     ToolButton23: TToolButton;
-    ToolButton24: TToolButton;
+    tbStrech: TToolButton;
     ToolButton25: TToolButton;
-    ToolButton26: TToolButton;
-    ToolButton27: TToolButton;
-    ToolButton3: TToolButton;
+    tbSlowAnim: TToolButton;
+    tbFastAnim: TToolButton;
+    tbFullScreen: TToolButton;
     tbFlipHorizontal: TToolButton;
     tbFlipVertical: TToolButton;
-    ToolButton4: TToolButton;
+    tbPrint: TToolButton;
     tbFirstImage: TToolButton;
     tbInformation: TToolButton;
-    ToolButton6: TToolButton;
-    ToolButton7: TToolButton;
-    ToolButton8: TToolButton;
-    ToolButton9: TToolButton;
+    tbRotateLeft: TToolButton;
+    tbRotateRight: TToolButton;
+    tbExit: TToolButton;
+    tbZoomIn: TToolButton;
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
-    procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormDragDrop(Sender, Source: TObject; X, Y: Integer);
@@ -166,60 +167,60 @@ type
     procedure Image1DblClick(Sender: TObject);
     procedure Image1MouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
-    procedure Image1Resize(Sender: TObject);
-    procedure MenuItem10Click(Sender: TObject);
-    procedure MenuItem13Click(Sender: TObject);
-    procedure MenuItem14Click(Sender: TObject);
-    procedure MenuItem16Click(Sender: TObject);
-    procedure MenuItem17Click(Sender: TObject);
-    procedure MenuItem20Click(Sender: TObject);
-    procedure MenuItem21Click(Sender: TObject);
-    procedure MenuItem22Click(Sender: TObject);
-    procedure MenuItem23Click(Sender: TObject);
-    procedure MenuItem24Click(Sender: TObject);
-    procedure MenuItem25Click(Sender: TObject);
-    procedure MenuItem27Click(Sender: TObject);
-    procedure MenuItem28Click(Sender: TObject);
-    procedure MenuItem2Click(Sender: TObject);
-    procedure MenuItem70Click(Sender: TObject);
-    procedure MenuItem72Click(Sender: TObject);
+    procedure mnuAlwaysOnTopClick(Sender: TObject);
+    procedure mnuOpenClick(Sender: TObject);
+    procedure mnuPasteClick(Sender: TObject);
+    procedure mnuCopyClick(Sender: TObject);
+    procedure mnuSaveAsClick(Sender: TObject);
+    procedure mnuGrayscaleClick(Sender: TObject);
+    procedure mnuBGRClick(Sender: TObject);
+    procedure mnuRBGClick(Sender: TObject);
+    procedure mnuGRBClick(Sender: TObject);
+    procedure mnuQuitRedClick(Sender: TObject);
+    procedure mnuQuitGreenClick(Sender: TObject);
+    procedure mnuQuitBlueClick(Sender: TObject);
+    procedure mnuNoiseClick(Sender: TObject);
+    procedure mnuTvClick(Sender: TObject);
+    procedure mnuToolsClick(Sender: TObject);
+    procedure mnuDeleteFileClick(Sender: TObject);
+    procedure mnuEXIFClick(Sender: TObject);
     procedure mnuShowThumbsClick(Sender: TObject);
-    procedure MenuItem31Click(Sender: TObject);
-    procedure MenuItem33Click(Sender: TObject);
-    procedure MenuItem34Click(Sender: TObject);
-    procedure MenuItem36Click(Sender: TObject);
-    procedure MenuItem37Click(Sender: TObject);
-    procedure MenuItem39Click(Sender: TObject);
-    procedure MenuItem3Click(Sender: TObject);
-    procedure MenuItem40Click(Sender: TObject);
-    procedure MenuItem41Click(Sender: TObject);
-    procedure MenuItem43Click(Sender: TObject);
-    procedure MenuItem44Click(Sender: TObject);
-    procedure MenuItem46Click(Sender: TObject);
-    procedure MenuItem49Click(Sender: TObject);
-    procedure MenuItem50Click(Sender: TObject);
-    procedure MenuItem51Click(Sender: TObject);
-    procedure MenuItem52Click(Sender: TObject);
-    procedure MenuItem53Click(Sender: TObject);
-    procedure MenuItem54Click(Sender: TObject);
-    procedure MenuItem55Click(Sender: TObject);
-    procedure MenuItem56Click(Sender: TObject);
-    procedure MenuItem57Click(Sender: TObject);
-    procedure MenuItem58Click(Sender: TObject);
-    procedure MenuItem59Click(Sender: TObject);
-    procedure MenuItem5Click(Sender: TObject);
-    procedure MenuItem61Click(Sender: TObject);
-    procedure MenuItem62Click(Sender: TObject);
-    procedure MenuItem64Click(Sender: TObject);
-    procedure MenuItem65Click(Sender: TObject);
-    procedure MenuItem66Click(Sender: TObject);
-    procedure MenuItem67Click(Sender: TObject);
-    procedure MenuItem68Click(Sender: TObject);
-    procedure MenuItem69Click(Sender: TObject);
-    procedure MenuItem6Click(Sender: TObject);
-    procedure MenuItem7Click(Sender: TObject);
-    procedure MenuItem8Click(Sender: TObject);
-    procedure MenuItem9Click(Sender: TObject);
+    procedure mnuResizeClick(Sender: TObject);
+    procedure mnuBRGClick(Sender: TObject);
+    procedure mnuGBRClick(Sender: TObject);
+    procedure mnuBrightPlusClick(Sender: TObject);
+    procedure mnuBrightLessClick(Sender: TObject);
+    procedure mnuHighlightRedClick(Sender: TObject);
+    procedure mnuExitClick(Sender: TObject);
+    procedure mnuHighlightGreenClick(Sender: TObject);
+    procedure mnuHighlightBlueClick(Sender: TObject);
+    procedure mnuCompactClick(Sender: TObject);
+    procedure mnuGoToClick(Sender: TObject);
+    procedure mnuAntialiasingClick(Sender: TObject);
+    procedure mnuDesktopExpandClick(Sender: TObject);
+    procedure mnuDesktopCenterClick(Sender: TObject);
+    procedure mnuDesktopMosaicClick(Sender: TObject);
+    procedure mnuDesktopStrechClick(Sender: TObject);
+    procedure mnuThumbCustomClick(Sender: TObject);
+    procedure mnuStrechClick(Sender: TObject);
+    procedure mnuWindowEffectsClick(Sender: TObject);
+    procedure mnuNegativeClick(Sender: TObject);
+    procedure mnuSmoothClick(Sender: TObject);
+    procedure mnuRealModeClick(Sender: TObject);
+    procedure mnuTreeViewClick(Sender: TObject);
+    procedure mnuAboutClick(Sender: TObject);
+    procedure mnuToolBarClick(Sender: TObject);
+    procedure mnuStatusBarClick(Sender: TObject);
+    procedure mnuThumb32Click(Sender: TObject);
+    procedure mnuThumb64Click(Sender: TObject);
+    procedure mnuThumb128Click(Sender: TObject);
+    procedure mnuMosaicClick(Sender: TObject);
+    procedure mnuSwirlClick(Sender: TObject);
+    procedure mnuMenusClick(Sender: TObject);
+    procedure mnuFlipHClick(Sender: TObject);
+    procedure mnuFlipVClick(Sender: TObject);
+    procedure mnuRotateLClick(Sender: TObject);
+    procedure mnuRotateRClick(Sender: TObject);
     procedure PairSplitter2Resize(Sender: TObject);
     procedure PairSplitterSide2Resize(Sender: TObject);
     procedure PairSplitterSide3Resize(Sender: TObject);
@@ -254,30 +255,31 @@ type
     procedure ToolBar1MouseLeave(Sender: TObject);
     procedure ToolBar1MouseMove(Sender: TObject; Shift: TShiftState; X,
       Y: Integer);
-    procedure ToolButton10Click(Sender: TObject);
-    procedure ToolButton11Click(Sender: TObject);
-    procedure ToolButton12Click(Sender: TObject);
-    procedure ToolButton13Click(Sender: TObject);
-    procedure ToolButton14Click(Sender: TObject);
-    procedure ToolButton15Click(Sender: TObject);
+    procedure tbZoomOutClick(Sender: TObject);
+    procedure tbAdjustClick(Sender: TObject);
+    procedure tbPlayShowClick(Sender: TObject);
+    procedure tbRandomClick(Sender: TObject);
+    procedure tbZoom100Click(Sender: TObject);
+    procedure tbReloadClick(Sender: TObject);
     procedure tbShowTreeViewClick(Sender: TObject);
-    procedure ToolButton18Click(Sender: TObject);
-    procedure ToolButton19Click(Sender: TObject);
-    procedure ToolButton1Click(Sender: TObject);
-    procedure ToolButton20Click(Sender: TObject);
-    procedure ToolButton21Click(Sender: TObject);
-    procedure ToolButton24Click(Sender: TObject);
-    procedure ToolButton26Click(Sender: TObject);
-    procedure ToolButton27Click(Sender: TObject);
-    procedure ToolButton2Click(Sender: TObject);
-    procedure ToolButton3Click(Sender: TObject);
+    procedure tbSelectClick(Sender: TObject);
+    procedure tbPrevFrameClick(Sender: TObject);
+    procedure tbPrevImageClick(Sender: TObject);
+    procedure tbNextFrameClick(Sender: TObject);
+    procedure tbPauseAnimClick(Sender: TObject);
+    procedure tbStrechClick(Sender: TObject);
+    procedure tbSlowAnimClick(Sender: TObject);
+    procedure tbFastAnimClick(Sender: TObject);
+    procedure tbNextImageClick(Sender: TObject);
+    procedure tbFullScreenClick(Sender: TObject);
     procedure tbFlipHorizontalClick(Sender: TObject);
     procedure tbFlipVerticalClick(Sender: TObject);
-    procedure ToolButton4Click(Sender: TObject);
-    procedure ToolButton6Click(Sender: TObject);
-    procedure ToolButton7Click(Sender: TObject);
-    procedure ToolButton8Click(Sender: TObject);
-    procedure ToolButton9Click(Sender: TObject);
+    procedure tbPrintClick(Sender: TObject);
+    procedure tbRotateLeftClick(Sender: TObject);
+    procedure tbRotateRightClick(Sender: TObject);
+    procedure tbExitClick(Sender: TObject);
+    procedure tbZoomInClick(Sender: TObject);
+    procedure mnuLanguageClick(Sender:TObject);
   private
     { private declarations }
   public
@@ -339,6 +341,9 @@ var
   ifallthumbs:boolean;
   realimgwidth,realimgheight:LongInt;
   inprocessanim:boolean;
+  procedure fullsc;
+  procedure compact;
+  procedure showthumbnails;
   function UTF16LongName(const FileName: String): UnicodeString;
   procedure filterimagen(filter:integer);
   procedure efectimagen(efect:integer;nivel:integer=5000);
@@ -354,6 +359,7 @@ uses
 procedure saveconfig;
 var
    iniconfigfile:TMEMINIFile;
+   i:integer;
 begin
   iniconfigfile:=TMEMINIFile.Create(GetAppConfigDir(false)+'lazview.ini');
   case frmain.WindowState of
@@ -369,11 +375,15 @@ begin
       iniconfigfile.WriteInteger('Config','mainwindowwidth',frmain.Width);
       iniconfigfile.WriteInteger('Config','mainwindowheight',frmain.Height);
     end;
-  wsFullScreen:
-    begin
-      iniconfigfile.WriteString('Config','mainwindowstate','wsFullScreen');
-    end;
   end;
+  iniconfigfile.WriteBool('Config','compactmode',compactmode);
+  iniconfigfile.WriteBool('Config','showthumbs',showthumbs);
+  for i:=0 to frmain.mnuLanguage.Count-1 do
+  begin
+    if frmain.mnuLanguage.Items[i].Checked then
+      iniconfigfile.WriteString('Config','language',frmain.mnuLanguage.Items[i].Caption);
+  end;
+  iniconfigfile.WriteBool('Config','stayontop',frmain.mnuAlwaysOnTop.Checked);
   iniconfigfile.UpdateFile;
   iniconfigfile.Free;
 end;
@@ -381,8 +391,14 @@ end;
 procedure loadconfig;
 var
    iniconfigfile:TMEMINIFile;
+   tmplang:string;
+   tmpstayontop:boolean;
+   i:integer;
 begin
-  iniconfigfile:=TMEMINIFile.Create(GetAppConfigDir(false)+'lazview.ini');
+  if FileExists(ExtractFilePath(Application.Params[0])+'lazview.ini') then
+    iniconfigfile:=TMEMINIFile.Create(ExtractFilePath(Application.Params[0])+'lazview.ini')
+  else
+    iniconfigfile:=TMEMINIFile.Create(GetAppConfigDir(false)+'lazview.ini');
   case iniconfigfile.ReadString('Config','mainwindowstate','wsMaximized') of
   'wsMaximized':
     begin
@@ -396,12 +412,55 @@ begin
       frmain.Width:=iniconfigfile.ReadInteger('Config','mainwindowwidth',frmain.Width);
       frmain.Height:=iniconfigfile.ReadInteger('Config','mainwindowheight',frmain.Height);
     end;
-  'wsFullScreen':
-    begin
-      frmain.WindowState:=wsFullScreen;
-    end;
+  end;
+  if iniconfigfile.ReadBool('Config','compactmode',compactmode) then
+    compact;
+  if iniconfigfile.ReadBool('Config','showthumbs',showthumbs) then
+    showthumbnails;
+  tmplang:=iniconfigfile.ReadString('Config','language','en');
+  SetDefaultLang(tmplang);
+  for i:=0 to frmain.mnuLanguage.Count-1 do
+  begin
+    if frmain.mnuLanguage.Items[i].Caption<>tmplang then
+      frmain.mnuLanguage.Items[i].Checked:=false
+    else
+      frmain.mnuLanguage.Items[i].Checked:=true;
+  end;
+  tmpstayontop:=iniconfigfile.ReadBool('Config','stayontop',false);
+  if tmpstayontop then
+  begin
+    frmain.FormStyle:=fsSystemStayOnTop;
+    frmain.mnuAlwaysOnTop.Checked:=true;
   end;
   iniconfigfile.Free;
+end;
+
+procedure showthumbnails;
+begin
+  frmain.pssThumbs.OnResize:=@frmain.PairSplitterSide2Resize;
+  frmain.mnuShowThumbs.Checked:=true;
+  frmain.tbShowThumbs.Down:=true;
+  showthumbs:=true;
+  frmain.sboxthumb.Visible:=true;
+  frmain.psVertical.Position:=frmain.psVertical.Height-64-18;
+end;
+
+procedure compact;
+begin
+    fwidth:=frmain.Width;
+    fheight:=frmain.Height;
+    frmain.ToolBar1.Visible:=false;
+    frmain.StatusBar1.Visible:=false;
+    frmain.psVertical.AnchorSideTop.Control:=frmain;
+    frmain.psVertical.AnchorSideTop.Side:=asrTop;
+    frmain.Splitter1.AnchorSideTop.Control:=frmain;
+    frmain.Splitter1.AnchorSideTop.Side:=asrTop;
+    frmain.psVertical.AnchorSideBottom.Control:=frmain;
+    frmain.psVertical.AnchorSideBottom.Side:=asrBottom;
+    frmain.Splitter1.AnchorSideBottom.Control:=frmain;
+    frmain.Splitter1.AnchorSideBottom.Side:=asrBottom;
+    frmain.MainMenu1.Items.Visible:=false;
+    compactmode:=true;
 end;
 
 function UTF16LongName(const FileName: String): UnicodeString;
@@ -719,22 +778,19 @@ begin
   frmain.Image1.AutoSize:=true;
   frmain.Image1.Width:=frmain.Image1.Picture.BitMap.Width;
   frmain.Image1.Height:=frmain.Image1.Picture.BitMap.Height;
-  frmain.Image1.Cursor:=crSizeAll;
+  //frmain.Image1.Cursor:=crSizeAll;
   frmain.StatusBar1.Panels.Items[1].Text:='Resolution:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
 end;
 
 procedure zoomin(raton:boolean=false);
 var
-   lwidth,lheight{,lx,ly}:integer;
+   lwidth,lheight:integer;
 begin
   realmode;
-  //lx:=Mouse.CursorPos.x;
-  //ly:=Mouse.CursorPos.y;
   lwidth:=frmain.Image1.Width;
   lheight:=frmain.Image1.Height;
   if frmain.Image1.Align = alClient then
   begin
-    //frmain.ScrollBox1.AutoScroll:=true;
     frmain.ScrollBox1.Enabled:=true;
     frmain.Image1.Stretch:=true;
     frmain.Image1.AutoSize:=false;
@@ -744,12 +800,7 @@ begin
   end;
   frmain.Image1.Width:=frmain.Image1.Width+20;
   frmain.Image1.Height:=frmain.Image1.Height+20;
-  if raton then
-  begin
-    //frmain.Image1.Top:=ly-frmain.Image1.Height-20;
-    //frmain.Image1.Left:=ly+frmain.Image1.Width-20;
-  end;
-  frmain.Image1.Cursor:=crSizeAll;
+  //frmain.Image1.Cursor:=crSizeAll;
   frmain.StatusBar1.Panels.Items[1].Text:='Resolution:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
 end;
 
@@ -772,7 +823,7 @@ begin
   end;
   frmain.Image1.Width:=frmain.Image1.Width-20;
   frmain.Image1.Height:=frmain.Image1.Height-20;
-  frmain.Image1.Cursor:=crSizeAll;
+  //frmain.Image1.Cursor:=crSizeAll;
   frmain.StatusBar1.Panels.Items[1].Text:='Resolution:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
 end;
 
@@ -802,7 +853,7 @@ begin
     frmain.Label2.Caption:=inttostr(ifile+1)+'/'+inttostr(nfile)+'  '+fimagen;
     frmain.StatusBar1.Panels.Items[0].Text:=inttostr(ifile+1)+'/'+inttostr(nfile);
     frmain.StatusBar1.Panels.Items[3].Text:=' Size:'+FloatTostr(Round(FileSize(wimagen)/1024))+'Kb';
-    if restorezoom and (frmain.ToolButton24.Down=false) then
+    if restorezoom and (frmain.tbStrech.Down=false) then
       zoomnormal()
     else
       zoomstrech();
@@ -810,21 +861,21 @@ begin
     begin
       ifgif:=true;
       frmain.Image1.Picture.Clear;
-      frmain.ToolButton19.Enabled:=true;
-      frmain.ToolButton20.Enabled:=true;
-      frmain.ToolButton21.Enabled:=true;
-      frmain.ToolButton26.Enabled:=true;
-      frmain.ToolButton27.Enabled:=true;
+      frmain.tbSlowAnim.Enabled:=true;
+      frmain.tbPrevFrame.Enabled:=true;
+      frmain.tbPauseAnim.Enabled:=true;
+      frmain.tbNextFrame.Enabled:=true;
+      frmain.tbFastAnim.Enabled:=true;
     end
     else
     begin
       ifgif:=false;
       frmain.Timer3.Enabled:=false;
-      frmain.ToolButton19.Enabled:=false;
-      frmain.ToolButton20.Enabled:=false;
-      frmain.ToolButton21.Enabled:=false;
-      frmain.ToolButton26.Enabled:=false;
-      frmain.ToolButton27.Enabled:=false;
+      frmain.tbSlowAnim.Enabled:=false;
+      frmain.tbPrevFrame.Enabled:=false;
+      frmain.tbPauseAnim.Enabled:=false;
+      frmain.tbNextFrame.Enabled:=false;
+      frmain.tbFastAnim.Enabled:=false;
       frmain.StatusBar1.Panels[2].Text:='';
     end;
     ////EXIF information
@@ -859,7 +910,7 @@ begin
         bgcolor.blue:=0;
         bgcolor.green:=0;
         bgcolor.red:=0;
-        if frmain.MenuItem58.Checked or realimage then
+        if frmain.mnuRealMode.Checked or realimage then
         begin
           frmain.Image1.Picture.LoadFromStream(streamimage);
           frmain.StatusBar1.Panels.Items[1].Text:='Resolution:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
@@ -950,24 +1001,24 @@ begin
     ////////****Update buttons and menus****////////////////
     frmain.tbFlipHorizontal.Enabled:=true;
     frmain.tbFlipVertical.Enabled:=true;
-    frmain.ToolButton6.Enabled:=true;
-    frmain.ToolButton7.Enabled:=true;
-    frmain.ToolButton9.Enabled:=true;
-    frmain.ToolButton10.Enabled:=true;
-    frmain.ToolButton11.Enabled:=true;
-    frmain.ToolButton14.Enabled:=true;
-    frmain.ToolButton15.Enabled:=true;
-    frmain.MenuItem6.Enabled:=true;
-    frmain.MenuItem7.Enabled:=true;
-    frmain.MenuItem8.Enabled:=true;
-    frmain.MenuItem9.Enabled:=true;
-    frmain.MenuItem16.Enabled:=true;
-    frmain.MenuItem14.Enabled:=true;
-    frmain.MenuItem7.Enabled:=true;
-    frmain.MenuItem8.Enabled:=true;
-    frmain.MenuItem14.Enabled:=true;
-    frmain.MenuItem15.Enabled:=true;
-    frmain.MenuItem31.Enabled:=true;
+    frmain.tbRotateLeft.Enabled:=true;
+    frmain.tbRotateRight.Enabled:=true;
+    frmain.tbZoomIn.Enabled:=true;
+    frmain.tbZoomOut.Enabled:=true;
+    frmain.tbReload.Enabled:=true;
+    frmain.tbAdjust.Enabled:=true;
+    frmain.tbStrech.Enabled:=true;
+    frmain.mnuSaveAs.Enabled:=true;
+    frmain.mnuCopy.Enabled:=true;
+    frmain.mnuFlipH.Enabled:=true;
+    frmain.mnuFlipV.Enabled:=true;
+    frmain.mnuRotateL.Enabled:=true;
+    frmain.mnuRotateR.Enabled:=true;
+    frmain.mnuEffects.Enabled:=true;
+    frmain.mnuStrech.Enabled:=true;
+    frmain.mnuGoTo.Enabled:=true;
+    frmain.mnuDeleteFile.Enabled:=true;
+    frmain.mnuDesktopImage.Enabled:=true;
     /////
   except on e:Exception do
     begin
@@ -986,30 +1037,26 @@ begin
       frmain.Image1.Picture.Bitmap.Assign(ebitmap);
       ebitmap.Destroy;
       /////////*****Update buttons and menus****///////////////////
-      frmain.tbFlipHorizontal.Enabled:=false;
-      frmain.tbFlipVertical.Enabled:=false;
-      frmain.ToolButton6.Enabled:=false;
-      frmain.ToolButton7.Enabled:=false;
-      frmain.ToolButton9.Enabled:=false;
-      frmain.ToolButton10.Enabled:=false;
-      frmain.ToolButton11.Enabled:=false;
-      frmain.ToolButton14.Enabled:=false;
-      frmain.ToolButton15.Enabled:=false;
-      frmain.ToolButton19.Enabled:=false;
-      frmain.ToolButton20.Enabled:=false;
-      frmain.ToolButton21.Enabled:=false;
-      frmain.StatusBar1.Panels[2].Text:='';
-      frmain.MenuItem6.Enabled:=false;
-      frmain.MenuItem7.Enabled:=false;
-      frmain.MenuItem8.Enabled:=false;
-      frmain.MenuItem9.Enabled:=false;
-      frmain.MenuItem16.Enabled:=false;
-      frmain.MenuItem14.Enabled:=false;
-      frmain.MenuItem7.Enabled:=false;
-      frmain.MenuItem8.Enabled:=false;
-      frmain.MenuItem14.Enabled:=true;
-      frmain.MenuItem15.Enabled:=false;
-      frmain.MenuItem31.Enabled:=false;
+     frmain.tbFlipHorizontal.Enabled:=false;
+    frmain.tbFlipVertical.Enabled:=false;
+    frmain.tbRotateLeft.Enabled:=false;
+    frmain.tbRotateRight.Enabled:=false;
+    frmain.tbZoomIn.Enabled:=false;
+    frmain.tbZoomOut.Enabled:=false;
+    frmain.tbReload.Enabled:=false;
+    frmain.tbAdjust.Enabled:=false;
+    frmain.tbStrech.Enabled:=false;
+    frmain.mnuSaveAs.Enabled:=false;
+    frmain.mnuCopy.Enabled:=false;
+    frmain.mnuFlipH.Enabled:=false;
+    frmain.mnuFlipV.Enabled:=false;
+    frmain.mnuRotateL.Enabled:=false;
+    frmain.mnuRotateR.Enabled:=false;
+    frmain.mnuEffects.Enabled:=false;
+    frmain.mnuStrech.Enabled:=false;
+    frmain.mnuGoTo.Enabled:=false;
+    frmain.mnuDeleteFile.Enabled:=false;
+    frmain.mnuDesktopImage.Enabled:=false;
       //////////////
     end;
   end;
@@ -1030,6 +1077,7 @@ end;
 
 procedure fullsc();
 begin
+  compactmode:=false;
   frmain.pssThumbs.OnResize:=nil;
   if full = false then
   begin
@@ -1045,10 +1093,10 @@ begin
     frmain.FormStyle:=fsStayOnTop;
     frmain.Label1.Visible:=true;
     frmain.Label2.Visible:=true;
-    frmain.MainMenu1.Items.Visible:=false;
     frmain.Splitter1.Left:=0-frmain.Splitter1.Width;
     frmain.psVertical.Position:=frmain.psVertical.Height-thumbsize-18;
     frmain.WindowState:=wsFullScreen;
+    frmain.MainMenu1.Items.Visible:=false;
     frmain.Timer2.Enabled:=true;
     full:=true;
     if frmain.mnuShowThumbs.Checked then
@@ -1065,7 +1113,7 @@ begin
     frmain.WindowState:=wsNormal;
     frmain.BorderStyle:=bsSizeable;
     frmain.ToolBar1.Align:=alTop;
-    if frmain.MenuItem61.Checked then
+    if frmain.mnuToolBar.Checked then
       frmain.ToolBar1.Visible:=true;
     frmain.Top:=fxpos;
     frmain.Left:=fypos;
@@ -1075,19 +1123,14 @@ begin
     frmain.FormStyle:=fsNormal;
     frmain.Label1.Visible:=false;
     frmain.Label2.Visible:=false;
-    try
-      frmain.MainMenu1.Items.Visible:=true;
-    except on e:exception do
-
-    end;
-    if frmain.MenuItem59.Checked then
+    if frmain.mnuTreeView.Checked then
       frmain.Splitter1.Left:=200;
     full:=false;
     frmain.psVertical.Align:=alNone;
     frmain.psVertical.Anchors:=[akTop, akLeft, akRight, akBottom];
     frmain.psVertical.AnchorSideLeft.Control:=frmain.Splitter1;
     frmain.psVertical.AnchorSideLeft.Side:=asrBottom;
-    if frmain.MenuItem62.Checked then
+    if frmain.mnuStatusBar.Checked then
     begin
       frmain.StatusBar1.Visible:=true;
       frmain.psVertical.AnchorSideBottom.Control:=frmain.StatusBar1;
@@ -1098,7 +1141,7 @@ begin
       frmain.psVertical.AnchorSideBottom.Side:=asrBottom;
     end;
 
-    if frmain.MenuItem61.Checked=false then
+    if frmain.mnuToolBar.Checked=false then
     begin
       frmain.ToolBar1.Visible:=false;
       frmain.psVertical.AnchorSideTop.Control:=frmain;
@@ -1115,7 +1158,7 @@ begin
       frmain.Splitter1.AnchorSideTop.Side:=asrBottom;
     end;
 
-    if frmain.MenuItem62.Checked then
+    if frmain.mnuStatusBar.Checked then
     begin
       frmain.Splitter1.AnchorSideBottom.Control:=frmain.StatusBar1;
       frmain.Splitter1.AnchorSideBottom.Side:=asrTop;
@@ -1133,6 +1176,10 @@ begin
       frmain.psVertical.Position:=frmain.psVertical.Height-thumbsize-18
     else
       frmain.psVertical.Position:=frmain.psVertical.Height;
+  end;
+  try
+    frmain.MainMenu1.Items.Visible:=not full;
+  except on e:exception do
   end;
   frmain.pssThumbs.OnResize:=@frmain.PairSplitterSide2Resize;
 end;
@@ -1744,7 +1791,22 @@ var
    i:integer;
    ruta:string;
    curleft,curright:TCursorImage;
+   itemfile:TSearchRec;
+   mitem:TMenuItem;
 begin
+  if FindFirst(ExtractFilePath(UTF8ToSys(Application.Params[0]))+pathdelim+'languages'+pathdelim+'lazview.*.po',faAnyFile,itemfile)=0 then
+  begin
+    Repeat
+      try
+        mitem:=TMenuItem.Create(frmain.MainMenu1);
+        mitem.Caption:=Copy(itemfile.name,Pos('lazview.',itemfile.name)+8,Pos('.po',itemfile.name)-9);
+        mitem.OnClick:=@mnuLanguageClick;
+        frmain.mnuLanguage.Add(mitem);
+      except
+      on E:Exception do ShowMessage('The file '+itemfile.Name+' of language is not valid');
+      end;
+    Until FindNext(itemfile)<>0;
+  end;
   frmain.Image1.Width:=frmain.ScrollBox1.Width;
   frmain.Image1.Height:=frmain.ScrollBox1.Height;
   ruta:=ExtractFilePath(Application.Params[1]);
@@ -1754,15 +1816,15 @@ begin
     if DirectoryExists(ruta) then
       frmain.ShellTreeView1.Path:=ruta;
   end;
-  frmain.ShellTreeView1.Items.AddFirst(nil,'Mis documentos').StateIndex:=29;
-  frmain.ShellTreeView1.Items.AddFirst(nil,'Mis imágenes').StateIndex:=27;
-  frmain.ShellTreeView1.Items.AddFirst(nil,'Escritorio').StateIndex:=28;
+  frmain.ShellTreeView1.Items.AddFirst(nil,'Documents').StateIndex:=29;
+  frmain.ShellTreeView1.Items.AddFirst(nil,'Pictures').StateIndex:=27;
+  frmain.ShellTreeView1.Items.AddFirst(nil,'Desktop').StateIndex:=28;
   for i:=3 to frmain.ShellTreeView1.Items.Count-1 do
   begin
     frmain.ShellTreeView1.Items[i].StateIndex:=16;
   end;
   frmain.ShellTreeView1.OnSelectionChanged:=@ShellTreeView1SelectionChanged;
-  if frmain.MenuItem59.Checked then
+  if frmain.mnuTreeView.Checked then
     frmain.Splitter1.Left:=200
   else
     frmain.Splitter1.Left:=0-frmain.Splitter1.Width;
@@ -1798,10 +1860,10 @@ end;
 procedure Tfrmain.FormDropFiles(Sender: TObject;
   const FileNames: array of String);
 begin
-  if DirectoryExists(FileNames[0]) then
-    loadfiles(FileNames[0],'')
+  if DirectoryExistsUTF8(FileNames[0]) then
+    loadfiles(FileNames[0]+pathdelim,'')
   else
-    loadpicture(FileNames[0]);
+    loadfiles(ExtractFilePath(FileNames[0]),ExtractFileName(FileNames[0]));
 end;
 
 procedure Tfrmain.FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -1809,13 +1871,10 @@ begin
   saveconfig;
 end;
 
-procedure Tfrmain.FormCloseQuery(Sender: TObject; var CanClose: boolean);
-begin
-end;
-
 procedure Tfrmain.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState
   );
 begin
+  //ShowMessage(inttostr(key));
  case Key of
   38://Flecha arriba
    begin
@@ -1845,8 +1904,8 @@ begin
       else
         prevfile();
     end;
-  13,70:
-    begin//Enter, F
+  13,70,122:
+    begin//Enter, F, F11
       fullsc();
     end;
   27,81://Escape, Q
@@ -1928,7 +1987,7 @@ end;
 procedure Tfrmain.FormMouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
-  if frmain.ToolButton18.Down=false then
+  if frmain.tbFullScreen.Down=false then
   begin
     startdraw:=true;
     imgx:=X+frmain.Image1.ClientOrigin.x-frmain.Image1.Left;
@@ -1976,18 +2035,33 @@ begin
   if (compactmode or full) and (frmain.Image1.Stretch=false) and (startselect=false) then
   begin
     if x>(frmain.Width/3)*2 then
+    begin
       frmain.Image1.Cursor:=2;
+      frmain.Cursor:=2;
+    end;
     if x<(frmain.Width/3) then
+    begin
       frmain.Image1.Cursor:=1;
+      frmain.Cursor:=1;
+    end;
     if (x<(frmain.Width/3)*2) and (x>(frmain.Width/3)) then
+    begin
       frmain.Image1.Cursor:=crDefault;
+      frmain.Cursor:=crDefault;
+    end;
   end
   else
   begin
     if frmain.Image1.Stretch then
-      frmain.Image1.Cursor:=crSizeAll
+    begin
+      frmain.Image1.Cursor:=crSizeAll;
+      //frmain.Cursor:=crSizeAll;
+    end
     else
+    begin
       frmain.Image1.Cursor:=crDefault;
+      frmain.Cursor:=crDefault;
+    end;
   end;
 end;
 
@@ -2023,7 +2097,7 @@ procedure Tfrmain.FormWindowStateChange(Sender: TObject);
 begin
   if Assigned(flist) and modethumb and frmain.Image1.Visible and (ifgif=false) then
   begin
-    if (frmain.MenuItem58.Checked=false) and ((frmain.WindowState=wsMaximized) or (frmain.WindowState=wsNormal) or (frmain.WindowState=wsFullScreen)) then
+    if (frmain.mnuCompact.Checked=false) and ((frmain.WindowState=wsMaximized) or (frmain.WindowState=wsNormal) or (frmain.WindowState=wsFullScreen)) then
       loadpicture(carpeta+flist[ifile],false);
   end;
 end;
@@ -2049,7 +2123,7 @@ end;
 
 procedure Tfrmain.Image1DblClick(Sender: TObject);
 begin
- if frmain.Image1.Cursor=crDefault then
+ if (frmain.Image1.Cursor=crDefault) and (frmain.Cursor=crDefault) then
   fullsc();
 end;
 
@@ -2062,13 +2136,17 @@ begin
   //frmain.Image1.Anchors:=[akTop,akLeft,akRight,akBottom];
 end;
 
-procedure Tfrmain.Image1Resize(Sender: TObject);
+procedure Tfrmain.mnuAlwaysOnTopClick(Sender: TObject);
 begin
-
+  frmain.mnuAlwaysOnTop.Checked:=not frmain.mnuAlwaysOnTop.Checked;
+  if frmain.mnuAlwaysOnTop.Checked then
+    frmain.FormStyle:=fsSystemStayOnTop
+  else
+    frmain.FormStyle:=fsNormal;
 end;
 
 
-procedure Tfrmain.MenuItem10Click(Sender: TObject);
+procedure Tfrmain.mnuOpenClick(Sender: TObject);
 begin
   OpenPictureDialog1.InitialDir:=carpeta;
   OpenPictureDialog1.Execute;
@@ -2084,7 +2162,7 @@ begin
   end;
 end;
 
-procedure Tfrmain.MenuItem13Click(Sender: TObject);
+procedure Tfrmain.mnuPasteClick(Sender: TObject);
 begin
   modethumb:=false;
   if ifgif then
@@ -2102,31 +2180,32 @@ begin
   zoomnormal();
   frmain.tbFlipHorizontal.Enabled:=true;
   frmain.tbFlipVertical.Enabled:=true;
-  frmain.ToolButton6.Enabled:=true;
-  frmain.ToolButton7.Enabled:=true;
-  frmain.ToolButton9.Enabled:=true;
-  frmain.ToolButton10.Enabled:=true;
-  frmain.ToolButton11.Enabled:=true;
-  frmain.ToolButton14.Enabled:=true;
-  frmain.ToolButton15.Enabled:=true;
-  frmain.MenuItem6.Enabled:=true;
-  frmain.MenuItem7.Enabled:=true;
-  frmain.MenuItem8.Enabled:=true;
-  frmain.MenuItem9.Enabled:=true;
-  frmain.MenuItem16.Enabled:=true;
-  frmain.MenuItem14.Enabled:=true;
-  frmain.MenuItem7.Enabled:=true;
-  frmain.MenuItem8.Enabled:=true;
-  frmain.MenuItem14.Enabled:=true;
-  frmain.MenuItem15.Enabled:=true;
-  frmain.MenuItem31.Enabled:=true;
+  frmain.tbFlipHorizontal.Enabled:=true;
+  frmain.tbFlipVertical.Enabled:=true;
+  frmain.tbRotateLeft.Enabled:=true;
+  frmain.tbRotateRight.Enabled:=true;
+  frmain.tbZoomIn.Enabled:=true;
+  frmain.tbZoomOut.Enabled:=true;
+  frmain.tbReload.Enabled:=true;
+  frmain.tbAdjust.Enabled:=true;
+  frmain.tbStrech.Enabled:=true;
+  frmain.mnuSaveAs.Enabled:=true;
+  frmain.mnuCopy.Enabled:=true;
+  frmain.mnuFlipH.Enabled:=true;
+  frmain.mnuFlipV.Enabled:=true;
+  frmain.mnuRotateL.Enabled:=true;
+  frmain.mnuRotateR.Enabled:=true;
+  frmain.mnuEffects.Enabled:=true;
+  frmain.mnuStrech.Enabled:=true;
+  frmain.mnuGoTo.Enabled:=true;
+  frmain.mnuDesktopImage.Enabled:=true;
   frmain.Shape1.Visible:=false;
   ifgif:=false;
   frmain.StatusBar1.Panels.Items[1].Text:='Resolution:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height);
   frmain.Caption:='LazView [Clipboard]';
 end;
 
-procedure Tfrmain.MenuItem14Click(Sender: TObject);
+procedure Tfrmain.mnuCopyClick(Sender: TObject);
 var
    clipbitmap:Graphics.TBitmap;
    cuadro:TRect;
@@ -2147,7 +2226,7 @@ begin
     frmain.Image1.Picture.Bitmap.SaveToClipboardFormat(2);
 end;
 
-procedure Tfrmain.MenuItem16Click(Sender: TObject);
+procedure Tfrmain.mnuSaveAsClick(Sender: TObject);
 var
    confirmar:boolean=true;
    filtroext:string;
@@ -2183,8 +2262,8 @@ begin
       case frmain.SavePictureDialog1.FilterIndex of
         1:
         begin
-          Form3.ShowModal;
-          calidadjpg:=Form3.TrackBar1.Position;
+          frquality.ShowModal;
+          calidadjpg:=frquality.TrackBar1.Position;
           frmain.Image1.Picture.Jpeg.CompressionQuality:=calidadjpg;
           frmain.Image1.Refresh;
           frmain.Image1.Picture.Jpeg.SaveToFile(ExtractFilePath(frmain.SavePictureDialog1.FileName)+pathdelim+ExtractFileName(frmain.SavePictureDialog1.FileName)+'.'+frmain.SavePictureDialog1.GetFilterExt);
@@ -2216,57 +2295,57 @@ begin
   end;
 end;
 
-procedure Tfrmain.MenuItem17Click(Sender: TObject);
+procedure Tfrmain.mnuGrayscaleClick(Sender: TObject);
 begin
   filterimagen(1);
 end;
 
-procedure Tfrmain.MenuItem20Click(Sender: TObject);
+procedure Tfrmain.mnuBGRClick(Sender: TObject);
 begin
   efectimagen(5);
 end;
 
-procedure Tfrmain.MenuItem21Click(Sender: TObject);
+procedure Tfrmain.mnuRBGClick(Sender: TObject);
 begin
   efectimagen(6);
 end;
 
-procedure Tfrmain.MenuItem22Click(Sender: TObject);
+procedure Tfrmain.mnuGRBClick(Sender: TObject);
 begin
   efectimagen(7);;
 end;
 
-procedure Tfrmain.MenuItem23Click(Sender: TObject);
+procedure Tfrmain.mnuQuitRedClick(Sender: TObject);
 begin
   efectimagen(15);
 end;
 
-procedure Tfrmain.MenuItem24Click(Sender: TObject);
+procedure Tfrmain.mnuQuitGreenClick(Sender: TObject);
 begin
   efectimagen(16);
 end;
 
-procedure Tfrmain.MenuItem25Click(Sender: TObject);
+procedure Tfrmain.mnuQuitBlueClick(Sender: TObject);
 begin
   efectimagen(17);
 end;
 
-procedure Tfrmain.MenuItem27Click(Sender: TObject);
+procedure Tfrmain.mnuNoiseClick(Sender: TObject);
 begin
   efectimagen(18);
 end;
 
-procedure Tfrmain.MenuItem28Click(Sender: TObject);
+procedure Tfrmain.mnuTvClick(Sender: TObject);
 begin
   efectimagen(19);
 end;
 
-procedure Tfrmain.MenuItem2Click(Sender: TObject);
+procedure Tfrmain.mnuToolsClick(Sender: TObject);
 begin
 
 end;
 
-procedure Tfrmain.MenuItem70Click(Sender: TObject);
+procedure Tfrmain.mnuDeleteFileClick(Sender: TObject);
 begin
   if MessageDlg(Application.Title,'Do you want to delete '+flist[ifile]+'?.',mtConfirmation,[mbOK,mbCancel],0)=1 then
   begin
@@ -2287,66 +2366,40 @@ begin
   end;
 end;
 
-procedure Tfrmain.MenuItem72Click(Sender: TObject);
+procedure Tfrmain.mnuEXIFClick(Sender: TObject);
 var
    imgdata:TImgData;
    i:integer;
 begin
- frexif.ValueListEditor1.Clean;
- ImgData:= TImgData.Create();
- if ImgData.ProcessFile(carpeta+flist[ifile]) then
+ if Assigned(flist) then
  begin
-   if ImgData.HasEXIF then
+   frexif.ValueListEditor1.Clean;
+   ImgData:= TImgData.Create();
+   if ImgData.ProcessFile(carpeta+flist[ifile]) then
    begin
-     {frexif.ValueListEditor1.InsertRow('Artist',ImgData.ExifObj.Artist,true);
-     frexif.ValueListEditor1.InsertRow('Camera make',ImgData.ExifObj.CameraMake,true);
-     frexif.ValueListEditor1.InsertRow('Camera model',ImgData.ExifObj.CameraModel,true);
-     frexif.ValueListEditor1.InsertRow('Copyright',ImgData.ExifObj.Copyright,true);
-     frexif.ValueListEditor1.InsertRow('Comment',ImgData.ExifObj.ExifComment,true);
-     frexif.ValueListEditor1.InsertRow('Picture DateTime',FormatDateTime(ISO_DATETIME_FORMAT, ImgData.ExifObj.GetImgDateTime),true);
-     frexif.ValueListEditor1.InsertRow('DateTime Digitized',FormatDateTime(ISO_DATETIME_FORMAT,ImgData.ExifObj.DateTimeDigitized),true);
-     frexif.ValueListEditor1.InsertRow('DateTime Modified',FormatDateTime(ISO_DATETIME_FORMAT,ImgData.ExifObj.DateTimeModified),true);
-     frexif.ValueListEditor1.InsertRow('DateTime Original',FormatDateTime(ISO_DATETIME_FORMAT,ImgData.ExifObj.DateTimeOriginal),true);
-     frexif.ValueListEditor1.InsertRow('EXIF Version',ImgData.ExifObj.ExifVersion,true);
-     frexif.ValueListEditor1.InsertRow('GPS Latitude',floattostr(ImgData.ExifObj.GPSLatitude),true);
-     frexif.ValueListEditor1.InsertRow('GPS Longitude',floattostr(ImgData.ExifObj.GPSLongitude),true);
-     frexif.ValueListEditor1.InsertRow('Description',ImgData.ExifObj.ImageDescription,true);
-     frexif.ValueListEditor1.InsertRow('Maker note',ImgData.ExifObj.MakerNote,true);
-     frexif.ValueListEditor1.InsertRow('Name',ImgData.ExifObj.msName,true);
-     frexif.ValueListEditor1.InsertRow('Orientation',ImgData.ExifObj.ThumbTagValueAsString['Orientation'],true);
-     frexif.ValueListEditor1.InsertRow('Compression',ImgData.ExifObj.ThumbTagValueAsString['Compression'],true);
-     frexif.ValueListEditor1.InsertRow('Thumb width',ImgData.ExifObj.ThumbTagValueAsString['Image Width'],true);
-     frexif.ValueListEditor1.InsertRow('Thumb height',ImgData.ExifObj.ThumbTagValueAsString['Image Length'],true);
-     frexif.ValueListEditor1.InsertRow('XResolution',ImgData.ExifObj.ThumbTagValueAsString['XResolution'],true);
-     frexif.ValueListEditor1.InsertRow('YResolution',ImgData.ExifObj.ThumbTagValueAsString['YResolution'],true);
-     frexif.ValueListEditor1.InsertRow('Resolution Unit',ImgData.ExifObj.ThumbTagValueAsString['Resolution Unit'],true);
-     frexif.ValueListEditor1.InsertRow('JPEGInterchange Format',ImgData.ExifObj.ThumbTagValueAsString['JPEGInterchange Format'],true);
-     frexif.ValueListEditor1.InsertRow('JPEGInterchange Format Length',ImgData.ExifObj.ThumbTagValueAsString['JPEGInterchange Format Length'],true);
-     frexif.ValueListEditor1.InsertRow('Bits Per Sample',ImgData.ExifObj.ThumbTagValueAsString['Bits Per Sample'],true);
-     frexif.ValueListEditor1.InsertRow('Tracer',ImgData.ExifObj.msTraceStr,true);
-     frexif.ValueListEditor1.InsertRow('ThumbTrace',ImgData.ExifObj.ThumbTrace,true);
-     frexif.ValueListEditor1.InsertRow('Real Width',inttostr(ImgData.ExifObj.Width),true);
-     frexif.ValueListEditor1.InsertRow('Real Height',inttostr(ImgData.ExifObj.Height),true);}
-     for i:=0 to ImgData.ExifObj.TagCount-1 do
+     if ImgData.HasEXIF then
      begin
-       frexif.ValueListEditor1.InsertRow(ImgData.ExifObj.TagByIndex[i].Name,ImgData.ExifObj.TagByIndex[i].Data,true);
+       for i:=0 to ImgData.ExifObj.TagCount-1 do
+       begin
+         frexif.ValueListEditor1.InsertRow(ImgData.ExifObj.TagByIndex[i].Name,ImgData.ExifObj.TagByIndex[i].Data,true);
+       end;
+       if ImgData.ExifObj.FlashUsed=1 then
+         frexif.ValueListEditor1.InsertRow('Use flash','Yes',true)
+       else
+         frexif.ValueListEditor1.InsertRow('Use flash','No',true);
+       if ImgData.ExifObj.HasThumbnail then
+         frexif.ValueListEditor1.InsertRow('Thumbnail','Yes',true)
+       else
+         frexif.ValueListEditor1.InsertRow('Thumbnail','No',true);
+       for i:=0 to ImgData.ExifObj.ThumbTagCount-1 do
+       begin
+         frexif.ValueListEditor1.InsertRow(ImgData.ExifObj.ThumbTagByIndex[i].Name,ImgData.ExifObj.ThumbTagByIndex[i].Data,true);
+       end;
      end;
-     if ImgData.ExifObj.FlashUsed=1 then
-       frexif.ValueListEditor1.InsertRow('Use flash','Yes',true)
-     else
-       frexif.ValueListEditor1.InsertRow('Use flash','No',true);
-     if ImgData.ExifObj.HasThumbnail then
-       frexif.ValueListEditor1.InsertRow('Thumbnail','Yes',true)
-     else
-       frexif.ValueListEditor1.InsertRow('Thumbnail','No',true);
-     for i:=0 to ImgData.ExifObj.ThumbTagCount-1 do
-     begin
-       frexif.ValueListEditor1.InsertRow(ImgData.ExifObj.ThumbTagByIndex[i].Name,ImgData.ExifObj.ThumbTagByIndex[i].Data,true);
-     end;
+     ImgData.Free;
    end;
-   ImgData.Free;
+    frexif.ShowModal;
  end;
-  frexif.ShowModal;
 end;
 
 procedure Tfrmain.mnuShowThumbsClick(Sender: TObject);
@@ -2376,7 +2429,7 @@ begin
   end;
 end;
 
-procedure Tfrmain.MenuItem31Click(Sender: TObject);
+procedure Tfrmain.mnuResizeClick(Sender: TObject);
 begin
   frresize.SpinEdit1.Value:=realimgwidth;
   frresize.SpinEdit2.Value:=realimgheight;
@@ -2385,47 +2438,48 @@ begin
     resizeto(frresize.SpinEdit1.Value,frresize.SpinEdit2.Value);
 end;
 
-procedure Tfrmain.MenuItem33Click(Sender: TObject);
+procedure Tfrmain.mnuBRGClick(Sender: TObject);
 begin
   efectimagen(8);
 end;
 
-procedure Tfrmain.MenuItem34Click(Sender: TObject);
+procedure Tfrmain.mnuGBRClick(Sender: TObject);
 begin
  efectimagen(9);
 end;
 
-procedure Tfrmain.MenuItem36Click(Sender: TObject);
+procedure Tfrmain.mnuBrightPlusClick(Sender: TObject);
 begin
   efectimagen(10);
 end;
 
-procedure Tfrmain.MenuItem37Click(Sender: TObject);
+procedure Tfrmain.mnuBrightLessClick(Sender: TObject);
 begin
   efectimagen(11);
 end;
 
-procedure Tfrmain.MenuItem39Click(Sender: TObject);
+procedure Tfrmain.mnuHighlightRedClick(Sender: TObject);
 begin
   efectimagen(12);
 end;
 
-procedure Tfrmain.MenuItem3Click(Sender: TObject);
+procedure Tfrmain.mnuExitClick(Sender: TObject);
 begin
+  saveconfig;
   Application.Terminate;
 end;
 
-procedure Tfrmain.MenuItem40Click(Sender: TObject);
+procedure Tfrmain.mnuHighlightGreenClick(Sender: TObject);
 begin
   efectimagen(13);
 end;
 
-procedure Tfrmain.MenuItem41Click(Sender: TObject);
+procedure Tfrmain.mnuHighlightBlueClick(Sender: TObject);
 begin
   efectimagen(14);
 end;
 
-procedure Tfrmain.MenuItem43Click(Sender: TObject);
+procedure Tfrmain.mnuCompactClick(Sender: TObject);
 begin
   if (full=false) and (compactmode=false) then
   begin
@@ -2443,6 +2497,7 @@ begin
     frmain.Splitter1.AnchorSideBottom.Side:=asrBottom;
     frmain.MainMenu1.Items.Visible:=false;
     compactmode:=true;
+    full:=false;
   end
   else
   begin
@@ -2455,114 +2510,114 @@ begin
   end;
 end;
 
-procedure Tfrmain.MenuItem44Click(Sender: TObject);
+procedure Tfrmain.mnuGoToClick(Sender: TObject);
 begin
-   Form5.Edit1.Text:=inttostr(ifile+1);
-   Form5.ShowModal;
-   if Form5.Edit1.Text<>'' then
+   frgoto.Edit1.Text:=inttostr(ifile+1);
+   frgoto.ShowModal;
+   if frgoto.Edit1.Text<>'' then
    begin
-    if (isgo=true) and (strtoint(Form5.Edit1.Text)<=flist.Count) and (strtoint(Form5.Edit1.Text)>0) then
+    if (isgo=true) and (strtoint(frgoto.Edit1.Text)<=flist.Count) and (strtoint(frgoto.Edit1.Text)>0) then
     begin
-    ifile:=strtoint(Form5.Edit1.Text)-1;
+    ifile:=strtoint(frgoto.Edit1.Text)-1;
     loadpicture(carpeta+flist[ifile]);
     end;
    end;
 end;
 
-procedure Tfrmain.MenuItem46Click(Sender: TObject);
+procedure Tfrmain.mnuAntialiasingClick(Sender: TObject);
 begin
   if frmain.Image1.AntialiasingMode=amOn then
   begin
     frmain.Image1.AntialiasingMode:=amOff;
-    frmain.MenuItem46.Checked:=false;
+    frmain.mnuAntiAliasing.Checked:=false;
   end
   else
   begin
     frmain.Image1.AntialiasingMode:=amOn;
-    frmain.MenuItem46.Checked:=true;
+    frmain.mnuAntiAliasing.Checked:=true;
   end;
 end;
 
-procedure Tfrmain.MenuItem49Click(Sender: TObject);
+procedure Tfrmain.mnuDesktopExpandClick(Sender: TObject);
 begin
   setwallpaper('2');
 end;
 
-procedure Tfrmain.MenuItem50Click(Sender: TObject);
+procedure Tfrmain.mnuDesktopCenterClick(Sender: TObject);
 begin
   setwallpaper('0');
 end;
 
-procedure Tfrmain.MenuItem51Click(Sender: TObject);
+procedure Tfrmain.mnuDesktopMosaicClick(Sender: TObject);
 begin
   setwallpaper('','1');
 end;
 
-procedure Tfrmain.MenuItem52Click(Sender: TObject);
+procedure Tfrmain.mnuDesktopStrechClick(Sender: TObject);
 begin
   setwallpaper('1');
 end;
 
-procedure Tfrmain.MenuItem53Click(Sender: TObject);
+procedure Tfrmain.mnuThumbCustomClick(Sender: TObject);
 begin
-  frmain.MenuItem64.Checked:=false;
-  frmain.MenuItem65.Checked:=false;
-  frmain.MenuItem66.Checked:=false;
-  frmain.MenuItem53.Checked:=true;
-  Form6.ShowModal;
-  frmain.psVertical.Position:=frmain.psVertical.Height-Form6.SpinEdit1.Value-18;
+  frmain.mnuThumb32.Checked:=false;
+  frmain.mnuThumb64.Checked:=false;
+  frmain.mnuThumb128.Checked:=false;
+  frmain.mnuThumbCustom.Checked:=true;
+  frthumbsize.ShowModal;
+  frmain.psVertical.Position:=frmain.psVertical.Height-frthumbsize.SpinEdit1.Value-18;
 end;
 
-procedure Tfrmain.MenuItem54Click(Sender: TObject);
+procedure Tfrmain.mnuStrechClick(Sender: TObject);
 begin
-  if frmain.ToolButton24.Down then
+  if frmain.tbStrech.Down then
   begin
-    frmain.ToolButton24.Down:=false;
-    frmain.MenuItem24.Checked:=false;
+    frmain.tbStrech.Down:=false;
+    frmain.mnuStrech.Checked:=false;
     zoomnormal();
   end
   else
   begin
-    frmain.ToolButton24.Down:=true;
-    frmain.MenuItem24.Checked:=true;
+    frmain.tbStrech.Down:=true;
+    frmain.mnuStrech.Checked:=true;
     zoomstrech();
   end;
 end;
 
-procedure Tfrmain.MenuItem55Click(Sender: TObject);
+procedure Tfrmain.mnuWindowEffectsClick(Sender: TObject);
 begin
-  Form4.Show;
+  freffect.Show;
 end;
 
-procedure Tfrmain.MenuItem56Click(Sender: TObject);
+procedure Tfrmain.mnuNegativeClick(Sender: TObject);
 begin
   filterimagen(13);
 end;
 
-procedure Tfrmain.MenuItem57Click(Sender: TObject);
+procedure Tfrmain.mnuSmoothClick(Sender: TObject);
 begin
   filterimagen(15);
 end;
 
-procedure Tfrmain.MenuItem58Click(Sender: TObject);
+procedure Tfrmain.mnuRealModeClick(Sender: TObject);
 begin
-  frmain.MenuItem58.Checked:=not frmain.MenuItem58.Checked;
+  frmain.mnuRealMode.Checked:=not frmain.mnuRealMode.Checked;
   if Assigned(flist) and frmain.Image1.Visible then
   begin
-    loadpicture(carpeta+flist[ifile]);
+    loadpicture(carpeta+flist[ifile],frmain.mnuRealMode.Checked);
   end;
 end;
 
-procedure Tfrmain.MenuItem59Click(Sender: TObject);
+procedure Tfrmain.mnuTreeViewClick(Sender: TObject);
 begin
-  frmain.MenuItem59.Checked:=not frmain.MenuItem59.Checked;
-  frmain.tbShowTreeView.Down:=frmain.MenuItem59.Checked;
-  if frmain.MenuItem59.Checked then
+  frmain.mnuTreeView.Checked:=not frmain.mnuTreeView.Checked;
+  frmain.tbShowTreeView.Down:=frmain.mnuTreeView.Checked;
+  if frmain.mnuTreeView.Checked then
     frmain.Splitter1.Left:=200
   else
     frmain.Splitter1.Left:=0-frmain.Splitter1.Width;
-  frmain.ShellTreeView1.Visible:=frmain.MenuItem59.Checked;
-  if frmain.MenuItem61.Checked=false then
+  frmain.ShellTreeView1.Visible:=frmain.mnuTreeView.Checked;
+  if frmain.mnuToolBar.Checked=false then
   begin
     frmain.ToolBar1.Visible:=false;
     frmain.Splitter1.AnchorSideTop.Control:=frmain;
@@ -2574,7 +2629,7 @@ begin
     frmain.Splitter1.AnchorSideTop.Control:=frmain.ToolBar1;
     frmain.Splitter1.AnchorSideTop.Side:=asrBottom;
   end;
-  if frmain.MenuItem62.Checked then
+  if frmain.mnuStatusBar.Checked then
   begin
     frmain.Splitter1.AnchorSideBottom.Control:=frmain.StatusBar1;
     frmain.Splitter1.AnchorSideBottom.Side:=asrTop;
@@ -2586,12 +2641,12 @@ begin
   end;
 end;
 
-procedure Tfrmain.MenuItem5Click(Sender: TObject);
+procedure Tfrmain.mnuAboutClick(Sender: TObject);
 begin
   ShowMessage('Imagen viewer: LazView'+#13#10+'Version: 0.1'+#13#10+'Created by: nenirey@gmail.com'+#13#10+'CopyLeft: 2018');
 end;
 
-procedure Tfrmain.MenuItem61Click(Sender: TObject);
+procedure Tfrmain.mnuToolBarClick(Sender: TObject);
 begin
   if frmain.ToolBar1.Visible then
   begin
@@ -2609,13 +2664,13 @@ begin
     frmain.Splitter1.AnchorSideTop.Control:=frmain.ToolBar1;
     frmain.Splitter1.AnchorSideTop.Side:=asrBottom;
   end;
-  frmain.MenuItem61.Checked:=frmain.ToolBar1.Visible;
+  frmain.mnuToolBar.Checked:=frmain.ToolBar1.Visible;
 end;
 
-procedure Tfrmain.MenuItem62Click(Sender: TObject);
+procedure Tfrmain.mnuStatusBarClick(Sender: TObject);
 begin
   frmain.StatusBar1.Visible:=not frmain.StatusBar1.Visible;
-  frmain.MenuItem62.Checked:=frmain.StatusBar1.Visible;
+  frmain.mnuStatusBar.Checked:=frmain.StatusBar1.Visible;
   if frmain.StatusBar1.Visible then
   begin
     frmain.psVertical.AnchorSideBottom.Control:=frmain.StatusBar1;
@@ -2626,7 +2681,7 @@ begin
     frmain.psVertical.AnchorSideBottom.Control:=frmain;
     frmain.psVertical.AnchorSideBottom.Side:=asrBottom;
   end;
-  if frmain.MenuItem62.Checked then
+  if frmain.mnuStatusBar.Checked then
   begin
     frmain.Splitter1.AnchorSideBottom.Control:=frmain.StatusBar1;
     frmain.Splitter1.AnchorSideBottom.Side:=asrTop;
@@ -2638,37 +2693,37 @@ begin
   end;
 end;
 
-procedure Tfrmain.MenuItem64Click(Sender: TObject);
+procedure Tfrmain.mnuThumb32Click(Sender: TObject);
 begin
-  frmain.MenuItem64.Checked:=true;
-  frmain.MenuItem65.Checked:=false;
-  frmain.MenuItem66.Checked:=false;
-  frmain.MenuItem53.Checked:=false;
+  frmain.mnuThumb32.Checked:=true;
+  frmain.mnuThumb64.Checked:=false;
+  frmain.mnuThumb128.Checked:=false;
+  frmain.mnuThumbCustom.Checked:=false;
 
   frmain.psVertical.Position:=frmain.psVertical.Height-32-18;
 end;
 
-procedure Tfrmain.MenuItem65Click(Sender: TObject);
+procedure Tfrmain.mnuThumb64Click(Sender: TObject);
 begin
-  frmain.MenuItem64.Checked:=false;
-  frmain.MenuItem65.Checked:=true;
-  frmain.MenuItem66.Checked:=false;
-  frmain.MenuItem53.Checked:=false;
+  frmain.mnuThumb32.Checked:=false;
+  frmain.mnuThumb64.Checked:=true;
+  frmain.mnuThumb128.Checked:=false;
+  frmain.mnuThumbCustom.Checked:=false;
   frmain.psVertical.Position:=frmain.psVertical.Height-64-18;
 end;
 
-procedure Tfrmain.MenuItem66Click(Sender: TObject);
+procedure Tfrmain.mnuThumb128Click(Sender: TObject);
 begin
-  frmain.MenuItem64.Checked:=false;
-  frmain.MenuItem65.Checked:=false;
-  frmain.MenuItem66.Checked:=true;
-  frmain.MenuItem53.Checked:=false;
+  frmain.mnuThumb32.Checked:=false;
+  frmain.mnuThumb64.Checked:=false;
+  frmain.mnuThumb128.Checked:=true;
+  frmain.mnuThumbCustom.Checked:=false;
   frmain.psVertical.Position:=frmain.psVertical.Height-128-18;
 end;
 
-procedure Tfrmain.MenuItem67Click(Sender: TObject);
+procedure Tfrmain.mnuMosaicClick(Sender: TObject);
 begin
-  if frmain.MenuItem67.Checked then
+  if frmain.mnuMosaic.Checked then
   begin
     mosaic.Clear;
     frmain.ScrollBox1.Repaint;
@@ -2682,26 +2737,26 @@ begin
     frmain.sboxthumb.Repaint;
     frmain.psVertical.Color:=clWhite;
   end;
-  frmain.MenuItem67.Checked:=not frmain.MenuItem67.Checked;
+  frmain.mnuMosaic.Checked:=not frmain.mnuMosaic.Checked;
   frmain.Image1.Repaint;
 end;
 
-procedure Tfrmain.MenuItem68Click(Sender: TObject);
+procedure Tfrmain.mnuSwirlClick(Sender: TObject);
 begin
   filterimagen(9);
 end;
 
-procedure Tfrmain.MenuItem69Click(Sender: TObject);
+procedure Tfrmain.mnuMenusClick(Sender: TObject);
 begin
   try
     frmain.MainMenu1.Items.Visible:=not frmain.MainMenu1.Items.Visible;
-    frmain.MenuItem69.Checked:=frmain.MainMenu1.Items.Visible;
+    frmain.mnuMenus.Checked:=frmain.MainMenu1.Items.Visible;
   except on e:exception do
 
   end;
 end;
 
-procedure Tfrmain.MenuItem6Click(Sender: TObject);
+procedure Tfrmain.mnuFlipHClick(Sender: TObject);
 begin
   if (realimgwidth>256) or ifgif then
     filterimagen(19)
@@ -2709,7 +2764,7 @@ begin
     efectimagen(1);
 end;
 
-procedure Tfrmain.MenuItem7Click(Sender: TObject);
+procedure Tfrmain.mnuFlipVClick(Sender: TObject);
 begin
   if (realimgwidth>256) or ifgif then
     filterimagen(20)
@@ -2717,7 +2772,7 @@ begin
     efectimagen(2);
 end;
 
-procedure Tfrmain.MenuItem8Click(Sender: TObject);
+procedure Tfrmain.mnuRotateLClick(Sender: TObject);
 begin
   if (realimgwidth>256) or ifgif then
     filterimagen(18)
@@ -2725,7 +2780,7 @@ begin
     efectimagen(3);
 end;
 
-procedure Tfrmain.MenuItem9Click(Sender: TObject);
+procedure Tfrmain.mnuRotateRClick(Sender: TObject);
 begin
   if (realimgwidth>256) or ifgif then
     filterimagen(17)
@@ -2749,7 +2804,7 @@ begin
   if frmain.Splitter1.Left<>0 then
   begin
     frmain.ShellTreeView1.Visible:=true;
-    frmain.MenuItem59.Checked:=true;
+    frmain.mnuTreeView.Checked:=true;
   end;
 end;
 
@@ -2790,7 +2845,7 @@ end;
 
 procedure Tfrmain.sboxthumbPaint(Sender: TObject);
 begin
-  if frmain.MenuItem67.Checked then
+  if frmain.mnuMosaic.Checked then
     frmain.sboxthumb.Canvas.Draw(frmain.sboxthumb.HorzScrollBar.Position,0,mosaic);
 end;
 
@@ -2814,7 +2869,7 @@ end;
 
 procedure Tfrmain.ScrollBox1Paint(Sender: TObject);
 begin
-  if frmain.MenuItem67.Checked then
+  if frmain.mnuMosaic.Checked then
     frmain.ScrollBox1.Canvas.Draw(0,0,mosaic);
 end;
 
@@ -2896,19 +2951,25 @@ end;
 
 procedure Tfrmain.tbFirstImageClick(Sender: TObject);
 begin
-  ifile:=0;
-  loadpicture(carpeta+flist[0]);
+  if Assigned(flist) then
+  begin
+    ifile:=0;
+    loadpicture(carpeta+flist[0]);
+  end;
 end;
 
 procedure Tfrmain.tbInformationClick(Sender: TObject);
 begin
-  frmain.MenuItem72Click(nil);
+  frmain.mnuEXIFClick(nil);
 end;
 
 procedure Tfrmain.tbLastImageClick(Sender: TObject);
 begin
-  ifile:=flist.Count-1;
-  loadpicture(carpeta+flist[flist.Count-1]);
+  if Assigned(flist) then
+  begin
+    ifile:=flist.Count-1;
+    loadpicture(carpeta+flist[flist.Count-1]);
+  end;
 end;
 
 procedure Tfrmain.Timer1Timer(Sender: TObject);
@@ -2984,22 +3045,22 @@ begin
   frmain.Timer2.Enabled:=false;
 end;
 
-procedure Tfrmain.ToolButton10Click(Sender: TObject);
+procedure Tfrmain.tbZoomOutClick(Sender: TObject);
 begin
   zoomout();
 end;
 
-procedure Tfrmain.ToolButton11Click(Sender: TObject);
+procedure Tfrmain.tbAdjustClick(Sender: TObject);
 begin
   zoomnormal();
 end;
 
-procedure Tfrmain.ToolButton12Click(Sender: TObject);
+procedure Tfrmain.tbPlayShowClick(Sender: TObject);
 begin
   frmain.Timer1.Enabled:=not frmain.Timer1.Enabled;
   if frmain.Timer1.Enabled then
   begin
-    frmain.ToolButton12.ImageIndex:=12;
+    frmain.tbPlayShow.ImageIndex:=12;
     fwidth:=frmain.Width;
     fheight:=frmain.Height;
     fxpos:=frmain.Top;
@@ -3022,21 +3083,21 @@ begin
     frmain.ToolBar1.Left:=Round((screen.Width-frmain.ToolBar1.Width)/2);
   end
   else
-    frmain.ToolButton12.ImageIndex:=13;
+    frmain.tbPlayShow.ImageIndex:=13;
 end;
 
-procedure Tfrmain.ToolButton13Click(Sender: TObject);
+procedure Tfrmain.tbRandomClick(Sender: TObject);
 begin
   aleatorio:=not aleatorio;
-  frmain.ToolButton13.Down:=aleatorio;
+  frmain.tbRandom.Down:=aleatorio;
 end;
 
-procedure Tfrmain.ToolButton14Click(Sender: TObject);
+procedure Tfrmain.tbZoom100Click(Sender: TObject);
 begin
   zoomoriginal();
 end;
 
-procedure Tfrmain.ToolButton15Click(Sender: TObject);
+procedure Tfrmain.tbReloadClick(Sender: TObject);
 begin
   loadpicture(carpeta+flist[ifile]);
 end;
@@ -3044,33 +3105,33 @@ end;
 procedure Tfrmain.tbShowTreeViewClick(Sender: TObject);
 begin
   frmain.pssThumbs.OnResize:=nil;
-  frmain.MenuItem59.Checked:=not frmain.MenuItem59.Checked;
-  frmain.tbShowTreeView.Down:=frmain.MenuItem59.Checked;
-  if frmain.MenuItem59.Checked then
+  frmain.mnuTreeView.Checked:=not frmain.mnuTreeView.Checked;
+  frmain.tbShowTreeView.Down:=frmain.mnuTreeView.Checked;
+  if frmain.mnuTreeView.Checked then
     frmain.Splitter1.Left:=200
   else
     frmain.Splitter1.Left:=0-frmain.Splitter1.Width;
-  frmain.ShellTreeView1.Visible:=frmain.MenuItem59.Checked;
+  frmain.ShellTreeView1.Visible:=frmain.mnuTreeView.Checked;
   frmain.pssThumbs.OnResize:=@frmain.PairSplitterSide2Resize;
 end;
 
-procedure Tfrmain.ToolButton18Click(Sender: TObject);
+procedure Tfrmain.tbSelectClick(Sender: TObject);
 begin
-  frmain.MenuItem60.Checked:=not frmain.MenuItem60.Checked;
-  frmain.ToolButton18.Down:=frmain.MenuItem60.Checked;
-  if frmain.MenuItem60.Checked then
+  frmain.mnuSelect.Checked:=not frmain.mnuSelect.Checked;
+  frmain.tbSelect.Down:=frmain.mnuSelect.Checked;
+  if frmain.mnuSelect.Checked then
     frmain.Image1.Cursor:=crCross
   else
   begin
-    if frmain.Image1.Stretch then
+    {if frmain.Image1.Stretch then
       frmain.Image1.Cursor:=crSizeAll
     else
-      frmain.Image1.Cursor:=crDefault;
+      frmain.Image1.Cursor:=crDefault;}
     frmain.Shape1.Hide;
   end;
 end;
 
-procedure Tfrmain.ToolButton19Click(Sender: TObject);
+procedure Tfrmain.tbPrevFrameClick(Sender: TObject);
 begin
   BGRAGif.Pause;
   frmain.Timer3.Enabled:=false;
@@ -3078,16 +3139,16 @@ begin
     BGRAGif.CurrentImage:=BGRAGif.CurrentImage-1
   else
     BGRAGif.CurrentImage:=BGRAGif.Count-1;
-  frmain.ToolButton21.ImageIndex:=21;
+  frmain.tbPauseAnim.ImageIndex:=21;
   frmain.Timer3Timer(nil);
 end;
 
-procedure Tfrmain.ToolButton1Click(Sender: TObject);
+procedure Tfrmain.tbPrevImageClick(Sender: TObject);
 begin
    prevfile();
 end;
 
-procedure Tfrmain.ToolButton20Click(Sender: TObject);
+procedure Tfrmain.tbNextFrameClick(Sender: TObject);
 begin
   BGRAGif.Pause;
   frmain.Timer3.Enabled:=false;
@@ -3095,36 +3156,36 @@ begin
     BGRAGif.CurrentImage:=BGRAGif.CurrentImage+1
   else
     BGRAGif.CurrentImage:=0;
-  frmain.ToolButton21.ImageIndex:=21;
+  frmain.tbPauseAnim.ImageIndex:=21;
   frmain.Timer3Timer(nil);
 end;
 
-procedure Tfrmain.ToolButton21Click(Sender: TObject);
+procedure Tfrmain.tbPauseAnimClick(Sender: TObject);
 begin
   if BGRAGif.Paused then
   begin
-    frmain.ToolButton21.ImageIndex:=21;
+    frmain.tbPauseAnim.ImageIndex:=21;
     BGRAGif.Resume;
   end
   else
   begin
-    frmain.ToolButton21.ImageIndex:=22;
+    frmain.tbPauseAnim.ImageIndex:=22;
     BGRAGif.Pause;
   end;
   frmain.Timer3.Enabled:=not BGRAGif.Paused;
 end;
 
-procedure Tfrmain.ToolButton24Click(Sender: TObject);
+procedure Tfrmain.tbStrechClick(Sender: TObject);
 begin
-  frmain.MenuItem54.Checked:=not frmain.MenuItem54.Checked;
-  frmain.ToolButton24.Down:=frmain.MenuItem54.Checked;
-  if frmain.ToolButton24.Down then
+  frmain.mnuStrech.Checked:=not frmain.mnuStrech.Checked;
+  frmain.tbStrech.Down:=frmain.mnuStrech.Checked;
+  if frmain.tbStrech.Down then
     zoomstrech()
   else
     zoomnormal();
 end;
 
-procedure Tfrmain.ToolButton26Click(Sender: TObject);
+procedure Tfrmain.tbSlowAnimClick(Sender: TObject);
 var
    i:integer;
 begin
@@ -3132,7 +3193,7 @@ begin
     BGRAGif.FrameDelayMs[i]:=BGRAGif.FrameDelayMs[i]+10;
 end;
 
-procedure Tfrmain.ToolButton27Click(Sender: TObject);
+procedure Tfrmain.tbFastAnimClick(Sender: TObject);
   var
    i:integer;
 begin
@@ -3145,14 +3206,14 @@ begin
   end
 end;
 
-procedure Tfrmain.ToolButton2Click(Sender: TObject);
+procedure Tfrmain.tbNextImageClick(Sender: TObject);
 begin
-   nextfile();
+   nextfile;
 end;
 
-procedure Tfrmain.ToolButton3Click(Sender: TObject);
+procedure Tfrmain.tbFullScreenClick(Sender: TObject);
 begin
-  fullsc();
+  fullsc;
 end;
 
 procedure Tfrmain.tbFlipHorizontalClick(Sender: TObject);
@@ -3171,7 +3232,7 @@ begin
     efectimagen(2);
 end;
 
-procedure Tfrmain.ToolButton4Click(Sender: TObject);
+procedure Tfrmain.tbPrintClick(Sender: TObject);
 var
    MyPrinter : TPrinter;
    myBitMap : Graphics.TBitmap;
@@ -3179,6 +3240,7 @@ var
    bgcolor:TBGRAPixel;
    i:integer;
 begin
+ try
   for i:=0 to printer.Printers.Count-1 do
     frprint.cbPrinter.AddItem(printer.Printers[i],nil);
   frprint.cbPrinter.ItemIndex:=printer.PrinterIndex;
@@ -3218,12 +3280,14 @@ begin
     myBitMap.Free;
     tmpbgra.Free;
   end;
+ except on e:exception do
+ end;
 end;
 
 
 
 
-procedure Tfrmain.ToolButton6Click(Sender: TObject);
+procedure Tfrmain.tbRotateLeftClick(Sender: TObject);
 begin
   if ((realimgwidth>256) or ifgif) and ((LCLintf.GetKeyState( VK_SHIFT ) <> -128) and (LCLintf.GetKeyState( VK_SHIFT ) <> -127)) then
     filterimagen(18)
@@ -3231,7 +3295,7 @@ begin
     efectimagen(3);
 end;
 
-procedure Tfrmain.ToolButton7Click(Sender: TObject);
+procedure Tfrmain.tbRotateRightClick(Sender: TObject);
 begin
   if ((realimgwidth>256) or ifgif) and ((LCLintf.GetKeyState( VK_SHIFT ) <> -128) and (LCLintf.GetKeyState( VK_SHIFT ) <> -127)) then
     filterimagen(17)
@@ -3239,22 +3303,35 @@ begin
     efectimagen(4);
 end;
 
-procedure Tfrmain.ToolButton8Click(Sender: TObject);
+procedure Tfrmain.tbExitClick(Sender: TObject);
 begin
   saveconfig;
   Application.Terminate;
 end;
 
-procedure Tfrmain.ToolButton9Click(Sender: TObject);
+procedure Tfrmain.tbZoomInClick(Sender: TObject);
 begin
   zoomin();
 end;
 
+procedure Tfrmain.mnuLanguageClick(Sender:TObject);
+var
+   i:integer;
+begin
+  for i:=0 to frmain.mnuLanguage.Count-1 do
+    frmain.mnuLanguage.Items[i].Checked:=false;
+  (Sender as TMenuItem).Checked:=true;
+  SetDefaultLang((Sender as TMenuItem).Caption);
+end;
+
 Constructor thumbsthread.Create(CreateSuspended:Boolean);
 begin
+ if Assigned(flist) then
+ begin
   FreeOnTerminate:=True;
   inherited Create(CreateSuspended);
   done:=false;
+ end;
 end;
 
 procedure thumbsthread.refreshthumbs;

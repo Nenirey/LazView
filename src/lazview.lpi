@@ -22,7 +22,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="1"/>
-      <BuildNr Value="2264"/>
+      <BuildNr Value="2363"/>
       <StringTable Comments="Pequeño visor de imagenes" CompanyName="Independiente" FileDescription="Visor de imágenes LazView" InternalName="lazview" LegalCopyright="R.Mir" LegalTrademarks="Reinier Romero Mir (c)" OriginalFilename="lazview" ProductName="LazView" ProductVersion="0.1"/>
     </VersionInfo>
     <BuildModes Count="2">
@@ -91,36 +91,33 @@
         <UnitName Value="LazView"/>
       </Unit0>
       <Unit1>
-        <Filename Value="unit2.pas"/>
+        <Filename Value="fresize.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frresize"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="Unit2"/>
       </Unit1>
       <Unit2>
         <Filename Value="unit3.pas"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="Form3"/>
+        <ComponentName Value="fquality"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="Unit3"/>
+        <UnitName Value="fquality"/>
       </Unit2>
       <Unit3>
-        <Filename Value="unit4.pas"/>
+        <Filename Value="feffects.pas"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="Form4"/>
+        <ComponentName Value="freffect"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="Unit4"/>
       </Unit3>
       <Unit4>
-        <Filename Value="unit5.pas"/>
+        <Filename Value="fgoto.pas"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="Form5"/>
+        <ComponentName Value="frgoto"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="Unit5"/>
       </Unit4>
       <Unit5>
         <Filename Value="imgsize.pas"/>
@@ -128,12 +125,11 @@
         <UnitName Value="ImgSize"/>
       </Unit5>
       <Unit6>
-        <Filename Value="unit6.pas"/>
+        <Filename Value="fthumbsize.pas"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="Form6"/>
+        <ComponentName Value="frthumbsize"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="Unit6"/>
       </Unit6>
       <Unit7>
         <Filename Value="fmain.pas"/>

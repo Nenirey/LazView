@@ -3,6 +3,7 @@ SEARCH_DIR("C:\lazarus\components\printers\lib\i386-win32\win32\")
 SEARCH_DIR("C:\lazarus\components\cairocanvas\lib\i386-win32\win32\")
 SEARCH_DIR("C:\lazarus\lcl\units\i386-win32\win32\")
 SEARCH_DIR("C:\lazarus\lcl\units\i386-win32\")
+SEARCH_DIR("C:\Users\Reinier Romero Mir\Documents\LazView\components\dexif\lib\i386-win32-win32\")
 SEARCH_DIR("C:\lazarus\components\lazutils\lib\i386-win32\")
 SEARCH_DIR("C:\lazarus\packager\units\i386-win32\")
 SEARCH_DIR(".\")
@@ -115,6 +116,7 @@ C:\lazarus\components\printers\lib\i386-win32\win32\printer4lazarus.o
 "C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\unit6.o"
 "C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgrabitmaptypes.o"
 "C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\print.o"
+"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\fexif.o"
 C:\lazarus\components\lazutils\lib\i386-win32\lazutf8.o
 C:\lazarus\lcl\units\i386-win32\interfacebase.o
 C:\lazarus\components\lazutils\lib\i386-win32\fpcadds.o
@@ -365,8 +367,8 @@ C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-registry\registry.o
 C:\lazarus\fpc\3.0.4\units\i386-win32\rtl-objpas\dateutils.o
 "C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgragifformat.o"
 "C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgrareadpcx.o"
-C:\lazarus\lcl\units\i386-win32\wspairsplitter.o
 C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-base\inifiles.o
+C:\lazarus\lcl\units\i386-win32\wspairsplitter.o
 "C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgragraphics.o"
 C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-image\fpimgcanv.o
 "C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgramultifiletype.o"
@@ -435,6 +437,16 @@ C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-xml\dtdmodel.o
 C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-xml\xmlreader.o
 C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-xml\xmltextreader.o
 C:\lazarus\fpc\3.0.4\units\i386-win32\paszlib\zipper.o
+C:\lazarus\lcl\units\i386-win32\valedit.o
+"C:\Users\Reinier Romero Mir\Documents\LazView\components\dexif\lib\i386-win32-win32\dglobal.o"
+"C:\Users\Reinier Romero Mir\Documents\LazView\components\dexif\lib\i386-win32-win32\dmetadata.o"
+"C:\Users\Reinier Romero Mir\Documents\LazView\components\dexif\lib\i386-win32-win32\dEXIF.o"
+"C:\Users\Reinier Romero Mir\Documents\LazView\components\dexif\lib\i386-win32-win32\dIPTC.o"
+"C:\Users\Reinier Romero Mir\Documents\LazView\components\dexif\lib\i386-win32-win32\dUtils.o"
+"C:\Users\Reinier Romero Mir\Documents\LazView\components\dexif\lib\i386-win32-win32\dtags.o"
+"C:\Users\Reinier Romero Mir\Documents\LazView\components\dexif\lib\i386-win32-win32\msData.o"
+"C:\Users\Reinier Romero Mir\Documents\LazView\components\dexif\lib\i386-win32-win32\dexifwrite.o"
+"C:\Users\Reinier Romero Mir\Documents\LazView\components\dexif\lib\i386-win32-win32\diptcwrite.o"
 C:\lazarus\fpc\3.0.4\units\i386-win32\rtl\sysinitpas.o
 )
 GROUP(
