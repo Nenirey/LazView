@@ -1,7 +1,7 @@
 unit fmain;
 
 {$mode objfpc}{$H+}
-
+{$GOTO ON}
 interface
 
 uses
@@ -10,7 +10,8 @@ uses
   types, LCLType, PairSplitter, ShellCtrls, FPImage, fresize, fquality, feffects, fgoto, fthumbsize,
   LazUTF8, print{$IFDEF WINDOWS}, Registry, Windows, Windirs{$ENDIF},
   BGRABitmapTypes, BGRABitmap, BGRAThumbnail, BGRAAnimatedGif,
-  DateUtils, Math, ImgSize, BGRAGifFormat, Printers, LCLintf, fexif, INIFiles, LCLTranslator;
+  DateUtils, Math, ImgSize, BGRAGifFormat, Printers, LCLintf, fexif, INIFiles, LCLTranslator,
+  Imaging, ImagingClasses, ImagingComponents;
 
 type
 
@@ -114,6 +115,7 @@ type
     Timer2: TTimer;
     Timer3: TTimer;
     Timer4: TTimer;
+    Timer5: TTimer;
     ToolBar1: TToolBar;
     tbPrevImage: TToolButton;
     tbZoomOut: TToolButton;
@@ -251,6 +253,7 @@ type
     procedure Timer2Timer(Sender: TObject);
     procedure Timer3Timer(Sender: TObject);
     procedure Timer4Timer(Sender: TObject);
+    procedure Timer5Timer(Sender: TObject);
     procedure ToolBar1Click(Sender: TObject);
     procedure ToolBar1MouseLeave(Sender: TObject);
     procedure ToolBar1MouseMove(Sender: TObject; Shift: TShiftState; X,
@@ -332,6 +335,7 @@ var
   folderchange:boolean=true;
   starting:boolean=true;
   BGRAgif:TBGRAAnimatedGif;
+  APNGImage: ImagingClasses.TMultiImage;
   scrollchange:boolean=true;
   mosaic:Graphics.TBitmap;
   mosaicmousedown:boolean=false;
@@ -839,12 +843,16 @@ var
    //fpcustomimg:TFPCustomImage;
    wimagen:UnicodeString;
    ImgData: TImgData;
+   pngrect:TRect;
+label
+  normalpng;
 begin
   {$IFDEF WINDOWS}
   wimagen:=UTF16LongName(fimagen);
   {$ELSE}
   wimagen:=fimagen;
   {$ENDIF}
+  frmain.Timer5.Enabled:=false;
   frmain.StatusBar1.Panels.Items[5].Text:='';
   starttime:=Now();
   try
@@ -903,8 +911,28 @@ begin
         realimgwidth:=frmain.Image1.Picture.Width;
         realimgheight:=frmain.Image1.Picture.Height;
       end;
-      '.JPG','.JPEG','.JPE','.JFIF','.BMP','.PNG','.XPM','.PBM','.PPM','.PCX','.ICNS','.CUR','.TIF','.TIFF':
+      '.PNG':
       begin
+        APNGImage:=ImagingClasses.TMultiImage.Create;
+        if Imaging.DetermineFileFormat(fimagen) <> '' then
+          APNGImage.LoadMultiFromFile(fimagen);
+        frmain.Image1.Picture.PNG.Create;
+        frmain.Image1.Picture.PNG.Width:=APNGImage.Width;
+        frmain.Image1.Picture.PNG.Height:=APNGImage.Height;
+        pngrect.Top:=0;
+        pngrect.Left:=0;
+        pngrect.Width:=APNGImage.Width;
+        pngrect.Height:=APNGImage.Height;
+        if APNGImage.ImageCount>1 then
+          frmain.Timer5.Enabled:=true
+        else
+        begin
+          goto normalpng;
+        end;
+      end;
+      '.JPG','.JPEG','.JPE','.JFIF','.BMP','.XPM','.PBM','.PPM','.PCX','.ICNS','.CUR','.TIF','.TIFF':
+      begin
+        normalpng:
         streamimage:=TFileStream.Create(wimagen,fmOpenRead or fmShareDenyNone);
         bgcolor.alpha:=255;
         bgcolor.blue:=0;
@@ -3026,6 +3054,25 @@ begin
   ththumbs.thumbpath:=carpeta;
   ththumbs.Start;
   frmain.Timer4.Enabled:=false;
+end;
+
+procedure Tfrmain.Timer5Timer(Sender: TObject);
+var
+   pngrect:TRect;
+begin
+  if Assigned(APNGImage) then
+  begin
+    pngrect.Top:=0;
+    pngrect.Left:=0;
+    pngrect.Width:=APNGImage.Width;
+    pngrect.Height:=APNGImage.Height;
+    ImagingComponents.DisplayImage(frmain.Image1.Picture.PNG.Canvas,pngrect,APNGImage);
+    frmain.Image1.Refresh;
+    if APNGImage.ActiveImage<APNGImage.ImageCount-1 then
+      APNGImage.ActiveImage:=APNGImage.ActiveImage+1
+    else
+      APNGImage.ActiveImage:=0;
+  end;
 end;
 
 procedure Tfrmain.ToolBar1Click(Sender: TObject);

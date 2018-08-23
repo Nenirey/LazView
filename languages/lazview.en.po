@@ -151,6 +151,10 @@ msgstr ""
 msgid "About..."
 msgstr ""
 
+#: tfrmain.mnualwaysontop.caption
+msgid "Always on top"
+msgstr ""
+
 #: tfrmain.mnuantialiasing.caption
 msgid "Antialiasing"
 msgstr ""

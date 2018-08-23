@@ -1,7 +1,7 @@
 object frmain: Tfrmain
-  Left = 285
+  Left = 459
   Height = 536
-  Top = 122
+  Top = 98
   Width = 819
   ActiveControl = ShellTreeView1
   AllowDropFiles = True
@@ -2095,6 +2095,13 @@ object frmain: Tfrmain
     Interval = 500
     OnTimer = Timer4Timer
     left = 264
+    top = 207
+  end
+  object Timer5: TTimer
+    Enabled = False
+    Interval = 41
+    OnTimer = Timer5Timer
+    left = 320
     top = 207
   end
 end

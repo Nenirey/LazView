@@ -6,8 +6,8 @@ uses
   {$IFDEF UNIX}
   cthreads, cmem,
   {$ENDIF}
-  Forms, Interfaces, fmain, fresize, fquality, feffects, fgoto, fthumbsize,
-  print, fexif;
+  Forms, vampyreimagingpackage, Interfaces, fmain, fresize, fquality, feffects,
+  fgoto, fthumbsize, print, fexif;
 
 {$R *.res}
 
