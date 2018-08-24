@@ -367,7 +367,10 @@ var
    iniconfigfile:TMEMINIFile;
    i:integer;
 begin
-  iniconfigfile:=TMEMINIFile.Create(GetAppConfigDir(false)+'lazview.ini');
+  if FileExists(ExtractFilePath(Application.Params[0])+'lazview.ini') then
+    iniconfigfile:=TMEMINIFile.Create(ExtractFilePath(Application.Params[0])+'lazview.ini')
+  else
+    iniconfigfile:=TMEMINIFile.Create(GetAppConfigDir(false)+'lazview.ini');
   case frmain.WindowState of
   wsMaximized:
     begin
