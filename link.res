@@ -1,590 +1,663 @@
-SEARCH_DIR("C:\Users\Reinier Romero Mir\Documents\LazView\components\bgrabitmap\")
-SEARCH_DIR("C:\lazarus\components\printers\lib\i386-win32\win32\")
-SEARCH_DIR("C:\lazarus\components\cairocanvas\lib\i386-win32\win32\")
-SEARCH_DIR("C:\lazarus\lcl\units\i386-win32\win32\")
-SEARCH_DIR("C:\lazarus\lcl\units\i386-win32\")
-SEARCH_DIR("C:\Users\Reinier Romero Mir\Documents\LazView\components\dexif\lib\i386-win32-win32\")
-SEARCH_DIR("C:\lazarus\components\lazutils\lib\i386-win32\")
-SEARCH_DIR("C:\lazarus\packager\units\i386-win32\")
-SEARCH_DIR(".\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\httpd22\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\rtl\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\zorba\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\zlib\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\winunits-jedi\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\winunits-base\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\winceunits\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\utils-lexyacc\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\unzip\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\tcl\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\symbolic\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\sqlite\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\sdl\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\rtl-unicode\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\rtl-objpas\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\rtl-extra\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\rtl-console\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\rsvg\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\regexpr\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\pxlib\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\ptc\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\postgres\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\pcap\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\paszlib\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\oracle\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\openssl\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\opengles\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\opengl\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\opencl\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\openal\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\oggvorbis\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\odbc\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\nvapi\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\numlib\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\mysql\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\mad\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\lua\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\libxml2\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\libvlc\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\libtar\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\libsee\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\libpng\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\libmicrohttpd\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\libgd\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\jni\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\imagemagick\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\ibase\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\httpd24\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\hermes\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\hash\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\gtk2\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\gtk1\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\graph\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\googleapi\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\gmp\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\gdbint\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\fv\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\fppkg\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\fpmkunit\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\fpindexer\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\fpgtk\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\fftw\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-xml\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-web\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-stl\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-sound\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-sdo\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-res\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-registry\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-process\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-pdf\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-passrc\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-net\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-json\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-js\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-image\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-fpcunit\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-extra\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-db\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-base\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\fastcgi\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\dblib\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\chm\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\cdrom\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\cairo\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\bzip2\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\aspell\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\a52\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\units\i386-win32\")
-SEARCH_DIR("C:\lazarus\fpc\3.0.4\bin\i386-win32\")
+SEARCH_DIR("/usr/lib/x86_64-linux-gnu/")
+SEARCH_DIR("/lib64/")
+SEARCH_DIR("/home/reinier/LazView/components/vampireimaging/Extras/Extensions/J2KObjects/")
+SEARCH_DIR("/home/reinier/LazView/components/bgrabitmap/")
+SEARCH_DIR("/home/reinier/.lazarus/lib/Printer4Lazarus/lib/x86_64-linux/gtk2/")
+SEARCH_DIR("/home/reinier/LazView/components/vampireimaging/lazarus/Projects/lib/x86_64-/")
+SEARCH_DIR("/home/reinier/.lazarus/lib/cairocanvas_pkg/lib/x86_64-linux/gtk2/")
+SEARCH_DIR("/home/reinier/.lazarus/lib/units/x86_64-linux/gtk2/")
+SEARCH_DIR("/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/")
+SEARCH_DIR("/home/reinier/LazView/components/dexif/lib/x86_64-linux-gtk2/")
+SEARCH_DIR("/home/reinier/.lazarus/lib/LazUtils/lib/x86_64-linux/")
+SEARCH_DIR("/home/reinier/.lazarus/lib/units/x86_64-linux/")
+SEARCH_DIR("./")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/httpd22/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/rtl/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-image/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/imlib/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/gtk1/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/users/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/lua/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/dblib/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/newt/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/graph/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-pdf/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/libxml2/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/fastcgi/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/ncurses/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/fftw/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/gdbm/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/fppkg/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/libgd/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/googleapi/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/chm/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/oracle/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/rtl-unicode/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/libcurl/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/bzip2/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/ibase/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/pthreads/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-registry/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-base/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/x11/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/ptc/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/cdrom/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/xforms/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/pcap/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/libtar/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/numlib/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/sqlite/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-db/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/fv/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-stl/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/modplug/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/postgres/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/libpng/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/gnome1/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/libvlc/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/gdbint/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-js/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/zlib/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/rtl-console/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/unzip/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-fpcunit/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/rtl-objpas/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/ggi/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/mysql/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/tcl/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/utmp/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-extra/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/dts/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/gmp/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/opengl/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/cairo/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-json/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/rsvg/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/mad/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/zorba/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/odbc/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-async/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/hermes/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/libsee/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/paszlib/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/gtk2/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-sound/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/httpd24/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/ldap/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/libmicrohttpd/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/uuid/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/dbus/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-net/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/opencl/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/svgalib/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/jni/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/regexpr/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/imagemagick/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/symbolic/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/openal/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/fpindexer/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/opengles/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/utils-lexyacc/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/fpgtk/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/openssl/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/syslog/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/bfd/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-sdo/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-process/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/pxlib/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-passrc/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/proj4/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/aspell/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-web/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/a52/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/oggvorbis/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/iconvenc/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/fpmkunit/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-xml/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/sdl/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-res/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/rtl-extra/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/hash/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/units/x86_64-linux/")
+SEARCH_DIR("/usr/lib/fpc/3.0.4/")
 INPUT(
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\lazview.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\lazview.or"
-C:\lazarus\fpc\3.0.4\units\i386-win32\rtl\system.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\rtl\fpintres.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\rtl\objpas.o
-C:\lazarus\lcl\units\i386-win32\win32\interfaces.o
-C:\lazarus\lcl\units\i386-win32\forms.o
-C:\lazarus\components\printers\lib\i386-win32\win32\printer4lazarus.o
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\fmain.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\unit2.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\unit3.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\unit4.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\unit5.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\imgsize.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\unit6.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgrabitmaptypes.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\print.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\fexif.o"
-C:\lazarus\components\lazutils\lib\i386-win32\lazutf8.o
-C:\lazarus\lcl\units\i386-win32\interfacebase.o
-C:\lazarus\components\lazutils\lib\i386-win32\fpcadds.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\rtl\windows.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\rtl\classes.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\rtl\sysutils.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\rtl\rtlconsts.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\rtl\types.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\rtl\typinfo.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\rtl\sysconst.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\rtl\windirs.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\rtl\math.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-base\gettext.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-image\fpimage.o
-C:\lazarus\lcl\units\i386-win32\lcltype.o
-C:\lazarus\lcl\units\i386-win32\lclproc.o
-C:\lazarus\lcl\units\i386-win32\lmessages.o
-C:\lazarus\lcl\units\i386-win32\lclplatformdef.o
-C:\lazarus\lcl\units\i386-win32\graphtype.o
-C:\lazarus\lcl\units\i386-win32\graphmath.o
-C:\lazarus\lcl\units\i386-win32\intfgraphics.o
-C:\lazarus\lcl\units\i386-win32\themes.o
-C:\lazarus\components\lazutils\lib\i386-win32\laz_avl_tree.o
-C:\lazarus\components\lazutils\lib\i386-win32\lazfileutils.o
-C:\lazarus\components\lazutils\lib\i386-win32\lazmethodlist.o
-C:\lazarus\components\lazutils\lib\i386-win32\lazutf8classes.o
-C:\lazarus\components\lazutils\lib\i386-win32\lazlogger.o
-C:\lazarus\lcl\units\i386-win32\lclstrconsts.o
-C:\lazarus\components\lazutils\lib\i386-win32\lazutilsstrconsts.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\winunits-base\shlobj.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\winunits-base\activex.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\winunits-base\shellapi.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\winunits-base\commctrl.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\rtl-objpas\variants.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\rtl\ctypes.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\rtl-objpas\varutils.o
-C:\lazarus\components\lazutils\lib\i386-win32\lazloggerbase.o
-C:\lazarus\components\lazutils\lib\i386-win32\lazclasses.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\rtl\messages.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-image\fpreadbmp.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-image\fpwritebmp.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-image\bmpcomn.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-image\fpreadpng.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-image\fpwritepng.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-image\fpreadtiff.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-image\fpwritetiff.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-image\fptiffcmn.o
-C:\lazarus\lcl\units\i386-win32\icnstypes.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-image\fpimgcmn.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-image\pngcomn.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\paszlib\zstream.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\paszlib\zbase.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\paszlib\gzio.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\rtl\dos.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\hash\crc.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\paszlib\zdeflate.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\paszlib\zinflate.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\rtl\strings.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\paszlib\trees.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\paszlib\adler.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\paszlib\infblock.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\paszlib\infutil.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\paszlib\infcodes.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\paszlib\inftrees.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\paszlib\inffast.o
-C:\lazarus\lcl\units\i386-win32\graphics.o
-C:\lazarus\lcl\units\i386-win32\lclintf.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-base\contnrs.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-image\fpcanvas.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-image\fpreadpnm.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-image\fpwritepnm.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-image\fpreadjpeg.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-image\fpwritejpeg.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-image\fpreadgif.o
-C:\lazarus\lcl\units\i386-win32\lresources.o
-C:\lazarus\lcl\units\i386-win32\lclrescache.o
-C:\lazarus\lcl\units\i386-win32\wsreferences.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-image\clipping.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jpeglib.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jdapimin.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jdatasrc.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jdapistd.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jmorecfg.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jdeferr.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jinclude.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jerror.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jmemmgr.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jdmarker.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jdinput.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jcomapi.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jutils.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jmemnobs.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jdmaster.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jdcolor.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jdsample.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jdpostct.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jddctmgr.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jdphuff.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jdhuff.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jdcoefct.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jdmainct.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jquant1.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jquant2.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jdmerge.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jdct.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jidctfst.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jidctint.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jidctflt.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jidctred.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jcapistd.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jcapimin.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jdatadst.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jcparam.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jcinit.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jcmarker.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jcphuff.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jchuff.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jcmaster.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jccolor.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jcsample.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jcprepct.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jcdctmgr.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jccoefct.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jcmainct.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jfdctint.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jfdctfst.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\pasjpeg\jfdctflt.o
-C:\lazarus\components\lazutils\lib\i386-win32\lazconfigstorage.o
-C:\lazarus\components\lazutils\lib\i386-win32\dynqueue.o
-C:\lazarus\components\lazutils\lib\i386-win32\avglvltree.o
-C:\lazarus\components\lazutils\lib\i386-win32\lazdbglog.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-base\syncobjs.o
-C:\lazarus\components\lazutils\lib\i386-win32\lazutf16.o
-C:\lazarus\components\lazutils\lib\i386-win32\fileutil.o
-C:\lazarus\components\lazutils\lib\i386-win32\utf8process.o
-C:\lazarus\components\lazutils\lib\i386-win32\lazutf8sysutils.o
-C:\lazarus\components\lazutils\lib\i386-win32\maps.o
-C:\lazarus\components\lazutils\lib\i386-win32\masks.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\rtl-objpas\strutils.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-process\process.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-process\pipes.o
-C:\lazarus\lcl\units\i386-win32\win32\win32int.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\winunits-base\multimon.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\rtl\character.o
-C:\lazarus\lcl\units\i386-win32\controls.o
-C:\lazarus\lcl\units\i386-win32\buttons.o
-C:\lazarus\lcl\units\i386-win32\dialogs.o
-C:\lazarus\lcl\units\i386-win32\stdctrls.o
-C:\lazarus\lcl\units\i386-win32\menus.o
-C:\lazarus\lcl\units\i386-win32\comctrls.o
-C:\lazarus\lcl\units\i386-win32\win32\win32def.o
-C:\lazarus\lcl\units\i386-win32\spin.o
-C:\lazarus\components\lazutils\lib\i386-win32\translations.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\rtl\unicodedata.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\rtl\unicodenumtable.o
-C:\lazarus\lcl\units\i386-win32\imglist.o
-C:\lazarus\lcl\units\i386-win32\propertystorage.o
-C:\lazarus\lcl\units\i386-win32\actnlist.o
-C:\lazarus\lcl\units\i386-win32\lclclasses.o
-C:\lazarus\lcl\units\i386-win32\wslclclasses.o
-C:\lazarus\lcl\units\i386-win32\wsimglist.o
-C:\lazarus\lcl\units\i386-win32\wsproc.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-base\rttiutils.o
-C:\lazarus\lcl\units\i386-win32\wsmenus.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-base\custapp.o
-C:\lazarus\lcl\units\i386-win32\customtimer.o
-C:\lazarus\lcl\units\i386-win32\clipbrd.o
-C:\lazarus\lcl\units\i386-win32\helpintfs.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-base\singleinstance.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\chm\fasthtmlparser.o
-C:\lazarus\lcl\units\i386-win32\wscontrols.o
-C:\lazarus\lcl\units\i386-win32\wsforms.o
-C:\lazarus\lcl\units\i386-win32\imagelistcache.o
-C:\lazarus\components\lazutils\lib\i386-win32\textstrings.o
-C:\lazarus\components\lazutils\lib\i386-win32\extendedstrings.o
-C:\lazarus\lcl\units\i386-win32\wsstdctrls.o
-C:\lazarus\lcl\units\i386-win32\wsbuttons.o
-C:\lazarus\lcl\units\i386-win32\buttonpanel.o
-C:\lazarus\lcl\units\i386-win32\extctrls.o
-C:\lazarus\lcl\units\i386-win32\lcltaskdialog.o
-C:\lazarus\lcl\units\i386-win32\popupnotifier.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\rtl\fgl.o
-C:\lazarus\lcl\units\i386-win32\wsextctrls.o
-C:\lazarus\lcl\units\i386-win32\wsdialogs.o
-C:\lazarus\lcl\units\i386-win32\toolwin.o
-C:\lazarus\lcl\units\i386-win32\wscomctrls.o
-C:\lazarus\lcl\units\i386-win32\wstoolwin.o
-C:\lazarus\lcl\units\i386-win32\wsspin.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-json\jsonscanner.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-json\jsonparser.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-json\fpjson.o
-C:\lazarus\components\lazutils\lib\i386-win32\lconvencoding.o
-C:\lazarus\components\lazutils\lib\i386-win32\stringhashlist.o
-C:\lazarus\lcl\units\i386-win32\win32\win32proc.o
-C:\lazarus\lcl\units\i386-win32\win32\win32wsfactory.o
-C:\lazarus\lcl\units\i386-win32\win32\win32wscontrols.o
-C:\lazarus\lcl\units\i386-win32\win32\win32wsbuttons.o
-C:\lazarus\lcl\units\i386-win32\win32\win32wsmenus.o
-C:\lazarus\lcl\units\i386-win32\win32\win32wsstdctrls.o
-C:\lazarus\lcl\units\i386-win32\win32\win32wsdialogs.o
-C:\lazarus\lcl\units\i386-win32\win32\win32themes.o
-C:\lazarus\lcl\units\i386-win32\win32\win32extra.o
-C:\lazarus\lcl\units\i386-win32\lclmessageglue.o
-C:\lazarus\lcl\units\i386-win32\calendar.o
-C:\lazarus\lcl\units\i386-win32\extdlgs.o
-C:\lazarus\lcl\units\i386-win32\checklst.o
-C:\lazarus\lcl\units\i386-win32\grids.o
-C:\lazarus\lcl\units\i386-win32\wscalendar.o
-C:\lazarus\lcl\units\i386-win32\calcform.o
-C:\lazarus\lcl\units\i386-win32\wsextdlgs.o
-C:\lazarus\lcl\units\i386-win32\wschecklst.o
-C:\lazarus\lcl\units\i386-win32\maskedit.o
-C:\lazarus\components\lazutils\lib\i386-win32\dynamicarray.o
-C:\lazarus\components\lazutils\lib\i386-win32\laz2_xmlcfg.o
-C:\lazarus\components\lazutils\lib\i386-win32\lcsvutils.o
-C:\lazarus\components\lazutils\lib\i386-win32\lazfilecache.o
-C:\lazarus\components\lazutils\lib\i386-win32\laz2_dom.o
-C:\lazarus\components\lazutils\lib\i386-win32\laz2_xmlread.o
-C:\lazarus\components\lazutils\lib\i386-win32\laz2_xmlwrite.o
-C:\lazarus\components\lazutils\lib\i386-win32\lazutilities.o
-C:\lazarus\components\lazutils\lib\i386-win32\laz2_xmlutils.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-base\uriparser.o
-C:\lazarus\lcl\units\i386-win32\wsgrids.o
-C:\lazarus\lcl\units\i386-win32\win32\win32wscalendar.o
-C:\lazarus\lcl\units\i386-win32\win32\win32wschecklst.o
-C:\lazarus\lcl\units\i386-win32\win32\win32wscomctrls.o
-C:\lazarus\lcl\units\i386-win32\win32\win32wsextctrls.o
-C:\lazarus\lcl\units\i386-win32\win32\win32wsextdlgs.o
-C:\lazarus\lcl\units\i386-win32\win32\win32wsforms.o
-C:\lazarus\lcl\units\i386-win32\win32\win32wsgrids.o
-C:\lazarus\lcl\units\i386-win32\win32\win32wsimglist.o
-C:\lazarus\lcl\units\i386-win32\win32\win32wsspin.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\winunits-base\uxtheme.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\winunits-base\commdlg.o
-C:\lazarus\components\printers\lib\i386-win32\win32\printersdlgs.o
-C:\lazarus\components\printers\lib\i386-win32\win32\osprinters.o
-C:\lazarus\components\printers\lib\i386-win32\win32\printer4lazstrconst.o
-C:\lazarus\packager\units\i386-win32\lazaruspackageintf.o
-C:\lazarus\lcl\units\i386-win32\printers.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\winunits-base\winver.o
-C:\lazarus\components\printers\lib\i386-win32\win32\winutilprn.o
-C:\lazarus\lcl\units\i386-win32\pairsplitter.o
-C:\lazarus\lcl\units\i386-win32\shellctrls.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-registry\registry.o
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgrabitmap.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgrathumbnail.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgraanimatedgif.o"
-C:\lazarus\fpc\3.0.4\units\i386-win32\rtl-objpas\dateutils.o
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgragifformat.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgrareadpcx.o"
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-base\inifiles.o
-C:\lazarus\lcl\units\i386-win32\wspairsplitter.o
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgragraphics.o"
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-image\fpimgcanv.o
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgramultifiletype.o"
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-image\fppixlcanv.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-image\pixtools.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-image\ellipses.o
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgrautf8.o"
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-image\fpreadxwd.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-image\fpreadxpm.o
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgrawritepng.o"
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-image\fpwritepcx.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-image\fpwritetga.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-image\fpwritexpm.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-image\xwdfile.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-image\pcxcomn.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-image\targacmn.o
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgrawinbitmap.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgralclbitmap.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgradefaultbitmap.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgracanvas.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgracanvas2d.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgraarrow.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgrapen.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgratransform.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgrapath.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgrapolygon.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgrapolygonaliased.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgrablend.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgraresample.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgrafillinfo.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgragradientscanner.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgrasse.o"
-C:\lazarus\fpc\3.0.4\units\i386-win32\rtl\cpu.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\rtl\mmx.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-base\base64.o
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgrafilters.o"
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-image\fpreadpcx.o
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgrareadbmp.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgrareadjpeg.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgradithering.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgrafilterscanner.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgrafiltertype.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgrafilterblur.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgrapalette.o"
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-base\bufstream.o
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgratext.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgragrayscalemask.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgrareadbmpmiomap.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgrareadgif.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgrareadico.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgrareadlzp.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgrareadpng.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgrareadpsd.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgrareadtga.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgrareadxpm.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgrawritelzp.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgralzpcommon.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\bgracompressablebitmap.o"
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-image\fpreadpsd.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-image\fpreadtga.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-xml\dom.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-xml\xmlread.o
-"C:\Users\Reinier Romero Mir\Documents\LazView\units\i386-win32-win32\unzipperext.o"
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-xml\xmlutils.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-xml\dtdmodel.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-xml\xmlreader.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\fcl-xml\xmltextreader.o
-C:\lazarus\fpc\3.0.4\units\i386-win32\paszlib\zipper.o
-C:\lazarus\lcl\units\i386-win32\valedit.o
-"C:\Users\Reinier Romero Mir\Documents\LazView\components\dexif\lib\i386-win32-win32\dglobal.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\components\dexif\lib\i386-win32-win32\dmetadata.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\components\dexif\lib\i386-win32-win32\dEXIF.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\components\dexif\lib\i386-win32-win32\dIPTC.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\components\dexif\lib\i386-win32-win32\dUtils.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\components\dexif\lib\i386-win32-win32\dtags.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\components\dexif\lib\i386-win32-win32\msData.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\components\dexif\lib\i386-win32-win32\dexifwrite.o"
-"C:\Users\Reinier Romero Mir\Documents\LazView\components\dexif\lib\i386-win32-win32\diptcwrite.o"
-C:\lazarus\fpc\3.0.4\units\i386-win32\rtl\sysinitpas.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/rtl/cprt0.o
+/usr/lib/x86_64-linux-gnu/crti.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/lazview.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/lazview.or
+/usr/lib/fpc/3.0.4/units/x86_64-linux/rtl/system.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/rtl/fpintres.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/rtl/objpas.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/rtl/cthreads.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/rtl/cmem.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/forms.o
+/home/reinier/LazView/components/vampireimaging/lazarus/Projects/lib/x86_64-/vampyreimagingpackage.o
+/home/reinier/.lazarus/lib/units/x86_64-linux/gtk2/interfaces.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/fmain.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/fresize.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/fquality.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/feffects.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/fgoto.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/fthumbsize.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/print.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/fexif.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/rtl/baseunix.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/rtl/unix.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/rtl/unixtype.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/rtl/initc.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/rtl/dl.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/rtl/unixutil.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/rtl/ctypes.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/rtl/classes.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/rtl/sysutils.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/rtl/types.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/rtl/typinfo.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/rtl/math.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-base/custapp.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/lclstrconsts.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/lcltype.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/lclproc.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/lclintf.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/lclclasses.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/interfacebase.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/lresources.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/graphtype.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/graphics.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/menus.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/lmessages.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/customtimer.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/actnlist.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/clipbrd.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/helpintfs.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/controls.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/imglist.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/themes.o
+/home/reinier/.lazarus/lib/LazUtils/lib/x86_64-linux/lazfileutils.o
+/home/reinier/.lazarus/lib/LazUtils/lib/x86_64-linux/lazutf8.o
+/home/reinier/.lazarus/lib/LazUtils/lib/x86_64-linux/maps.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-base/gettext.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/rtl/rtlconsts.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/rtl/linux.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/rtl/errors.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/rtl/sysconst.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-base/singleinstance.o
+/home/reinier/.lazarus/lib/LazUtils/lib/x86_64-linux/laz_avl_tree.o
+/home/reinier/.lazarus/lib/LazUtils/lib/x86_64-linux/fpcadds.o
+/home/reinier/.lazarus/lib/LazUtils/lib/x86_64-linux/lazmethodlist.o
+/home/reinier/.lazarus/lib/LazUtils/lib/x86_64-linux/lazutf8classes.o
+/home/reinier/.lazarus/lib/LazUtils/lib/x86_64-linux/lazlogger.o
+/home/reinier/.lazarus/lib/LazUtils/lib/x86_64-linux/lazutilsstrconsts.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/rtl/cwstring.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/rtl/dynlibs.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/rtl/unixcp.o
+/home/reinier/.lazarus/lib/LazUtils/lib/x86_64-linux/lazloggerbase.o
+/home/reinier/.lazarus/lib/LazUtils/lib/x86_64-linux/lazclasses.o
+/home/reinier/.lazarus/lib/LazUtils/lib/x86_64-linux/fileutil.o
+/home/reinier/.lazarus/lib/LazUtils/lib/x86_64-linux/utf8process.o
+/home/reinier/.lazarus/lib/LazUtils/lib/x86_64-linux/lazutf8sysutils.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-image/fpimage.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/lclplatformdef.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/graphmath.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/intfgraphics.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-image/fpreadbmp.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-image/fpwritebmp.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-image/bmpcomn.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-image/fpreadpng.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-image/fpwritepng.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-image/fpreadtiff.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-image/fpwritetiff.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-image/fptiffcmn.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/icnstypes.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-image/fpimgcmn.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-image/pngcomn.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/paszlib/zstream.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/paszlib/zbase.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/paszlib/gzio.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/hash/crc.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/paszlib/zdeflate.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/paszlib/zinflate.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/paszlib/trees.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/paszlib/adler.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/paszlib/infblock.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/paszlib/infutil.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/paszlib/infcodes.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/paszlib/inftrees.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/paszlib/inffast.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-base/contnrs.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-image/fpcanvas.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-image/fpreadpnm.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-image/fpwritepnm.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-image/fpreadjpeg.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-image/fpwritejpeg.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-image/fpreadgif.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/lclrescache.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/wsreferences.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-image/clipping.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jpeglib.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jdapimin.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jdatasrc.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jdapistd.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jmorecfg.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jdeferr.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jinclude.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jerror.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jmemmgr.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jdmarker.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jdinput.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jcomapi.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jutils.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jmemnobs.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jdmaster.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jdcolor.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jdsample.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jdpostct.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jddctmgr.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jdphuff.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jdhuff.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jdcoefct.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jdmainct.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jquant1.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jquant2.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jdmerge.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jdct.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jidctfst.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jidctint.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jidctflt.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jidctred.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jcapistd.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jcapimin.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jdatadst.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jcparam.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jcinit.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jcmarker.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jcphuff.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jchuff.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jcmaster.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jccolor.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jcsample.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jcprepct.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jcdctmgr.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jccoefct.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jcmainct.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jfdctint.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jfdctfst.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/pasjpeg/jfdctflt.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/rtl-objpas/variants.o
+/home/reinier/.lazarus/lib/LazUtils/lib/x86_64-linux/lazconfigstorage.o
+/home/reinier/.lazarus/lib/LazUtils/lib/x86_64-linux/dynqueue.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/rtl-objpas/varutils.o
+/home/reinier/.lazarus/lib/LazUtils/lib/x86_64-linux/avglvltree.o
+/home/reinier/.lazarus/lib/LazUtils/lib/x86_64-linux/lazdbglog.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-base/syncobjs.o
+/home/reinier/.lazarus/lib/LazUtils/lib/x86_64-linux/masks.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/rtl-objpas/strutils.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-process/process.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-process/pipes.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/rtl/termio.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/wslclclasses.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/wsimglist.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/wsproc.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/propertystorage.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-base/rttiutils.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/wsmenus.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/chm/fasthtmlparser.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/wscontrols.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/wsforms.o
+/home/reinier/LazView/components/vampireimaging/lazarus/Projects/lib/x86_64-/Imaging.o
+/home/reinier/LazView/components/vampireimaging/lazarus/Projects/lib/x86_64-/ImagingBitmap.o
+/home/reinier/LazView/components/vampireimaging/lazarus/Projects/lib/x86_64-/ImagingCanvases.o
+/home/reinier/LazView/components/vampireimaging/lazarus/Projects/lib/x86_64-/ImagingClasses.o
+/home/reinier/LazView/components/vampireimaging/lazarus/Projects/lib/x86_64-/ImagingComponents.o
+/home/reinier/LazView/components/vampireimaging/lazarus/Projects/lib/x86_64-/ImagingDds.o
+/home/reinier/LazView/components/vampireimaging/lazarus/Projects/lib/x86_64-/ImagingExport.o
+/home/reinier/LazView/components/vampireimaging/lazarus/Projects/lib/x86_64-/ImagingFormats.o
+/home/reinier/LazView/components/vampireimaging/lazarus/Projects/lib/x86_64-/ImagingIO.o
+/home/reinier/LazView/components/vampireimaging/lazarus/Projects/lib/x86_64-/ImagingJpeg.o
+/home/reinier/LazView/components/vampireimaging/lazarus/Projects/lib/x86_64-/ImagingNetworkGraphics.o
+/home/reinier/LazView/components/vampireimaging/lazarus/Projects/lib/x86_64-/ImagingTarga.o
+/home/reinier/LazView/components/vampireimaging/lazarus/Projects/lib/x86_64-/ImagingTypes.o
+/home/reinier/LazView/components/vampireimaging/lazarus/Projects/lib/x86_64-/ImagingUtility.o
+/home/reinier/LazView/components/vampireimaging/lazarus/Projects/lib/x86_64-/ImagingPortableMaps.o
+/home/reinier/LazView/components/vampireimaging/lazarus/Projects/lib/x86_64-/ImagingExtras.o
+/home/reinier/LazView/components/vampireimaging/lazarus/Projects/lib/x86_64-/ImagingGif.o
+/home/reinier/LazView/components/vampireimaging/lazarus/Projects/lib/x86_64-/ImagingColors.o
+/home/reinier/.lazarus/lib/units/x86_64-linux/lazaruspackageintf.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/rtl/dos.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/rtl/strings.o
+/home/reinier/LazView/components/vampireimaging/lazarus/Projects/lib/x86_64-/dzlib.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/paszlib/paszlib.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/paszlib/zcompres.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/paszlib/zuncompr.o
+/home/reinier/LazView/components/vampireimaging/lazarus/Projects/lib/x86_64-/ImagingJpeg2000.o
+/home/reinier/LazView/components/vampireimaging/lazarus/Projects/lib/x86_64-/ImagingPsd.o
+/home/reinier/LazView/components/vampireimaging/lazarus/Projects/lib/x86_64-/ImagingPcx.o
+/home/reinier/LazView/components/vampireimaging/lazarus/Projects/lib/x86_64-/ImagingXpm.o
+/home/reinier/LazView/components/vampireimaging/lazarus/Projects/lib/x86_64-/ElderImagery.o
+/home/reinier/LazView/components/vampireimaging/lazarus/Projects/lib/x86_64-/OpenJpeg.o
+/home/reinier/LazView/components/vampireimaging/lazarus/Projects/lib/x86_64-/ElderImageryBsi.o
+/home/reinier/LazView/components/vampireimaging/lazarus/Projects/lib/x86_64-/ElderImageryCif.o
+/home/reinier/LazView/components/vampireimaging/lazarus/Projects/lib/x86_64-/ElderImageryImg.o
+/home/reinier/LazView/components/vampireimaging/lazarus/Projects/lib/x86_64-/ElderImageryTexture.o
+/home/reinier/LazView/components/vampireimaging/lazarus/Projects/lib/x86_64-/ElderImagerySky.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/gtk2/glib2.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/gtk2/gdk2.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/gtk2/gtk2.o
+/home/reinier/.lazarus/lib/units/x86_64-linux/gtk2/gtk2def.o
+/home/reinier/.lazarus/lib/units/x86_64-linux/gtk2/gtk2proc.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/gtk2/gdk2pixbuf.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/gtk2/pango.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/cairo/cairo.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/gtk2/atk.o
+/home/reinier/.lazarus/lib/LazUtils/lib/x86_64-linux/dynhasharray.o
+/home/reinier/.lazarus/lib/units/x86_64-linux/gtk2/gtk2extra.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/lclmemmanager.o
+/home/reinier/.lazarus/lib/units/x86_64-linux/gtk2/gtk2globals.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/x11/xlib.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/x11/x.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/gtk2/gtk2ext.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/gtk2/gdk2x.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/x11/xrender.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/comctrls.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/stdctrls.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/extctrls.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/toolwin.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/buttons.o
+/home/reinier/.lazarus/lib/LazUtils/lib/x86_64-linux/textstrings.o
+/home/reinier/.lazarus/lib/LazUtils/lib/x86_64-linux/extendedstrings.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/wsstdctrls.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/popupnotifier.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/rtl/fgl.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/wsextctrls.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/imagelistcache.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/wsbuttons.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/wscomctrls.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/wstoolwin.o
+/home/reinier/.lazarus/lib/units/x86_64-linux/gtk2/gtk2int.o
+/home/reinier/.lazarus/lib/units/x86_64-linux/gtk2/gtk2fontcache.o
+/home/reinier/.lazarus/lib/units/x86_64-linux/gtk2/gtk2winapiwindow.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/dialogs.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/checklst.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/spin.o
+/home/reinier/.lazarus/lib/units/x86_64-linux/gtk2/gtk2msgqueue.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/buttonpanel.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/lcltaskdialog.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/wsdialogs.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/wschecklst.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/wsspin.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/extdlgs.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/lclmessageglue.o
+/home/reinier/.lazarus/lib/units/x86_64-linux/gtk2/gtk2debug.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/calendar.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/calcform.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/wscalendar.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/wsextdlgs.o
+/home/reinier/.lazarus/lib/units/x86_64-linux/gtk2/gtk2wsprivate.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-base/uriparser.o
+/home/reinier/.lazarus/lib/units/x86_64-linux/gtk2/gtk2wscontrols.o
+/home/reinier/.lazarus/lib/LazUtils/lib/x86_64-linux/lazlinkedlist.o
+/home/reinier/.lazarus/lib/units/x86_64-linux/gtk2/gtk2wsfactory.o
+/home/reinier/.lazarus/lib/units/x86_64-linux/gtk2/gtk2wsstdctrls.o
+/home/reinier/.lazarus/lib/units/x86_64-linux/gtk2/gtk2wschecklst.o
+/home/reinier/.lazarus/lib/units/x86_64-linux/gtk2/gtk2themes.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/grids.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/pairsplitter.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/maskedit.o
+/home/reinier/.lazarus/lib/LazUtils/lib/x86_64-linux/dynamicarray.o
+/home/reinier/.lazarus/lib/LazUtils/lib/x86_64-linux/laz2_xmlcfg.o
+/home/reinier/.lazarus/lib/LazUtils/lib/x86_64-linux/lcsvutils.o
+/home/reinier/.lazarus/lib/LazUtils/lib/x86_64-linux/lazfilecache.o
+/home/reinier/.lazarus/lib/LazUtils/lib/x86_64-linux/laz2_dom.o
+/home/reinier/.lazarus/lib/LazUtils/lib/x86_64-linux/laz2_xmlread.o
+/home/reinier/.lazarus/lib/LazUtils/lib/x86_64-linux/laz2_xmlwrite.o
+/home/reinier/.lazarus/lib/LazUtils/lib/x86_64-linux/lazutilities.o
+/home/reinier/.lazarus/lib/LazUtils/lib/x86_64-linux/laz2_xmlutils.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/wsgrids.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/wspairsplitter.o
+/home/reinier/.lazarus/lib/units/x86_64-linux/gtk2/gtk2wsbuttons.o
+/home/reinier/.lazarus/lib/units/x86_64-linux/gtk2/gtk2wscalendar.o
+/home/reinier/.lazarus/lib/units/x86_64-linux/gtk2/gtk2wscomctrls.o
+/home/reinier/.lazarus/lib/units/x86_64-linux/gtk2/gtk2wsdialogs.o
+/home/reinier/.lazarus/lib/units/x86_64-linux/gtk2/gtk2wsextctrls.o
+/home/reinier/.lazarus/lib/units/x86_64-linux/gtk2/gtk2wsextdlgs.o
+/home/reinier/.lazarus/lib/units/x86_64-linux/gtk2/gtk2wsforms.o
+/home/reinier/.lazarus/lib/units/x86_64-linux/gtk2/gtk2wsgrids.o
+/home/reinier/.lazarus/lib/units/x86_64-linux/gtk2/gtk2wsimglist.o
+/home/reinier/.lazarus/lib/units/x86_64-linux/gtk2/gtk2wsmenus.o
+/home/reinier/.lazarus/lib/units/x86_64-linux/gtk2/gtk2wsspin.o
+/home/reinier/.lazarus/lib/units/x86_64-linux/gtk2/gtk2wspairsplitter.o
+/home/reinier/.lazarus/lib/units/x86_64-linux/gtk2/unitywsctrls.o
+/home/reinier/.lazarus/lib/units/x86_64-linux/gtk2/gtk2cellrenderer.o
+/home/reinier/.lazarus/lib/units/x86_64-linux/gtk2/gtk2listviewtreemodel.o
+/home/reinier/.lazarus/lib/units/x86_64-linux/gtk2/gtk2disableliboverlay.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/shellctrls.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgrabitmaptypes.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgrabitmap.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgrathumbnail.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgraanimatedgif.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/rtl-objpas/dateutils.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/imgsize.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgragifformat.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/printers.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-base/inifiles.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/lcltranslator.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgragraphics.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-image/fpimgcanv.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgramultifiletype.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-image/fppixlcanv.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-image/pixtools.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-image/ellipses.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgrautf8.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-image/fpreadxwd.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-image/fpreadxpm.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgrawritepng.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-image/fpwritepcx.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-image/fpwritetga.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-image/fpwritexpm.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-image/xwdfile.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-image/pcxcomn.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-image/targacmn.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgragtkbitmap.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgralclbitmap.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgradefaultbitmap.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgracanvas.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgracanvas2d.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgraarrow.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgrapen.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgratransform.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgrapath.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgrapolygon.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgrapolygonaliased.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgrablend.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgraresample.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgrafillinfo.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgragradientscanner.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgrasse.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-base/base64.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgrafilters.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-image/fpreadpcx.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgrareadbmp.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgrareadjpeg.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgradithering.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgrafilterscanner.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgrafiltertype.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgrafilterblur.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgrapalette.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-base/bufstream.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgratext.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgragrayscalemask.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgrareadbmpmiomap.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgrareadgif.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgrareadico.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgrareadlzp.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgrareadpcx.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgrareadpng.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgrareadpsd.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgrareadtga.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgrareadxpm.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgrawritelzp.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgralzpcommon.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/bgracompressablebitmap.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-image/fpreadpsd.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-image/fpreadtga.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-xml/dom.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-xml/xmlread.o
+/home/reinier/LazView/units/x86_64-linux-gtk2/unzipperext.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-xml/xmlutils.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-xml/dtdmodel.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-xml/xmlreader.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-xml/xmltextreader.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/paszlib/zipper.o
+/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux/valedit.o
+/home/reinier/.lazarus/lib/LazUtils/lib/x86_64-linux/translations.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-json/jsonscanner.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-json/jsonparser.o
+/usr/lib/fpc/3.0.4/units/x86_64-linux/fcl-json/fpjson.o
+/home/reinier/.lazarus/lib/LazUtils/lib/x86_64-linux/lconvencoding.o
+/home/reinier/.lazarus/lib/LazUtils/lib/x86_64-linux/stringhashlist.o
+/home/reinier/LazView/components/dexif/lib/x86_64-linux-gtk2/dglobal.o
+/home/reinier/LazView/components/dexif/lib/x86_64-linux-gtk2/dmetadata.o
+/home/reinier/LazView/components/dexif/lib/x86_64-linux-gtk2/dEXIF.o
+/home/reinier/LazView/components/dexif/lib/x86_64-linux-gtk2/dIPTC.o
+/home/reinier/LazView/components/dexif/lib/x86_64-linux-gtk2/dUtils.o
+/home/reinier/LazView/components/dexif/lib/x86_64-linux-gtk2/dtags.o
+/home/reinier/LazView/components/dexif/lib/x86_64-linux-gtk2/msData.o
+/home/reinier/LazView/components/dexif/lib/x86_64-linux-gtk2/dexifwrite.o
+/home/reinier/LazView/components/dexif/lib/x86_64-linux-gtk2/diptcwrite.o
 )
 GROUP(
-C:\lazarus\fpc\3.0.4\units\i386-win32\rtl\libimpsystem.a
-C:\lazarus\fpc\3.0.4\units\i386-win32\rtl\libimpfpintres.a
-C:\lazarus\fpc\3.0.4\units\i386-win32\rtl\libimpwindows.a
-C:\lazarus\fpc\3.0.4\units\i386-win32\rtl\libimpsysutils.a
-C:\lazarus\fpc\3.0.4\units\i386-win32\winunits-base\libimpshlobj.a
-C:\lazarus\fpc\3.0.4\units\i386-win32\winunits-base\libimpactivex.a
-C:\lazarus\fpc\3.0.4\units\i386-win32\winunits-base\libimpshellapi.a
-C:\lazarus\fpc\3.0.4\units\i386-win32\winunits-base\libimpcommctrl.a
-C:\lazarus\fpc\3.0.4\units\i386-win32\rtl-objpas\libimpvarutils.a
-C:\lazarus\fpc\3.0.4\units\i386-win32\rtl\libimpdos.a
-C:\lazarus\lcl\units\i386-win32\libimplclintf.a
-C:\lazarus\lcl\units\i386-win32\win32\libimpwin32int.a
-C:\lazarus\lcl\units\i386-win32\win32\libimpwin32extra.a
-C:\lazarus\fpc\3.0.4\units\i386-win32\winunits-base\libimpcommdlg.a
-C:\lazarus\components\printers\lib\i386-win32\win32\libimpwinutilprn.a
-C:\lazarus\fpc\3.0.4\units\i386-win32\rtl\libimpsysinitpas.a
+/home/reinier/LazView/components/vampireimaging/Extras/Extensions/J2KObjects/libopenjpeglinx86_64.a
 )
-SEARCH_DIR("/usr/i686-pc-cygwin/lib"); SEARCH_DIR("/usr/lib"); SEARCH_DIR("/usr/lib/w32api");
-OUTPUT_FORMAT(pei-i386)
-ENTRY(_mainCRTStartup)
+INPUT(
+-lpthread
+-ldl
+-lgobject-2.0
+-lglib-2.0
+-lgthread-2.0
+-lgmodule-2.0
+-lgdk-x11-2.0
+-lgtk-x11-2.0
+-lgdk_pixbuf-2.0
+-lpango-1.0
+-lcairo
+-latk-1.0
+-lX11
+)
+GROUP(
+-lc
+)
+INPUT(
+/usr/lib/x86_64-linux-gnu/crtn.o
+)
+ENTRY(_start)
 SECTIONS
 {
-  . = SIZEOF_HEADERS;
-  . = ALIGN(__section_alignment__);
-  .text  __image_base__ + ( __section_alignment__ < 0x1000 ? . : __section_alignment__ ) :
+  PROVIDE (__executable_start = 0x0400000); . = 0x0400000 +  SIZEOF_HEADERS;
+  . = 0 +  SIZEOF_HEADERS;
+  .interp         : { *(.interp) }
+  .hash           : { *(.hash) }
+  .dynsym         : { *(.dynsym) }
+  .dynstr         : { *(.dynstr) }
+  .gnu.version    : { *(.gnu.version) }
+  .gnu.version_d  : { *(.gnu.version_d) }
+  .gnu.version_r  : { *(.gnu.version_r) }
+  .rel.dyn        :
+    {
+      *(.rel.init)
+      *(.rel.text .rel.text.* .rel.gnu.linkonce.t.*)
+      *(.rel.fini)
+      *(.rel.rodata .rel.rodata.* .rel.gnu.linkonce.r.*)
+      *(.rel.data.rel.ro*)
+      *(.rel.data .rel.data.* .rel.gnu.linkonce.d.*)
+      *(.rel.tdata .rel.tdata.* .rel.gnu.linkonce.td.*)
+      *(.rel.tbss .rel.tbss.* .rel.gnu.linkonce.tb.*)
+      *(.rel.got)
+      *(.rel.bss .rel.bss.* .rel.gnu.linkonce.b.*)
+    }
+  .rela.dyn       :
+    {
+      *(.rela.init)
+      *(.rela.text .rela.text.* .rela.gnu.linkonce.t.*)
+      *(.rela.fini)
+      *(.rela.rodata .rela.rodata.* .rela.gnu.linkonce.r.*)
+      *(.rela.data .rela.data.* .rela.gnu.linkonce.d.*)
+      *(.rela.tdata .rela.tdata.* .rela.gnu.linkonce.td.*)
+      *(.rela.tbss .rela.tbss.* .rela.gnu.linkonce.tb.*)
+      *(.rela.got)
+      *(.rela.bss .rela.bss.* .rela.gnu.linkonce.b.*)
+    }
+  .rel.plt        : { *(.rel.plt) }
+  .rela.plt       : { *(.rela.plt) }
+  .init           :
   {
-    *(.init)
+    KEEP (*(.init))
+  } =0x90909090
+  .plt            : { *(.plt) }
+  .text           :
+  {
     *(.text .stub .text.* .gnu.linkonce.t.*)
-    *(SORT(.text$*))
-    *(.glue_7t)
-    *(.glue_7)
-    . = ALIGN(8);
-     ___CTOR_LIST__ = .; __CTOR_LIST__ = . ;
-    LONG (-1);
-    *(.ctors); *(.ctor); *(SORT(.ctors.*));  LONG (0);
-     ___DTOR_LIST__ = .; __DTOR_LIST__ = . ;
-    LONG (-1);
-    *(.dtors); *(.dtor); *(SORT(.dtors.*));  LONG (0);
-     *(.fini)
-    PROVIDE (etext = .);
-    *(.gcc_except_table)
-  }
-  .data BLOCK(__section_alignment__) :
+    KEEP (*(.text.*personality*))
+    *(.gnu.warning)
+  } =0x90909090
+  .fini           :
   {
-    __data_start__ = . ;
-    *(.data .data.* .gnu.linkonce.d.* .fpc*)
-    *(.data2)
-    *(SORT(.data$*))
-    *(.jcr)
-    PROVIDE (__tls_index = .);
-    LONG (0);
-    __data_end__ = . ;
-    *(.data_cygwin_nocopy)
-  }
-  .rdata BLOCK(__section_alignment__) :
+    KEEP (*(.fini))
+  } =0x90909090
+  PROVIDE (_etext = .);
+  .rodata         :
   {
-    *(.rdata)
-    *(.rdata.*)
     *(.rodata .rodata.* .gnu.linkonce.r.*)
-    *(SORT(.rdata$*))
-    *(.eh_frame)
-    ___RUNTIME_PSEUDO_RELOC_LIST__ = .;
-    __RUNTIME_PSEUDO_RELOC_LIST__ = .;
-    *(.rdata_runtime_pseudo_reloc)
-    ___RUNTIME_PSEUDO_RELOC_LIST_END__ = .;
-    __RUNTIME_PSEUDO_RELOC_LIST_END__ = .;
   }
-  .pdata BLOCK(__section_alignment__) : { *(.pdata) }
-  .bss BLOCK(__section_alignment__) :
+  . = ALIGN (0x1000) - ((0x1000 - .) & (0x1000 - 1));
+  .dynamic        : { *(.dynamic) }
+  .got            : { *(.got .toc) }
+  .got.plt        : { *(.got.plt .toc.plt) }
+  .data           :
   {
-    __bss_start__ = . ;
-    *(.bss .bss.* .gnu.linkonce.b.*)
-    *(SORT(.bss$*))
-    *(COMMON)
-    __bss_end__ = . ;
+    *(.data .data.* .gnu.linkonce.d.*)
+    KEEP (*(.fpc .fpc.n_version .fpc.n_links))
+    KEEP (*(.gnu.linkonce.d.*personality*))
   }
-  .edata BLOCK(__section_alignment__) : { *(.edata) }
-  .idata BLOCK(__section_alignment__) :
+  PROVIDE (_edata = .);
+  PROVIDE (edata = .);
+  .threadvar : { *(.threadvar .threadvar.* .gnu.linkonce.tv.*) }
+  __bss_start = .;
+  .bss            :
   {
-    SORT(*)(.idata$2)
-    SORT(*)(.idata$3)
-    /* These zeroes mark the end of the import list.  */
-    LONG (0); LONG (0); LONG (0); LONG (0); LONG (0);
-    SORT(*)(.idata$4)
-    SORT(*)(.idata$5)
-    SORT(*)(.idata$6)
-    SORT(*)(.idata$7)
-  }
-  .CRT BLOCK(__section_alignment__) :
-  {
-    ___crt_xc_start__ = . ;
-    *(SORT(.CRT$XC*))  /* C initialization */
-    ___crt_xc_end__ = . ;
-    ___crt_xi_start__ = . ;
-    *(SORT(.CRT$XI*))  /* C++ initialization */
-    ___crt_xi_end__ = . ;
-    ___crt_xl_start__ = . ;
-    *(SORT(.CRT$XL*))  /* TLS callbacks */
-    /* ___crt_xl_end__ is defined in the TLS Directory support code */
-    PROVIDE (___crt_xl_end__ = .);
-    ___crt_xp_start__ = . ;
-    *(SORT(.CRT$XP*))  /* Pre-termination */
-    ___crt_xp_end__ = . ;
-    ___crt_xt_start__ = . ;
-    *(SORT(.CRT$XT*))  /* Termination */
-    ___crt_xt_end__ = . ;
-  }
-  .tls BLOCK(__section_alignment__) :
-  {
-    ___tls_start__ = . ;
-    *(.tls .tls.*)
-    *(.tls$)
-    *(SORT(.tls$*))
-    ___tls_end__ = . ;
-  }
-  .rsrc BLOCK(__section_alignment__) :
-  {
-    *(.rsrc)
-    *(SORT(.rsrc$*))
-  }
-  .reloc BLOCK(__section_alignment__) : { *(.reloc) }
-  .stab BLOCK(__section_alignment__) (NOLOAD) : { *(.stab) }
-  .stabstr BLOCK(__section_alignment__) (NOLOAD) : { *(.stabstr) }
-  .debug_aranges BLOCK(__section_alignment__) (NOLOAD) : { *(.debug_aranges) }
-  .debug_pubnames BLOCK(__section_alignment__) (NOLOAD) : { *(.debug_pubnames) }
-  .debug_info BLOCK(__section_alignment__) (NOLOAD) : { *(.debug_info) *(.gnu.linkonce.wi.*) }
-  .debug_abbrev BLOCK(__section_alignment__) (NOLOAD) : { *(.debug_abbrev) }
-  .debug_line BLOCK(__section_alignment__) (NOLOAD) : { *(.debug_line) }
-  .debug_frame BLOCK(__section_alignment__) (NOLOAD) : { *(.debug_frame) }
-  .debug_str BLOCK(__section_alignment__) (NOLOAD) : { *(.debug_str) }
-  .debug_loc BLOCK(__section_alignment__) (NOLOAD) : { *(.debug_loc) }
-  .debug_macinfo BLOCK(__section_alignment__) (NOLOAD) : { *(.debug_macinfo) }
-  .debug_weaknames BLOCK(__section_alignment__) (NOLOAD) : { *(.debug_weaknames) }
-  .debug_funcnames BLOCK(__section_alignment__) (NOLOAD) : { *(.debug_funcnames) }
-  .debug_typenames BLOCK(__section_alignment__) (NOLOAD) : { *(.debug_typenames) }
-  .debug_varnames BLOCK(__section_alignment__) (NOLOAD) : { *(.debug_varnames) }
-  .debug_ranges BLOCK(__section_alignment__) (NOLOAD) : { *(.debug_ranges) }
+   *(.dynbss)
+   *(.bss .bss.* .gnu.linkonce.b.*)
+   *(COMMON)
+   . = ALIGN(32 / 8);
+}
+  . = ALIGN(32 / 8);
+  PROVIDE (_end = .);
+  PROVIDE (end = .);
+  .stab          0 : { *(.stab) }
+  .stabstr       0 : { *(.stabstr) }
+  /* DWARF debug sections.
+     Symbols in the DWARF debugging sections are relative to the beginning
+     of the section so we begin them at 0.  */
+  /* DWARF 1 */
+  .debug          0 : { *(.debug) }
+  .line           0 : { *(.line) }
+  /* GNU DWARF 1 extensions */
+  .debug_srcinfo  0 : { *(.debug_srcinfo) }
+  .debug_sfnames  0 : { *(.debug_sfnames) }
+  /* DWARF 1.1 and DWARF 2 */
+  .debug_aranges  0 : { *(.debug_aranges) }
+  .debug_pubnames 0 : { *(.debug_pubnames) }
+  /* DWARF 2 */
+  .debug_info     0 : { *(.debug_info .gnu.linkonce.wi.*) }
+  .debug_abbrev   0 : { *(.debug_abbrev) }
+  .debug_line     0 : { *(.debug_line) }
+  .debug_frame    0 : { *(.debug_frame) }
+  .debug_str      0 : { *(.debug_str) }
+  .debug_loc      0 : { *(.debug_loc) }
+  .debug_macinfo  0 : { *(.debug_macinfo) }
+  /* SGI/MIPS DWARF 2 extensions */
+  .debug_weaknames 0 : { *(.debug_weaknames) }
+  .debug_funcnames 0 : { *(.debug_funcnames) }
+  .debug_typenames 0 : { *(.debug_typenames) }
+  .debug_varnames  0 : { *(.debug_varnames) }
+  /DISCARD/ : { *(.note.GNU-stack) }
 }

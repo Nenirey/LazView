@@ -1,0 +1,5 @@
+{"version":1,"strings":[
+{"hash":65677486,"name":"tform5.caption","sourcebytes":[71,111,32,116,111,32,105,109,97,103,101,32,110,117,109,98,101,114,46,46,46],"value":"Go to image number..."},
+{"hash":48,"name":"tform5.edit1.text","sourcebytes":[48],"value":"0"},
+{"hash":128182794,"name":"tform5.label1.caption","sourcebytes":[71,111,32,116,111,32,105,109,97,103,101,32,110,117,109,98,101,114,58],"value":"Go to image number:"}
+]}

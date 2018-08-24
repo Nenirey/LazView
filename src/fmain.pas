@@ -11,7 +11,7 @@ uses
   LazUTF8, print{$IFDEF WINDOWS}, Registry, Windows, Windirs{$ENDIF},
   BGRABitmapTypes, BGRABitmap, BGRAThumbnail, BGRAAnimatedGif,
   DateUtils, Math, ImgSize, BGRAGifFormat, Printers, LCLintf, fexif, INIFiles, LCLTranslator,
-  Imaging, ImagingClasses, ImagingComponents;
+  Imaging, ImagingClasses, ImagingComponents, ImagingTypes, Variants;
 
 type
 
@@ -321,7 +321,7 @@ Const
 
 var
   frmain: Tfrmain;
-  full,ifgif,startdraw,startselect,compactmode:boolean;
+  full,ifgif,ifapng,startdraw,startselect,compactmode:boolean;
   flist:TStringList;
   nfile,ifile,ndir,idir:LongInt;
   carpeta:string;
@@ -336,6 +336,7 @@ var
   starting:boolean=true;
   BGRAgif:TBGRAAnimatedGif;
   APNGImage: ImagingClasses.TMultiImage;
+  APNGDelays:Array of integer;
   scrollchange:boolean=true;
   mosaic:Graphics.TBitmap;
   mosaicmousedown:boolean=false;
@@ -345,6 +346,7 @@ var
   ifallthumbs:boolean;
   realimgwidth,realimgheight:LongInt;
   inprocessanim:boolean;
+  procedure rendermosaic;
   procedure fullsc;
   procedure compact;
   procedure showthumbnails;
@@ -388,6 +390,7 @@ begin
       iniconfigfile.WriteString('Config','language',frmain.mnuLanguage.Items[i].Caption);
   end;
   iniconfigfile.WriteBool('Config','stayontop',frmain.mnuAlwaysOnTop.Checked);
+  iniconfigfile.WriteBool('Config','backgroundmosaic',frmain.mnuMosaic.Checked);
   iniconfigfile.UpdateFile;
   iniconfigfile.Free;
 end;
@@ -396,7 +399,7 @@ procedure loadconfig;
 var
    iniconfigfile:TMEMINIFile;
    tmplang:string;
-   tmpstayontop:boolean;
+   tmpstayontop,tmpbackgroundmosaic:boolean;
    i:integer;
 begin
   if FileExists(ExtractFilePath(Application.Params[0])+'lazview.ini') then
@@ -436,6 +439,17 @@ begin
     frmain.FormStyle:=fsSystemStayOnTop;
     frmain.mnuAlwaysOnTop.Checked:=true;
   end;
+  tmpbackgroundmosaic:=iniconfigfile.ReadBool('Config','backgroundmosaic',frmain.mnuMosaic.Checked);
+  if tmpbackgroundmosaic then
+  begin
+    mosaic:=Graphics.TBitmap.Create;
+    rendermosaic;
+    frmain.sboxthumb.Repaint;
+    frmain.psVertical.Color:=clWhite;
+    frmain.mnuMosaic.Checked:=true;
+  end
+  else
+    frmain.mnuMosaic.Checked:=false;
   iniconfigfile.Free;
 end;
 
@@ -834,7 +848,7 @@ end;
 procedure loadpicture(fimagen:string;restorezoom:boolean=true;scrollthumbs:boolean=true;realimage:boolean=false);
 var
    ebitmap:Graphics.TBitmap;
-   th,tw:integer;
+   th,tw,i:integer;
    iw,ih:word;
    streamimage:TFileStream;
    starttime:TDateTime;
@@ -844,14 +858,16 @@ var
    wimagen:UnicodeString;
    ImgData: TImgData;
    pngrect:TRect;
-label
-  normalpng;
+   Item: TMetadataItem;
+//label
+  //normalpng;
 begin
   {$IFDEF WINDOWS}
   wimagen:=UTF16LongName(fimagen);
   {$ELSE}
   wimagen:=fimagen;
   {$ENDIF}
+  frmain.Timer3.Enabled:=false;
   frmain.Timer5.Enabled:=false;
   frmain.StatusBar1.Panels.Items[5].Text:='';
   starttime:=Now();
@@ -865,20 +881,8 @@ begin
       zoomnormal()
     else
       zoomstrech();
-    if UpperCase(ExtractFileExt(wimagen)) = '.GIF' then
+    if (UpperCase(ExtractFileExt(wimagen))<>'.GIF') and (UpperCase(ExtractFileExt(wimagen))<>'.PNG')  then
     begin
-      ifgif:=true;
-      frmain.Image1.Picture.Clear;
-      frmain.tbSlowAnim.Enabled:=true;
-      frmain.tbPrevFrame.Enabled:=true;
-      frmain.tbPauseAnim.Enabled:=true;
-      frmain.tbNextFrame.Enabled:=true;
-      frmain.tbFastAnim.Enabled:=true;
-    end
-    else
-    begin
-      ifgif:=false;
-      frmain.Timer3.Enabled:=false;
       frmain.tbSlowAnim.Enabled:=false;
       frmain.tbPrevFrame.Enabled:=false;
       frmain.tbPauseAnim.Enabled:=false;
@@ -899,6 +903,13 @@ begin
     case UpperCase(ExtractFileExt(fimagen)) of
       '.GIF':
       begin
+        ifgif:=true;
+        frmain.Image1.Picture.Clear;
+        frmain.tbSlowAnim.Enabled:=true;
+        frmain.tbPrevFrame.Enabled:=true;
+        frmain.tbPauseAnim.Enabled:=true;
+        frmain.tbNextFrame.Enabled:=true;
+        frmain.tbFastAnim.Enabled:=true;
         BGRAgif:=TBGRAAnimatedGif.Create(wimagen);
         frmain.Timer3Timer(nil);
         if BGRAGif.Count>1 then
@@ -913,6 +924,9 @@ begin
       end;
       '.PNG':
       begin
+        ifgif:=false;
+        ifapng:=true;
+        GlobalMetadata.ClearMetaItems;
         APNGImage:=ImagingClasses.TMultiImage.Create;
         if Imaging.DetermineFileFormat(fimagen) <> '' then
           APNGImage.LoadMultiFromFile(fimagen);
@@ -923,16 +937,52 @@ begin
         pngrect.Left:=0;
         pngrect.Width:=APNGImage.Width;
         pngrect.Height:=APNGImage.Height;
+        if GlobalMetadata.MetaItemCount > 0 then
+        begin
+          for I := 0 to GlobalMetadata.MetaItemCount - 1 do
+          begin
+            Item := GlobalMetadata.MetaItemsByIdx[I];
+              if Item.Id='FrameDelay' then
+              begin
+                //ShowMessage(Item.Id);
+                SetLength(APNGDelays,Length(APNGDelays)+1);
+                APNGDelays[Length(APNGDelays)-1]:=Item.Value;
+              end;
+          end;
+        end
+        else
+          frmain.StatusBar1.Panels[5].Text:='No metadata information found!!!';
+        realimgwidth:=pngrect.Width;
+        realimgheight:=pngrect.Height;
         if APNGImage.ImageCount>1 then
-          frmain.Timer5.Enabled:=true
+        begin
+          frmain.Timer5.Enabled:=true;
+          frmain.tbSlowAnim.Enabled:=true;
+          frmain.tbPrevFrame.Enabled:=true;
+          frmain.tbPauseAnim.Enabled:=true;
+          frmain.tbNextFrame.Enabled:=true;
+          frmain.tbFastAnim.Enabled:=true;
+          frmain.StatusBar1.Panels[2].Text:=inttostr(APNGImage.ActiveImage)+'/'+inttostr(APNGImage.ImageCount);
+        end
         else
         begin
-          goto normalpng;
+          ebitmap:=Graphics.TBitmap.Create;
+          ImagingComponents.ConvertImageToBitmap(APNGImage,ebitmap);
+          frmain.Image1.Picture.Bitmap.Assign(ebitmap);
+          frmain.tbSlowAnim.Enabled:=false;
+          frmain.tbPrevFrame.Enabled:=false;
+          frmain.tbPauseAnim.Enabled:=false;
+          frmain.tbNextFrame.Enabled:=false;
+          frmain.tbFastAnim.Enabled:=false;
+          frmain.StatusBar1.Panels[2].Text:='';
+          //goto normalpng;
+          //ImagingComponents.DisplayImage(frmain.Image1.Picture.PNG.Canvas,pngrect,APNGImage);
         end;
       end;
       '.JPG','.JPEG','.JPE','.JFIF','.BMP','.XPM','.PBM','.PPM','.PCX','.ICNS','.CUR','.TIF','.TIFF':
       begin
-        normalpng:
+        ifgif:=false;
+        ifapng:=false;
         streamimage:=TFileStream.Create(wimagen,fmOpenRead or fmShareDenyNone);
         bgcolor.alpha:=255;
         bgcolor.blue:=0;
@@ -3059,6 +3109,7 @@ end;
 procedure Tfrmain.Timer5Timer(Sender: TObject);
 var
    pngrect:TRect;
+   tmpbitmap:Graphics.TBitmap;
 begin
   if Assigned(APNGImage) then
   begin
@@ -3066,8 +3117,13 @@ begin
     pngrect.Left:=0;
     pngrect.Width:=APNGImage.Width;
     pngrect.Height:=APNGImage.Height;
-    ImagingComponents.DisplayImage(frmain.Image1.Picture.PNG.Canvas,pngrect,APNGImage);
+    tmpbitmap:=Graphics.TBitmap.Create;
+    ImagingComponents.ConvertImageToBitmap(APNGImage,tmpbitmap);
+    frmain.Image1.Picture.Bitmap.Assign(tmpbitmap);
+    //ImagingComponents.DisplayImage(frmain.Image1.Picture.PNG.Canvas,pngrect,APNGImage);
+    frmain.Timer5.Interval:=APNGDelays[APNGImage.ActiveImage];
     frmain.Image1.Refresh;
+    frmain.StatusBar1.Panels[2].Text:=inttostr(APNGImage.ActiveImage)+'/'+inttostr(APNGImage.ImageCount);
     if APNGImage.ActiveImage<APNGImage.ImageCount-1 then
       APNGImage.ActiveImage:=APNGImage.ActiveImage+1
     else
@@ -3180,14 +3236,27 @@ end;
 
 procedure Tfrmain.tbPrevFrameClick(Sender: TObject);
 begin
-  BGRAGif.Pause;
-  frmain.Timer3.Enabled:=false;
-  if BGRAGif.CurrentImage>0 then
-    BGRAGif.CurrentImage:=BGRAGif.CurrentImage-1
-  else
-    BGRAGif.CurrentImage:=BGRAGif.Count-1;
-  frmain.tbPauseAnim.ImageIndex:=21;
-  frmain.Timer3Timer(nil);
+  if ifgif then
+  begin
+    BGRAGif.Pause;
+    frmain.Timer3.Enabled:=false;
+    if BGRAGif.CurrentImage>0 then
+      BGRAGif.CurrentImage:=BGRAGif.CurrentImage-1
+    else
+      BGRAGif.CurrentImage:=BGRAGif.Count-1;
+    frmain.tbPauseAnim.ImageIndex:=21;
+    frmain.Timer3Timer(nil);
+  end;
+  if ifapng then
+  begin
+    frmain.Timer5.Enabled:=false;
+    if APNGImage.ActiveImage>0 then
+      APNGImage.ActiveImage:=APNGImage.ActiveImage-2
+    else
+      APNGImage.ActiveImage:=APNGImage.ImageCount-1;
+    frmain.tbPauseAnim.ImageIndex:=21;
+    frmain.Timer5Timer(nil);
+  end;
 end;
 
 procedure Tfrmain.tbPrevImageClick(Sender: TObject);
@@ -3197,29 +3266,54 @@ end;
 
 procedure Tfrmain.tbNextFrameClick(Sender: TObject);
 begin
-  BGRAGif.Pause;
-  frmain.Timer3.Enabled:=false;
-  if BGRAGif.CurrentImage<BGRAGif.Count-1 then
-    BGRAGif.CurrentImage:=BGRAGif.CurrentImage+1
-  else
-    BGRAGif.CurrentImage:=0;
-  frmain.tbPauseAnim.ImageIndex:=21;
-  frmain.Timer3Timer(nil);
+  if ifgif then
+  begin
+    BGRAGif.Pause;
+    frmain.Timer3.Enabled:=false;
+    if BGRAGif.CurrentImage<BGRAGif.Count-1 then
+      BGRAGif.CurrentImage:=BGRAGif.CurrentImage+1
+    else
+      BGRAGif.CurrentImage:=0;
+    frmain.tbPauseAnim.ImageIndex:=21;
+    frmain.Timer3Timer(nil);
+  end;
+  if ifapng then
+  begin
+    frmain.Timer5.Enabled:=false;
+    frmain.tbPauseAnim.ImageIndex:=21;
+    frmain.Timer5Timer(nil);
+  end;
 end;
 
 procedure Tfrmain.tbPauseAnimClick(Sender: TObject);
 begin
-  if BGRAGif.Paused then
-  begin
-    frmain.tbPauseAnim.ImageIndex:=21;
-    BGRAGif.Resume;
-  end
-  else
-  begin
-    frmain.tbPauseAnim.ImageIndex:=22;
-    BGRAGif.Pause;
+  if ifgif then
+    begin
+    if BGRAGif.Paused then
+    begin
+      frmain.tbPauseAnim.ImageIndex:=21;
+      BGRAGif.Resume;
+    end
+    else
+    begin
+      frmain.tbPauseAnim.ImageIndex:=22;
+      BGRAGif.Pause;
+    end;
+    frmain.Timer3.Enabled:=not BGRAGif.Paused;
   end;
-  frmain.Timer3.Enabled:=not BGRAGif.Paused;
+  if ifapng then
+  begin
+    if frmain.Timer5.Enabled=false then
+    begin
+      frmain.tbPauseAnim.ImageIndex:=21;
+      frmain.Timer5.Enabled:=true;
+    end
+    else
+    begin
+      frmain.tbPauseAnim.ImageIndex:=22;
+      frmain.Timer5.Enabled:=false;
+    end;
+  end;
 end;
 
 procedure Tfrmain.tbStrechClick(Sender: TObject);
@@ -3236,21 +3330,42 @@ procedure Tfrmain.tbSlowAnimClick(Sender: TObject);
 var
    i:integer;
 begin
-  for i:=0 to BGRAGif.Count-1 do
-    BGRAGif.FrameDelayMs[i]:=BGRAGif.FrameDelayMs[i]+10;
+  if ifgif then
+  begin
+    for i:=0 to BGRAGif.Count-1 do
+      BGRAGif.FrameDelayMs[i]:=BGRAGif.FrameDelayMs[i]+10;
+  end;
+  if ifapng then
+  begin
+    for i:=0 to Length(APNGDelays)-1 do
+      APNGDelays[i]:= APNGDelays[i]+10;
+  end;
 end;
 
 procedure Tfrmain.tbFastAnimClick(Sender: TObject);
   var
    i:integer;
 begin
-  for i:=0 to BGRAGif.Count-1 do
+  if ifgif then
   begin
-    if BGRAGif.FrameDelayMs[i]>10 then
-      BGRAGif.FrameDelayMs[i]:=BGRAGif.FrameDelayMs[i]-9;
-    if BGRAGif.FrameDelayMs[i]>1 then
-      BGRAGif.FrameDelayMs[i]:=BGRAGif.FrameDelayMs[i]-1;
-  end
+    for i:=0 to BGRAGif.Count-1 do
+    begin
+      if BGRAGif.FrameDelayMs[i]>10 then
+        BGRAGif.FrameDelayMs[i]:=BGRAGif.FrameDelayMs[i]-9;
+      if BGRAGif.FrameDelayMs[i]>1 then
+        BGRAGif.FrameDelayMs[i]:=BGRAGif.FrameDelayMs[i]-1;
+    end;
+  end;
+  if ifapng then
+  begin
+    for i:=0 to Length(APNGDelays)-1 do
+    begin
+      if APNGDelays[i]>10 then
+        APNGDelays[i]:=APNGDelays[i]-9;
+      if APNGDelays[i]>1 then
+        APNGDelays[i]:=APNGDelays[i]-1;
+    end;
+  end;
 end;
 
 procedure Tfrmain.tbNextImageClick(Sender: TObject);

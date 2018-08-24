@@ -22,7 +22,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="1"/>
-      <BuildNr Value="2386"/>
+      <BuildNr Value="2440"/>
       <StringTable Comments="Pequeño visor de imagenes" CompanyName="Independiente" FileDescription="Visor de imágenes LazView" InternalName="lazview" LegalCopyright="R.Mir" LegalTrademarks="Reinier Romero Mir (c)" OriginalFilename="lazview" ProductName="LazView" ProductVersion="0.1"/>
     </VersionInfo>
     <BuildModes Count="2">
@@ -35,7 +35,6 @@
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
-            <Libraries Value="F:/codetyphon/binLibraries/i386-linux/"/>
             <OtherUnitFiles Value="../components/bgrabitmap"/>
             <UnitOutputDirectory Value="../units/$(TargetCPU)-$(TargetOS)-$(LCLWidgetType)"/>
             <SrcPath Value="../components/bgrabitmap"/>
