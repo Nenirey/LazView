@@ -1,7 +1,6 @@
 unit fmain;
 
 {$mode objfpc}{$H+}
-{$GOTO ON}
 interface
 
 uses
@@ -665,8 +664,12 @@ begin
     end;
     BGRAGif.SetSize(w,h);
     BGRAGif:=tmpgif;
-  end
-  else
+  end;
+  if ifapng then
+  begin
+    APNGImage.ResizeImages(w,h,rfLanczos);
+  end;
+  if ifgif=false and ifapng=false then
   begin
     tmpbitmap:=BGRABitmap.TBGRABitmap.Create(w,h);
     tmpbitmap.Canvas.CopyRect(Types.Rect(0,0,w,h),frmain.Image1.Picture.Bitmap.Canvas,Types.Rect(0,0,frmain.Image1.Picture.Bitmap.Width,frmain.Image1.Picture.Bitmap.Height));
@@ -928,7 +931,7 @@ begin
       '.PNG':
       begin
         ifgif:=false;
-        ifapng:=true;
+        SetLength(APNGDelays,0);
         GlobalMetadata.ClearMetaItems;
         APNGImage:=ImagingClasses.TMultiImage.Create;
         if Imaging.DetermineFileFormat(fimagen) <> '' then
@@ -959,6 +962,7 @@ begin
         realimgheight:=pngrect.Height;
         if APNGImage.ImageCount>1 then
         begin
+          ifapng:=true;
           frmain.Timer5.Enabled:=true;
           frmain.tbSlowAnim.Enabled:=true;
           frmain.tbPrevFrame.Enabled:=true;
@@ -2314,6 +2318,7 @@ var
    calidadjpg:integer;
    i:integer;
    bgrtmp:TBGRABitmap;
+   baseimg:ImagingClasses.TSingleImage;
 begin
   if Assigned(flist) then
     frmain.SavePictureDialog1.FileName:=flist[ifile]
@@ -2349,7 +2354,31 @@ begin
           frmain.Image1.Refresh;
           frmain.Image1.Picture.Jpeg.SaveToFile(ExtractFilePath(frmain.SavePictureDialog1.FileName)+pathdelim+ExtractFileName(frmain.SavePictureDialog1.FileName)+'.'+frmain.SavePictureDialog1.GetFilterExt);
         end;
-        2:frmain.Image1.Picture.PNG.SaveToFile(ExtractFilePath(frmain.SavePictureDialog1.FileName)+pathdelim+ExtractFileName(frmain.SavePictureDialog1.FileName)+'.'+frmain.SavePictureDialog1.GetFilterExt);
+        2:
+        begin
+          if ifapng then
+          begin
+            APNGImage.SaveToFile(ExtractFilePath(frmain.SavePictureDialog1.FileName)+pathdelim+ExtractFileName(frmain.SavePictureDialog1.FileName)+'.'+frmain.SavePictureDialog1.GetFilterExt);
+          end;
+          //Convert BGRAGif to APNG
+          if ifgif then
+          begin
+            APNGImage:=ImagingClasses.TMultiImage.Create;
+            APNGImage.Width:=BGRAGif.Width;
+            APNGImage.Height:=BGRAGif.Height;
+            for i:=0 to BGRAGif.Count-1 do
+            begin
+              APNGImage.AddImage(BGRAGif.FrameImage[i].Width,BGRAGif.FrameImage[i].Height);
+              baseimg:=ImagingClasses.TSingleImage.Create;
+              ImagingComponents.ConvertBitmapToImage(BGRAGif.FrameImage[i].Bitmap,baseimg);
+              APNGImage.InsertImage(i,baseimg);
+              GlobalMetadata.SetMetaItem('FrameDelay',BGRAGif.FrameDelayMs[i],i);
+            end;
+            APNGImage.SaveToFile(ExtractFilePath(frmain.SavePictureDialog1.FileName)+pathdelim+ExtractFileName(frmain.SavePictureDialog1.FileName)+'.'+frmain.SavePictureDialog1.GetFilterExt);
+          end;
+          if (ifgif=false) and (ifapng=false) then
+            frmain.Image1.Picture.PNG.SaveToFile(ExtractFilePath(frmain.SavePictureDialog1.FileName)+pathdelim+ExtractFileName(frmain.SavePictureDialog1.FileName)+'.'+frmain.SavePictureDialog1.GetFilterExt);
+        end;
         3:frmain.Image1.Picture.Bitmap.SaveToFile(ExtractFilePath(frmain.SavePictureDialog1.FileName)+pathdelim+ExtractFileName(frmain.SavePictureDialog1.FileName)+'.'+frmain.SavePictureDialog1.GetFilterExt);
         4:frmain.Image1.Picture.Icon.SaveToFile(ExtractFilePath(frmain.SavePictureDialog1.FileName)+pathdelim+ExtractFileName(frmain.SavePictureDialog1.FileName)+'.'+frmain.SavePictureDialog1.GetFilterExt);
         5:
@@ -2357,8 +2386,23 @@ begin
            if ifgif then
            begin
              BGRAGif.SaveToFile(ExtractFilePath(frmain.SavePictureDialog1.FileName)+pathdelim+ExtractFileName(frmain.SavePictureDialog1.FileName)+'.'+frmain.SavePictureDialog1.GetFilterExt);
-           end
-           else
+           end;
+           //Convert APNG to BGRAGif
+           if ifapng then
+           begin
+             BGRAgif:=TBGRAAnimatedGif.Create;
+             for i:=0 to APNGImage.ImageCount-1 do
+             begin
+               bgrtmp:=TBGRABitmap.Create;
+               BGRAgif.SetSize(APNGImage.Width,APNGImage.Height);
+               ImagingComponents.ConvertDataToBitmap(APNGImage.Images[i],bgrtmp.Bitmap);
+               BGRAgif.InsertFrame(i,bgrtmp,0,0,APNGDelays[i],dmKeep,true);
+             end;
+             BGRAGif.SaveToFile(ExtractFilePath(frmain.SavePictureDialog1.FileName)+pathdelim+ExtractFileName(frmain.SavePictureDialog1.FileName)+'.'+frmain.SavePictureDialog1.GetFilterExt);
+             bgrtmp.Destroy;
+             BGRAGif.Destroy;
+           end;
+           if (ifgif=false) and (ifapng=false) then
            begin
              BGRAgif:=TBGRAAnimatedGif.Create;
              bgrtmp:=TBGRABitmap.Create(frmain.Image1.Picture.Bitmap);

@@ -1,7 +1,7 @@
 object frmain: Tfrmain
-  Left = 366
+  Left = 372
   Height = 536
-  Top = 102
+  Top = 129
   Width = 819
   ActiveControl = ShellTreeView1
   AllowDropFiles = True

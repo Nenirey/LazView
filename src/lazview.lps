@@ -3,12 +3,12 @@
   <ProjectSession>
     <Version Value="10"/>
     <BuildModes Active="Release"/>
-    <Units Count="11">
+    <Units Count="17">
       <Unit0>
         <Filename Value="lazview.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="LazView"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="7"/>
         <WindowIndex Value="1"/>
         <CursorPos Y="27"/>
         <UsageCount Value="200"/>
@@ -20,7 +20,7 @@
         <ComponentName Value="frresize"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="9"/>
         <WindowIndex Value="1"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
@@ -33,7 +33,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="fquality"/>
-        <UsageCount Value="37"/>
+        <UsageCount Value="44"/>
       </Unit2>
       <Unit3>
         <Filename Value="feffects.pas"/>
@@ -41,7 +41,7 @@
         <ComponentName Value="freffect"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="10"/>
         <WindowIndex Value="1"/>
         <CursorPos X="14"/>
         <UsageCount Value="200"/>
@@ -54,7 +54,7 @@
         <ComponentName Value="frgoto"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="11"/>
         <WindowIndex Value="1"/>
         <CursorPos X="11"/>
         <UsageCount Value="208"/>
@@ -65,7 +65,7 @@
         <Filename Value="imgsize.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="ImgSize"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="13"/>
         <WindowIndex Value="1"/>
         <CursorPos X="49" Y="177"/>
         <UsageCount Value="200"/>
@@ -77,10 +77,10 @@
         <ComponentName Value="frthumbsize"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="12"/>
         <WindowIndex Value="1"/>
         <CursorPos X="16"/>
-        <UsageCount Value="143"/>
+        <UsageCount Value="150"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit6>
@@ -92,9 +92,9 @@
         <ResourceBaseClass Value="Form"/>
         <IsVisibleTab Value="True"/>
         <WindowIndex Value="1"/>
-        <TopLine Value="356"/>
-        <CursorPos X="5" Y="372"/>
-        <UsageCount Value="99"/>
+        <TopLine Value="1317"/>
+        <CursorPos X="11" Y="1317"/>
+        <UsageCount Value="106"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit7>
@@ -104,7 +104,7 @@
         <UnitName Value="BGRABitmapTypes"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="1"/>
-        <UsageCount Value="81"/>
+        <UsageCount Value="88"/>
       </Unit8>
       <Unit9>
         <Filename Value="print.pas"/>
@@ -112,10 +112,10 @@
         <ComponentName Value="frprint"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="14"/>
         <WindowIndex Value="1"/>
         <CursorPos X="21" Y="36"/>
-        <UsageCount Value="78"/>
+        <UsageCount Value="85"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit9>
@@ -125,13 +125,137 @@
         <ComponentName Value="frexif"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="8"/>
         <WindowIndex Value="1"/>
-        <UsageCount Value="53"/>
+        <UsageCount Value="60"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit10>
+      <Unit11>
+        <Filename Value="../components/vampireimaging/Source/ImagingClasses.pas"/>
+        <EditorIndex Value="5"/>
+        <WindowIndex Value="1"/>
+        <TopLine Value="254"/>
+        <CursorPos X="75" Y="266"/>
+        <UsageCount Value="13"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit11>
+      <Unit12>
+        <Filename Value="../components/vampireimaging/Source/ImagingTypes.pas"/>
+        <EditorIndex Value="6"/>
+        <WindowIndex Value="1"/>
+        <CursorPos X="14" Y="467"/>
+        <UsageCount Value="13"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit12>
+      <Unit13>
+        <Filename Value="../components/vampireimaging/Source/Imaging.pas"/>
+        <EditorIndex Value="4"/>
+        <WindowIndex Value="1"/>
+        <TopLine Value="627"/>
+        <CursorPos X="3" Y="635"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit13>
+      <Unit14>
+        <Filename Value="../components/bgrabitmap/bgrareadpng.pas"/>
+        <UnitName Value="BGRAReadPng"/>
+        <EditorIndex Value="3"/>
+        <WindowIndex Value="1"/>
+        <TopLine Value="1090"/>
+        <CursorPos Y="1103"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+      </Unit14>
+      <Unit15>
+        <Filename Value="../components/bgrabitmap/bgragifformat.pas"/>
+        <UnitName Value="BGRAGifFormat"/>
+        <EditorIndex Value="2"/>
+        <WindowIndex Value="1"/>
+        <TopLine Value="994"/>
+        <CursorPos Y="1006"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+      </Unit15>
+      <Unit16>
+        <Filename Value="../components/bgrabitmap/bgraanimatedgif.pas"/>
+        <UnitName Value="BGRAAnimatedGif"/>
+        <EditorIndex Value="1"/>
+        <WindowIndex Value="1"/>
+        <TopLine Value="83"/>
+        <CursorPos X="15" Y="94"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit16>
     </Units>
-    <JumpHistory HistoryIndex="-1"/>
+    <JumpHistory Count="16" HistoryIndex="15">
+      <Position1>
+        <Filename Value="fmain.pas"/>
+        <Caret Line="372" Column="5" TopLine="367"/>
+      </Position1>
+      <Position2>
+        <Filename Value="fmain.pas"/>
+        <Caret Line="932" Column="33" TopLine="922"/>
+      </Position2>
+      <Position3>
+        <Filename Value="fmain.pas"/>
+        <Caret Line="2519" Column="10" TopLine="2513"/>
+      </Position3>
+      <Position4>
+        <Filename Value="fmain.pas"/>
+        <Caret Line="11" Column="58"/>
+      </Position4>
+      <Position5>
+        <Filename Value="fmain.pas"/>
+        <Caret Line="965" Column="24" TopLine="952"/>
+      </Position5>
+      <Position6>
+        <Filename Value="fmain.pas"/>
+        <Caret Line="2523" Column="9" TopLine="2517"/>
+      </Position6>
+      <Position7>
+        <Filename Value="fmain.pas"/>
+        <Caret Line="670" Column="19" TopLine="663"/>
+      </Position7>
+      <Position8>
+        <Filename Value="fmain.pas"/>
+        <Caret Line="2372" Column="15" TopLine="2360"/>
+      </Position8>
+      <Position9>
+        <Filename Value="../components/bgrabitmap/bgrareadpng.pas"/>
+        <Caret Line="1103" TopLine="1090"/>
+      </Position9>
+      <Position10>
+        <Filename Value="fmain.pas"/>
+        <Caret Line="2369" Column="15" TopLine="2357"/>
+      </Position10>
+      <Position11>
+        <Filename Value="fmain.pas"/>
+        <Caret Line="2372" Column="17" TopLine="2358"/>
+      </Position11>
+      <Position12>
+        <Filename Value="fmain.pas"/>
+        <Caret Line="2358" Column="11" TopLine="2356"/>
+      </Position12>
+      <Position13>
+        <Filename Value="fmain.pas"/>
+        <Caret Line="2393" Column="18" TopLine="2383"/>
+      </Position13>
+      <Position14>
+        <Filename Value="fmain.pas"/>
+        <Caret Line="2395" Column="32" TopLine="2381"/>
+      </Position14>
+      <Position15>
+        <Filename Value="fmain.pas"/>
+        <Caret Line="2372" Column="40" TopLine="2360"/>
+      </Position15>
+      <Position16>
+        <Filename Value="fmain.pas"/>
+        <Caret Line="3431" Column="11" TopLine="3428"/>
+      </Position16>
+    </JumpHistory>
   </ProjectSession>
 </CONFIG>
