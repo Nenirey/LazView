@@ -22,7 +22,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="1"/>
-      <BuildNr Value="2588"/>
+      <BuildNr Value="2666"/>
       <StringTable Comments="Pequeño visor de imagenes" CompanyName="Independiente" FileDescription="Visor de imágenes LazView" InternalName="lazview" LegalCopyright="R.Mir" LegalTrademarks="Reinier Romero Mir (c)" OriginalFilename="lazview" ProductName="LazView" ProductVersion="0.1"/>
     </VersionInfo>
     <BuildModes Count="2">
@@ -105,7 +105,7 @@
         <ComponentName Value="fquality"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="fquality"/>
+        <UnitName Value="Unit3"/>
       </Unit2>
       <Unit3>
         <Filename Value="feffects.pas"/>
@@ -201,4 +201,17 @@
       </Options>
     </Linking>
   </CompilerOptions>
+  <Debugging>
+    <Exceptions Count="3">
+      <Item1>
+        <Name Value="EIntOverflow"/>
+      </Item1>
+      <Item2>
+        <Name Value="RunError(215)"/>
+      </Item2>
+      <Item3>
+        <Name Value="PNGImageException"/>
+      </Item3>
+    </Exceptions>
+  </Debugging>
 </CONFIG>

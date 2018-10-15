@@ -873,7 +873,7 @@ var
    ImgData: TImgData;
    pngrect:TRect;
    Item: TMetadataItem;
-   Orientation:string='Horizontal (Normal)';
+   Orientation:string='Horizontal (normal)';
 begin
   {$IFDEF WINDOWS}
   wimagen:=UTF16LongName(fimagen);
@@ -882,8 +882,12 @@ begin
   {$ENDIF}
   frmain.Timer3.Enabled:=false;
   frmain.Timer5.Enabled:=false;
+  ifgif:=false;
+  ifapng:=false;
   frmain.StatusBar1.Panels.Items[5].Text:='';
   starttime:=Now();
+  if Assigned(APNGImage) then
+    APNGImage.ClearAll;
   try
     frmain.Caption:='LazView '+fimagen;
     frmain.Label1.Caption:=inttostr(ifile+1)+'/'+inttostr(nfile)+'  '+fimagen;
@@ -947,6 +951,11 @@ begin
         frmain.Image1.Picture.PNG.Create;
         frmain.Image1.Picture.PNG.Width:=APNGImage.Width;
         frmain.Image1.Picture.PNG.Height:=APNGImage.Height;
+        ebitmap:=Graphics.TBitmap.Create;
+        ImagingComponents.ConvertImageToBitmap(APNGImage,ebitmap);
+        frmain.StatusBar1.Panels.Items[1].Text:='Resolution:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
+        frmain.Image1.Picture.Bitmap.Assign(ebitmap);
+        ebitmap.Destroy;
         pngrect.Top:=0;
         pngrect.Left:=0;
         pngrect.Width:=APNGImage.Width;
@@ -977,21 +986,17 @@ begin
           frmain.tbPauseAnim.Enabled:=true;
           frmain.tbNextFrame.Enabled:=true;
           frmain.tbFastAnim.Enabled:=true;
-          frmain.StatusBar1.Panels[2].Text:=inttostr(APNGImage.ActiveImage)+'/'+inttostr(APNGImage.ImageCount);
+          frmain.StatusBar1.Panels[2].Text:=inttostr(APNGImage.ActiveImage+1)+'/'+inttostr(APNGImage.ImageCount);
         end
         else
         begin
-          ebitmap:=Graphics.TBitmap.Create;
-          ImagingComponents.ConvertImageToBitmap(APNGImage,ebitmap);
-          frmain.Image1.Picture.Bitmap.Assign(ebitmap);
+          ifapng:=false;
           frmain.tbSlowAnim.Enabled:=false;
           frmain.tbPrevFrame.Enabled:=false;
           frmain.tbPauseAnim.Enabled:=false;
           frmain.tbNextFrame.Enabled:=false;
           frmain.tbFastAnim.Enabled:=false;
           frmain.StatusBar1.Panels[2].Text:='';
-          //goto normalpng;
-          //ImagingComponents.DisplayImage(frmain.Image1.Picture.PNG.Canvas,pngrect,APNGImage);
         end;
       end;
       '.JPG','.JPEG','.JPE','.JFIF','.BMP','.XPM','.PBM','.PPM','.PCX','.ICNS','.CUR','.TIF','.TIFF':
@@ -1403,6 +1408,7 @@ var
    title:string;
    tmpgif:TBGRAAnimatedGif;
    tmpbitmap:BGRABitmap.TBGRABitmap;
+   nbitmap:Graphics.TBitmap;
    i:integer;
    imgrect:TRect;
    imgpoint:TPoint;
@@ -1412,7 +1418,7 @@ begin
   frmain.Caption:='Aplicando efecto espere...';
   imgrect.Left:=0;
   imgrect.Top:=0;
-  if ifgif and (BGRAGif.Count>1) then
+  if ifgif and (BGRAGif.Count>0) then
   begin
     tmpgif:=TBGRAAnimatedGif.Create;
     tmpgif.SetSize(BGRAGif.Width,BGRAGif.Height);
@@ -1462,8 +1468,41 @@ begin
     tmpbitmap.Destroy;
     BGRAGif.SetSize(BGRAGif.Width,BGRAGif.Height);
     BGRAGif:=tmpgif;
-  end
-  else
+  end;
+  if ifapng then
+  begin
+    for i:=0 to APNGImage.ImageCount-1 do
+    begin
+      case filter of
+      1:begin
+           APNGImage.ActiveImage:=i;
+           APNGImage.Format:=ifA16Gray16;
+         end;
+      17:begin
+           APNGImage.ActiveImage:=i;
+           APNGImage.Rotate(270);
+         end;
+      18:begin
+           APNGImage.ActiveImage:=i;
+           APNGImage.Rotate(90);
+         end;
+      19:begin
+           APNGImage.ActiveImage:=i;
+           APNGImage.Mirror;
+         end;
+      20:begin
+           APNGImage.ActiveImage:=i;
+           APNGImage.Flip;
+         end;
+        else
+        begin
+          ShowMessage('Not implemented!!');
+          break;
+        end;
+      end;
+    end;
+  end;
+  if (ifgif=false) and (ifapng=false) then
   begin
     if frmain.Image1.Visible then
     begin
@@ -1540,7 +1579,7 @@ begin
   realmode;
   title:=frmain.Caption;
   frmain.Caption:='Aplicando efecto porfavor espere...';
-  if ifgif and (BGRAGif.Count>1) then
+  if ifgif and (BGRAGif.Count>0) then
   begin
     tmpgif:=TBGRAAnimatedGif.Create;
     case efect of
@@ -1695,8 +1734,43 @@ begin
     tmpbitmap.Destroy;
     BGRAGif.SetSize(BGRAGif.Width,BGRAGif.Height);
     BGRAGif:=tmpgif;
-  end
-  else
+  end;
+  if ifapng then
+  begin
+    for i:=0 to APNGImage.ImageCount-1 do
+    begin
+      case efect of
+        5:begin
+            APNGImage.ActiveImage:=i;
+            APNGImage.SwapChannels(1,3);
+          end;
+        6:begin
+            APNGImage.ActiveImage:=i;
+            APNGImage.SwapChannels(2,3);
+          end;
+        7:begin
+            APNGImage.ActiveImage:=i;
+            APNGImage.SwapChannels(1,2);
+          end;
+        8:begin
+            APNGImage.ActiveImage:=i;
+            APNGImage.SwapChannels(1,3);
+            APNGImage.SwapChannels(2,3);
+          end;
+        9:begin
+            APNGImage.ActiveImage:=i;
+            APNGImage.SwapChannels(2,3);
+            APNGImage.SwapChannels(1,3);
+          end;
+        else
+        begin
+          ShowMessage('Not implemented!!');
+          break;
+        end;
+      end;
+    end;
+  end;
+  if (ifgif=false and ifapng=false) then
   begin
     imagen:=TLazIntfImage.Create(0,0);
     imagen2:=frmain.Image1.Picture.Bitmap.CreateIntfImage;
@@ -2427,7 +2501,7 @@ begin
         begin
           if ifapng then
           begin
-            APNGImage.SaveToFile(ExtractFilePath(frmain.SavePictureDialog1.FileName)+pathdelim+ExtractFileName(frmain.SavePictureDialog1.FileName)+'.'+frmain.SavePictureDialog1.GetFilterExt);
+            APNGImage.SaveMultiToFile(ExtractFilePath(frmain.SavePictureDialog1.FileName)+pathdelim+ExtractFileName(frmain.SavePictureDialog1.FileName)+'.'+frmain.SavePictureDialog1.GetFilterExt);
           end;
           //Convert BGRAGif to APNG
           if ifgif then
@@ -2976,14 +3050,14 @@ begin
     mosaic.Clear;
     frmain.ScrollBox1.Repaint;
     frmain.sboxthumb.Repaint;
-    //frmain.psVertical.Color:=clNone;
+    frmain.Splitter2.Color:=clNone;
   end
   else
   begin
     mosaic:=Graphics.TBitmap.Create;
     rendermosaic;
     frmain.sboxthumb.Repaint;
-    //frmain.psVertical.Color:=clWhite;
+    frmain.Splitter2.Color:=clWhite;
   end;
   frmain.mnuMosaic.Checked:=not frmain.mnuMosaic.Checked;
   frmain.Image1.Repaint;
@@ -3295,6 +3369,13 @@ var
 begin
   if Assigned(APNGImage) then
   begin
+    if Sender<>nil then
+    begin
+      if APNGImage.ActiveImage<APNGImage.ImageCount-1 then
+        APNGImage.ActiveImage:=APNGImage.ActiveImage+1
+      else
+        APNGImage.ActiveImage:=0;
+    end;
     pngrect.Top:=0;
     pngrect.Left:=0;
     pngrect.Width:=APNGImage.Width;
@@ -3302,14 +3383,10 @@ begin
     tmpbitmap:=Graphics.TBitmap.Create;
     ImagingComponents.ConvertImageToBitmap(APNGImage,tmpbitmap);
     frmain.Image1.Picture.Bitmap.Assign(tmpbitmap);
-    //ImagingComponents.DisplayImage(frmain.Image1.Picture.PNG.Canvas,pngrect,APNGImage);
     frmain.Timer5.Interval:=APNGDelays[APNGImage.ActiveImage];
     frmain.Image1.Refresh;
-    frmain.StatusBar1.Panels[2].Text:=inttostr(APNGImage.ActiveImage)+'/'+inttostr(APNGImage.ImageCount);
-    if APNGImage.ActiveImage<APNGImage.ImageCount-1 then
-      APNGImage.ActiveImage:=APNGImage.ActiveImage+1
-    else
-      APNGImage.ActiveImage:=0;
+    frmain.StatusBar1.Panels[2].Text:=inttostr(APNGImage.ActiveImage+1)+'/'+inttostr(APNGImage.ImageCount);
+    tmpbitmap.Destroy;
   end;
 end;
 
@@ -3428,7 +3505,7 @@ begin
   begin
     frmain.Timer5.Enabled:=false;
     if APNGImage.ActiveImage>0 then
-      APNGImage.ActiveImage:=APNGImage.ActiveImage-2
+      APNGImage.ActiveImage:=APNGImage.ActiveImage-1
     else
       APNGImage.ActiveImage:=APNGImage.ImageCount-1;
     frmain.tbPauseAnim.ImageIndex:=21;
@@ -3458,7 +3535,7 @@ begin
   begin
     frmain.Timer5.Enabled:=false;
     frmain.tbPauseAnim.ImageIndex:=21;
-    frmain.Timer5Timer(nil);
+    frmain.Timer5Timer(self);
   end;
 end;
 
@@ -3557,7 +3634,7 @@ end;
 
 procedure Tfrmain.tbFlipHorizontalClick(Sender: TObject);
 begin
- if ((realimgwidth>256) or ifgif) and ((LCLintf.GetKeyState( VK_SHIFT ) <> -128) and (LCLintf.GetKeyState( VK_SHIFT ) <> -127)) then
+ if ((realimgwidth>256) or ifgif or ifapng) and ((LCLintf.GetKeyState( VK_SHIFT ) <> -128) and (LCLintf.GetKeyState( VK_SHIFT ) <> -127)) then
    filterimagen(19)
  else
    efectimagen(1);
@@ -3565,7 +3642,7 @@ end;
 
 procedure Tfrmain.tbFlipVerticalClick(Sender: TObject);
 begin
-  if ((realimgwidth>256) or ifgif) and ((LCLintf.GetKeyState( VK_SHIFT ) <> -128) and (LCLintf.GetKeyState( VK_SHIFT ) <> -127)) then
+  if ((realimgwidth>256) or ifgif or ifapng) and ((LCLintf.GetKeyState( VK_SHIFT ) <> -128) and (LCLintf.GetKeyState( VK_SHIFT ) <> -127)) then
     filterimagen(20)
   else
     efectimagen(2);
@@ -3629,7 +3706,7 @@ end;
 
 procedure Tfrmain.tbRotateLeftClick(Sender: TObject);
 begin
-  if ((realimgwidth>256) or ifgif) and ((LCLintf.GetKeyState( VK_SHIFT ) <> -128) and (LCLintf.GetKeyState( VK_SHIFT ) <> -127)) then
+  if ((realimgwidth>256) or ifgif or ifapng) and ((LCLintf.GetKeyState( VK_SHIFT ) <> -128) and (LCLintf.GetKeyState( VK_SHIFT ) <> -127)) then
     filterimagen(18)
   else
     efectimagen(3);
@@ -3637,7 +3714,7 @@ end;
 
 procedure Tfrmain.tbRotateRightClick(Sender: TObject);
 begin
-  if ((realimgwidth>256) or ifgif) and ((LCLintf.GetKeyState( VK_SHIFT ) <> -128) and (LCLintf.GetKeyState( VK_SHIFT ) <> -127)) then
+  if ((realimgwidth>256) or ifgif or ifapng) and ((LCLintf.GetKeyState( VK_SHIFT ) <> -128) and (LCLintf.GetKeyState( VK_SHIFT ) <> -127)) then
     filterimagen(17)
   else
     efectimagen(4);
@@ -3697,6 +3774,9 @@ var
    bgcolor:TBGRAPixel;
    th,tw:integer;
    wthumb:UnicodeString;
+   ImgData: TImgData;
+   Orientation:string='Horizontal (normal)';
+   bmp:BGRABitMap.TBGRABitmap;
 begin
   wthumb:=UTF16LongName(carpeta+iname);
   {$IFDEF WINDOWS}
@@ -3708,15 +3788,38 @@ begin
   bgcolor.blue:=0;
   bgcolor.green:=0;
   bgcolor.red:=0;
-  //if carpeta=thumbpath then
-  //begin
-    try
+  try
+    ////EXIF information
+    ImgData:= TImgData.Create();
+    if ImgData.ProcessFile(wthumb) then
+    begin
+      if ImgData.HasEXIF then
+      begin
+        Orientation:=ImgData.ExifObj.TagByName['Orientation'].Data;
+      end
+      else
+        Orientation:='Horizontal (normal)';
+      ImgData.Free;
+    end;
     thumb:=Graphics.TBitMap.Create;
     thumb.Width:=thumbsize;
     thumb.Height:=thumbsize;
     thumbtmp:=TPicture.Create();
     streamimage:=TFileStream.Create(wthumb, fmOpenRead or fmShareDenyNone);
-    thumbtmp.Bitmap.Assign(GetStreamThumbnail(streamimage,thumbsize,thumbsize, bgcolor, false));
+        //*******Implement orientation image********
+    case Orientation of
+    'Rotate 90 CW': thumbtmp.Bitmap.Assign(GetStreamThumbnail(streamimage,thumbsize,thumbsize, bgcolor, false).RotateCW);
+    'Rotate 270 CW':thumbtmp.Bitmap.Assign(GetStreamThumbnail(streamimage,thumbsize,thumbsize, bgcolor, false).RotateCCW);
+    'Rotate 180 CW':
+    begin
+      bmp:=BGRABitMap.TBGRABitmap.Create(GetStreamThumbnail(streamimage,thumbsize,thumbsize, bgcolor, false));
+      bmp.HorizontalFlip;
+      thumbtmp.Bitmap.Assign(bmp);
+      bmp.Free;
+    end;
+      else
+        thumbtmp.Bitmap.Assign(GetStreamThumbnail(streamimage,thumbsize,thumbsize, bgcolor, false));
+    end;
     streamimage.Free;
     thumb.Canvas.Rectangle(0,0,thumbsize,thumbsize);
     thumb.Canvas.CopyRect(Types.Rect(2,2,thumbsize-2,thumbsize-2),thumbtmp.Bitmap.Canvas,Types.Rect(0,0,thumbtmp.Bitmap.Width,thumbtmp.Bitmap.Height));

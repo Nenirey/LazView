@@ -1,12 +1,12 @@
 object frmain: Tfrmain
-  Left = 251
+  Left = 289
   Height = 609
   Top = 72
   Width = 902
   ActiveControl = ShellTreeView1
   AllowDropFiles = True
   Caption = 'LazView'
-  ClientHeight = 580
+  ClientHeight = 589
   ClientWidth = 902
   KeyPreview = True
   Menu = MainMenu1
@@ -25,11 +25,11 @@ object frmain: Tfrmain
   OnShow = FormShow
   OnWindowStateChange = FormWindowStateChange
   Position = poDesktopCenter
-  LCLVersion = '2.1.0.0'
+  LCLVersion = '1.8.4.0'
   object StatusBar1: TStatusBar
     Left = 0
-    Height = 21
-    Top = 559
+    Height = 23
+    Top = 566
     Width = 902
     Panels = <    
       item
@@ -66,7 +66,7 @@ object frmain: Tfrmain
     AnchorSideBottom.Control = Splitter1
     AnchorSideBottom.Side = asrBottom
     Left = 0
-    Height = 535
+    Height = 542
     Top = 24
     Width = 2
     Anchors = [akTop, akLeft, akRight, akBottom]
@@ -92,7 +92,7 @@ object frmain: Tfrmain
     AnchorSideTop.Side = asrBottom
     AnchorSideBottom.Control = StatusBar1
     Left = 2
-    Height = 535
+    Height = 542
     Top = 24
     Width = 5
     Align = alNone
@@ -423,7 +423,7 @@ object frmain: Tfrmain
     AnchorSideBottom.Control = Splitter2
     AnchorSideBottom.Side = asrBottom
     Left = 2
-    Height = 341
+    Height = 347
     Top = 24
     Width = 900
     HorzScrollBar.Increment = 29
@@ -436,7 +436,7 @@ object frmain: Tfrmain
     VertScrollBar.Tracking = True
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderStyle = bsNone
-    ClientHeight = 341
+    ClientHeight = 347
     ClientWidth = 900
     Enabled = False
     Color = clBlack
@@ -450,7 +450,7 @@ object frmain: Tfrmain
     OnPaint = ScrollBox1Paint
     object Image1: TImage
       Left = 0
-      Height = 341
+      Height = 347
       Top = 0
       Width = 900
       AntialiasingMode = amOn
@@ -472,7 +472,7 @@ object frmain: Tfrmain
       AnchorSideRight.Control = ScrollBox1
       AnchorSideRight.Side = asrBottom
       Left = 0
-      Height = 23
+      Height = 21
       Top = 0
       Width = 900
       Anchors = [akTop, akLeft, akRight]
@@ -491,7 +491,7 @@ object frmain: Tfrmain
       AnchorSideRight.Control = ScrollBox1
       AnchorSideRight.Side = asrBottom
       Left = 2
-      Height = 23
+      Height = 21
       Top = 2
       Width = 897
       Anchors = [akTop, akLeft, akRight]
@@ -526,8 +526,8 @@ object frmain: Tfrmain
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = StatusBar1
     Left = 2
-    Height = 197
-    Top = 362
+    Height = 198
+    Top = 368
     Width = 900
     HorzScrollBar.Increment = 1
     HorzScrollBar.Page = 1
@@ -553,7 +553,7 @@ object frmain: Tfrmain
     Cursor = crVSplit
     Left = 2
     Height = 3
-    Top = 362
+    Top = 368
     Width = 900
     Align = alNone
     Anchors = [akLeft, akRight]
@@ -565,8 +565,8 @@ object frmain: Tfrmain
     ResizeStyle = rsLine
   end
   object ImageList1: TImageList
-    Left = 8
-    Top = 207
+    left = 8
+    top = 207
     Bitmap = {
       4C69240000001000000010000000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF0004733A6404753BC5FFFFFF00FFFF
@@ -1724,8 +1724,8 @@ object frmain: Tfrmain
     }
   end
   object MainMenu1: TMainMenu
-    Left = 40
-    Top = 208
+    left = 40
+    top = 208
     object mnuFile: TMenuItem
       Caption = '&File'
       object mnuOpen: TMenuItem
@@ -2047,49 +2047,49 @@ object frmain: Tfrmain
   end
   object OpenPictureDialog1: TOpenPictureDialog
     Filter = 'Gráfico (*.png;*.xpm;*.bmp;*.cur;*.ico;*.icns;*.jpeg;*.jpg;*.jpe;*.jfif;*.tif;*.tiff;*.gif;*.pbm;*.pgm;*.ppm;*.gif;*.pcx;*.psd)|*.png;*.xpm;*.bmp;*.cur;*.ico;*.icns;*.jpeg;*.jpg;*.jpe;*.jfif;*.tif;*.tiff;*.gif;*.pbm;*.pgm;*.ppm;*.gif;*.pcx;*.psd|Portable Network Graphic (*.png)|*.png|Pixmap (*.xpm)|*.xpm|Bitmaps (*.bmp)|*.bmp|Cursor (*.cur)|*.cur|Icon (*.ico)|*.ico|Mac OS X Icon (*.icns)|*.icns|Joint Picture Expert Group (*.jpeg;*.jpg;*.jpe;*.jfif)|*.jpeg;*.jpg;*.jpe;*.jfif|Tagged Image File Format (*.tif;*.tiff)|*.tif;*.tiff|Graphics Interchange Format (*.gif)|*.gif|Portable PixMap (*.pbm;*.pgm;*.ppm)|*.pbm;*.pgm;*.ppm'
-    Left = 72
-    Top = 208
+    left = 72
+    top = 208
   end
   object Timer1: TTimer
     Enabled = False
     Interval = 10000
     OnTimer = Timer1Timer
-    Left = 104
-    Top = 208
+    left = 104
+    top = 208
   end
   object SavePictureDialog1: TSavePictureDialog
     Filter = 'Joint Picture Expert Group (*.jpeg;*.jpg;*.jpe;*.jfif)|*.jpg|Portable Network Graphic (*.png)|*.png|Bitmaps (*.bmp)|*.bmp|Icon (*.ico)|*.ico|Graphics Interchange Format (*.gif)|*.gif'
-    Left = 136
-    Top = 208
+    left = 136
+    top = 208
   end
   object Timer2: TTimer
     Enabled = False
     OnTimer = Timer2Timer
-    Left = 168
-    Top = 208
+    left = 168
+    top = 208
   end
   object Timer3: TTimer
     OnTimer = Timer3Timer
-    Left = 200
-    Top = 208
+    left = 200
+    top = 208
   end
   object PopupMenu1: TPopupMenu
     OnPopup = PopupMenu1Popup
-    Left = 232
-    Top = 208
+    left = 232
+    top = 208
   end
   object Timer4: TTimer
     Enabled = False
     Interval = 500
     OnTimer = Timer4Timer
-    Left = 264
-    Top = 207
+    left = 264
+    top = 207
   end
   object Timer5: TTimer
     Enabled = False
     Interval = 41
     OnTimer = Timer5Timer
-    Left = 312
-    Top = 207
+    left = 312
+    top = 207
   end
 end
