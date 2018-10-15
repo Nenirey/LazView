@@ -6,7 +6,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, ComCtrls,
   StdCtrls, Menus, ExtDlgs, LazFileUtils, FileUtil, IntfGraphics,
-  types, LCLType, PairSplitter, ShellCtrls, FPImage, fresize, fquality, feffects, fgoto, fthumbsize,
+  types, LCLType, ShellCtrls, FPImage, fresize, fquality, feffects, fgoto, fthumbsize,
   LazUTF8, print{$IFDEF WINDOWS}, Registry, Windows, Windirs{$ENDIF},
   BGRABitmapTypes, BGRABitmap, BGRAThumbnail, BGRAAnimatedGif,
   DateUtils, Math, ImgSize, BGRAGifFormat, Printers, LCLintf, fexif, INIFiles, LCLTranslator,
@@ -99,9 +99,6 @@ type
     mnuRotateL: TMenuItem;
     mnuRotateR: TMenuItem;
     OpenPictureDialog1: TOpenPictureDialog;
-    psVertical: TPairSplitter;
-    pssImagen: TPairSplitterSide;
-    pssThumbs: TPairSplitterSide;
     PopupMenu1: TPopupMenu;
     SavePictureDialog1: TSavePictureDialog;
     ScrollBox1: TScrollBox;
@@ -109,6 +106,7 @@ type
     Shape1: TShape;
     ShellTreeView1: TShellTreeView;
     Splitter1: TSplitter;
+    Splitter2: TSplitter;
     StatusBar1: TStatusBar;
     Timer1: TTimer;
     Timer2: TTimer;
@@ -253,7 +251,6 @@ type
     procedure Timer3Timer(Sender: TObject);
     procedure Timer4Timer(Sender: TObject);
     procedure Timer5Timer(Sender: TObject);
-    procedure ToolBar1Click(Sender: TObject);
     procedure ToolBar1MouseLeave(Sender: TObject);
     procedure ToolBar1MouseMove(Sender: TObject; Shift: TShiftState; X,
       Y: Integer);
@@ -393,6 +390,7 @@ begin
   end;
   iniconfigfile.WriteBool('Config','stayontop',frmain.mnuAlwaysOnTop.Checked);
   iniconfigfile.WriteBool('Config','backgroundmosaic',frmain.mnuMosaic.Checked);
+  iniconfigfile.WriteInteger('Config','thumbpanelsize',frmain.Splitter2.Top);
   iniconfigfile.UpdateFile;
   iniconfigfile.Free;
 end;
@@ -425,7 +423,18 @@ begin
   if iniconfigfile.ReadBool('Config','compactmode',compactmode) then
     compact;
   if iniconfigfile.ReadBool('Config','showthumbs',showthumbs) then
-    showthumbnails;
+  begin
+    frmain.mnuShowThumbs.Checked:=true;
+    frmain.tbShowThumbs.Down:=true;
+    showthumbs:=true;
+    frmain.sboxthumb.Visible:=true;
+    if frmain.StatusBar1.Visible then
+      frmain.Splitter2.Top:=iniconfigfile.ReadInteger('Config','thumbpanelsize',frmain.StatusBar1.Top-64)
+    else
+      frmain.Splitter2.Top:=iniconfigfile.ReadInteger('Config','thumbpanelsize',frmain.StatusBar1.Top+frmain.StatusBar1.Height-64);
+    thumbsize:=frmain.sboxthumb.Height;
+    frmain.PairSplitterSide2Resize(nil);
+  end;
   tmplang:=iniconfigfile.ReadString('Config','language','en');
   SetDefaultLang(tmplang);
   for i:=0 to frmain.mnuLanguage.Count-1 do
@@ -447,7 +456,7 @@ begin
     mosaic:=Graphics.TBitmap.Create;
     rendermosaic;
     frmain.sboxthumb.Repaint;
-    frmain.psVertical.Color:=clWhite;
+    frmain.Splitter2.Color:=clWhite;
     frmain.mnuMosaic.Checked:=true;
   end
   else
@@ -457,12 +466,14 @@ end;
 
 procedure showthumbnails;
 begin
-  frmain.pssThumbs.OnResize:=@frmain.PairSplitterSide2Resize;
   frmain.mnuShowThumbs.Checked:=true;
   frmain.tbShowThumbs.Down:=true;
   showthumbs:=true;
   frmain.sboxthumb.Visible:=true;
-  frmain.psVertical.Position:=frmain.psVertical.Height-64-18;
+  if frmain.StatusBar1.Visible then
+    frmain.Splitter2.Top:=frmain.StatusBar1.Top-thumbsize-18
+  else
+    frmain.Splitter2.Top:=frmain.StatusBar1.Top-thumbsize-18-frmain.StatusBar1.Height;
 end;
 
 procedure compact;
@@ -471,14 +482,15 @@ begin
     fheight:=frmain.Height;
     frmain.ToolBar1.Visible:=false;
     frmain.StatusBar1.Visible:=false;
-    frmain.psVertical.AnchorSideTop.Control:=frmain;
-    frmain.psVertical.AnchorSideTop.Side:=asrTop;
-    frmain.Splitter1.AnchorSideTop.Control:=frmain;
-    frmain.Splitter1.AnchorSideTop.Side:=asrTop;
-    frmain.psVertical.AnchorSideBottom.Control:=frmain;
-    frmain.psVertical.AnchorSideBottom.Side:=asrBottom;
-    frmain.Splitter1.AnchorSideBottom.Control:=frmain;
-    frmain.Splitter1.AnchorSideBottom.Side:=asrBottom;
+
+
+    frmain.ScrollBox1.AnchorSideTop.Control:=frmain;
+    frmain.ScrollBox1.AnchorSideTop.Side:=asrTop;
+
+
+    frmain.sboxthumb.AnchorSideBottom.Control:=frmain;
+    frmain.sboxthumb.AnchorSideBottom.Side:=asrBottom;
+
     frmain.MainMenu1.Items.Visible:=false;
     compactmode:=true;
 end;
@@ -507,7 +519,7 @@ var
 begin
   inprocessanim:=true;
   i:=frmain.sboxthumb.HorzScrollBar.Position;
-  center:=(frmain.sboxthumb.Components[ifile] as TControl).Left-Round(frmain.pssThumbs.Width/2)+Round(thumbsize/2)+1;
+  center:=(frmain.sboxthumb.Components[ifile] as TControl).Left-Round(frmain.Splitter2.Width/2)+Round(thumbsize/2)+1;
   if i<center then
   begin
     //ShowMessage('Left');
@@ -559,7 +571,7 @@ begin
       Application.ProcessMessages;
     end;
   end;
-  frmain.sboxthumb.HorzScrollBar.Position:=(frmain.sboxthumb.Components[ifile] as TControl).Left-Round(frmain.pssThumbs.Width/2)+Round(thumbsize/2)+1;
+  frmain.sboxthumb.HorzScrollBar.Position:=(frmain.sboxthumb.Components[ifile] as TControl).Left-Round(frmain.Splitter2.Width/2)+Round(thumbsize/2)+1;
   inprocessanim:=false;
 end;
 
@@ -597,7 +609,6 @@ begin
         mosaic.Canvas.Pen.Color:=clGray;
       end;
       mosaic.Canvas.Rectangle(x*mosaicsize,y*mosaicsize,x*mosaicsize+mosaicsize,y*mosaicsize+mosaicsize);
-      //frmain.ScrollBox1.Canvas.Draw(0,0,mosaic);
     end;
   end;
   frmain.ScrollBox1.Canvas.Draw(0,0,mosaic);
@@ -606,7 +617,6 @@ end;
 
 procedure realmode;
 begin
-  //frmain.MenuItem58.Checked:=true;
   if Assigned(flist) and frmain.Image1.Visible and modethumb then
   begin
     loadpicture(carpeta+flist[ifile],true,true,true);
@@ -662,6 +672,7 @@ begin
       tmpgif.InsertFrame(i,tmpbitmap,0,0,BGRAGif.FrameDelayMs[i],BGRAGif.FrameDisposeMode[i],BGRAGif.FrameHasLocalPalette[i]);
       tmpbitmap.Destroy;
     end;
+    tmpgif.LoopCount:=BGRAGif.LoopCount;
     BGRAGif.SetSize(w,h);
     BGRAGif:=tmpgif;
   end;
@@ -796,13 +807,11 @@ procedure zoomoriginal();
 begin
   realmode;
   frmain.Image1.Align:=alNone;
-  //frmain.ScrollBox1.AutoScroll:=true;
   frmain.ScrollBox1.Enabled:=true;
   frmain.Image1.Stretch:=true;
   frmain.Image1.AutoSize:=true;
   frmain.Image1.Width:=frmain.Image1.Picture.BitMap.Width;
   frmain.Image1.Height:=frmain.Image1.Picture.BitMap.Height;
-  //frmain.Image1.Cursor:=crSizeAll;
   frmain.StatusBar1.Panels.Items[1].Text:='Resolution:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
 end;
 
@@ -817,6 +826,7 @@ begin
   begin
     frmain.ScrollBox1.Enabled:=true;
     frmain.Image1.Stretch:=true;
+    frmain.tbStrech.Down:=false;
     frmain.Image1.AutoSize:=false;
     frmain.Image1.Align:=alNone;
     frmain.Image1.Width:=lwidth;
@@ -824,7 +834,6 @@ begin
   end;
   frmain.Image1.Width:=frmain.Image1.Width+20;
   frmain.Image1.Height:=frmain.Image1.Height+20;
-  //frmain.Image1.Cursor:=crSizeAll;
   frmain.StatusBar1.Panels.Items[1].Text:='Resolution:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
 end;
 
@@ -837,9 +846,9 @@ begin
   lheight:=frmain.Image1.Height;
   if frmain.Image1.Align = alClient then
   begin
-    //frmain.ScrollBox1.AutoScroll:=true;
     frmain.ScrollBox1.Enabled:=true;
     frmain.Image1.Stretch:=true;
+    frmain.tbStrech.Down:=false;
     frmain.Image1.AutoSize:=false;
     frmain.Image1.Align:=alNone;
     frmain.Image1.Width:=lwidth;
@@ -847,26 +856,24 @@ begin
   end;
   frmain.Image1.Width:=frmain.Image1.Width-20;
   frmain.Image1.Height:=frmain.Image1.Height-20;
-  //frmain.Image1.Cursor:=crSizeAll;
   frmain.StatusBar1.Panels.Items[1].Text:='Resolution:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
 end;
 
 procedure loadpicture(fimagen:string;restorezoom:boolean=true;scrollthumbs:boolean=true;realimage:boolean=false);
 var
    ebitmap:Graphics.TBitmap;
+   bmp:TBGRACustomBitMap;
    th,tw,i:integer;
    iw,ih:word;
    streamimage:TFileStream;
    starttime:TDateTime;
    bgcolor:TBGRAPixel;
    BGRAImage:BGRABitmap.TBGRABitmap;
-   //fpcustomimg:TFPCustomImage;
    wimagen:UnicodeString;
    ImgData: TImgData;
    pngrect:TRect;
    Item: TMetadataItem;
-//label
-  //normalpng;
+   Orientation:string='Horizontal (Normal)';
 begin
   {$IFDEF WINDOWS}
   wimagen:=UTF16LongName(fimagen);
@@ -902,7 +909,8 @@ begin
     begin
       if ImgData.HasEXIF then
       begin
-        frmain.StatusBar1.Panels.Items[5].Text:=FormatDateTime(ISO_DATETIME_FORMAT, ImgData.ExifObj.GetImgDateTime);
+        Orientation:=ImgData.ExifObj.TagByName['Orientation'].Data;
+        frmain.StatusBar1.Panels.Items[5].Text:=FormatDateTime(ISO_DATETIME_FORMAT, ImgData.ExifObj.GetImgDateTime)+' Orientation:'+Orientation;
       end;
       ImgData.Free;
     end;
@@ -997,7 +1005,20 @@ begin
         bgcolor.red:=0;
         if frmain.mnuRealMode.Checked or realimage then
         begin
-          frmain.Image1.Picture.LoadFromStream(streamimage);
+          //*******Implement orientation image********
+          case Orientation of
+          'Rotate 90 CW': frmain.Image1.Picture.Bitmap.Assign(BGRABitMap.TBGRABitmap.Create(streamimage).RotateCW);
+          'Rotate 270 CW':frmain.Image1.Picture.Bitmap.Assign(BGRABitMap.TBGRABitmap.Create(streamimage).RotateCCW);
+          'Rotate 180 CW':
+          begin
+            bmp:=BGRABitMap.TBGRABitmap.Create(streamimage);
+            bmp.HorizontalFlip;
+            frmain.Image1.Picture.Bitmap.Assign(bmp);
+            bmp.Free;
+          end;
+            else
+              frmain.Image1.Picture.LoadFromStream(streamimage);
+          end;
           frmain.StatusBar1.Panels.Items[1].Text:='Resolution:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
           modethumb:=false;
           realimgwidth:=frmain.Image1.Picture.Width;
@@ -1023,17 +1044,30 @@ begin
           streamimage.Position:=0;
           if ((iw>Screen.Width) or (ih>Screen.Height)) then
           begin
-            if (iw-frmain.pssImagen.Width)<=(ih-frmain.pssImagen.Height) then
+            if (iw-frmain.Splitter2.Width)<=(ih-frmain.ScrollBox1.Height) then
             begin
-              th:=frmain.pssImagen.Height;
+              th:=frmain.ScrollBox1.Height;
               calculateaspectwidth(iw,ih,frmain.Image1.Height,tw);
             end
             else
             begin
-              tw:=frmain.pssImagen.Width;
+              tw:=frmain.Splitter2.Width;
               calculateaspectheight(iw,ih,frmain.Image1.Width,th);
             end;
-            frmain.Image1.Picture.Bitmap.Assign(GetStreamThumbnail(streamimage,tw,th, bgcolor, false));
+            //*******Implement orientation image********
+            case Orientation of
+            'Rotate 90 CW': frmain.Image1.Picture.Bitmap.Assign(BGRABitMap.TBGRABitmap.Create(GetStreamThumbnail(streamimage,tw,th, bgcolor, false)).RotateCW);
+            'Rotate 270 CW':frmain.Image1.Picture.Bitmap.Assign(BGRABitMap.TBGRABitmap.Create(GetStreamThumbnail(streamimage,tw,th, bgcolor, false)).RotateCCW);
+            'Rotate 180 CW':
+            begin
+              bmp:=BGRABitMap.TBGRABitmap.Create(GetStreamThumbnail(streamimage,tw,th, bgcolor, false));
+              bmp.HorizontalFlip;
+              frmain.Image1.Picture.Bitmap.Assign(bmp);
+              bmp.Free;
+            end;
+              else
+                frmain.Image1.Picture.Bitmap.Assign(GetStreamThumbnail(streamimage,tw,th, bgcolor, false));
+            end;
             if LowerCase(ExtractFileExt(fimagen))='.pcx' then
               modethumb:=false
             else
@@ -1044,7 +1078,21 @@ begin
           end
           else
           begin
-            frmain.Image1.Picture.LoadFromStream(streamimage);
+             //*******Implement orientation image********
+            case Orientation of
+            'Rotate 90 CW': frmain.Image1.Picture.Bitmap.Assign(BGRABitMap.TBGRABitmap.Create(streamimage).RotateCW);
+            'Rotate 270 CW':frmain.Image1.Picture.Bitmap.Assign(BGRABitMap.TBGRABitmap.Create(streamimage).RotateCCW);
+            'Rotate 180 CW':
+            begin
+              bmp:=BGRABitMap.TBGRABitmap.Create(streamimage);
+              bmp.HorizontalFlip;
+              frmain.Image1.Picture.Bitmap.Assign(bmp);
+              bmp.Free;
+            end;
+              else
+                frmain.Image1.Picture.LoadFromStream(streamimage);
+            end;
+            //frmain.Image1.Picture.LoadFromStream(streamimage);
             frmain.StatusBar1.Panels.Items[1].Text:='Resolution:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
             modethumb:=false;
             realimgwidth:=frmain.Image1.Picture.Width;
@@ -1090,6 +1138,7 @@ begin
     frmain.tbRotateRight.Enabled:=true;
     frmain.tbZoomIn.Enabled:=true;
     frmain.tbZoomOut.Enabled:=true;
+    frmain.tbZoom100.Enabled:=true;
     frmain.tbReload.Enabled:=true;
     frmain.tbAdjust.Enabled:=true;
     frmain.tbStrech.Enabled:=true;
@@ -1128,6 +1177,7 @@ begin
     frmain.tbRotateRight.Enabled:=false;
     frmain.tbZoomIn.Enabled:=false;
     frmain.tbZoomOut.Enabled:=false;
+    frmain.tbZoom100.Enabled:=false;
     frmain.tbReload.Enabled:=false;
     frmain.tbAdjust.Enabled:=false;
     frmain.tbStrech.Enabled:=false;
@@ -1149,21 +1199,15 @@ begin
   begin
     if scrollthumbs and (frmain.sboxthumb.ComponentCount>ifile) then
     begin
-      //frmain.sboxthumb.ScrollInView((frmain.sboxthumb.Components[ifile] as TControl));
-      //frmain.sboxthumb.HorzScrollBar.Position:=ifile*(thumbsize+1);
-      //frmain.sboxthumb.HorzScrollBar.Position:=(frmain.sboxthumb.Components[ifile] as TControl).Left-Round(frmain.Width/2)+Round(thumbsize/2)+1;
       if inprocessanim=false then
         scrollanim;
     end;
   end;
-  //if frmain.ToolButton24.Down then
-    //zoomstrech();
 end;
 
 procedure fullsc();
 begin
   compactmode:=false;
-  frmain.pssThumbs.OnResize:=nil;
   if full = false then
   begin
     fwidth:=frmain.Width;
@@ -1172,23 +1216,36 @@ begin
     fypos:=frmain.Left;
     frmain.BorderStyle:=bsNone;
     frmain.ToolBar1.Align:=alNone;
-    frmain.psVertical.Align:=alClient;
+
+    frmain.ScrollBox1.AnchorSideTop.Control:=frmain;
+    frmain.ScrollBox1.AnchorSideTop.Side:=asrTop;
+
+    frmain.Splitter1.AnchorSideTop.Control:=frmain;
+    frmain.Splitter1.AnchorSideTop.Side:=asrTop;
+
+    frmain.sboxthumb.AnchorSideBottom.Control:=frmain;
+    frmain.sboxthumb.AnchorSideBottom.Side:=asrBottom;
+
+    frmain.Splitter1.AnchorSideBottom.Control:=frmain;
+    frmain.Splitter1.AnchorSideBottom.Side:=asrBottom;
+
     frmain.StatusBar1.Visible:=false;
     frmain.Color:=clBlack;
     frmain.FormStyle:=fsStayOnTop;
     frmain.Label1.Visible:=true;
     frmain.Label2.Visible:=true;
     frmain.Splitter1.Left:=0-frmain.Splitter1.Width;
-    frmain.psVertical.Position:=frmain.psVertical.Height-thumbsize-18;
+    if frmain.StatusBar1.Visible then
+      frmain.Splitter2.Top:=frmain.StatusBar1.Top-thumbsize-18
+    else
+      frmain.Splitter2.Top:=frmain.StatusBar1.Top-thumbsize-18-frmain.StatusBar1.Height;
+
     frmain.WindowState:=wsFullScreen;
     frmain.MainMenu1.Items.Visible:=false;
     frmain.Timer2.Enabled:=true;
     full:=true;
-    if frmain.mnuShowThumbs.Checked then
-      frmain.ToolBar1.Top:=frmain.pssThumbs.Top-frmain.ToolBar1.Height
-    else
-      frmain.ToolBar1.Top:=screen.Height-frmain.ToolBar1.Height;
     frmain.ToolBar1.Left:=Round((screen.Width-frmain.ToolBar1.Width)/2);
+    frmain.MainMenu1.Items.Visible:=false;
   end
   else
   begin
@@ -1211,34 +1268,36 @@ begin
     if frmain.mnuTreeView.Checked then
       frmain.Splitter1.Left:=200;
     full:=false;
-    frmain.psVertical.Align:=alNone;
-    frmain.psVertical.Anchors:=[akTop, akLeft, akRight, akBottom];
-    frmain.psVertical.AnchorSideLeft.Control:=frmain.Splitter1;
-    frmain.psVertical.AnchorSideLeft.Side:=asrBottom;
+
     if frmain.mnuStatusBar.Checked then
     begin
       frmain.StatusBar1.Visible:=true;
-      frmain.psVertical.AnchorSideBottom.Control:=frmain.StatusBar1;
+      frmain.sboxthumb.AnchorSideBottom.Control:=frmain.StatusBar1;
+      frmain.sboxthumb.AnchorSideBottom.Side:=asrTop;
     end
     else
     begin
-      frmain.psVertical.AnchorSideBottom.Control:=frmain;
-      frmain.psVertical.AnchorSideBottom.Side:=asrBottom;
+      frmain.sboxthumb.AnchorSideBottom.Control:=frmain;
+      frmain.sboxthumb.AnchorSideBottom.Side:=asrBottom;
     end;
 
     if frmain.mnuToolBar.Checked=false then
     begin
       frmain.ToolBar1.Visible:=false;
-      frmain.psVertical.AnchorSideTop.Control:=frmain;
-      frmain.psVertical.AnchorSideTop.Side:=asrTop;
+
+      frmain.ScrollBox1.AnchorSideTop.Control:=frmain;
+      frmain.ScrollBox1.AnchorSideTop.Side:=asrTop;
+
       frmain.Splitter1.AnchorSideTop.Control:=frmain;
       frmain.Splitter1.AnchorSideTop.Side:=asrTop;
     end
     else
     begin
       frmain.ToolBar1.Visible:=true;
-      frmain.psVertical.AnchorSideTop.Control:=frmain.ToolBar1;
-      frmain.psVertical.AnchorSideTop.Side:=asrBottom;
+
+      frmain.ScrollBox1.AnchorSideTop.Control:=frmain.ToolBar1;
+      frmain.ScrollBox1.AnchorSideTop.Side:=asrBottom;
+
       frmain.Splitter1.AnchorSideTop.Control:=frmain.ToolBar1;
       frmain.Splitter1.AnchorSideTop.Side:=asrBottom;
     end;
@@ -1254,19 +1313,23 @@ begin
       frmain.Splitter1.AnchorSideBottom.Side:=asrBottom;
     end;
 
-    frmain.psVertical.AnchorSideRight.Control:=frmain;
-    frmain.psVertical.AnchorSideRight.Side:=asrBottom;
-
     if frmain.mnuShowThumbs.Checked then
-      frmain.psVertical.Position:=frmain.psVertical.Height-thumbsize-18
+    begin
+      if frmain.StatusBar1.Visible then
+        frmain.Splitter2.Top:=frmain.StatusBar1.Top-thumbsize
+      else
+        frmain.Splitter2.Top:=frmain.StatusBar1.Top-thumbsize-frmain.StatusBar1.Height;
+    end
     else
-      frmain.psVertical.Position:=frmain.psVertical.Height;
+    begin
+      if frmain.StatusBar1.Visible then
+        frmain.Splitter2.Top:=frmain.StatusBar1.Top
+      else
+        frmain.Splitter2.Top:=frmain.StatusBar1.Top-frmain.StatusBar1.Height;
+    end;
+
+    frmain.MainMenu1.Items.Visible:=frmain.mnuMenus.Checked;
   end;
-  try
-    frmain.MainMenu1.Items.Visible:=not full;
-  except on e:exception do
-  end;
-  frmain.pssThumbs.OnResize:=@frmain.PairSplitterSide2Resize;
 end;
 
 procedure osd();
@@ -1393,7 +1456,9 @@ begin
       20:tmpbitmap.VerticalFlip;
       end;
       tmpgif.InsertFrame(i,tmpbitmap,0,0,BGRAGif.FrameDelayMs[i],BGRAGif.FrameDisposeMode[i],BGRAGif.FrameHasLocalPalette[i]);
+      tmpgif.LoopCount:=BGRAGif.LoopCount;
     end;
+    tmpgif.LoopCount:=BGRAGif.LoopCount;
     tmpbitmap.Destroy;
     BGRAGif.SetSize(BGRAGif.Width,BGRAGif.Height);
     BGRAGif:=tmpgif;
@@ -2089,17 +2154,17 @@ end;
 procedure Tfrmain.FormMouseMove(Sender: TObject; Shift: TShiftState; X,
   Y: Integer);
 begin
-  if frmain.Image1.Stretch then
+  {if frmain.Image1.Stretch and (frmain.tbStrech.Down=false) then
     frmain.Image1.Cursor:=crSizeAll
   else
-    frmain.Image1.Cursor:=crDefault;
+    frmain.Image1.Cursor:=crDefault;}
 
   hidetoolbardelay:=5;
 
-  if frmain.mnuShowThumbs.Checked then
-    frmain.ToolBar1.Top:=frmain.pssThumbs.Top-frmain.ToolBar1.Height
-  else
-    frmain.ToolBar1.Top:=screen.Height-frmain.ToolBar1.Height;
+  //if frmain.mnuShowThumbs.Checked then
+    //frmain.ToolBar1.Top:=frmain.pssThumbs.Top-frmain.ToolBar1.Height
+  //else
+    //frmain.ToolBar1.Top:=screen.Height-frmain.ToolBar1.Height;
 
   frmain.ToolBar1.Left:=Round((screen.Width-frmain.ToolBar1.Width)/2);
 
@@ -2117,7 +2182,7 @@ begin
     frmain.Shape1.Visible:=true;
     frmain.Shape1.SetBounds(imgx,imgy,X-imgx,Y-imgy);
   end;
-  if (compactmode or full) and (frmain.Image1.Stretch=false) and (startselect=false) then
+  if (compactmode or full) and ((frmain.Image1.Stretch=false) or frmain.tbStrech.Down) and (startselect=false) then
   begin
     if x>(frmain.Width/3)*2 then
     begin
@@ -2137,7 +2202,7 @@ begin
   end
   else
   begin
-    if frmain.Image1.Stretch then
+    if frmain.Image1.Stretch and (frmain.tbStrech.Down=false)  then
     begin
       frmain.Image1.Cursor:=crSizeAll;
       //frmain.Cursor:=crSizeAll;
@@ -2161,10 +2226,12 @@ end;
 
 procedure Tfrmain.FormResize(Sender: TObject);
 begin
-  if frmain.mnuShowThumbs.Checked then
+  {if frmain.mnuShowThumbs.Checked then
+  begin
     frmain.psVertical.Position:=(frmain.psVertical.Height-thumbsize)-18
+  end
   else
-    frmain.psVertical.Position:=frmain.psVertical.Height;
+    frmain.psVertical.Position:=frmain.psVertical.Height;}
 end;
 
 procedure Tfrmain.FormShow(Sender: TObject);
@@ -2175,7 +2242,7 @@ begin
     if (ifile<flist.Count) then
       loadpicture(carpeta+flist[ifile]);
   end;
-  frmain.pssThumbs.OnResize:=@frmain.PairSplitterSide2Resize;
+  //frmain.pssThumbs.OnResize:=@frmain.PairSplitterSide2Resize;
 end;
 
 procedure Tfrmain.FormWindowStateChange(Sender: TObject);
@@ -2185,13 +2252,14 @@ begin
     if (frmain.mnuCompact.Checked=false) and ((frmain.WindowState=wsMaximized) or (frmain.WindowState=wsNormal) or (frmain.WindowState=wsFullScreen)) then
       loadpicture(carpeta+flist[ifile],false);
   end;
+  frmain.FormResize(nil);
 end;
 
 procedure Tfrmain.Image1Click(Sender: TObject);
 begin
   if startselect=false then
     frmain.Shape1.Visible:=false;
-  if (compactmode or full) and (frmain.Image1.Stretch=false) and (startselect=false) then
+  if (compactmode or full) and ((frmain.Image1.Stretch=false) or frmain.tbStrech.Down) and (startselect=false) then
   begin
     if frmain.Image1.Cursor=2 then
     begin
@@ -2335,7 +2403,8 @@ begin
   filtroext:=StringReplace(frmain.SavePictureDialog1.GetFilterExt,'*','',[rfReplaceAll]);
   if filtroext='.' then
     filtroext:=ExtractFileExt(frmain.SavePictureDialog1.FileName);
-  if frmain.SavePictureDialog1.UserChoice={$IFDEF WINDOWS}1{$ELSE}2{$ENDIF} then
+  //ShowMessage(inttostr(frmain.SavePictureDialog1.UserChoice));
+  if {$IFDEF LCLQT}frmain.SavePictureDialog1.UserChoice=1{$else}{$IFDEF LCLQT5}frmain.SavePictureDialog1.UserChoice=1{$ELSE}frmain.SavePictureDialog1.UserChoice=1{$endif}{$ENDIF}then
   begin
     if FileExists(ExtractFilePath(frmain.SavePictureDialog1.FileName)+pathdelim+ExtractFileName(frmain.SavePictureDialog1.FileName)+'.'+frmain.SavePictureDialog1.GetFilterExt) then
       confirmar:=(Application.MessageBox('Desea reemplazar la imagen?','Confirmar',MB_ICONQUESTION + MB_YESNO)=IDYES)
@@ -2534,16 +2603,26 @@ begin
   showthumbs:=frmain.mnuShowThumbs.Checked;
   if showthumbs=false then
   begin
-    frmain.pssThumbs.OnResize:=nil;
-    frmain.psVertical.Position:=frmain.psVertical.Height;
+    //frmain.pssThumbs.OnResize:=nil;
+    //frmain.Splitter2.OnMoved:=nil;
+    //frmain.psVertical.Position:=frmain.psVertical.Height;
+    if frmain.StatusBar1.Visible then
+      frmain.Splitter2.Top:=frmain.StatusBar1.Top
+    else
+      frmain.Splitter2.Top:=frmain.StatusBar1.Top-frmain.StatusBar1.Height;
     frmain.sboxthumb.Visible:=false;
-    frmain.pssThumbs.OnResize:=@frmain.PairSplitterSide2Resize;
+    //frmain.pssThumbs.OnResize:=@frmain.PairSplitterSide2Resize;
+    frmain.Splitter2.OnMoved:=@frmain.PairSplitterSide2Resize;
     //refreshthumbs;
   end
   else
   begin
     frmain.sboxthumb.Visible:=true;
-    frmain.psVertical.Position:=frmain.psVertical.Height-64-18;
+    if frmain.StatusBar1.Visible then
+      frmain.Splitter2.Top:=frmain.StatusBar1.Top-thumbsize
+    else
+      frmain.Splitter2.Top:=frmain.StatusBar1.Top-thumbsize-frmain.StatusBar1.Height;
+    PairSplitterSide2Resize(nil);
     {if folderchange then
     begin
       refreshthumbs;
@@ -2612,15 +2691,28 @@ begin
     fheight:=frmain.Height;
     frmain.ToolBar1.Visible:=false;
     frmain.StatusBar1.Visible:=false;
-    frmain.psVertical.AnchorSideTop.Control:=frmain;
-    frmain.psVertical.AnchorSideTop.Side:=asrTop;
+
+    //frmain.psVertical.AnchorSideTop.Control:=frmain;
+    //Adjust the ScrollBox1 to the top window
+    frmain.ScrollBox1.AnchorSideTop.Control:=frmain;
+
+    //frmain.psVertical.AnchorSideTop.Side:=asrTop;
+    frmain.ScrollBox1.AnchorSideTop.Side:=asrTop;
+
     frmain.Splitter1.AnchorSideTop.Control:=frmain;
     frmain.Splitter1.AnchorSideTop.Side:=asrTop;
-    frmain.psVertical.AnchorSideBottom.Control:=frmain;
-    frmain.psVertical.AnchorSideBottom.Side:=asrBottom;
+
+    //frmain.psVertical.AnchorSideBottom.Control:=frmain;
+    frmain.sboxthumb.AnchorSideBottom.Control:=frmain;
+
+    //frmain.psVertical.AnchorSideBottom.Side:=asrBottom;
+    frmain.sboxthumb.AnchorSideBottom.Side:=asrBottom;
+
     frmain.Splitter1.AnchorSideBottom.Control:=frmain;
     frmain.Splitter1.AnchorSideBottom.Side:=asrBottom;
+
     frmain.MainMenu1.Items.Visible:=false;
+    frmain.Splitter2.Top:=frmain.Splitter2.Top+frmain.StatusBar1.Height;
     compactmode:=true;
     full:=false;
   end
@@ -2632,6 +2724,7 @@ begin
       fullsc;
       compactmode:=false;
     end;
+    frmain.Splitter2.Top:=frmain.Splitter2.Top-frmain.StatusBar1.Height;
   end;
 end;
 
@@ -2690,7 +2783,12 @@ begin
   frmain.mnuThumb128.Checked:=false;
   frmain.mnuThumbCustom.Checked:=true;
   frthumbsize.ShowModal;
-  frmain.psVertical.Position:=frmain.psVertical.Height-frthumbsize.SpinEdit1.Value-18;
+  //frmain.psVertical.Position:=frmain.psVertical.Height-frthumbsize.SpinEdit1.Value-18;
+  if frmain.StatusBar1.Visible then
+    frmain.Splitter2.Top:=frmain.StatusBar1.Top-frthumbsize.SpinEdit1.Value-18
+  else
+    frmain.Splitter2.Top:=frmain.StatusBar1.Top-frthumbsize.SpinEdit1.Value-18-frmain.StatusBar1.Height;
+  PairSplitterSide2Resize(nil);
 end;
 
 procedure Tfrmain.mnuStrechClick(Sender: TObject);
@@ -2742,7 +2840,7 @@ begin
   else
     frmain.Splitter1.Left:=0-frmain.Splitter1.Width;
   frmain.ShellTreeView1.Visible:=frmain.mnuTreeView.Checked;
-  if frmain.mnuToolBar.Checked=false then
+  if (frmain.mnuToolBar.Checked=false) or compactmode or full then
   begin
     frmain.ToolBar1.Visible:=false;
     frmain.Splitter1.AnchorSideTop.Control:=frmain;
@@ -2754,7 +2852,7 @@ begin
     frmain.Splitter1.AnchorSideTop.Control:=frmain.ToolBar1;
     frmain.Splitter1.AnchorSideTop.Side:=asrBottom;
   end;
-  if frmain.mnuStatusBar.Checked then
+  if frmain.mnuStatusBar.Checked or compactmode or full then
   begin
     frmain.Splitter1.AnchorSideBottom.Control:=frmain.StatusBar1;
     frmain.Splitter1.AnchorSideBottom.Side:=asrTop;
@@ -2776,16 +2874,20 @@ begin
   if frmain.ToolBar1.Visible then
   begin
     frmain.ToolBar1.Visible:=false;
-    frmain.psVertical.AnchorSideTop.Control:=frmain;
-    frmain.psVertical.AnchorSideTop.Side:=asrTop;
+    //frmain.psVertical.AnchorSideTop.Control:=frmain;
+    frmain.ScrollBox1.AnchorSideTop.Control:=frmain;
+    //frmain.psVertical.AnchorSideTop.Side:=asrTop;
+    frmain.ScrollBox1.AnchorSideTop.Side:=asrTop;
     frmain.Splitter1.AnchorSideTop.Control:=frmain;
     frmain.Splitter1.AnchorSideTop.Side:=asrTop;
   end
   else
   begin
     frmain.ToolBar1.Visible:=true;
-    frmain.psVertical.AnchorSideTop.Control:=frmain.ToolBar1;
-    frmain.psVertical.AnchorSideTop.Side:=asrBottom;
+    //frmain.psVertical.AnchorSideTop.Control:=frmain.ToolBar1;
+    frmain.ScrollBox1.AnchorSideTop.Control:=frmain.ToolBar1;
+    //frmain.psVertical.AnchorSideTop.Side:=asrBottom;
+    frmain.ScrollBox1.AnchorSideTop.Side:=asrBottom;
     frmain.Splitter1.AnchorSideTop.Control:=frmain.ToolBar1;
     frmain.Splitter1.AnchorSideTop.Side:=asrBottom;
   end;
@@ -2798,13 +2900,19 @@ begin
   frmain.mnuStatusBar.Checked:=frmain.StatusBar1.Visible;
   if frmain.StatusBar1.Visible then
   begin
-    frmain.psVertical.AnchorSideBottom.Control:=frmain.StatusBar1;
-    frmain.psVertical.AnchorSideBottom.Side:=asrTop;
+    //frmain.psVertical.AnchorSideBottom.Control:=frmain.StatusBar1;
+   frmain.sboxthumb.AnchorSideBottom.Control:=frmain.StatusBar1;
+    //frmain.psVertical.AnchorSideBottom.Side:=asrTop;
+    frmain.sboxthumb.AnchorSideBottom.Side:=asrTop;
+    frmain.Splitter2.Top:=frmain.Splitter2.Top-frmain.StatusBar1.Height;
   end
   else
   begin
-    frmain.psVertical.AnchorSideBottom.Control:=frmain;
-    frmain.psVertical.AnchorSideBottom.Side:=asrBottom;
+    //frmain.psVertical.AnchorSideBottom.Control:=frmain;
+    frmain.sboxthumb.AnchorSideBottom.Control:=frmain;
+    //frmain.psVertical.AnchorSideBottom.Side:=asrBottom;
+    frmain.sboxthumb.AnchorSideBottom.Side:=asrBottom;
+    frmain.Splitter2.Top:=frmain.Splitter2.Top+frmain.StatusBar1.Height;
   end;
   if frmain.mnuStatusBar.Checked then
   begin
@@ -2825,7 +2933,12 @@ begin
   frmain.mnuThumb128.Checked:=false;
   frmain.mnuThumbCustom.Checked:=false;
 
-  frmain.psVertical.Position:=frmain.psVertical.Height-32-18;
+  //frmain.psVertical.Position:=frmain.psVertical.Height-32-18;
+  if frmain.StatusBar1.Visible then
+    frmain.Splitter2.Top:=frmain.StatusBar1.Top-32-18
+  else
+    frmain.Splitter2.Top:=frmain.StatusBar1.Top-32-18-frmain.StatusBar1.Height;
+  PairSplitterSide2Resize(nil);
 end;
 
 procedure Tfrmain.mnuThumb64Click(Sender: TObject);
@@ -2834,7 +2947,12 @@ begin
   frmain.mnuThumb64.Checked:=true;
   frmain.mnuThumb128.Checked:=false;
   frmain.mnuThumbCustom.Checked:=false;
-  frmain.psVertical.Position:=frmain.psVertical.Height-64-18;
+  //frmain.psVertical.Position:=frmain.psVertical.Height-64-18;
+  if frmain.StatusBar1.Visible then
+    frmain.Splitter2.Top:=frmain.StatusBar1.Top-64-18
+  else
+    frmain.Splitter2.Top:=frmain.StatusBar1.Top-64-18-frmain.StatusBar1.Height;
+  PairSplitterSide2Resize(nil);
 end;
 
 procedure Tfrmain.mnuThumb128Click(Sender: TObject);
@@ -2843,7 +2961,12 @@ begin
   frmain.mnuThumb64.Checked:=false;
   frmain.mnuThumb128.Checked:=true;
   frmain.mnuThumbCustom.Checked:=false;
-  frmain.psVertical.Position:=frmain.psVertical.Height-128-18;
+  //frmain.psVertical.Position:=frmain.psVertical.Height-128-18;
+  if frmain.StatusBar1.Visible then
+    frmain.Splitter2.Top:=frmain.StatusBar1.Top-128-18
+  else
+    frmain.Splitter2.Top:=frmain.StatusBar1.Top-128-18-frmain.StatusBar1.Height;
+  PairSplitterSide2Resize(nil);
 end;
 
 procedure Tfrmain.mnuMosaicClick(Sender: TObject);
@@ -2853,14 +2976,14 @@ begin
     mosaic.Clear;
     frmain.ScrollBox1.Repaint;
     frmain.sboxthumb.Repaint;
-    frmain.psVertical.Color:=clNone;
+    //frmain.psVertical.Color:=clNone;
   end
   else
   begin
     mosaic:=Graphics.TBitmap.Create;
     rendermosaic;
     frmain.sboxthumb.Repaint;
-    frmain.psVertical.Color:=clWhite;
+    //frmain.psVertical.Color:=clWhite;
   end;
   frmain.mnuMosaic.Checked:=not frmain.mnuMosaic.Checked;
   frmain.Image1.Repaint;
@@ -2920,7 +3043,7 @@ end;
 
 procedure Tfrmain.PairSplitterSide2Resize(Sender: TObject);
 begin
-  thumbsize:=frmain.sboxthumb.Height-18;
+  thumbsize:=frmain.sboxthumb.Height;
   frmain.Timer4.Enabled:=true;
 end;
 
@@ -2935,9 +3058,10 @@ end;
 
 procedure Tfrmain.PopupMenu1Popup(Sender: TObject);
 var
-   i,s:integer;
+   i,s,c:integer;
    mi:TMenuItem;
    sm:TMenuItem;
+   cm:TMenuItem;
 begin
  if frmain.PopupMenu1.Items.Count<2 then
  begin
@@ -2953,7 +3077,18 @@ begin
        sm.OnClick:=frmain.MainMenu1.Items[i].Items[s].OnClick;
        sm.Checked:=frmain.MainMenu1.Items[i].Items[s].Checked;
        sm.Enabled:=frmain.MainMenu1.Items[i].Items[s].Enabled;
+       sm.ShortCut:=frmain.MainMenu1.Items[i].Items[s].ShortCut;
        frmain.PopupMenu1.Items[i].Add(sm);
+       for c:=0 to frmain.MainMenu1.Items[i].Items[s].Count-1 do
+       begin
+         cm:=TMenuItem.Create(frmain.PopupMenu1);
+         cm.Caption:=frmain.MainMenu1.Items[i].Items[s].Items[c].Caption;
+         cm.OnClick:=frmain.MainMenu1.Items[i].Items[s].Items[c].OnClick;
+         cm.Checked:=frmain.MainMenu1.Items[i].Items[s].Items[c].Checked;
+         cm.Enabled:=frmain.MainMenu1.Items[i].Items[s].Items[c].Enabled;
+         cm.ShortCut:=frmain.MainMenu1.Items[i].Items[s].Items[c].ShortCut;
+         frmain.PopupMenu1.Items[i].Items[s].Add(cm);
+       end;
      end;
    end;
  end;
@@ -3178,11 +3313,6 @@ begin
   end;
 end;
 
-procedure Tfrmain.ToolBar1Click(Sender: TObject);
-begin
-
-end;
-
 procedure Tfrmain.ToolBar1MouseLeave(Sender: TObject);
 begin
   if full then
@@ -3217,7 +3347,7 @@ begin
     fypos:=frmain.Left;
     frmain.BorderStyle:=bsNone;
     frmain.ToolBar1.Align:=alNone;
-    frmain.psVertical.Align:=alClient;
+    //frmain.psVertical.Align:=alClient;
     frmain.StatusBar1.Visible:=false;
     frmain.Color:=clBlack;
     frmain.FormStyle:=fsStayOnTop;
@@ -3225,7 +3355,7 @@ begin
     frmain.Label2.Visible:=false;
     frmain.MainMenu1.Items.Visible:=false;
     frmain.Splitter1.Left:=0-frmain.Splitter1.Width;
-    frmain.psVertical.Position:=frmain.psVertical.Height-thumbsize-18;
+    //frmain.psVertical.Position:=frmain.psVertical.Height-thumbsize-18;
     frmain.WindowState:=wsFullScreen;
     frmain.Timer2.Enabled:=true;
     full:=true;
@@ -3254,7 +3384,7 @@ end;
 
 procedure Tfrmain.tbShowTreeViewClick(Sender: TObject);
 begin
-  frmain.pssThumbs.OnResize:=nil;
+  //frmain.pssThumbs.OnResize:=nil;
   frmain.mnuTreeView.Checked:=not frmain.mnuTreeView.Checked;
   frmain.tbShowTreeView.Down:=frmain.mnuTreeView.Checked;
   if frmain.mnuTreeView.Checked then
@@ -3262,7 +3392,7 @@ begin
   else
     frmain.Splitter1.Left:=0-frmain.Splitter1.Width;
   frmain.ShellTreeView1.Visible:=frmain.mnuTreeView.Checked;
-  frmain.pssThumbs.OnResize:=@frmain.PairSplitterSide2Resize;
+  //frmain.pssThumbs.OnResize:=@frmain.PairSplitterSide2Resize;
 end;
 
 procedure Tfrmain.tbSelectClick(Sender: TObject);
@@ -3490,6 +3620,7 @@ begin
     tmpbgra.Free;
   end;
  except on e:exception do
+   ShowMessage(e.Message);
  end;
 end;
 
@@ -3642,6 +3773,7 @@ begin
         thumbimages.Hint:=flist[i];
         thumbimages.ShowHint:=true;
         thumbimages.Tag:=i;
+        thumbimages.Top:=2;
         //thumbimages.AnchorSideTop.Control:=frmain.sboxthumb;
         //thumbimages.AnchorSideTop.Side:=asrTop;
         //thumbimages.AnchorSideBottom.Control:=frmain.pssThumbs;

@@ -1,6 +1,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8"
 
+#: tform3.caption
+msgid "Quality"
+msgstr ""
+
+#: tform3.label1.caption
+msgid "100"
+msgstr ""
+
 #: tfreffect.button1.caption
 msgid "Grayscale"
 msgstr ""

@@ -1,13 +1,13 @@
 object frmain: Tfrmain
-  Left = 372
-  Height = 536
-  Top = 129
-  Width = 819
+  Left = 251
+  Height = 609
+  Top = 72
+  Width = 902
   ActiveControl = ShellTreeView1
   AllowDropFiles = True
   Caption = 'LazView'
-  ClientHeight = 516
-  ClientWidth = 819
+  ClientHeight = 580
+  ClientWidth = 902
   KeyPreview = True
   Menu = MainMenu1
   OnClose = FormClose
@@ -25,12 +25,12 @@ object frmain: Tfrmain
   OnShow = FormShow
   OnWindowStateChange = FormWindowStateChange
   Position = poDesktopCenter
-  LCLVersion = '1.8.4.0'
+  LCLVersion = '2.1.0.0'
   object StatusBar1: TStatusBar
     Left = 0
-    Height = 23
-    Top = 493
-    Width = 819
+    Height = 21
+    Top = 559
+    Width = 902
     Panels = <    
       item
         Text = '0/0'
@@ -59,163 +59,6 @@ object frmain: Tfrmain
     SimpleText = 'Marco 1.0'
     SimplePanel = False
   end
-  object psVertical: TPairSplitter
-    AnchorSideLeft.Control = Splitter1
-    AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = ToolBar1
-    AnchorSideTop.Side = asrBottom
-    AnchorSideRight.Control = Owner
-    AnchorSideRight.Side = asrBottom
-    AnchorSideBottom.Control = StatusBar1
-    Cursor = crVSplit
-    Left = 3
-    Height = 469
-    Top = 24
-    Width = 816
-    Anchors = [akTop, akLeft, akRight, akBottom]
-    Color = clBlack
-    Position = 360
-    SplitterType = pstVertical
-    object pssImagen: TPairSplitterSide
-      Cursor = crArrow
-      Left = 0
-      Height = 360
-      Top = 0
-      Width = 816
-      ClientWidth = 816
-      ClientHeight = 360
-      OnMouseMove = FormMouseMove
-      object ScrollBox1: TScrollBox
-        Left = 0
-        Height = 360
-        Top = 0
-        Width = 816
-        HorzScrollBar.Increment = 29
-        HorzScrollBar.Page = 297
-        HorzScrollBar.Smooth = True
-        HorzScrollBar.Tracking = True
-        VertScrollBar.Increment = 14
-        VertScrollBar.Page = 145
-        VertScrollBar.Smooth = True
-        VertScrollBar.Tracking = True
-        Align = alClient
-        BorderStyle = bsNone
-        ClientHeight = 360
-        ClientWidth = 816
-        Enabled = False
-        Color = clBlack
-        ParentColor = False
-        TabOrder = 0
-        TabStop = True
-        OnMouseDown = FormMouseDown
-        OnMouseMove = FormMouseMove
-        OnMouseUp = Image1MouseUp
-        OnMouseWheel = FormMouseWheel
-        OnPaint = ScrollBox1Paint
-        object Image1: TImage
-          Left = 0
-          Height = 360
-          Top = 0
-          Width = 816
-          AntialiasingMode = amOn
-          Align = alClient
-          Center = True
-          OnClick = Image1Click
-          OnDblClick = Image1DblClick
-          OnMouseDown = FormMouseDown
-          OnMouseMove = FormMouseMove
-          OnMouseUp = Image1MouseUp
-          OnMouseWheel = FormMouseWheel
-          ParentShowHint = False
-          PopupMenu = PopupMenu1
-          Proportional = True
-        end
-        object Label1: TLabel
-          AnchorSideLeft.Control = ScrollBox1
-          AnchorSideTop.Control = ScrollBox1
-          AnchorSideRight.Control = ScrollBox1
-          AnchorSideRight.Side = asrBottom
-          Left = 0
-          Height = 21
-          Top = 0
-          Width = 816
-          Anchors = [akTop, akLeft, akRight]
-          Caption = '0/0'
-          Font.Color = clBlack
-          Font.Height = -16
-          Font.Style = [fsBold]
-          ParentColor = False
-          ParentFont = False
-          Visible = False
-          WordWrap = True
-        end
-        object Label2: TLabel
-          AnchorSideLeft.Control = ScrollBox1
-          AnchorSideTop.Control = ScrollBox1
-          AnchorSideRight.Control = ScrollBox1
-          AnchorSideRight.Side = asrBottom
-          Left = 2
-          Height = 21
-          Top = 2
-          Width = 813
-          Anchors = [akTop, akLeft, akRight]
-          BorderSpacing.Left = 2
-          BorderSpacing.Top = 2
-          BorderSpacing.Right = 1
-          Caption = '0/0'
-          Font.Color = clWhite
-          Font.Height = -16
-          Font.Style = [fsBold]
-          ParentColor = False
-          ParentFont = False
-          Visible = False
-          WordWrap = True
-        end
-        object Shape1: TShape
-          Left = 232
-          Height = 65
-          Top = 80
-          Width = 65
-          Pen.Mode = pmNotXor
-          Pen.Style = psDash
-          Pen.Width = 2
-          OnMouseMove = FormMouseMove
-          Visible = False
-        end
-      end
-    end
-    object pssThumbs: TPairSplitterSide
-      Cursor = crArrow
-      Left = 0
-      Height = 104
-      Top = 365
-      Width = 816
-      ClientWidth = 816
-      ClientHeight = 104
-      object sboxthumb: TScrollBox
-        Left = 0
-        Height = 104
-        Top = 0
-        Width = 816
-        HorzScrollBar.Increment = 1
-        HorzScrollBar.Page = 1
-        HorzScrollBar.Smooth = True
-        HorzScrollBar.Tracking = True
-        VertScrollBar.Page = 1
-        VertScrollBar.Visible = False
-        Align = alClient
-        BorderStyle = bsNone
-        Color = clBlack
-        ParentColor = False
-        TabOrder = 0
-        OnMouseDown = sboxthumbMouseDown
-        OnMouseLeave = sboxthumbMouseLeave
-        OnMouseMove = sboxthumbMouseMove
-        OnMouseUp = sboxthumbMouseUp
-        OnPaint = sboxthumbPaint
-      end
-    end
-  end
   object ShellTreeView1: TShellTreeView
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Splitter1
@@ -223,9 +66,9 @@ object frmain: Tfrmain
     AnchorSideBottom.Control = Splitter1
     AnchorSideBottom.Side = asrBottom
     Left = 0
-    Height = 469
+    Height = 535
     Top = 24
-    Width = 0
+    Width = 2
     Anchors = [akTop, akLeft, akRight, akBottom]
     BackgroundColor = clDefault
     BorderStyle = bsNone
@@ -236,7 +79,7 @@ object frmain: Tfrmain
     ParentFont = False
     ReadOnly = True
     StateImages = ImageList1
-    TabOrder = 3
+    TabOrder = 2
     ToolTips = False
     Visible = False
     OnChange = ShellTreeView1Change
@@ -248,8 +91,8 @@ object frmain: Tfrmain
     AnchorSideTop.Control = ToolBar1
     AnchorSideTop.Side = asrBottom
     AnchorSideBottom.Control = StatusBar1
-    Left = -2
-    Height = 469
+    Left = 2
+    Height = 535
     Top = 24
     Width = 5
     Align = alNone
@@ -264,12 +107,11 @@ object frmain: Tfrmain
     Left = 0
     Height = 24
     Top = 0
-    Width = 819
+    Width = 902
     Anchors = [akTop]
     AutoSize = True
     Images = ImageList1
     TabOrder = 0
-    OnClick = ToolBar1Click
     OnMouseLeave = ToolBar1MouseLeave
     OnMouseMove = ToolBar1MouseMove
     object tbPrevImage: TToolButton
@@ -572,9 +414,159 @@ object frmain: Tfrmain
       ShowHint = True
     end
   end
+  object ScrollBox1: TScrollBox
+    AnchorSideLeft.Control = Splitter1
+    AnchorSideTop.Control = ToolBar1
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Splitter2
+    AnchorSideBottom.Side = asrBottom
+    Left = 2
+    Height = 341
+    Top = 24
+    Width = 900
+    HorzScrollBar.Increment = 29
+    HorzScrollBar.Page = 297
+    HorzScrollBar.Smooth = True
+    HorzScrollBar.Tracking = True
+    VertScrollBar.Increment = 14
+    VertScrollBar.Page = 145
+    VertScrollBar.Smooth = True
+    VertScrollBar.Tracking = True
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BorderStyle = bsNone
+    ClientHeight = 341
+    ClientWidth = 900
+    Enabled = False
+    Color = clBlack
+    ParentColor = False
+    TabOrder = 4
+    TabStop = True
+    OnMouseDown = FormMouseDown
+    OnMouseMove = FormMouseMove
+    OnMouseUp = Image1MouseUp
+    OnMouseWheel = FormMouseWheel
+    OnPaint = ScrollBox1Paint
+    object Image1: TImage
+      Left = 0
+      Height = 341
+      Top = 0
+      Width = 900
+      AntialiasingMode = amOn
+      Align = alClient
+      Center = True
+      OnClick = Image1Click
+      OnDblClick = Image1DblClick
+      OnMouseDown = FormMouseDown
+      OnMouseMove = FormMouseMove
+      OnMouseUp = Image1MouseUp
+      OnMouseWheel = FormMouseWheel
+      ParentShowHint = False
+      PopupMenu = PopupMenu1
+      Proportional = True
+    end
+    object Label1: TLabel
+      AnchorSideLeft.Control = ScrollBox1
+      AnchorSideTop.Control = ScrollBox1
+      AnchorSideRight.Control = ScrollBox1
+      AnchorSideRight.Side = asrBottom
+      Left = 0
+      Height = 23
+      Top = 0
+      Width = 900
+      Anchors = [akTop, akLeft, akRight]
+      Caption = '0/0'
+      Font.Color = clBlack
+      Font.Height = -16
+      Font.Style = [fsBold]
+      ParentColor = False
+      ParentFont = False
+      Visible = False
+      WordWrap = True
+    end
+    object Label2: TLabel
+      AnchorSideLeft.Control = ScrollBox1
+      AnchorSideTop.Control = ScrollBox1
+      AnchorSideRight.Control = ScrollBox1
+      AnchorSideRight.Side = asrBottom
+      Left = 2
+      Height = 23
+      Top = 2
+      Width = 897
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 2
+      BorderSpacing.Top = 2
+      BorderSpacing.Right = 1
+      Caption = '0/0'
+      Font.Color = clWhite
+      Font.Height = -16
+      Font.Style = [fsBold]
+      ParentColor = False
+      ParentFont = False
+      Visible = False
+      WordWrap = True
+    end
+    object Shape1: TShape
+      Left = 232
+      Height = 65
+      Top = 80
+      Width = 65
+      Pen.Mode = pmNotXor
+      Pen.Style = psDash
+      Pen.Width = 2
+      OnMouseMove = FormMouseMove
+      Visible = False
+    end
+  end
+  object sboxthumb: TScrollBox
+    AnchorSideLeft.Control = Splitter1
+    AnchorSideTop.Control = Splitter2
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = StatusBar1
+    Left = 2
+    Height = 197
+    Top = 362
+    Width = 900
+    HorzScrollBar.Increment = 1
+    HorzScrollBar.Page = 1
+    HorzScrollBar.Smooth = True
+    HorzScrollBar.Tracking = True
+    VertScrollBar.Page = 1
+    VertScrollBar.Visible = False
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BorderStyle = bsNone
+    Color = clBlack
+    ParentColor = False
+    TabOrder = 5
+    OnMouseDown = sboxthumbMouseDown
+    OnMouseLeave = sboxthumbMouseLeave
+    OnMouseMove = sboxthumbMouseMove
+    OnMouseUp = sboxthumbMouseUp
+    OnPaint = sboxthumbPaint
+  end
+  object Splitter2: TSplitter
+    AnchorSideLeft.Control = Splitter1
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Cursor = crVSplit
+    Left = 2
+    Height = 3
+    Top = 362
+    Width = 900
+    Align = alNone
+    Anchors = [akLeft, akRight]
+    Beveled = True
+    Color = clNone
+    OnMoved = PairSplitterSide2Resize
+    ParentColor = False
+    ResizeAnchor = akBottom
+    ResizeStyle = rsLine
+  end
   object ImageList1: TImageList
-    left = 8
-    top = 207
+    Left = 8
+    Top = 207
     Bitmap = {
       4C69240000001000000010000000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF0004733A6404753BC5FFFFFF00FFFF
@@ -1732,8 +1724,8 @@ object frmain: Tfrmain
     }
   end
   object MainMenu1: TMainMenu
-    left = 40
-    top = 208
+    Left = 40
+    Top = 208
     object mnuFile: TMenuItem
       Caption = '&File'
       object mnuOpen: TMenuItem
@@ -1876,14 +1868,12 @@ object frmain: Tfrmain
         Caption = 'Flip horizontal'
         Enabled = False
         ShortCut = 72
-        ShortCutKey2 = 8264
         OnClick = mnuFlipHClick
       end
       object mnuFlipV: TMenuItem
         Caption = 'Flip vertical'
         Enabled = False
         ShortCut = 86
-        ShortCutKey2 = 8278
         OnClick = mnuFlipVClick
       end
       object MenuItem18: TMenuItem
@@ -1893,14 +1883,12 @@ object frmain: Tfrmain
         Caption = 'Rotate left'
         Enabled = False
         ShortCut = 76
-        ShortCutKey2 = 8268
         OnClick = mnuRotateLClick
       end
       object mnuRotateR: TMenuItem
         Caption = 'Rotate right'
         Enabled = False
         ShortCut = 82
-        ShortCutKey2 = 8274
         OnClick = mnuRotateRClick
       end
       object MenuItem19: TMenuItem
@@ -2059,49 +2047,49 @@ object frmain: Tfrmain
   end
   object OpenPictureDialog1: TOpenPictureDialog
     Filter = 'Gráfico (*.png;*.xpm;*.bmp;*.cur;*.ico;*.icns;*.jpeg;*.jpg;*.jpe;*.jfif;*.tif;*.tiff;*.gif;*.pbm;*.pgm;*.ppm;*.gif;*.pcx;*.psd)|*.png;*.xpm;*.bmp;*.cur;*.ico;*.icns;*.jpeg;*.jpg;*.jpe;*.jfif;*.tif;*.tiff;*.gif;*.pbm;*.pgm;*.ppm;*.gif;*.pcx;*.psd|Portable Network Graphic (*.png)|*.png|Pixmap (*.xpm)|*.xpm|Bitmaps (*.bmp)|*.bmp|Cursor (*.cur)|*.cur|Icon (*.ico)|*.ico|Mac OS X Icon (*.icns)|*.icns|Joint Picture Expert Group (*.jpeg;*.jpg;*.jpe;*.jfif)|*.jpeg;*.jpg;*.jpe;*.jfif|Tagged Image File Format (*.tif;*.tiff)|*.tif;*.tiff|Graphics Interchange Format (*.gif)|*.gif|Portable PixMap (*.pbm;*.pgm;*.ppm)|*.pbm;*.pgm;*.ppm'
-    left = 72
-    top = 208
+    Left = 72
+    Top = 208
   end
   object Timer1: TTimer
     Enabled = False
     Interval = 10000
     OnTimer = Timer1Timer
-    left = 104
-    top = 208
+    Left = 104
+    Top = 208
   end
   object SavePictureDialog1: TSavePictureDialog
     Filter = 'Joint Picture Expert Group (*.jpeg;*.jpg;*.jpe;*.jfif)|*.jpg|Portable Network Graphic (*.png)|*.png|Bitmaps (*.bmp)|*.bmp|Icon (*.ico)|*.ico|Graphics Interchange Format (*.gif)|*.gif'
-    left = 136
-    top = 208
+    Left = 136
+    Top = 208
   end
   object Timer2: TTimer
     Enabled = False
     OnTimer = Timer2Timer
-    left = 168
-    top = 208
+    Left = 168
+    Top = 208
   end
   object Timer3: TTimer
     OnTimer = Timer3Timer
-    left = 200
-    top = 208
+    Left = 200
+    Top = 208
   end
   object PopupMenu1: TPopupMenu
     OnPopup = PopupMenu1Popup
-    left = 232
-    top = 208
+    Left = 232
+    Top = 208
   end
   object Timer4: TTimer
     Enabled = False
     Interval = 500
     OnTimer = Timer4Timer
-    left = 264
-    top = 207
+    Left = 264
+    Top = 207
   end
   object Timer5: TTimer
     Enabled = False
     Interval = 41
     OnTimer = Timer5Timer
-    left = 320
-    top = 207
+    Left = 312
+    Top = 207
   end
 end

@@ -1,13 +1,21 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8"
 
+#: tform3.caption
+msgid "Quality"
+msgstr "Calidad"
+
+#: tform3.label1.caption
+msgid "100"
+msgstr ""
+
 #: tfreffect.button1.caption
 msgid "Grayscale"
 msgstr "Escala de grises"
 
 #: tfreffect.button10.caption
 msgid "RGB -> BRG"
-msgstr ""
+msgstr "RGB -> BRG"
 
 #: tfreffect.button11.caption
 msgctxt "tfreffect.button11.caption"
@@ -37,11 +45,11 @@ msgstr "Cilindro"
 
 #: tfreffect.button17.caption
 msgid "Emboss"
-msgstr ""
+msgstr "Emboss"
 
 #: tfreffect.button18.caption
 msgid "Emboss high light"
-msgstr ""
+msgstr "Emboss high ligh"
 
 #: tfreffect.button19.caption
 msgid "Normalize"
@@ -58,7 +66,7 @@ msgstr "Esfera"
 
 #: tfreffect.button21.caption
 msgid "Median"
-msgstr ""
+msgstr "Median"
 
 #: tfreffect.button22.caption
 msgid "Smart zoom 3"
@@ -74,7 +82,7 @@ msgstr "Pixelar"
 
 #: tfreffect.button25.caption
 msgid "Test"
-msgstr ""
+msgstr "Prueva"
 
 #: tfreffect.button3.caption
 msgctxt "tfreffect.button3.caption"
@@ -93,19 +101,19 @@ msgstr "Recargar imagen"
 
 #: tfreffect.button6.caption
 msgid "RGB -> BGR"
-msgstr ""
+msgstr "RGB -> BGR"
 
 #: tfreffect.button7.caption
 msgid "RGB -> RBG"
-msgstr ""
+msgstr "RGB -> RBG"
 
 #: tfreffect.button8.caption
 msgid "RGB -> GRB"
-msgstr ""
+msgstr "RGB -> GRB"
 
 #: tfreffect.button9.caption
 msgid "RGB -> GBR"
-msgstr ""
+msgstr "RGB -> GBR"
 
 #: tfreffect.caption
 msgctxt "tfreffect.caption"
@@ -135,7 +143,7 @@ msgstr "Ir a la imagen numero:"
 
 #: tfrmain.caption
 msgid "LazView"
-msgstr ""
+msgstr "LazView"
 
 #: tfrmain.label1.caption
 msgctxt "tfrmain.label1.caption"
@@ -153,11 +161,11 @@ msgstr "Acerca de..."
 
 #: tfrmain.mnualwaysontop.caption
 msgid "Always on top"
-msgstr ""
+msgstr "Siempre sobre todo"
 
 #: tfrmain.mnuantialiasing.caption
 msgid "Antialiasing"
-msgstr ""
+msgstr "Suavizado"
 
 #: tfrmain.mnubgr.caption
 msgid "Invert color (RGB)-(BGR)"
@@ -169,15 +177,15 @@ msgstr "Invert color (RGB)-(BRG"
 
 #: tfrmain.mnubrightless.caption
 msgid "Brightness -"
-msgstr ""
+msgstr "Brillo -"
 
 #: tfrmain.mnubrightplus.caption
 msgid "Brightness +"
-msgstr ""
+msgstr "Brillo +"
 
 #: tfrmain.mnucompact.caption
 msgid "Compact mode"
-msgstr ""
+msgstr "Modo compacto"
 
 #: tfrmain.mnucopy.caption
 msgid "Copy"
@@ -193,19 +201,19 @@ msgstr "Centrar"
 
 #: tfrmain.mnudesktopexpand.caption
 msgid "Expand"
-msgstr ""
+msgstr "Expandir"
 
 #: tfrmain.mnudesktopimage.caption
 msgid "Set as desktop image"
-msgstr ""
+msgstr "Establecer como fondo de escritorio"
 
 #: tfrmain.mnudesktopmosaic.caption
 msgid "Mosaic"
-msgstr ""
+msgstr "Mosaico"
 
 #: tfrmain.mnudesktopstrech.caption
 msgid "Strech"
-msgstr ""
+msgstr "Estirar"
 
 #: tfrmain.mnuedit.caption
 msgid "&Edit"
@@ -235,28 +243,28 @@ msgstr "&Archivo"
 #: tfrmain.mnufliph.caption
 msgctxt "tfrmain.mnufliph.caption"
 msgid "Flip horizontal"
-msgstr ""
+msgstr "Girar horizontalmente"
 
 #: tfrmain.mnuflipv.caption
 msgctxt "tfrmain.mnuflipv.caption"
 msgid "Flip vertical"
-msgstr ""
+msgstr "Girar verticalmente"
 
 #: tfrmain.mnugbr.caption
 msgid "Invert color (RGB)-(GBR)"
-msgstr ""
+msgstr "Invertir color (RGB)-(GBR)"
 
 #: tfrmain.mnugoto.caption
 msgid "Go to number image..."
-msgstr ""
+msgstr "Ir al numero de imagen..."
 
 #: tfrmain.mnugrayscale.caption
 msgid "Greyscale"
-msgstr ""
+msgstr "Escala de grises"
 
 #: tfrmain.mnugrb.caption
 msgid "Invert color (RGB)-(GRB)"
-msgstr ""
+msgstr "Invertir color (RGB)-(GRB)"
 
 #: tfrmain.mnuhelp.caption
 msgid "&Help"
@@ -282,15 +290,15 @@ msgstr "Resaltar rojo"
 
 #: tfrmain.mnulanguage.caption
 msgid "Language"
-msgstr ""
+msgstr "Lenguage"
 
 #: tfrmain.mnumenus.caption
 msgid "Menus"
-msgstr ""
+msgstr "Menus"
 
 #: tfrmain.mnumosaic.caption
 msgid "Mosaic background"
-msgstr ""
+msgstr "Fondo en mosaico"
 
 #: tfrmain.mnunegative.caption
 #, fuzzy
@@ -300,64 +308,65 @@ msgstr "Negativo"
 
 #: tfrmain.mnunoise.caption
 msgid "Noise"
-msgstr ""
+msgstr "Ruido"
 
 #: tfrmain.mnuopen.caption
 msgid "Open"
-msgstr ""
+msgstr "Abrir"
 
 #: tfrmain.mnupaste.caption
 msgid "Paste"
-msgstr ""
+msgstr "Pegar"
 
 #: tfrmain.mnuprint.caption
+#, fuzzy
 msgctxt "tfrmain.mnuprint.caption"
 msgid "Print"
-msgstr ""
+msgstr "Imprimir"
 
 #: tfrmain.mnuquitblue.caption
 msgid "Quit blue"
-msgstr ""
+msgstr "Quitar azul"
 
 #: tfrmain.mnuquitgreen.caption
 msgid "Quit green"
-msgstr ""
+msgstr "Quitar verde"
 
 #: tfrmain.mnuquitred.caption
 msgid "Quit red"
-msgstr ""
+msgstr "Quitar rojo"
 
 #: tfrmain.mnurbg.caption
 msgid "Invert color (RGB)-(RBG)"
-msgstr ""
+msgstr "Invertir color (RGB)-(RBG)"
 
 #: tfrmain.mnurealmode.caption
 msgid "Real mode"
-msgstr ""
+msgstr "Modo real"
 
 #: tfrmain.mnuresize.caption
 msgid "Resize..."
-msgstr ""
+msgstr "Redimencionar"
 
 #: tfrmain.mnurotatel.caption
 msgid "Rotate left"
-msgstr ""
+msgstr "Rotar a la izquierda"
 
 #: tfrmain.mnurotater.caption
 msgid "Rotate right"
-msgstr ""
+msgstr "Rotar a la derecha"
 
 #: tfrmain.mnusaveas.caption
 msgid "Save as..."
-msgstr ""
+msgstr "Guardar como..."
 
 #: tfrmain.mnuselect.caption
 msgid "Select"
-msgstr ""
+msgstr "Seleccionar"
 
 #: tfrmain.mnushowthumbs.caption
 msgid "Thumbail panel"
-msgstr ""
+msgstr "Vista en minuaturas"
 
 #: tfrmain.mnusmooth.caption
 #, fuzzy
@@ -367,39 +376,39 @@ msgstr "Suavizar"
 
 #: tfrmain.mnustatusbar.caption
 msgid "Status bar"
-msgstr ""
+msgstr "Barra de estado"
 
 #: tfrmain.mnustrech.caption
 msgid "Strech image"
-msgstr ""
+msgstr "Imagen estirada"
 
 #: tfrmain.mnuswirl.caption
 msgid "Swirl"
-msgstr ""
+msgstr "Remolino"
 
 #: tfrmain.mnuthumb128.caption
 msgid "128x128"
-msgstr ""
+msgstr "128x128"
 
 #: tfrmain.mnuthumb32.caption
 msgid "32x32"
-msgstr ""
+msgstr "32x32"
 
 #: tfrmain.mnuthumb64.caption
 msgid "64x64"
-msgstr ""
+msgstr "64x64"
 
 #: tfrmain.mnuthumbcustom.caption
 msgid "Custom..."
-msgstr ""
+msgstr "Personalizado"
 
 #: tfrmain.mnuthumbsize.caption
 msgid "Thumbail size"
-msgstr ""
+msgstr "Tamaño de las miniaturas"
 
 #: tfrmain.mnutoolbar.caption
 msgid "Tool bar"
-msgstr ""
+msgstr "Barra de herramientas"
 
 #: tfrmain.mnutools.caption
 msgid "&Tools"
@@ -411,7 +420,7 @@ msgstr "Arbol de directorios"
 
 #: tfrmain.mnutv.caption
 msgid "TV"
-msgstr ""
+msgstr "TV"
 
 #: tfrmain.mnuview.caption
 msgid "&View"
@@ -419,12 +428,12 @@ msgstr "&Ver"
 
 #: tfrmain.mnuwindoweffects.caption
 msgid "Effects window"
-msgstr ""
+msgstr "Ventana de efectos"
 
 #: tfrmain.statusbar1.panels[0].text
 msgctxt "tfrmain.statusbar1.panels[0].text"
 msgid "0/0"
-msgstr ""
+msgstr "0/0"
 
 #: tfrmain.statusbar1.panels[1].text
 msgid "Resolution: 0x0"
@@ -452,12 +461,12 @@ msgstr ""
 
 #: tfrmain.tbadjust.hint
 msgid "Adjust image"
-msgstr ""
+msgstr "Ajustar imagen"
 
 #: tfrmain.tbexit.hint
 msgctxt "tfrmain.tbexit.hint"
 msgid "Exit"
-msgstr ""
+msgstr "Salir"
 
 #: tfrmain.tbfastanim.caption
 msgid "tbFastAnim"
@@ -465,7 +474,7 @@ msgstr ""
 
 #: tfrmain.tbfastanim.hint
 msgid "Speed up"
-msgstr ""
+msgstr "Aumentar velocidad"
 
 #: tfrmain.tbfirstimage.caption
 msgid "tbFirstImage"
@@ -473,17 +482,17 @@ msgstr ""
 
 #: tfrmain.tbfirstimage.hint
 msgid "First image"
-msgstr ""
+msgstr "Primera imagen"
 
 #: tfrmain.tbfliphorizontal.hint
 msgctxt "tfrmain.tbfliphorizontal.hint"
 msgid "Flip horizontal"
-msgstr ""
+msgstr "Voltear horizontalmente"
 
 #: tfrmain.tbflipvertical.hint
 msgctxt "tfrmain.tbflipvertical.hint"
 msgid "Flip vertical"
-msgstr ""
+msgstr "Voltear verticalmente"
 
 #: tfrmain.tbfullscreen.hint
 msgid "Full screen"

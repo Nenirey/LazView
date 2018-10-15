@@ -1,76 +1,84 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8"
 
+#: tform3.caption
+msgid "Quality"
+msgstr "Quality"
+
+#: tform3.label1.caption
+msgid "100"
+msgstr ""
+
 #: tfreffect.button1.caption
 msgid "Grayscale"
 msgstr "Grayscale"
 
 #: tfreffect.button10.caption
 msgid "RGB -> BRG"
-msgstr ""
+msgstr "RGB -> BRG"
 
 #: tfreffect.button11.caption
 msgctxt "tfreffect.button11.caption"
 msgid "Smooth"
-msgstr ""
+msgstr "Smooth"
 
 #: tfreffect.button12.caption
 msgid "Sharpen"
-msgstr ""
+msgstr "Sharpen"
 
 #: tfreffect.button13.caption
 msgctxt "tfreffect.button13.caption"
 msgid "Negative"
-msgstr ""
+msgstr "Negative"
 
 #: tfreffect.button14.caption
 msgid "Plane (slow)"
-msgstr ""
+msgstr "Plane (slow)"
 
 #: tfreffect.button15.caption
 msgid "Contour"
-msgstr ""
+msgstr "Contour"
 
 #: tfreffect.button16.caption
 msgid "Cylinder"
-msgstr ""
+msgstr "Cylinder"
 
 #: tfreffect.button17.caption
 msgid "Emboss"
-msgstr ""
+msgstr "Emboss"
 
 #: tfreffect.button18.caption
 msgid "Emboss high light"
-msgstr ""
+msgstr "Emboss high light"
 
 #: tfreffect.button19.caption
 msgid "Normalize"
-msgstr ""
+msgstr "Normalize"
 
 #: tfreffect.button2.caption
 msgctxt "tfreffect.button2.caption"
 msgid "Highlight red"
-msgstr ""
+msgstr "Highlight re"
 
 #: tfreffect.button20.caption
 msgid "Sphere"
-msgstr ""
+msgstr "Sphere"
 
 #: tfreffect.button21.caption
 msgid "Median"
-msgstr ""
+msgstr "Median"
 
 #: tfreffect.button22.caption
 msgid "Smart zoom 3"
-msgstr ""
+msgstr "Smart zoom 3"
 
 #: tfreffect.button23.caption
 msgid "Twirl"
-msgstr ""
+msgstr "Twirl"
 
 #: tfreffect.button24.caption
 msgid "Pixelate"
-msgstr ""
+msgstr "Pixelate"
 
 #: tfreffect.button25.caption
 msgid "Test"
@@ -79,12 +87,12 @@ msgstr ""
 #: tfreffect.button3.caption
 msgctxt "tfreffect.button3.caption"
 msgid "Highlight green"
-msgstr ""
+msgstr "Highlight green"
 
 #: tfreffect.button4.caption
 msgctxt "tfreffect.button4.caption"
 msgid "Highlight blue"
-msgstr ""
+msgstr "Highlight blue"
 
 #: tfreffect.button5.caption
 msgctxt "tfreffect.button5.caption"
