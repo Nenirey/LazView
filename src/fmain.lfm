@@ -1,7 +1,7 @@
 object frmain: Tfrmain
-  Left = 289
+  Left = 339
   Height = 609
-  Top = 72
+  Top = 80
   Width = 902
   ActiveControl = ShellTreeView1
   AllowDropFiles = True
@@ -423,7 +423,7 @@ object frmain: Tfrmain
     AnchorSideBottom.Control = Splitter2
     AnchorSideBottom.Side = asrBottom
     Left = 2
-    Height = 347
+    Height = 462
     Top = 24
     Width = 900
     HorzScrollBar.Increment = 29
@@ -435,8 +435,9 @@ object frmain: Tfrmain
     VertScrollBar.Smooth = True
     VertScrollBar.Tracking = True
     Anchors = [akTop, akLeft, akRight, akBottom]
+    BorderSpacing.Bottom = 3
     BorderStyle = bsNone
-    ClientHeight = 347
+    ClientHeight = 462
     ClientWidth = 900
     Enabled = False
     Color = clBlack
@@ -450,7 +451,7 @@ object frmain: Tfrmain
     OnPaint = ScrollBox1Paint
     object Image1: TImage
       Left = 0
-      Height = 347
+      Height = 462
       Top = 0
       Width = 900
       AntialiasingMode = amOn
@@ -471,11 +472,12 @@ object frmain: Tfrmain
       AnchorSideTop.Control = ScrollBox1
       AnchorSideRight.Control = ScrollBox1
       AnchorSideRight.Side = asrBottom
-      Left = 0
+      Left = 3
       Height = 21
       Top = 0
-      Width = 900
+      Width = 897
       Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 3
       Caption = '0/0'
       Font.Color = clBlack
       Font.Height = -16
@@ -490,12 +492,12 @@ object frmain: Tfrmain
       AnchorSideTop.Control = ScrollBox1
       AnchorSideRight.Control = ScrollBox1
       AnchorSideRight.Side = asrBottom
-      Left = 2
+      Left = 5
       Height = 21
       Top = 2
-      Width = 897
+      Width = 894
       Anchors = [akTop, akLeft, akRight]
-      BorderSpacing.Left = 2
+      BorderSpacing.Left = 5
       BorderSpacing.Top = 2
       BorderSpacing.Right = 1
       Caption = '0/0'
@@ -526,8 +528,8 @@ object frmain: Tfrmain
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = StatusBar1
     Left = 2
-    Height = 198
-    Top = 368
+    Height = 77
+    Top = 489
     Width = 900
     HorzScrollBar.Increment = 1
     HorzScrollBar.Page = 1
@@ -536,6 +538,7 @@ object frmain: Tfrmain
     VertScrollBar.Page = 1
     VertScrollBar.Visible = False
     Anchors = [akTop, akLeft, akRight, akBottom]
+    BorderSpacing.Top = 3
     BorderStyle = bsNone
     Color = clBlack
     ParentColor = False
@@ -550,15 +553,17 @@ object frmain: Tfrmain
     AnchorSideLeft.Control = Splitter1
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = StatusBar1
+    AnchorSideBottom.Side = asrBottom
     Cursor = crVSplit
     Left = 2
     Height = 3
-    Top = 368
+    Top = 486
     Width = 900
     Align = alNone
     Anchors = [akLeft, akRight]
+    AutoSnap = False
     Beveled = True
-    Color = clNone
     OnMoved = PairSplitterSide2Resize
     ParentColor = False
     ResizeAnchor = akBottom

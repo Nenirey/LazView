@@ -390,7 +390,7 @@ begin
   end;
   iniconfigfile.WriteBool('Config','stayontop',frmain.mnuAlwaysOnTop.Checked);
   iniconfigfile.WriteBool('Config','backgroundmosaic',frmain.mnuMosaic.Checked);
-  iniconfigfile.WriteInteger('Config','thumbpanelsize',frmain.Splitter2.Top);
+  iniconfigfile.WriteInteger('Config','thumbpanelsize',thumbsize);
   iniconfigfile.UpdateFile;
   iniconfigfile.Free;
 end;
@@ -406,6 +406,8 @@ begin
     iniconfigfile:=TMEMINIFile.Create(ExtractFilePath(Application.Params[0])+'lazview.ini')
   else
     iniconfigfile:=TMEMINIFile.Create(GetAppConfigDir(false)+'lazview.ini');
+    if iniconfigfile.ReadBool('Config','compactmode',compactmode) then
+    compact;
   case iniconfigfile.ReadString('Config','mainwindowstate','wsMaximized') of
   'wsMaximized':
     begin
@@ -420,8 +422,6 @@ begin
       frmain.Height:=iniconfigfile.ReadInteger('Config','mainwindowheight',frmain.Height);
     end;
   end;
-  if iniconfigfile.ReadBool('Config','compactmode',compactmode) then
-    compact;
   if iniconfigfile.ReadBool('Config','showthumbs',showthumbs) then
   begin
     frmain.mnuShowThumbs.Checked:=true;
@@ -429,11 +429,18 @@ begin
     showthumbs:=true;
     frmain.sboxthumb.Visible:=true;
     if frmain.StatusBar1.Visible then
-      frmain.Splitter2.Top:=iniconfigfile.ReadInteger('Config','thumbpanelsize',frmain.StatusBar1.Top-64)
+      frmain.Splitter2.Top:=frmain.StatusBar1.Top-frmain.Splitter2.Height+frmain.StatusBar1.Height-iniconfigfile.ReadInteger('Config','thumbpanelsize',64)
     else
-      frmain.Splitter2.Top:=iniconfigfile.ReadInteger('Config','thumbpanelsize',frmain.StatusBar1.Top+frmain.StatusBar1.Height-64);
+      frmain.Splitter2.Top:=frmain.Height-frmain.Splitter2.Height-iniconfigfile.ReadInteger('Config','thumbpanelsize',64);
     thumbsize:=frmain.sboxthumb.Height;
     frmain.PairSplitterSide2Resize(nil);
+  end
+  else
+  begin
+    if frmain.StatusBar1.Visible then
+      frmain.Splitter2.Top:=frmain.StatusBar1.Top
+    else
+      frmain.Splitter2.Top:=frmain.Height;
   end;
   tmplang:=iniconfigfile.ReadString('Config','language','en');
   SetDefaultLang(tmplang);
@@ -940,7 +947,7 @@ begin
         realimgwidth:=frmain.Image1.Picture.Width;
         realimgheight:=frmain.Image1.Picture.Height;
       end;
-      '.PNG':
+      '.PNG','.APNG':
       begin
         ifgif:=false;
         SetLength(APNGDelays,0);
@@ -1240,11 +1247,6 @@ begin
     frmain.Label1.Visible:=true;
     frmain.Label2.Visible:=true;
     frmain.Splitter1.Left:=0-frmain.Splitter1.Width;
-    if frmain.StatusBar1.Visible then
-      frmain.Splitter2.Top:=frmain.StatusBar1.Top-thumbsize-18
-    else
-      frmain.Splitter2.Top:=frmain.StatusBar1.Top-thumbsize-18-frmain.StatusBar1.Height;
-
     frmain.WindowState:=wsFullScreen;
     frmain.MainMenu1.Items.Visible:=false;
     frmain.Timer2.Enabled:=true;
@@ -1740,6 +1742,22 @@ begin
     for i:=0 to APNGImage.ImageCount-1 do
     begin
       case efect of
+        1:begin
+            APNGImage.ActiveImage:=i;
+            APNGImage.Flip;
+          end;
+        2:begin
+            APNGImage.ActiveImage:=i;
+            APNGImage.Mirror;
+          end;
+        3:begin
+           APNGImage.ActiveImage:=i;
+           APNGImage.Rotate(270);
+         end;
+        4:begin
+           APNGImage.ActiveImage:=i;
+           APNGImage.Rotate(90);
+         end;
         5:begin
             APNGImage.ActiveImage:=i;
             APNGImage.SwapChannels(1,3);
@@ -1770,7 +1788,7 @@ begin
       end;
     end;
   end;
-  if (ifgif=false and ifapng=false) then
+  if (ifgif=false) and (ifapng=false) then
   begin
     imagen:=TLazIntfImage.Create(0,0);
     imagen2:=frmain.Image1.Picture.Bitmap.CreateIntfImage;
@@ -1955,7 +1973,7 @@ begin
         if (Attr and faDirectory)<>faDirectory then
         begin
           case UpperCase(ExtractFileExt(Name)) of
-            '.JPG','.JPEG','.JPE','.JFIF','.BMP','.GIF','.PNG','.ICO','.XPM','.PBM','.PPM','.ICNS','.CUR','.TIF','.TIFF','.PCX','.TGA','.PSD','.XWD':
+            '.JPG','.JPEG','.JPE','.JFIF','.BMP','.GIF','.PNG','.APNG','.ICO','.XPM','.PBM','.PPM','.ICNS','.CUR','.TIF','.TIFF','.PCX','.TGA','.PSD','.XWD':
             begin
               flisttmp.Add(Name);
               Inc(nfiletmp);
@@ -2100,6 +2118,14 @@ procedure Tfrmain.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState
 begin
   //ShowMessage(inttostr(key));
  case Key of
+  35://Fin
+  begin
+    frmain.tbLastImageClick(nil);
+  end;
+  36://Inicio
+  begin
+    frmain.tbFirstImageClick(nil);
+  end;
   38://Flecha arriba
    begin
      if Shift=[ssAlt] then
@@ -2300,12 +2326,20 @@ end;
 
 procedure Tfrmain.FormResize(Sender: TObject);
 begin
-  {if frmain.mnuShowThumbs.Checked then
+  if showthumbs then
   begin
-    frmain.psVertical.Position:=(frmain.psVertical.Height-thumbsize)-18
+    if frmain.StatusBar1.Visible then
+      frmain.Splitter2.Top:=frmain.StatusBar1.Top+frmain.StatusBar1.Height-frmain.Splitter2.Height-thumbsize
+    else
+      frmain.Splitter2.Top:=frmain.Height-frmain.Splitter2.Height-thumbsize;
   end
   else
-    frmain.psVertical.Position:=frmain.psVertical.Height;}
+  begin
+    if frmain.StatusBar1.Visible then
+      frmain.Splitter2.Top:=frmain.StatusBar1.Top-frmain.Splitter2.Height
+    else
+      frmain.Splitter2.Top:=frmain.Height-frmain.Splitter2.Height+3;
+  end;
 end;
 
 procedure Tfrmain.FormShow(Sender: TObject);
@@ -2316,7 +2350,6 @@ begin
     if (ifile<flist.Count) then
       loadpicture(carpeta+flist[ifile]);
   end;
-  //frmain.pssThumbs.OnResize:=@frmain.PairSplitterSide2Resize;
 end;
 
 procedure Tfrmain.FormWindowStateChange(Sender: TObject);
@@ -2677,17 +2710,11 @@ begin
   showthumbs:=frmain.mnuShowThumbs.Checked;
   if showthumbs=false then
   begin
-    //frmain.pssThumbs.OnResize:=nil;
-    //frmain.Splitter2.OnMoved:=nil;
-    //frmain.psVertical.Position:=frmain.psVertical.Height;
     if frmain.StatusBar1.Visible then
       frmain.Splitter2.Top:=frmain.StatusBar1.Top
     else
-      frmain.Splitter2.Top:=frmain.StatusBar1.Top-frmain.StatusBar1.Height;
+      frmain.Splitter2.Top:=frmain.Height;
     frmain.sboxthumb.Visible:=false;
-    //frmain.pssThumbs.OnResize:=@frmain.PairSplitterSide2Resize;
-    frmain.Splitter2.OnMoved:=@frmain.PairSplitterSide2Resize;
-    //refreshthumbs;
   end
   else
   begin
@@ -2697,13 +2724,6 @@ begin
     else
       frmain.Splitter2.Top:=frmain.StatusBar1.Top-thumbsize-frmain.StatusBar1.Height;
     PairSplitterSide2Resize(nil);
-    {if folderchange then
-    begin
-      refreshthumbs;
-      ththumbs:=thumbsthread.Create(true);
-      ththumbs.thumbpath:=carpeta;
-      ththumbs.Start;
-    end;}
   end;
 end;
 
@@ -2766,20 +2786,14 @@ begin
     frmain.ToolBar1.Visible:=false;
     frmain.StatusBar1.Visible:=false;
 
-    //frmain.psVertical.AnchorSideTop.Control:=frmain;
     //Adjust the ScrollBox1 to the top window
     frmain.ScrollBox1.AnchorSideTop.Control:=frmain;
-
-    //frmain.psVertical.AnchorSideTop.Side:=asrTop;
     frmain.ScrollBox1.AnchorSideTop.Side:=asrTop;
 
     frmain.Splitter1.AnchorSideTop.Control:=frmain;
     frmain.Splitter1.AnchorSideTop.Side:=asrTop;
 
-    //frmain.psVertical.AnchorSideBottom.Control:=frmain;
     frmain.sboxthumb.AnchorSideBottom.Control:=frmain;
-
-    //frmain.psVertical.AnchorSideBottom.Side:=asrBottom;
     frmain.sboxthumb.AnchorSideBottom.Side:=asrBottom;
 
     frmain.Splitter1.AnchorSideBottom.Control:=frmain;
@@ -2798,7 +2812,6 @@ begin
       fullsc;
       compactmode:=false;
     end;
-    frmain.Splitter2.Top:=frmain.Splitter2.Top-frmain.StatusBar1.Height;
   end;
 end;
 
@@ -3117,7 +3130,13 @@ end;
 
 procedure Tfrmain.PairSplitterSide2Resize(Sender: TObject);
 begin
-  thumbsize:=frmain.sboxthumb.Height;
+  if frmain.StatusBar1.Visible then
+    thumbsize:=frmain.sboxthumb.Height+frmain.StatusBar1.Height
+  else
+    thumbsize:=frmain.sboxthumb.Height;
+  showthumbs:=true;
+  frmain.mnuShowThumbs.Checked:=true;
+  frmain.tbShowThumbs.Down:=true;
   frmain.Timer4.Enabled:=true;
 end;
 
@@ -3127,6 +3146,7 @@ begin
   begin
     frmain.ShellTreeView1.Visible:=true;
     frmain.mnuTreeView.Checked:=true;
+    frmain.tbShowTreeView.Down:=true;
   end;
 end;
 
@@ -3355,10 +3375,26 @@ end;
 
 procedure Tfrmain.Timer4Timer(Sender: TObject);
 begin
-  refreshthumbs;
-  ththumbs:=thumbsthread.Create(true);
-  ththumbs.thumbpath:=carpeta;
-  ththumbs.Start;
+  if Assigned(flist) then
+  begin
+    refreshthumbs;
+    if (flist.Count<5000) then
+    begin
+      ththumbs:=thumbsthread.Create(true);
+      ththumbs.thumbpath:=carpeta;
+      ththumbs.Start;
+    end
+    else
+    begin
+      if showthumbs then
+      begin
+        frmain.Timer4.Enabled:=false;
+        frmain.mnuShowThumbsClick(nil);
+        ShowMessage('Sorry we cant show thumbs for file list > 5000');
+        showthumbs:=false;
+      end;
+    end;
+  end;
   frmain.Timer4.Enabled:=false;
 end;
 
@@ -3417,27 +3453,11 @@ begin
   frmain.Timer1.Enabled:=not frmain.Timer1.Enabled;
   if frmain.Timer1.Enabled then
   begin
+    if full=false then
+      fullsc;
     frmain.tbPlayShow.ImageIndex:=12;
-    fwidth:=frmain.Width;
-    fheight:=frmain.Height;
-    fxpos:=frmain.Top;
-    fypos:=frmain.Left;
-    frmain.BorderStyle:=bsNone;
-    frmain.ToolBar1.Align:=alNone;
-    //frmain.psVertical.Align:=alClient;
-    frmain.StatusBar1.Visible:=false;
-    frmain.Color:=clBlack;
-    frmain.FormStyle:=fsStayOnTop;
     frmain.Label1.Visible:=false;
     frmain.Label2.Visible:=false;
-    frmain.MainMenu1.Items.Visible:=false;
-    frmain.Splitter1.Left:=0-frmain.Splitter1.Width;
-    //frmain.psVertical.Position:=frmain.psVertical.Height-thumbsize-18;
-    frmain.WindowState:=wsFullScreen;
-    frmain.Timer2.Enabled:=true;
-    full:=true;
-    frmain.ToolBar1.Top:=screen.Height-frmain.ToolBar1.Height;
-    frmain.ToolBar1.Left:=Round((screen.Width-frmain.ToolBar1.Width)/2);
   end
   else
     frmain.tbPlayShow.ImageIndex:=13;
@@ -3461,7 +3481,6 @@ end;
 
 procedure Tfrmain.tbShowTreeViewClick(Sender: TObject);
 begin
-  //frmain.pssThumbs.OnResize:=nil;
   frmain.mnuTreeView.Checked:=not frmain.mnuTreeView.Checked;
   frmain.tbShowTreeView.Down:=frmain.mnuTreeView.Checked;
   if frmain.mnuTreeView.Checked then
@@ -3469,7 +3488,6 @@ begin
   else
     frmain.Splitter1.Left:=0-frmain.Splitter1.Width;
   frmain.ShellTreeView1.Visible:=frmain.mnuTreeView.Checked;
-  //frmain.pssThumbs.OnResize:=@frmain.PairSplitterSide2Resize;
 end;
 
 procedure Tfrmain.tbSelectClick(Sender: TObject);
@@ -3480,10 +3498,6 @@ begin
     frmain.Image1.Cursor:=crCross
   else
   begin
-    {if frmain.Image1.Stretch then
-      frmain.Image1.Cursor:=crSizeAll
-    else
-      frmain.Image1.Cursor:=crDefault;}
     frmain.Shape1.Hide;
   end;
 end;
@@ -3855,6 +3869,7 @@ var
    i:longint;
    thumbimages:tthumbimage;
    mayor:longint;
+   starttime:TDateTime;
 begin
   if ifallthumbs=false then
   begin
@@ -3877,10 +3892,6 @@ begin
         thumbimages.ShowHint:=true;
         thumbimages.Tag:=i;
         thumbimages.Top:=2;
-        //thumbimages.AnchorSideTop.Control:=frmain.sboxthumb;
-        //thumbimages.AnchorSideTop.Side:=asrTop;
-        //thumbimages.AnchorSideBottom.Control:=frmain.pssThumbs;
-        //thumbimages.Anchors:=[akBottom,akTop];
         thumbimages.OnClick:=@thumbimages.thumbclick;
         thumbimages.OnMouseDown:=@thumbimages.thumbmousedown;
         thumbimages.OnMouseLeave:=@thumbimages.thumbmouseleave;
@@ -3890,13 +3901,9 @@ begin
         frmain.sboxthumb.InsertControl(thumbimages);
       end;
     end;
-    //frmain.pssThumbs.OnResize:=nil;
-    //This is for force update the scrollbar
     frmain.sboxthumb.Visible:=false;
     frmain.sboxthumb.Visible:=true;
     frmain.sboxthumb.AutoSize:=true;
-    //frmain.sboxthumb.ScrollInView((frmain.sboxthumb.Components[ifile] as TControl));
-    //frmain.sboxthumb.HorzScrollBar.Position:=(frmain.sboxthumb.Components[ifile] as TControl).Left-Round(frmain.Width/2)+Round(thumbsize/2)+1;
     if inprocessanim=false then
       scrollanim;
   end;

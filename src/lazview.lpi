@@ -22,7 +22,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="1"/>
-      <BuildNr Value="2666"/>
+      <BuildNr Value="2773"/>
       <StringTable Comments="Pequeño visor de imagenes" CompanyName="Independiente" FileDescription="Visor de imágenes LazView" InternalName="lazview" LegalCopyright="R.Mir" LegalTrademarks="Reinier Romero Mir (c)" OriginalFilename="lazview" ProductName="LazView" ProductVersion="0.1"/>
     </VersionInfo>
     <BuildModes Count="2">
@@ -201,17 +201,4 @@
       </Options>
     </Linking>
   </CompilerOptions>
-  <Debugging>
-    <Exceptions Count="3">
-      <Item1>
-        <Name Value="EIntOverflow"/>
-      </Item1>
-      <Item2>
-        <Name Value="RunError(215)"/>
-      </Item2>
-      <Item3>
-        <Name Value="PNGImageException"/>
-      </Item3>
-    </Exceptions>
-  </Debugging>
 </CONFIG>
