@@ -302,7 +302,9 @@ type
    thumbindex:integer;
    iname:string;
    thumbpath:string;
+   ipublic:integer;
    procedure createallimages;
+   procedure createsingleimage;
    procedure refreshthumbs;
    procedure showthumbs;
   protected
@@ -342,6 +344,8 @@ var
   ifallthumbs:boolean;
   realimgwidth,realimgheight:LongInt;
   inprocessanim:boolean;
+  puntos:array of int64;
+  creados:array of boolean;
   procedure rendermosaic;
   procedure fullsc;
   procedure compact;
@@ -350,6 +354,7 @@ var
   procedure filterimagen(filter:integer);
   procedure efectimagen(efect:integer;nivel:integer=5000);
   procedure loadpicture(fimagen:string;restorezoom:boolean=true;scrollthumbs:boolean=true;realimage:boolean=false);
+  procedure saveconfig;
 implementation
 
 uses
@@ -357,6 +362,25 @@ uses
 {$R *.lfm}
 
 { Tfrmain }
+procedure showmainmenu(ifshow:boolean);
+begin
+  with frMain do
+  begin
+    if ifshow then
+    begin
+      Menu := MainMenu1;
+      {$IFDEF MSWINDOWS}
+      // Workaround: on Windows need to recreate window to properly recalculate children sizes.
+      saveconfig;
+      RecreateWnd(frMain);
+      {$ENDIF}
+    end
+    else if Assigned(Menu) then
+    begin
+      Menu := nil;
+    end;
+  end;
+end;
 
 procedure saveconfig;
 var
@@ -524,62 +548,65 @@ procedure scrollanim;
 var
   center,i:integer;
 begin
-  inprocessanim:=true;
-  i:=frmain.sboxthumb.HorzScrollBar.Position;
-  center:=(frmain.sboxthumb.Components[ifile] as TControl).Left-Round(frmain.Splitter2.Width/2)+Round(thumbsize/2)+1;
-  if i<center then
+  if Length(puntos)>ifile then
   begin
-    //ShowMessage('Left');
-    if (center-i)>200 then
-      i:=center;
-    while i<center do
+    inprocessanim:=true;
+    i:=frmain.sboxthumb.HorzScrollBar.Position;
+    center:=puntos[ifile]-Round(frmain.Splitter2.Width/2)+Round(thumbsize/2)+1;
+    if i<center then
     begin
-      {$IFDEF WINDOWS}
-      sleep(1);
-      {$ELSE}
-      sleep(10);
-      {$ENDIF}
-      if (center-i)>100 then
-        i:=i+50
-      else
+      //ShowMessage('Left');
+      if (center-i)>200 then
+        i:=center;
+      while i<center do
       begin
-        if (center-i)>20 then
-          i:=i+10
+        {$IFDEF WINDOWS}
+        sleep(1);
+        {$ELSE}
+        sleep(10);
+        {$ENDIF}
+        if (center-i)>100 then
+          i:=i+50
         else
-          i:=i+1;
+        begin
+          if (center-i)>20 then
+            i:=i+10
+          else
+            i:=i+1;
+        end;
+        frmain.sboxthumb.HorzScrollBar.Position:=i;
+        Application.ProcessMessages;
       end;
-      frmain.sboxthumb.HorzScrollBar.Position:=i;
-      Application.ProcessMessages;
     end;
-  end;
 
-  if i>center then
-  begin
-    //ShowMessage('Right');
-    if i>(center+200) then
-      i:=center;
-    while  i>center do
+    if i>center then
     begin
-      {$IFDEF WINDOWS}
-      sleep(1);
-      {$ELSE}
-      sleep(10);
-      {$ENDIF}
-      if i>(center+100) then
-        i:=i-50
-      else
+      //ShowMessage('Right');
+      if i>(center+200) then
+        i:=center;
+      while  i>center do
       begin
-        if i>(center+20) then
-          i:=i-10
+        {$IFDEF WINDOWS}
+        sleep(1);
+        {$ELSE}
+        sleep(10);
+        {$ENDIF}
+        if i>(center+100) then
+          i:=i-50
         else
-          i:=i-1;
+        begin
+          if i>(center+20) then
+            i:=i-10
+          else
+            i:=i-1;
+        end;
+        frmain.sboxthumb.HorzScrollBar.Position:=i;
+        Application.ProcessMessages;
       end;
-      frmain.sboxthumb.HorzScrollBar.Position:=i;
-      Application.ProcessMessages;
     end;
+    frmain.sboxthumb.HorzScrollBar.Position:=puntos[ifile]-Round(frmain.Splitter2.Width/2)+Round(thumbsize/2)+1;
+    inprocessanim:=false;
   end;
-  frmain.sboxthumb.HorzScrollBar.Position:=(frmain.sboxthumb.Components[ifile] as TControl).Left-Round(frmain.Splitter2.Width/2)+Round(thumbsize/2)+1;
-  inprocessanim:=false;
 end;
 
 procedure rendermosaic;
@@ -1209,7 +1236,7 @@ begin
   end;
   if frmain.mnuShowThumbs.Checked then
   begin
-    if scrollthumbs and (frmain.sboxthumb.ComponentCount>ifile) then
+    if scrollthumbs {and (frmain.sboxthumb.ComponentCount>ifile)} then
     begin
       if inprocessanim=false then
         scrollanim;
@@ -2163,6 +2190,10 @@ begin
       saveconfig;
       Application.Terminate;
     end;
+  67://Letra C
+    begin
+      frmain.mnuCompactClick(nil);
+    end;
   72://Letra H
     begin
     //if not ifgif then
@@ -2781,6 +2812,7 @@ procedure Tfrmain.mnuCompactClick(Sender: TObject);
 begin
   if (full=false) and (compactmode=false) then
   begin
+    showmainmenu(false);
     fwidth:=frmain.Width;
     fheight:=frmain.Height;
     frmain.ToolBar1.Visible:=false;
@@ -2799,7 +2831,6 @@ begin
     frmain.Splitter1.AnchorSideBottom.Control:=frmain;
     frmain.Splitter1.AnchorSideBottom.Side:=asrBottom;
 
-    frmain.MainMenu1.Items.Visible:=false;
     frmain.Splitter2.Top:=frmain.Splitter2.Top+frmain.StatusBar1.Height;
     compactmode:=true;
     full:=false;
@@ -2808,9 +2839,76 @@ begin
   begin
     if compactmode then
     begin
-      fullsc;
-      fullsc;
+      full:=false;
       compactmode:=false;
+      frmain.ToolBar1.Align:=alTop;
+      if frmain.mnuToolBar.Checked then
+        frmain.ToolBar1.Visible:=true;
+      frmain.Color:=clDefault;
+      frmain.Label1.Visible:=false;
+      frmain.Label2.Visible:=false;
+      if frmain.mnuTreeView.Checked then
+        frmain.Splitter1.Left:=200;
+      if frmain.mnuStatusBar.Checked then
+      begin
+        frmain.StatusBar1.Visible:=true;
+        frmain.sboxthumb.AnchorSideBottom.Control:=frmain.StatusBar1;
+        frmain.sboxthumb.AnchorSideBottom.Side:=asrTop;
+      end
+      else
+      begin
+        frmain.sboxthumb.AnchorSideBottom.Control:=frmain;
+        frmain.sboxthumb.AnchorSideBottom.Side:=asrBottom;
+      end;
+      if frmain.mnuToolBar.Checked=false then
+      begin
+        frmain.ToolBar1.Visible:=false;
+
+        frmain.ScrollBox1.AnchorSideTop.Control:=frmain;
+        frmain.ScrollBox1.AnchorSideTop.Side:=asrTop;
+
+        frmain.Splitter1.AnchorSideTop.Control:=frmain;
+        frmain.Splitter1.AnchorSideTop.Side:=asrTop;
+      end
+      else
+      begin
+        frmain.ToolBar1.Visible:=true;
+
+        frmain.ScrollBox1.AnchorSideTop.Control:=frmain.ToolBar1;
+        frmain.ScrollBox1.AnchorSideTop.Side:=asrBottom;
+
+        frmain.Splitter1.AnchorSideTop.Control:=frmain.ToolBar1;
+        frmain.Splitter1.AnchorSideTop.Side:=asrBottom;
+      end;
+
+      if frmain.mnuStatusBar.Checked then
+      begin
+        frmain.Splitter1.AnchorSideBottom.Control:=frmain.StatusBar1;
+        frmain.Splitter1.AnchorSideBottom.Side:=asrTop;
+      end
+      else
+      begin
+        frmain.Splitter1.AnchorSideBottom.Control:=frmain;
+        frmain.Splitter1.AnchorSideBottom.Side:=asrBottom;
+      end;
+
+      if frmain.mnuShowThumbs.Checked then
+      begin
+        if frmain.StatusBar1.Visible then
+          frmain.Splitter2.Top:=frmain.StatusBar1.Top-thumbsize
+        else
+          frmain.Splitter2.Top:=frmain.StatusBar1.Top-thumbsize-frmain.StatusBar1.Height;
+      end
+      else
+      begin
+        if frmain.StatusBar1.Visible then
+          frmain.Splitter2.Top:=frmain.StatusBar1.Top
+        else
+          frmain.Splitter2.Top:=frmain.StatusBar1.Top-frmain.StatusBar1.Height;
+      end;
+
+      //frmain.MainMenu1.Items.Visible:=frmain.mnuMenus.Checked;
+      showmainmenu(true);
     end;
   end;
 end;
@@ -3083,12 +3181,8 @@ end;
 
 procedure Tfrmain.mnuMenusClick(Sender: TObject);
 begin
-  try
-    frmain.MainMenu1.Items.Visible:=not frmain.MainMenu1.Items.Visible;
-    frmain.mnuMenus.Checked:=frmain.MainMenu1.Items.Visible;
-  except on e:exception do
-
-  end;
+  frmain.mnuMenus.Checked:=not frmain.mnuMenus.Checked;
+  showmainmenu(frmain.mnuMenus.Checked);
 end;
 
 procedure Tfrmain.mnuFlipHClick(Sender: TObject);
@@ -3378,7 +3472,7 @@ begin
   if Assigned(flist) then
   begin
     refreshthumbs;
-    if (flist.Count<5000) then
+    if {(flist.Count<5000)} true then
     begin
       ththumbs:=thumbsthread.Create(true);
       ththumbs.thumbpath:=carpeta;
@@ -3841,7 +3935,9 @@ begin
     {ShowMessage('Imagen #: '+inttostr(thumbindex)+#13+
     'Left: '+inttostr((frmain.sboxthumb.Controls[thumbindex] as TImage).Left)+#13+
     'Scroll: '+inttostr(frmain.sboxthumb.HorzScrollBar.Position)+#13+
-    'Scroll+Form width: '+inttostr(frmain.sboxthumb.HorzScrollBar.Position+frmain.Width));}
+    'Scroll+Form width: '+inttostr(frmnain.sboxthumb.HorzScrollBar.Position+frmain.Width));}
+    //ShowMessage(inttostr(thumbindex)+'   '+inttostr(ifile));
+    //frmain.StatusBar1.Panels[5].Text:=inttostr(frmain.sboxthumb.ControlCount);
     (frmain.sboxthumb.Controls[thumbindex] as TImage).Picture.Bitmap.Assign(thumb);
     //This is wrong but is workin for linux and windows
     {$IFDEF LINUX}
@@ -3869,7 +3965,7 @@ var
    i:longint;
    thumbimages:tthumbimage;
    mayor:longint;
-   starttime:TDateTime;
+   //starttime:TDateTime;
 begin
   if ifallthumbs=false then
   begin
@@ -3877,9 +3973,15 @@ begin
       mayor:=flist.Count
     else
       mayor:=frmain.sboxthumb.ControlCount;
+    SetLength(puntos,0);
+    SetLength(creados,0);
+    SetLength(puntos,mayor);
+    SetLength(creados,mayor);
     for i:=0 to mayor-1 do
     begin
-      if i>frmain.sboxthumb.ControlCount-1 then
+      puntos[i]:=(frmain.sboxthumb.Height+1)*i;
+      //Insert only the first and last to create the space
+      if (i>frmain.sboxthumb.ControlCount-1) and ((i=0) or (i=mayor-1)) then
       begin
         thumbimages:=tthumbimage.Create(frmain.sboxthumb);
         thumbimages.Width:=frmain.sboxthumb.Height-18;
@@ -3910,82 +4012,126 @@ begin
   ifallthumbs:=true;
 end;
 
+procedure thumbsthread.createsingleimage;
+var
+   thumbimages:tthumbimage;
+begin
+  thumbimages:=tthumbimage.Create(frmain.sboxthumb);
+  thumbimages.Width:=frmain.sboxthumb.Height-18;
+  thumbimages.Height:=frmain.sboxthumb.Height-18;
+  thumbimages.Left:=(frmain.sboxthumb.Height+1)*ipublic;
+  thumbimages.Stretch:=true;
+  thumbimages.Center:=true;
+  thumbimages.AutoSize:=false;
+  thumbimages.Hint:=flist[ipublic];
+  thumbimages.ShowHint:=true;
+  thumbimages.Tag:=ipublic;
+  thumbimages.Top:=2;
+  thumbimages.OnClick:=@thumbimages.thumbclick;
+  thumbimages.OnMouseDown:=@thumbimages.thumbmousedown;
+  thumbimages.OnMouseLeave:=@thumbimages.thumbmouseleave;
+  thumbimages.OnMouseMove:=@thumbimages.thumbmousemove;
+  thumbimages.OnMouseUp:=@thumbimages.thumbmouseup;
+  thumbimages.Show;
+  frmain.sboxthumb.InsertControl(thumbimages);
+end;
+
 procedure thumbsthread.Execute;
 var
    i,n,minv,maxv,icenter:longint;
+   exactcenter:float;
 begin
   if starting then///gift time to load the current image
     sleep(1000);
   ifallthumbs:=false;
-  //Synchronize(@refreshthumbs);
   Synchronize(@createallimages);
   folderchange:=false;
-  for i:=0 to flist.Count-1 do
+  while frmain.sboxthumb.ControlCount<flist.Count do
   begin
     if carpeta=thumbpath then
     begin
       //try
-        if i<flist.Count then
-        begin
-          if frmain.sboxthumb.HorzScrollBar.ScrollPos<>0 then
-          begin
+        //if i<flist.Count then
+        //begin
             //*** This is for update first the visible thumbs ***//
             ///// Determine the first visible thumb
-            try
-              icenter:=frmain.sboxthumb.ControlAtPos(Types.Point(Round(frmain.sboxthumb.Width/2),Round(frmain.sboxthumb.Height/2)),[capfAllowDisabled]).Tag;
+            {try
+              //icenter:=frmain.sboxthumb.ControlAtPos(Types.Point(Round(frmain.sboxthumb.Width/2),Round(frmain.sboxthumb.Height/2)),[capfAllowDisabled]).Tag;
+              icenter:=Round(Length(puntos)/2);
             except on e:exception do
               icenter:=frmain.sboxthumb.ControlCount-1;
-            end;
-            for n:=icenter downto 0 do
+            end;}
+            {for n:=icenter downto 0 do
             begin
-              if frmain.sboxthumb.Controls[n].Left>=frmain.sboxthumb.HorzScrollBar.Position then
+              if puntos[n]>=frmain.sboxthumb.HorzScrollBar.Position then
                 minv:=n
               else
                 break;
             end;
             if minv>0 then
-              minv:=minv-1;
+              minv:=minv-1;}
+          exactcenter:=(frmain.sboxthumb.HorzScrollBar.Position/frmain.sboxthumb.HorzScrollBar.Range)*100;
+          //spos:=ifile;
+          icenter:=Round(exactcenter*0.01*Length(puntos));
+          //frmain.Caption:=floattostr(icenter)+'%';
+          if icenter>=frmain.Splitter2.Width/thumbsize then
+            minv:=icenter-Round(frmain.Splitter2.Width/thumbsize)
+          else
+            minv:=0;
 
             ///// Determine the last visible thumb
-            for n:=icenter to frmain.sboxthumb.ControlCount-1 do
+            {for n:=icenter to Length(puntos)-1 do
             begin
-             if frmain.sboxthumb.Controls[n].Left>(frmain.sboxthumb.HorzScrollBar.Position+frmain.width) then
+             if puntos[n]>(frmain.sboxthumb.HorzScrollBar.Position+frmain.width) then
              begin
                 maxv:=n;
                 break;
              end;
             end;
             if maxv>frmain.sboxthumb.ControlCount-1 then
-              maxv:=frmain.sboxthumb.ControlCount-1;
+              maxv:=frmain.sboxthumb.ControlCount-1;}
+          if (icenter+(frmain.Splitter2.Width/thumbsize)+5)<=flist.Count-1 then
+            maxv:=icenter+Round(frmain.Splitter2.Width/thumbsize)+5
+          else
+            maxv:=flist.Count-1;
+          // si solo faltan 30 o menos completar todos
+          if flist.Count-1-maxv<30 then
+            maxv:=flist.Count-1;
+            //maxv:=flist.Count-1;
+          if minv<30 then
+            minv:=0;
             ////////Update the visible thumbs
-            //frmain.Caption:='minv:'+inttostr(minv)+'maxv:'+inttostr(maxv);
             for n:=minv to maxv do
             begin
-              if (frmain.sboxthumb.Controls[n] as TImage).Picture.Bitmap.Empty then
+              if creados[n]=false then
               begin
+                ipublic:=n;
+                Synchronize(@createsingleimage);
                 iname:=flist[n];
-                thumbindex:=(frmain.sboxthumb.Controls[n] as TImage).Tag;
+                thumbindex:=frmain.sboxthumb.ControlCount-1;
                 {$IFDEF LINUX}
                 Synchronize(@showthumbs);
                 {$ELSE}
                 showthumbs;
                 {$ENDIF}
+                creados[n]:=true;
               end;
             end;
-          end;
-
-
-          if (frmain.sboxthumb.Controls[i] as TImage).Picture.Bitmap.Empty then
-          begin
-            iname:=flist[i];
-            thumbindex:=(frmain.sboxthumb.Controls[i] as TImage).Tag;
+            Sleep(10);
+          ///Load the rest of thumbs
+            {if creados[i]=false then
+            begin
+              ipublic:=i;
+              Synchronize(@createsingleimage);
+              iname:=flist[i];
+              thumbindex:=frmain.sboxthumb.ControlCount-1;
+            end;
             {$IFDEF LINUX}
             Synchronize(@showthumbs);
             {$ELSE}
             showthumbs;
-            {$ENDIF}
-          end;
-        end;
+            {$ENDIF}}
+        //end;
     end
     else
       break;

@@ -22,7 +22,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="1"/>
-      <BuildNr Value="2773"/>
+      <BuildNr Value="2951"/>
       <StringTable Comments="Pequeño visor de imagenes" CompanyName="Independiente" FileDescription="Visor de imágenes LazView" InternalName="lazview" LegalCopyright="R.Mir" LegalTrademarks="Reinier Romero Mir (c)" OriginalFilename="lazview" ProductName="LazView" ProductVersion="0.1"/>
     </VersionInfo>
     <BuildModes Count="2">
@@ -201,4 +201,20 @@
       </Options>
     </Linking>
   </CompilerOptions>
+  <Debugging>
+    <Exceptions Count="4">
+      <Item1>
+        <Name Value="EListError"/>
+      </Item1>
+      <Item2>
+        <Name Value="EImagingCanvasBlendingError"/>
+      </Item2>
+      <Item3>
+        <Name Value="EImagingError"/>
+      </Item3>
+      <Item4>
+        <Name Value="EAccessViolation"/>
+      </Item4>
+    </Exceptions>
+  </Debugging>
 </CONFIG>

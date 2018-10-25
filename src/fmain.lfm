@@ -1,7 +1,7 @@
 object frmain: Tfrmain
-  Left = 339
+  Left = 364
   Height = 609
-  Top = 80
+  Top = 78
   Width = 902
   ActiveControl = ShellTreeView1
   AllowDropFiles = True
@@ -426,12 +426,12 @@ object frmain: Tfrmain
     Height = 462
     Top = 24
     Width = 900
-    HorzScrollBar.Increment = 29
-    HorzScrollBar.Page = 297
+    HorzScrollBar.Increment = 37
+    HorzScrollBar.Page = 377
     HorzScrollBar.Smooth = True
     HorzScrollBar.Tracking = True
-    VertScrollBar.Increment = 14
-    VertScrollBar.Page = 145
+    VertScrollBar.Increment = 16
+    VertScrollBar.Page = 161
     VertScrollBar.Smooth = True
     VertScrollBar.Tracking = True
     Anchors = [akTop, akLeft, akRight, akBottom]
@@ -510,9 +510,9 @@ object frmain: Tfrmain
       WordWrap = True
     end
     object Shape1: TShape
-      Left = 232
+      Left = 312
       Height = 65
-      Top = 80
+      Top = 96
       Width = 65
       Pen.Mode = pmNotXor
       Pen.Style = psDash
@@ -1729,6 +1729,7 @@ object frmain: Tfrmain
     }
   end
   object MainMenu1: TMainMenu
+    OwnerDraw = True
     left = 40
     top = 208
     object mnuFile: TMenuItem
@@ -1835,7 +1836,6 @@ object frmain: Tfrmain
       end
       object mnuCompact: TMenuItem
         Caption = 'Compact mode'
-        ShortCut = 67
         OnClick = mnuCompactClick
       end
       object mnuGoTo: TMenuItem
