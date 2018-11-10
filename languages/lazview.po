@@ -191,6 +191,10 @@ msgstr ""
 msgid "Copy"
 msgstr ""
 
+#: tfrmain.mnucrop.caption
+msgid "Crop"
+msgstr ""
+
 #: tfrmain.mnudeletefile.caption
 msgid "Delete"
 msgstr ""

@@ -10,7 +10,7 @@ uses
   LazUTF8, print{$IFDEF WINDOWS}, Registry, Windows, Windirs{$ENDIF},
   BGRABitmapTypes, BGRABitmap, BGRAThumbnail, BGRAAnimatedGif,
   DateUtils, Math, ImgSize, BGRAGifFormat, Printers, LCLintf, fexif, INIFiles, LCLTranslator,
-  Imaging, ImagingClasses, ImagingComponents, ImagingTypes, Variants;
+  Imaging, ImagingClasses, ImagingComponents, ImagingTypes, ImagingCanvases, Variants;
 
 type
 
@@ -22,6 +22,7 @@ type
     Label1: TLabel;
     Label2: TLabel;
     MainMenu1: TMainMenu;
+    mnuCrop: TMenuItem;
     mnuAlwaysOnTop: TMenuItem;
     mnuLanguage: TMenuItem;
     mnuFile: TMenuItem;
@@ -145,7 +146,7 @@ type
     tbRotateRight: TToolButton;
     tbExit: TToolButton;
     tbZoomIn: TToolButton;
-    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormDragDrop(Sender, Source: TObject; X, Y: Integer);
@@ -157,8 +158,6 @@ type
     procedure FormMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure FormMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
-    procedure FormMouseWheel(Sender: TObject; Shift: TShiftState;
-      WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
     procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FormWindowStateChange(Sender: TObject);
@@ -167,6 +166,7 @@ type
     procedure Image1MouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure mnuAlwaysOnTopClick(Sender: TObject);
+    procedure mnuCropClick(Sender: TObject);
     procedure mnuOpenClick(Sender: TObject);
     procedure mnuPasteClick(Sender: TObject);
     procedure mnuCopyClick(Sender: TObject);
@@ -220,7 +220,6 @@ type
     procedure mnuFlipVClick(Sender: TObject);
     procedure mnuRotateLClick(Sender: TObject);
     procedure mnuRotateRClick(Sender: TObject);
-    procedure PairSplitter2Resize(Sender: TObject);
     procedure PairSplitterSide2Resize(Sender: TObject);
     procedure PairSplitterSide3Resize(Sender: TObject);
     procedure PopupMenu1Popup(Sender: TObject);
@@ -241,6 +240,7 @@ type
       Shift: TShiftState; X, Y: Integer);
     procedure ShellTreeView1Change(Sender: TObject; Node: TTreeNode);
     procedure ShellTreeView1Click(Sender: TObject);
+    procedure ShellTreeView1Enter(Sender: TObject);
     procedure ShellTreeView1Expanded(Sender: TObject; Node: TTreeNode);
     procedure ShellTreeView1SelectionChanged(Sender: TObject);
     procedure tbFirstImageClick(Sender: TObject);
@@ -303,6 +303,7 @@ type
    iname:string;
    thumbpath:string;
    ipublic:integer;
+   procedure stop;
    procedure createallimages;
    procedure createsingleimage;
    procedure refreshthumbs;
@@ -311,7 +312,7 @@ type
    procedure Execute; override;
   public
    Constructor Create(CreateSuspended:Boolean);
-   procedure stop;
+   //procedure stop;
 end;
 
 Const
@@ -346,6 +347,8 @@ var
   inprocessanim:boolean;
   puntos:array of int64;
   creados:array of boolean;
+  refreshingthumb:boolean=false;
+  scrollthumbpos:integer;
   procedure rendermosaic;
   procedure fullsc;
   procedure compact;
@@ -373,6 +376,13 @@ begin
       // Workaround: on Windows need to recreate window to properly recalculate children sizes.
       saveconfig;
       RecreateWnd(frMain);
+      {$ENDIF}
+      {$IFDEF LINUX}
+      {$IFDEF LCLQT5}
+      // Workaround: on Windows need to recreate window to properly recalculate children sizes.
+      saveconfig;
+      RecreateWnd(frMain);
+      {$ENDIF}
       {$ENDIF}
     end
     else if Assigned(Menu) then
@@ -974,7 +984,7 @@ begin
         realimgwidth:=frmain.Image1.Picture.Width;
         realimgheight:=frmain.Image1.Picture.Height;
       end;
-      '.PNG','.APNG':
+      '.PNG','.APNG','.MNG':
       begin
         ifgif:=false;
         SetLength(APNGDelays,0);
@@ -982,6 +992,7 @@ begin
         APNGImage:=ImagingClasses.TMultiImage.Create;
         if Imaging.DetermineFileFormat(fimagen) <> '' then
           APNGImage.LoadMultiFromFile(fimagen);
+        GlobalMetadata.CopyLoadedMetaItemsForSaving;
         frmain.Image1.Picture.PNG.Create;
         frmain.Image1.Picture.PNG.Width:=APNGImage.Width;
         frmain.Image1.Picture.PNG.Height:=APNGImage.Height;
@@ -1033,7 +1044,7 @@ begin
           frmain.StatusBar1.Panels[2].Text:='';
         end;
       end;
-      '.JPG','.JPEG','.JPE','.JFIF','.BMP','.XPM','.PBM','.PPM','.PCX','.ICNS','.CUR','.TIF','.TIFF':
+      '.JPG','.JPEG','.JPE','.JFIF','.BMP','.XPM','.PBM','.PPM','.PCX','.ICNS','.TIF','.TIFF':
       begin
         ifgif:=false;
         ifapng:=false;
@@ -1148,7 +1159,7 @@ begin
         realimgwidth:=frmain.Image1.Picture.Width;
         realimgheight:=frmain.Image1.Picture.Height;
       end;
-      '.TGA','.PSD','.XWD':
+      '.TGA','.PSD','.XWD','.CUR':
       begin
         BGRAImage:=BGRABitmap.TBGRABitmap.Create(wimagen);
         frmain.Image1.Picture.Assign(BGRAImage);
@@ -1604,6 +1615,10 @@ var
    tmpbitmap:BGRABitmap.TBGRABitmap;
    redbrig,greenbrig,bluebrig:word;
    inzone:boolean;
+   FImage: TMultiImage;
+   FImageCanvas: TImagingCanvas;
+   xpercent,ypercent,rigthpercent,bottompercent:float;
+   exactx,exacty,exactright,exactbottom:int64;
 begin
   realmode;
   title:=frmain.Caption;
@@ -1648,6 +1663,8 @@ begin
              end
              else
                inzone:=true;
+
+
              if (BGRAGif.Bitmap.Canvas.Colors[xpix,ypix].red<60900) and inzone then
                redbrig:=BGRAGif.Bitmap.Canvas.Colors[xpix,ypix].red*138 shr 7
              else
@@ -1664,6 +1681,7 @@ begin
                bluebrig:=BGRAGif.Bitmap.Canvas.Colors[xpix,ypix].blue;
 
              tmpbitmap.Colors[xpix,ypix]:=FPColor(redbrig,greenbrig,bluebrig,BGRAGif.Bitmap.Canvas.Colors[xpix,ypix].alpha);
+
            end;
           11:begin
                redbrig:=BGRAGif.Bitmap.Canvas.Colors[xpix,ypix].red*118 shr 7;
@@ -1843,7 +1861,23 @@ begin
         10:begin
              if frmain.Shape1.Visible then
              begin
-              if (xpix>frmain.Shape1.BaseBounds.Left) and (xpix<frmain.Shape1.BaseBounds.Right) and (ypix>frmain.Shape1.BaseBounds.Top) and (ypix<frmain.Shape1.BaseBounds.Bottom) then
+              ///Actual size of image
+              //frmain.Image1.DestRect.Width
+              //frmain.Image1.DestRect.Height;
+
+              ////////////Area selection relative
+              xpercent:=((frmain.Shape1.BaseBounds.Left-frmain.Image1.DestRect.Left)/frmain.Image1.DestRect.Width)*100;
+              ypercent:=((frmain.Shape1.BaseBounds.Top-frmain.Image1.DestRect.Top)/frmain.Image1.DestRect.Height)*100;
+              rigthpercent:=((frmain.Shape1.BaseBounds.Right-frmain.Image1.DestRect.Left)/frmain.Image1.DestRect.Width)*100;
+              bottompercent:=((frmain.Shape1.BaseBounds.Bottom-frmain.Image1.DestRect.Top)/frmain.Image1.DestRect.Height)*100;
+
+              exactx:=Round(xpercent*0.01*frmain.Image1.Picture.Bitmap.Width);
+              exacty:=Round(ypercent*0.01*frmain.Image1.Picture.Bitmap.Height);
+              exactright:=Round(rigthpercent*0.01*frmain.Image1.Picture.Bitmap.Width);
+              exactbottom:=Round(bottompercent*0.01*frmain.Image1.Picture.Bitmap.Height);
+
+              //frmain.StatusBar1.Panels[5].Text:=inttostr(frmain.Shape1.BaseBounds.Right-frmain.Image1.DestRect.Left)+'/'+inttostr(frmain.Shape1.BaseBounds.Bottom-frmain.Image1.DestRect.Top);
+              if (xpix>exactx) and (xpix<exactright) and (ypix>exacty) and (ypix<exactbottom) then
                 inzone:=true
               else
                 inzone:=false;
@@ -2000,7 +2034,7 @@ begin
         if (Attr and faDirectory)<>faDirectory then
         begin
           case UpperCase(ExtractFileExt(Name)) of
-            '.JPG','.JPEG','.JPE','.JFIF','.BMP','.GIF','.PNG','.APNG','.ICO','.XPM','.PBM','.PPM','.ICNS','.CUR','.TIF','.TIFF','.PCX','.TGA','.PSD','.XWD':
+            '.JPG','.JPEG','.JPE','.JFIF','.BMP','.GIF','.PNG','.APNG','.MNG','.ICO','.XPM','.PBM','.PPM','.ICNS','.CUR','.TIF','.TIFF','.PCX','.TGA','.PSD','.XWD':
             begin
               flisttmp.Add(Name);
               Inc(nfiletmp);
@@ -2135,9 +2169,12 @@ begin
     loadfiles(ExtractFilePath(FileNames[0]),ExtractFileName(FileNames[0]));
 end;
 
-procedure Tfrmain.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+procedure Tfrmain.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 begin
+  if Assigned(ththumbs) then
+    ththumbs.stop;
   saveconfig;
+  CanClose:=true;
 end;
 
 procedure Tfrmain.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState
@@ -2257,7 +2294,6 @@ begin
       //efectbrigthplus(138);
     end;
  end;
-
 end;
 
 procedure Tfrmain.FormKeyPress(Sender: TObject; var Key: char);
@@ -2268,7 +2304,7 @@ end;
 procedure Tfrmain.FormMouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
-  if frmain.tbFullScreen.Down=false then
+  if frmain.tbSelect.Down=false then
   begin
     startdraw:=true;
     imgx:=X+frmain.Image1.ClientOrigin.x-frmain.Image1.Left;
@@ -2344,15 +2380,6 @@ begin
       frmain.Cursor:=crDefault;
     end;
   end;
-end;
-
-procedure Tfrmain.FormMouseWheel(Sender: TObject; Shift: TShiftState;
-  WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
-begin
-  if WheelDelta>0 then
-    zoomin(true)
-  else
-    zoomout(true);
 end;
 
 procedure Tfrmain.FormResize(Sender: TObject);
@@ -2436,6 +2463,74 @@ begin
     frmain.FormStyle:=fsNormal;
 end;
 
+procedure Tfrmain.mnuCropClick(Sender: TObject);
+var
+   xpercent,ypercent,rigthpercent,bottompercent,wpercent,hpercent:float;
+   exactx,exacty,exactright,exactbottom,exactw,exacth:int64;
+   tmpbitmap:BGRABitmap.TBGRABitmap;
+   i:integer;
+   tmpgif:TBGRAAnimatedGif;
+   tmpapng:TMultiImage;
+begin
+  realmode;
+  xpercent:=((frmain.Shape1.BaseBounds.Left-frmain.Image1.DestRect.Left)/frmain.Image1.DestRect.Width)*100;
+  ypercent:=((frmain.Shape1.BaseBounds.Top-frmain.Image1.DestRect.Top)/frmain.Image1.DestRect.Height)*100;
+  rigthpercent:=((frmain.Shape1.BaseBounds.Right-frmain.Image1.DestRect.Left)/frmain.Image1.DestRect.Width)*100;
+  bottompercent:=((frmain.Shape1.BaseBounds.Bottom-frmain.Image1.DestRect.Top)/frmain.Image1.DestRect.Height)*100;
+  wpercent:=(frmain.Shape1.Width/frmain.Image1.DestRect.Width)*100;
+  hpercent:=(frmain.Shape1.Height/frmain.Image1.DestRect.Height)*100;
+
+  exactx:=Round(xpercent*0.01*frmain.Image1.Picture.Bitmap.Width);
+  exacty:=Round(ypercent*0.01*frmain.Image1.Picture.Bitmap.Height);
+  exactright:=Round(rigthpercent*0.01*frmain.Image1.Picture.Bitmap.Width);
+  exactbottom:=Round(bottompercent*0.01*frmain.Image1.Picture.Bitmap.Height);
+  exactw:=Round(wpercent*0.01*frmain.Image1.Picture.Bitmap.Width);
+  exacth:=Round(hpercent*0.01*frmain.Image1.Picture.Bitmap.Height);
+
+  if ifgif then
+  begin
+    tmpgif:=TBGRAAnimatedGif.Create;
+    tmpgif.SetSize(exactw,exacth);
+    for i:=0 to BGRAGif.Count-1 do
+    begin
+      tmpbitmap:=BGRABitmap.TBGRABitmap.Create(exactw,exacth);
+      BGRAGif.CurrentImage:=i;
+      tmpbitmap.Canvas.CopyRect(Types.Rect(0,0,exactw,exacth),BGRAGif.Bitmap.Canvas,Types.Rect(exactx,exacty,exactright,exactbottom));
+      tmpgif.InsertFrame(i,tmpbitmap,0,0,BGRAGif.FrameDelayMs[i],BGRAGif.FrameDisposeMode[i],BGRAGif.FrameHasLocalPalette[i]);
+      tmpbitmap.Destroy;
+    end;
+    tmpgif.LoopCount:=BGRAGif.LoopCount;
+    BGRAGif.SetSize(exactw,exacth);
+    BGRAGif:=tmpgif;
+    //Cant destroy this because not work fine
+    //tmpgif.Destroy;
+  end;
+
+  if ifapng then
+  begin
+    tmpapng:=TMultiImage.Create;
+    tmpapng.AddImages(APNGImage);
+    tmpapng.ResizeImages(exactw,exacth,rfLanczos);
+    for i:=0 to APNGImage.ImageCount-1 do
+    begin
+      APNGImage.ActiveImage:=i;
+      tmpapng.ActiveImage:=i;
+      APNGImage.CopyTo(exactx,exacty,exactw,exacth,tmpapng,0,0);
+    end;
+    APNGImage.Assign(tmpapng);
+    tmpapng.Destroy;
+  end;
+
+  if (ifgif=false) and (ifapng=false) then
+  begin
+    tmpbitmap:=BGRABitmap.TBGRABitmap.Create(exactw,exacth);
+    tmpbitmap.Canvas.CopyRect(Types.Rect(0,0,exactw,exacth),frmain.Image1.Picture.Bitmap.Canvas,Types.Rect(exactx,exacty,exactright,exactbottom));
+    frmain.Image1.Picture.Bitmap.Assign(tmpbitmap);
+    tmpbitmap.Destroy;
+  end;
+  frmain.Shape1.Visible:=false;
+end;
+
 
 procedure Tfrmain.mnuOpenClick(Sender: TObject);
 begin
@@ -2456,18 +2551,14 @@ end;
 procedure Tfrmain.mnuPasteClick(Sender: TObject);
 begin
   modethumb:=false;
-  if ifgif then
-  begin
-    frmain.Timer3.Enabled:=false;
-    frmain.Image1.Visible:=true;
-    frmain.Image1.Picture.Clear;
-    frmain.Image1.Picture.LoadFromClipboardFormat(2);
-  end
-  else
-  begin
-    frmain.Image1.Picture.Clear;
-    frmain.Image1.Picture.LoadFromClipboardFormat(2);
-  end;
+  frmain.Timer3.Enabled:=false;
+  frmain.Timer5.Enabled:=false;
+  frmain.Image1.Picture.Clear;
+  {$IFDEF MSWINDOWS}
+  frmain.Image1.Picture.LoadFromClipboardFormat(2);
+  {$ELSE}
+  frmain.Image1.Picture.Bitmap.LoadFromClipboardFormat(5);
+  {$ENDIF}
   zoomnormal();
   frmain.tbFlipHorizontal.Enabled:=true;
   frmain.tbFlipVertical.Enabled:=true;
@@ -2581,7 +2672,7 @@ begin
               APNGImage.InsertImage(i,baseimg);
               GlobalMetadata.SetMetaItem('FrameDelay',BGRAGif.FrameDelayMs[i],i);
             end;
-            APNGImage.SaveToFile(ExtractFilePath(frmain.SavePictureDialog1.FileName)+pathdelim+ExtractFileName(frmain.SavePictureDialog1.FileName)+'.'+frmain.SavePictureDialog1.GetFilterExt);
+            APNGImage.SaveMultiToFile(ExtractFilePath(frmain.SavePictureDialog1.FileName)+pathdelim+ExtractFileName(frmain.SavePictureDialog1.FileName)+'.'+frmain.SavePictureDialog1.GetFilterExt);
           end;
           if (ifgif=false) and (ifapng=false) then
             frmain.Image1.Picture.PNG.SaveToFile(ExtractFilePath(frmain.SavePictureDialog1.FileName)+pathdelim+ExtractFileName(frmain.SavePictureDialog1.FileName)+'.'+frmain.SavePictureDialog1.GetFilterExt);
@@ -2741,6 +2832,7 @@ begin
   showthumbs:=frmain.mnuShowThumbs.Checked;
   if showthumbs=false then
   begin
+    refreshthumbs;
     if frmain.StatusBar1.Visible then
       frmain.Splitter2.Top:=frmain.StatusBar1.Top
     else
@@ -3217,11 +3309,6 @@ begin
     efectimagen(4);
 end;
 
-procedure Tfrmain.PairSplitter2Resize(Sender: TObject);
-begin
-
-end;
-
 procedure Tfrmain.PairSplitterSide2Resize(Sender: TObject);
 begin
   if frmain.StatusBar1.Visible then
@@ -3311,8 +3398,52 @@ end;
 
 procedure Tfrmain.ScrollBox1MouseWheel(Sender: TObject; Shift: TShiftState;
   WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
+var
+   lwidth,lheight:integer;
 begin
+   realmode;
+   lwidth:=frmain.Image1.Width;
+   lheight:=frmain.Image1.Height;
+   if frmain.Image1.Align = alClient then
+   begin
+     frmain.ScrollBox1.Enabled:=true;
+     frmain.Image1.Stretch:=true;
+     frmain.tbStrech.Down:=false;
+     frmain.Image1.AutoSize:=false;
+     frmain.Image1.Align:=alNone;
+     frmain.Image1.Width:=lwidth;
+     frmain.Image1.Height:=lheight;
+   end;
+  if WheelDelta>0 then
+  begin
+    frmain.Image1.Width:=frmain.Image1.Width+20;
+    frmain.Image1.Height:=frmain.Image1.Height+20;
 
+    if MousePos.y>frmain.ScrollBox1.Height/2 then
+      frmain.Image1.Top:=frmain.Image1.Top-18
+    else
+      frmain.Image1.Top:=frmain.Image1.Top-7;
+
+    if MousePos.x>frmain.ScrollBox1.Width/2 then
+      frmain.Image1.Left:=frmain.Image1.Left-18
+    else
+      frmain.Image1.Left:=frmain.Image1.Left-7;
+  end
+  else
+  begin
+    frmain.Image1.Width:=frmain.Image1.Width-20;
+    frmain.Image1.Height:=frmain.Image1.Height-20;
+
+    if MousePos.y>frmain.ScrollBox1.Height/2 then
+      frmain.Image1.Top:=frmain.Image1.Top+18
+    else
+      frmain.Image1.Top:=frmain.Image1.Top+7;
+
+    if MousePos.x>frmain.ScrollBox1.Width/2 then
+      frmain.Image1.Left:=frmain.Image1.Left+18
+    else
+      frmain.Image1.Left:=frmain.Image1.Left+7;
+  end;
 end;
 
 procedure Tfrmain.ScrollBox1Paint(Sender: TObject);
@@ -3379,6 +3510,11 @@ end;
 procedure Tfrmain.ShellTreeView1Click(Sender: TObject);
 begin
 
+end;
+
+procedure Tfrmain.ShellTreeView1Enter(Sender: TObject);
+begin
+  frmain.ScrollBox1.SetFocus;
 end;
 
 procedure Tfrmain.ShellTreeView1Expanded(Sender: TObject; Node: TTreeNode);
@@ -3472,22 +3608,9 @@ begin
   if Assigned(flist) then
   begin
     refreshthumbs;
-    if {(flist.Count<5000)} true then
-    begin
-      ththumbs:=thumbsthread.Create(true);
-      ththumbs.thumbpath:=carpeta;
-      ththumbs.Start;
-    end
-    else
-    begin
-      if showthumbs then
-      begin
-        frmain.Timer4.Enabled:=false;
-        frmain.mnuShowThumbsClick(nil);
-        ShowMessage('Sorry we cant show thumbs for file list > 5000');
-        showthumbs:=false;
-      end;
-    end;
+    ththumbs:=thumbsthread.Create(true);
+    ththumbs.thumbpath:=carpeta;
+    ththumbs.Start;
   end;
   frmain.Timer4.Enabled:=false;
 end;
@@ -3547,11 +3670,14 @@ begin
   frmain.Timer1.Enabled:=not frmain.Timer1.Enabled;
   if frmain.Timer1.Enabled then
   begin
+    showthumbs:=false;
     if full=false then
       fullsc;
     frmain.tbPlayShow.ImageIndex:=12;
     frmain.Label1.Visible:=false;
     frmain.Label2.Visible:=false;
+    frmain.Splitter2.Top:=frmain.Height;
+    frmain.sboxthumb.Visible:=false;
   end
   else
     frmain.tbPlayShow.ImageIndex:=13;
@@ -3875,6 +4001,11 @@ begin
   end;
 end;
 
+procedure thumbsthread.stop;
+begin
+  done:=true;
+end;
+
 procedure thumbsthread.showthumbs;
 var
    thumbtmp:TPicture;
@@ -3939,6 +4070,7 @@ begin
     //ShowMessage(inttostr(thumbindex)+'   '+inttostr(ifile));
     //frmain.StatusBar1.Panels[5].Text:=inttostr(frmain.sboxthumb.ControlCount);
     (frmain.sboxthumb.Controls[thumbindex] as TImage).Picture.Bitmap.Assign(thumb);
+    thumb.Free;
     //This is wrong but is workin for linux and windows
     {$IFDEF LINUX}
     Application.ProcessMessages;
@@ -4001,13 +4133,17 @@ begin
         thumbimages.OnMouseUp:=@thumbimages.thumbmouseup;
         thumbimages.Show;
         frmain.sboxthumb.InsertControl(thumbimages);
+        //creados[i]:=true;
       end;
     end;
     frmain.sboxthumb.Visible:=false;
     frmain.sboxthumb.Visible:=true;
     frmain.sboxthumb.AutoSize:=true;
-    if inprocessanim=false then
-      scrollanim;
+    if (inprocessanim=false) and (refreshingthumb=false) then
+      scrollanim
+    else
+      frmain.sboxthumb.HorzScrollBar.Position:=scrollthumbpos;
+    refreshingthumb:=false;
   end;
   ifallthumbs:=true;
 end;
@@ -4015,6 +4151,9 @@ end;
 procedure thumbsthread.createsingleimage;
 var
    thumbimages:tthumbimage;
+///try this first and more latter
+const
+  maxthumbs=500;
 begin
   thumbimages:=tthumbimage.Create(frmain.sboxthumb);
   thumbimages.Width:=frmain.sboxthumb.Height-18;
@@ -4034,11 +4173,19 @@ begin
   thumbimages.OnMouseUp:=@thumbimages.thumbmouseup;
   thumbimages.Show;
   frmain.sboxthumb.InsertControl(thumbimages);
+  if frmain.sboxthumb.ControlCount>maxthumbs then
+  begin
+    done:=true;
+    refreshingthumb:=true;
+    scrollthumbpos:=frmain.sboxthumb.HorzScrollBar.Position;
+    frmain.PairSplitterSide2Resize(nil);
+  end;
+  //frmain.StatusBar1.Panels[5].Text:=inttostr(frmain.sboxthumb.ControlCount);
 end;
 
 procedure thumbsthread.Execute;
 var
-   i,n,minv,maxv,icenter:longint;
+   n,x,minv,maxv,icenter:longint;
    exactcenter:float;
 begin
   if starting then///gift time to load the current image
@@ -4046,97 +4193,51 @@ begin
   ifallthumbs:=false;
   Synchronize(@createallimages);
   folderchange:=false;
-  while frmain.sboxthumb.ControlCount<flist.Count do
+  while (frmain.sboxthumb.ControlCount<=flist.Count) and (done=false) do
   begin
     if carpeta=thumbpath then
     begin
-      //try
-        //if i<flist.Count then
-        //begin
-            //*** This is for update first the visible thumbs ***//
-            ///// Determine the first visible thumb
-            {try
-              //icenter:=frmain.sboxthumb.ControlAtPos(Types.Point(Round(frmain.sboxthumb.Width/2),Round(frmain.sboxthumb.Height/2)),[capfAllowDisabled]).Tag;
-              icenter:=Round(Length(puntos)/2);
-            except on e:exception do
-              icenter:=frmain.sboxthumb.ControlCount-1;
-            end;}
-            {for n:=icenter downto 0 do
-            begin
-              if puntos[n]>=frmain.sboxthumb.HorzScrollBar.Position then
-                minv:=n
-              else
-                break;
-            end;
-            if minv>0 then
-              minv:=minv-1;}
-          exactcenter:=(frmain.sboxthumb.HorzScrollBar.Position/frmain.sboxthumb.HorzScrollBar.Range)*100;
-          //spos:=ifile;
-          icenter:=Round(exactcenter*0.01*Length(puntos));
-          //frmain.Caption:=floattostr(icenter)+'%';
-          if icenter>=frmain.Splitter2.Width/thumbsize then
-            minv:=icenter-Round(frmain.Splitter2.Width/thumbsize)
-          else
-            minv:=0;
+      exactcenter:=(frmain.sboxthumb.HorzScrollBar.Position/frmain.sboxthumb.HorzScrollBar.Range)*100;
+      icenter:=Round(exactcenter*0.01*Length(puntos));
 
-            ///// Determine the last visible thumb
-            {for n:=icenter to Length(puntos)-1 do
-            begin
-             if puntos[n]>(frmain.sboxthumb.HorzScrollBar.Position+frmain.width) then
-             begin
-                maxv:=n;
-                break;
-             end;
-            end;
-            if maxv>frmain.sboxthumb.ControlCount-1 then
-              maxv:=frmain.sboxthumb.ControlCount-1;}
-          if (icenter+(frmain.Splitter2.Width/thumbsize)+5)<=flist.Count-1 then
-            maxv:=icenter+Round(frmain.Splitter2.Width/thumbsize)+5
-          else
-            maxv:=flist.Count-1;
-          // si solo faltan 30 o menos completar todos
-          if flist.Count-1-maxv<30 then
-            maxv:=flist.Count-1;
-            //maxv:=flist.Count-1;
-          if minv<30 then
-            minv:=0;
-            ////////Update the visible thumbs
-            for n:=minv to maxv do
-            begin
-              if creados[n]=false then
-              begin
-                ipublic:=n;
-                Synchronize(@createsingleimage);
-                iname:=flist[n];
-                thumbindex:=frmain.sboxthumb.ControlCount-1;
-                {$IFDEF LINUX}
-                Synchronize(@showthumbs);
-                {$ELSE}
-                showthumbs;
-                {$ENDIF}
-                creados[n]:=true;
-              end;
-            end;
-            Sleep(10);
-          ///Load the rest of thumbs
-            {if creados[i]=false then
-            begin
-              ipublic:=i;
-              Synchronize(@createsingleimage);
-              iname:=flist[i];
-              thumbindex:=frmain.sboxthumb.ControlCount-1;
-            end;
-            {$IFDEF LINUX}
-            Synchronize(@showthumbs);
-            {$ELSE}
-            showthumbs;
-            {$ENDIF}}
-        //end;
+      if icenter>=frmain.Splitter2.Width/thumbsize then
+        minv:=icenter-Round(frmain.Splitter2.Width/thumbsize)
+      else
+        minv:=0;
+
+      if (icenter+(frmain.Splitter2.Width/thumbsize)+5)<=flist.Count-1 then
+        maxv:=icenter+Round(frmain.Splitter2.Width/thumbsize)+5
+      else
+        maxv:=flist.Count-1;
+
+      // si solo faltan 30 o menos completar todos
+      if flist.Count-1-maxv<30 then
+        maxv:=flist.Count-1;
+      if minv<30 then
+        minv:=0;
+
+      ////////Update the visible thumbs
+      for n:=minv to maxv do
+      begin
+        if creados[n]=false then
+        begin
+          ipublic:=n;
+          Synchronize(@createsingleimage);
+          iname:=flist[n];
+          thumbindex:=frmain.sboxthumb.ControlCount-1;
+          creados[n]:=true;
+          {$IFDEF LINUX}
+          Synchronize(@showthumbs);
+          {$ELSE}
+          showthumbs;
+          {$ENDIF}
+        end;
+      end;
+      Sleep(10);
     end
     else
       break;
   end;
-  //self.Destroy;
 end;
 
 procedure tthumbimage.thumbclick(Sender:TObject);
@@ -4171,12 +4272,12 @@ begin
   mosaicmousedown:=false;
 end;
 
-procedure thumbsthread.stop;
+{procedure thumbsthread.stop;
 begin
  if Assigned(thumb) then
    thumb.Destroy;
  self.Destroy;
-end;
+end;}
 
 end.
 

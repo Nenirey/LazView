@@ -146,14 +146,16 @@ msgid "LazView"
 msgstr "LazView"
 
 #: tfrmain.label1.caption
+#, fuzzy
 msgctxt "tfrmain.label1.caption"
 msgid "0/0"
-msgstr ""
+msgstr "0/0"
 
 #: tfrmain.label2.caption
+#, fuzzy
 msgctxt "tfrmain.label2.caption"
 msgid "0/0"
-msgstr ""
+msgstr "0/0"
 
 #: tfrmain.mnuabout.caption
 msgid "About..."
@@ -190,6 +192,10 @@ msgstr "Modo compacto"
 #: tfrmain.mnucopy.caption
 msgid "Copy"
 msgstr "Copiar"
+
+#: tfrmain.mnucrop.caption
+msgid "Crop"
+msgstr "Recortar"
 
 #: tfrmain.mnudeletefile.caption
 msgid "Delete"
@@ -232,9 +238,10 @@ msgid "EXIF"
 msgstr "EXIF"
 
 #: tfrmain.mnuexit.caption
+#, fuzzy
 msgctxt "tfrmain.mnuexit.caption"
 msgid "Exit"
-msgstr ""
+msgstr "Salir"
 
 #: tfrmain.mnufile.caption
 msgid "&File"

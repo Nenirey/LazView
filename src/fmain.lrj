@@ -86,6 +86,7 @@
 {"hash":170934612,"name":"tfrmain.mnurotatel.caption","sourcebytes":[82,111,116,97,116,101,32,108,101,102,116],"value":"Rotate left"},
 {"hash":49173844,"name":"tfrmain.mnurotater.caption","sourcebytes":[82,111,116,97,116,101,32,114,105,103,104,116],"value":"Rotate right"},
 {"hash":168835534,"name":"tfrmain.mnuresize.caption","sourcebytes":[82,101,115,105,122,101,46,46,46],"value":"Resize..."},
+{"hash":305504,"name":"tfrmain.mnucrop.caption","sourcebytes":[67,114,111,112],"value":"Crop"},
 {"hash":197966579,"name":"tfrmain.mnueffects.caption","sourcebytes":[69,102,102,101,99,116,115],"value":"Effects"},
 {"hash":213690617,"name":"tfrmain.mnubgr.caption","sourcebytes":[73,110,118,101,114,116,32,99,111,108,111,114,32,40,82,71,66,41,45,40,66,71,82,41],"value":"Invert color (RGB)-(BGR)"},
 {"hash":213754409,"name":"tfrmain.mnurbg.caption","sourcebytes":[73,110,118,101,114,116,32,99,111,108,111,114,32,40,82,71,66,41,45,40,82,66,71,41],"value":"Invert color (RGB)-(RBG)"},

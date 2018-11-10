@@ -1,7 +1,7 @@
 object frmain: Tfrmain
-  Left = 364
+  Left = 323
   Height = 609
-  Top = 78
+  Top = 45
   Width = 902
   ActiveControl = ShellTreeView1
   AllowDropFiles = True
@@ -10,7 +10,7 @@ object frmain: Tfrmain
   ClientWidth = 902
   KeyPreview = True
   Menu = MainMenu1
-  OnClose = FormClose
+  OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnDblClick = Image1DblClick
   OnDestroy = FormDestroy
@@ -20,7 +20,6 @@ object frmain: Tfrmain
   OnKeyDown = FormKeyDown
   OnKeyPress = FormKeyPress
   OnMouseDown = FormMouseDown
-  OnMouseWheel = FormMouseWheel
   OnResize = FormResize
   OnShow = FormShow
   OnWindowStateChange = FormWindowStateChange
@@ -68,8 +67,10 @@ object frmain: Tfrmain
     Left = 0
     Height = 542
     Top = 24
-    Width = 2
+    Width = 0
+    TabStop = False
     Anchors = [akTop, akLeft, akRight, akBottom]
+    BorderSpacing.Right = 3
     BackgroundColor = clDefault
     BorderStyle = bsNone
     Color = clDefault
@@ -83,6 +84,7 @@ object frmain: Tfrmain
     ToolTips = False
     Visible = False
     OnChange = ShellTreeView1Change
+    OnEnter = ShellTreeView1Enter
     OnExpanded = ShellTreeView1Expanded
     Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoThemedDraw]
     ObjectTypes = [otFolders, otHidden]
@@ -422,10 +424,10 @@ object frmain: Tfrmain
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = Splitter2
     AnchorSideBottom.Side = asrBottom
-    Left = 2
+    Left = 5
     Height = 462
     Top = 24
-    Width = 900
+    Width = 897
     HorzScrollBar.Increment = 37
     HorzScrollBar.Page = 377
     HorzScrollBar.Smooth = True
@@ -435,10 +437,11 @@ object frmain: Tfrmain
     VertScrollBar.Smooth = True
     VertScrollBar.Tracking = True
     Anchors = [akTop, akLeft, akRight, akBottom]
+    BorderSpacing.Left = 3
     BorderSpacing.Bottom = 3
     BorderStyle = bsNone
     ClientHeight = 462
-    ClientWidth = 900
+    ClientWidth = 897
     Enabled = False
     Color = clBlack
     ParentColor = False
@@ -447,13 +450,13 @@ object frmain: Tfrmain
     OnMouseDown = FormMouseDown
     OnMouseMove = FormMouseMove
     OnMouseUp = Image1MouseUp
-    OnMouseWheel = FormMouseWheel
+    OnMouseWheel = ScrollBox1MouseWheel
     OnPaint = ScrollBox1Paint
     object Image1: TImage
       Left = 0
       Height = 462
       Top = 0
-      Width = 900
+      Width = 897
       AntialiasingMode = amOn
       Align = alClient
       Center = True
@@ -462,7 +465,6 @@ object frmain: Tfrmain
       OnMouseDown = FormMouseDown
       OnMouseMove = FormMouseMove
       OnMouseUp = Image1MouseUp
-      OnMouseWheel = FormMouseWheel
       ParentShowHint = False
       PopupMenu = PopupMenu1
       Proportional = True
@@ -475,7 +477,7 @@ object frmain: Tfrmain
       Left = 3
       Height = 21
       Top = 0
-      Width = 897
+      Width = 894
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 3
       Caption = '0/0'
@@ -495,7 +497,7 @@ object frmain: Tfrmain
       Left = 5
       Height = 21
       Top = 2
-      Width = 894
+      Width = 891
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 5
       BorderSpacing.Top = 2
@@ -1903,6 +1905,10 @@ object frmain: Tfrmain
         Caption = 'Resize...'
         ShortCut = 83
         OnClick = mnuResizeClick
+      end
+      object mnuCrop: TMenuItem
+        Caption = 'Crop'
+        OnClick = mnuCropClick
       end
       object MenuItem32: TMenuItem
         Caption = '-'

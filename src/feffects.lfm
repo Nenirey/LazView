@@ -1,7 +1,7 @@
 object freffect: Tfreffect
-  Left = 675
+  Left = 656
   Height = 401
-  Top = 195
+  Top = 191
   Width = 369
   ActiveControl = Button1
   Caption = 'Effects'

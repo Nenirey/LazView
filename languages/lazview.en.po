@@ -191,6 +191,10 @@ msgstr ""
 msgid "Copy"
 msgstr ""
 
+#: tfrmain.mnucrop.caption
+msgid "Crop"
+msgstr "Crop"
+
 #: tfrmain.mnudeletefile.caption
 msgid "Delete"
 msgstr ""
@@ -269,19 +273,22 @@ msgid "&Help"
 msgstr "&Help"
 
 #: tfrmain.mnuhighlightblue.caption
+#, fuzzy
 msgctxt "tfrmain.mnuhighlightblue.caption"
 msgid "Highlight blue"
-msgstr ""
+msgstr "Highlight blue"
 
 #: tfrmain.mnuhighlightgreen.caption
+#, fuzzy
 msgctxt "tfrmain.mnuhighlightgreen.caption"
 msgid "Highlight green"
-msgstr ""
+msgstr "Highlight green"
 
 #: tfrmain.mnuhighlightred.caption
+#, fuzzy
 msgctxt "tfrmain.mnuhighlightred.caption"
 msgid "Highlight red"
-msgstr ""
+msgstr "Highlight re"
 
 #: tfrmain.mnulanguage.caption
 msgid "Language"
@@ -296,9 +303,10 @@ msgid "Mosaic background"
 msgstr ""
 
 #: tfrmain.mnunegative.caption
+#, fuzzy
 msgctxt "tfrmain.mnunegative.caption"
 msgid "Negative"
-msgstr ""
+msgstr "Negative"
 
 #: tfrmain.mnunoise.caption
 msgid "Noise"
@@ -362,9 +370,10 @@ msgid "Thumbail panel"
 msgstr ""
 
 #: tfrmain.mnusmooth.caption
+#, fuzzy
 msgctxt "tfrmain.mnusmooth.caption"
 msgid "Smooth"
-msgstr ""
+msgstr "Smooth"
 
 #: tfrmain.mnustatusbar.caption
 msgid "Status bar"
