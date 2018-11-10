@@ -1773,7 +1773,6 @@ object frmain: Tfrmain
       object mnuCopy: TMenuItem
         Caption = 'Copy'
         Enabled = False
-        ShortCut = 16451
         OnClick = mnuCopyClick
       end
       object mnuPaste: TMenuItem
@@ -1783,6 +1782,7 @@ object frmain: Tfrmain
       end
       object mnuSelect: TMenuItem
         Caption = 'Select'
+        OnClick = tbSelectClick
       end
     end
     object mnuView: TMenuItem

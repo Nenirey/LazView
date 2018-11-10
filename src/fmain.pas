@@ -10,7 +10,7 @@ uses
   LazUTF8, print{$IFDEF WINDOWS}, Registry, Windows, Windirs{$ENDIF},
   BGRABitmapTypes, BGRABitmap, BGRAThumbnail, BGRAAnimatedGif,
   DateUtils, Math, ImgSize, BGRAGifFormat, Printers, LCLintf, fexif, INIFiles, LCLTranslator,
-  Imaging, ImagingClasses, ImagingComponents, ImagingTypes, ImagingCanvases, Variants;
+  Imaging, ImagingClasses, ImagingComponents, ImagingTypes, ImagingCanvases, Variants, Clipbrd;
 
 type
 
@@ -349,6 +349,8 @@ var
   creados:array of boolean;
   refreshingthumb:boolean=false;
   scrollthumbpos:integer;
+  xpercent,ypercent,rigthpercent,bottompercent,wpercent,hpercent:float;
+  exactx,exacty,exactright,exactbottom,exactw,exacth:int64;
   procedure rendermosaic;
   procedure fullsc;
   procedure compact;
@@ -358,6 +360,7 @@ var
   procedure efectimagen(efect:integer;nivel:integer=5000);
   procedure loadpicture(fimagen:string;restorezoom:boolean=true;scrollthumbs:boolean=true;realimage:boolean=false);
   procedure saveconfig;
+  procedure extractrealtivearea;
 implementation
 
 uses
@@ -365,6 +368,23 @@ uses
 {$R *.lfm}
 
 { Tfrmain }
+procedure extractrealtivearea;
+begin
+  xpercent:=((frmain.Shape1.BaseBounds.Left-frmain.Image1.DestRect.Left)/frmain.Image1.DestRect.Width)*100;
+  ypercent:=((frmain.Shape1.BaseBounds.Top-frmain.Image1.DestRect.Top)/frmain.Image1.DestRect.Height)*100;
+  rigthpercent:=((frmain.Shape1.BaseBounds.Right-frmain.Image1.DestRect.Left)/frmain.Image1.DestRect.Width)*100;
+  bottompercent:=((frmain.Shape1.BaseBounds.Bottom-frmain.Image1.DestRect.Top)/frmain.Image1.DestRect.Height)*100;
+  wpercent:=(frmain.Shape1.Width/frmain.Image1.DestRect.Width)*100;
+  hpercent:=(frmain.Shape1.Height/frmain.Image1.DestRect.Height)*100;
+
+  exactx:=Round(xpercent*0.01*frmain.Image1.Picture.Bitmap.Width);
+  exacty:=Round(ypercent*0.01*frmain.Image1.Picture.Bitmap.Height);
+  exactright:=Round(rigthpercent*0.01*frmain.Image1.Picture.Bitmap.Width);
+  exactbottom:=Round(bottompercent*0.01*frmain.Image1.Picture.Bitmap.Height);
+  exactw:=Round(wpercent*0.01*frmain.Image1.Picture.Bitmap.Width);
+  exacth:=Round(hpercent*0.01*frmain.Image1.Picture.Bitmap.Height);
+end;
+
 procedure showmainmenu(ifshow:boolean);
 begin
   with frMain do
@@ -1866,15 +1886,7 @@ begin
               //frmain.Image1.DestRect.Height;
 
               ////////////Area selection relative
-              xpercent:=((frmain.Shape1.BaseBounds.Left-frmain.Image1.DestRect.Left)/frmain.Image1.DestRect.Width)*100;
-              ypercent:=((frmain.Shape1.BaseBounds.Top-frmain.Image1.DestRect.Top)/frmain.Image1.DestRect.Height)*100;
-              rigthpercent:=((frmain.Shape1.BaseBounds.Right-frmain.Image1.DestRect.Left)/frmain.Image1.DestRect.Width)*100;
-              bottompercent:=((frmain.Shape1.BaseBounds.Bottom-frmain.Image1.DestRect.Top)/frmain.Image1.DestRect.Height)*100;
-
-              exactx:=Round(xpercent*0.01*frmain.Image1.Picture.Bitmap.Width);
-              exacty:=Round(ypercent*0.01*frmain.Image1.Picture.Bitmap.Height);
-              exactright:=Round(rigthpercent*0.01*frmain.Image1.Picture.Bitmap.Width);
-              exactbottom:=Round(bottompercent*0.01*frmain.Image1.Picture.Bitmap.Height);
+              extractrealtivearea;
 
               //frmain.StatusBar1.Panels[5].Text:=inttostr(frmain.Shape1.BaseBounds.Right-frmain.Image1.DestRect.Left)+'/'+inttostr(frmain.Shape1.BaseBounds.Bottom-frmain.Image1.DestRect.Top);
               if (xpix>exactx) and (xpix<exactright) and (ypix>exacty) and (ypix<exactbottom) then
@@ -2229,7 +2241,10 @@ begin
     end;
   67://Letra C
     begin
-      frmain.mnuCompactClick(nil);
+      if Shift=[ssCtrl] then
+        frmain.mnuCopyClick(nil)
+      else
+        frmain.mnuCompactClick(nil);
     end;
   72://Letra H
     begin
@@ -2465,28 +2480,13 @@ end;
 
 procedure Tfrmain.mnuCropClick(Sender: TObject);
 var
-   xpercent,ypercent,rigthpercent,bottompercent,wpercent,hpercent:float;
-   exactx,exacty,exactright,exactbottom,exactw,exacth:int64;
    tmpbitmap:BGRABitmap.TBGRABitmap;
    i:integer;
    tmpgif:TBGRAAnimatedGif;
    tmpapng:TMultiImage;
 begin
   realmode;
-  xpercent:=((frmain.Shape1.BaseBounds.Left-frmain.Image1.DestRect.Left)/frmain.Image1.DestRect.Width)*100;
-  ypercent:=((frmain.Shape1.BaseBounds.Top-frmain.Image1.DestRect.Top)/frmain.Image1.DestRect.Height)*100;
-  rigthpercent:=((frmain.Shape1.BaseBounds.Right-frmain.Image1.DestRect.Left)/frmain.Image1.DestRect.Width)*100;
-  bottompercent:=((frmain.Shape1.BaseBounds.Bottom-frmain.Image1.DestRect.Top)/frmain.Image1.DestRect.Height)*100;
-  wpercent:=(frmain.Shape1.Width/frmain.Image1.DestRect.Width)*100;
-  hpercent:=(frmain.Shape1.Height/frmain.Image1.DestRect.Height)*100;
-
-  exactx:=Round(xpercent*0.01*frmain.Image1.Picture.Bitmap.Width);
-  exacty:=Round(ypercent*0.01*frmain.Image1.Picture.Bitmap.Height);
-  exactright:=Round(rigthpercent*0.01*frmain.Image1.Picture.Bitmap.Width);
-  exactbottom:=Round(bottompercent*0.01*frmain.Image1.Picture.Bitmap.Height);
-  exactw:=Round(wpercent*0.01*frmain.Image1.Picture.Bitmap.Width);
-  exacth:=Round(hpercent*0.01*frmain.Image1.Picture.Bitmap.Height);
-
+  extractrealtivearea;
   if ifgif then
   begin
     tmpgif:=TBGRAAnimatedGif.Create;
@@ -2554,11 +2554,7 @@ begin
   frmain.Timer3.Enabled:=false;
   frmain.Timer5.Enabled:=false;
   frmain.Image1.Picture.Clear;
-  {$IFDEF MSWINDOWS}
-  frmain.Image1.Picture.LoadFromClipboardFormat(2);
-  {$ELSE}
-  frmain.Image1.Picture.Bitmap.LoadFromClipboardFormat(5);
-  {$ENDIF}
+  frmain.Image1.Picture.Assign(Clipboard);
   zoomnormal();
   frmain.tbFlipHorizontal.Enabled:=true;
   frmain.tbFlipVertical.Enabled:=true;
@@ -2583,6 +2579,7 @@ begin
   frmain.mnuDesktopImage.Enabled:=true;
   frmain.Shape1.Visible:=false;
   ifgif:=false;
+  ifapng:=false;
   frmain.StatusBar1.Panels.Items[1].Text:='Resolution:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height);
   frmain.Caption:='LazView [Clipboard]';
 end;
@@ -2595,17 +2592,17 @@ begin
   if frmain.Shape1.Visible then
   begin
     clipbitmap:=Graphics.TBitmap.Create;
-    clipbitmap.Width:=frmain.Shape1.Width;
-    clipbitmap.Height:=frmain.Shape1.Height;
-    cuadro.Top:=2;
-    cuadro.Left:=2;
-    cuadro.Right:=frmain.Shape1.Width-2;
-    cuadro.Bottom:=frmain.Shape1.Height-2;
-    clipbitmap.Canvas.CopyRect(cuadro,frmain.Shape1.Canvas,cuadro);
-    clipbitmap.SaveToClipboardFormat(2);
+    clipbitmap.Width:=frmain.Shape1.Width-frmain.Shape1.Pen.Width*2;
+    clipbitmap.Height:=frmain.Shape1.Height-frmain.Shape1.Pen.Width*2;
+    cuadro.Top:=frmain.Shape1.Pen.Width;
+    cuadro.Left:=frmain.Shape1.Pen.Width;
+    cuadro.Right:=frmain.Shape1.Width-frmain.Shape1.Pen.Width;
+    cuadro.Bottom:=frmain.Shape1.Height-frmain.Shape1.Pen.Width;
+    clipbitmap.Canvas.CopyRect(Types.Rect(0,0,clipbitmap.Width,clipbitmap.Height),frmain.Shape1.Canvas,cuadro);
+    Clipboard.Assign(clipbitmap);
   end
   else
-    frmain.Image1.Picture.Bitmap.SaveToClipboardFormat(2);
+    Clipboard.Assign(frmain.Image1.Picture.Bitmap);
 end;
 
 procedure Tfrmain.mnuSaveAsClick(Sender: TObject);
