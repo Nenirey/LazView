@@ -58,9 +58,6 @@ type
     MenuItem32: TMenuItem;
     mnuBRG: TMenuItem;
     mnuGBR: TMenuItem;
-    MenuItem35: TMenuItem;
-    mnuBrightPlus: TMenuItem;
-    mnuBrightLess: TMenuItem;
     MenuItem38: TMenuItem;
     mnuHighlightRed: TMenuItem;
     mnuHelp: TMenuItem;
@@ -166,6 +163,8 @@ type
     procedure Image1MouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure mnuAlwaysOnTopClick(Sender: TObject);
+    procedure mnuContrastLessClick(Sender: TObject);
+    procedure mnuContrastPlusClick(Sender: TObject);
     procedure mnuCropClick(Sender: TObject);
     procedure mnuOpenClick(Sender: TObject);
     procedure mnuPasteClick(Sender: TObject);
@@ -356,7 +355,7 @@ var
   procedure compact;
   procedure showthumbnails;
   function UTF16LongName(const FileName: String): UnicodeString;
-  procedure filterimagen(filter:integer);
+  procedure filterimagen(filter:integer;nivel:float=0);
   procedure efectimagen(efect:integer;nivel:integer=5000);
   procedure loadpicture(fimagen:string;restorezoom:boolean=true;scrollthumbs:boolean=true;realimage:boolean=false);
   procedure saveconfig;
@@ -1442,7 +1441,7 @@ begin
   end;
 end;
 
-procedure filterimagen(filter:integer);
+procedure filterimagen(filter:integer;nivel:float=0);
 /////////Filter 1:Grayscale
 /////////       2:Plane
 /////////       3:Contour
@@ -1463,15 +1462,20 @@ procedure filterimagen(filter:integer);
 /////////      18:RotateCCW
 /////////      19:HorizontalFlip
 /////////      20:VerticalFlip
+/////////      21:Bright
+/////////      22:Contrast
+/////////      23:Gamma
 var
    bmp:TBGRACustomBitmap;
    title:string;
    tmpgif:TBGRAAnimatedGif;
    tmpbitmap:BGRABitmap.TBGRABitmap;
-   nbitmap:Graphics.TBitmap;
    i:integer;
    imgrect:TRect;
    imgpoint:TPoint;
+   FImageCanvas: TImagingCanvas;
+   FImage:TMultiImage;
+   baseimg:ImagingClasses.TSingleImage;
 begin
   realmode;
   title:=frmain.Caption;
@@ -1599,10 +1603,40 @@ begin
           bmp:=BGRABitMap.TBGRABitmap.Create(frmain.Image1.Picture.Bitmap);
           bmp.VerticalFlip;
         end;
+     21,22,23,24:begin
+          FImage:=TMultiImage.Create;
+          FImageCanvas := TImagingCanvas.Create;
+          FImage.Width:=frmain.Image1.Picture.Bitmap.Width;
+          FImage.Height:=frmain.Image1.Picture.Bitmap.Height;
+          FImage.AddImage(frmain.Image1.Picture.Bitmap.Width,frmain.Image1.Picture.Bitmap.Height);
+          baseimg:=ImagingClasses.TSingleImage.Create;
+          ImagingComponents.ConvertBitmapToImage(frmain.Image1.Picture.Bitmap,baseimg);
+          FImage.InsertImage(0,baseimg);
+          FImage.ActiveImage:=0;
+          FImageCanvas.CreateForImage(FImage);
+          if filter=21 then
+            FImageCanvas.ModifyContrastBrightness(0, nivel);
+          if filter=22 then
+            FImageCanvas.ModifyContrastBrightness(nivel, 0);
+          if filter=23 then
+            FImageCanvas.GammaCorection(nivel, nivel, nivel);
+          ImagingComponents.ConvertDataToBitmap(FImage.Images[0],frmain.Image1.Picture.Bitmap);
+          FImage.Destroy;
+          FimageCanvas.Destroy;
+          baseimg.Destroy;
+        end;
      end;
     end;
-    frmain.Image1.Picture.Bitmap.Assign(bmp);
-    bmp.Free;
+    case filter of
+    21,22,23:
+    begin
+    end;
+    else
+    begin
+      frmain.Image1.Picture.Bitmap.Assign(bmp);
+      bmp.Free;
+    end;
+    end;
   end;
   frmain.Caption:=title;
 end;
@@ -1637,8 +1671,6 @@ var
    inzone:boolean;
    FImage: TMultiImage;
    FImageCanvas: TImagingCanvas;
-   xpercent,ypercent,rigthpercent,bottompercent:float;
-   exactx,exacty,exactright,exactbottom:int64;
 begin
   realmode;
   title:=frmain.Caption;
@@ -1881,14 +1913,9 @@ begin
         10:begin
              if frmain.Shape1.Visible then
              begin
-              ///Actual size of image
-              //frmain.Image1.DestRect.Width
-              //frmain.Image1.DestRect.Height;
-
               ////////////Area selection relative
               extractrealtivearea;
 
-              //frmain.StatusBar1.Panels[5].Text:=inttostr(frmain.Shape1.BaseBounds.Right-frmain.Image1.DestRect.Left)+'/'+inttostr(frmain.Shape1.BaseBounds.Bottom-frmain.Image1.DestRect.Top);
               if (xpix>exactx) and (xpix<exactright) and (ypix>exacty) and (ypix<exactbottom) then
                 inzone:=true
               else
@@ -1914,10 +1941,25 @@ begin
              imagen.Colors[xpix,ypix]:=FPColor(redbrig,greenbrig,bluebrig,imagen2.Colors[xpix,ypix].alpha);
            end;
         11:begin
-             redbrig:=imagen2.Colors[xpix,ypix].red*118 shr 7;
-             greenbrig:=imagen2.Colors[xpix,ypix].green*118 shr 7;
-             bluebrig:=imagen2.Colors[xpix,ypix].blue*118 shr 7;
-             imagen.Colors[xpix,ypix]:=FPColor(redbrig,greenbrig,bluebrig,imagen2.Colors[xpix,ypix].alpha);
+             if frmain.Shape1.Visible then
+             begin
+              ////////////Area selection relative
+              extractrealtivearea;
+
+              if (xpix>exactx) and (xpix<exactright) and (ypix>exacty) and (ypix<exactbottom) then
+                inzone:=true
+              else
+                inzone:=false;
+             end
+             else
+               inzone:=true;
+             if inzone then
+             begin
+               redbrig:=imagen2.Colors[xpix,ypix].red*118 shr 7;
+               greenbrig:=imagen2.Colors[xpix,ypix].green*118 shr 7;
+               bluebrig:=imagen2.Colors[xpix,ypix].blue*118 shr 7;
+               imagen.Colors[xpix,ypix]:=FPColor(redbrig,greenbrig,bluebrig,imagen2.Colors[xpix,ypix].alpha);
+             end;
            end;
         12:begin
              if (imagen2.Colors[xpix,ypix].red-imagen2.Colors[xpix,ypix].green>nivel) and (imagen2.Colors[xpix,ypix].red-imagen2.Colors[xpix,ypix].blue>nivel) and (imagen2.Colors[xpix,ypix].red>nivel) then
@@ -2302,11 +2344,23 @@ begin
     end;
   188://Tecla <,
     begin
-      //efectbrigthminus(118);
+      filterimagen(21,-10);
+      //efectimagen(11);
     end;
   190://Tecla >.
     begin
-      //efectbrigthplus(138);
+      filterimagen(21,10);
+      //efectimagen(10);
+    end;
+  219://Tecla [
+    begin
+      filterimagen(22,-10);
+      //efectimagen(11);
+    end;
+  221://Tecla ]
+    begin
+      filterimagen(22,10);
+      //efectimagen(10);
     end;
  end;
 end;
@@ -2478,6 +2532,16 @@ begin
     frmain.FormStyle:=fsNormal;
 end;
 
+procedure Tfrmain.mnuContrastLessClick(Sender: TObject);
+begin
+  filterimagen(24);
+end;
+
+procedure Tfrmain.mnuContrastPlusClick(Sender: TObject);
+begin
+  filterimagen(23);
+end;
+
 procedure Tfrmain.mnuCropClick(Sender: TObject);
 var
    tmpbitmap:BGRABitmap.TBGRABitmap;
@@ -2613,11 +2677,34 @@ var
    i:integer;
    bgrtmp:TBGRABitmap;
    baseimg:ImagingClasses.TSingleImage;
+   function correctfilename:string;
+   var
+      ext:string;
+      name:string;
+      path:string;
+      namewithoutext:string;
+   begin
+     name:=ExtractFileName(frmain.SavePictureDialog1.FileName);
+     ext:=ExtractFileExt(frmain.SavePictureDialog1.FileName);
+     path:=ExtractFilePath(frmain.SavePictureDialog1.FileName);
+     if ext<>'' then
+       namewithoutext:=Copy(name,0,LastDelimiter(ext,name)-length(ext)+1)
+     else
+       namewithoutext:=name;
+     result:=path+pathdelim+namewithoutext+frmain.SavePictureDialog1.GetFilterExt;
+     //ExtractFilePath(frmain.SavePictureDialog1.FileName)+pathdelim+ExtractFileName(frmain.SavePictureDialog1.FileName)+'.'+frmain.SavePictureDialog1.GetFilterExt;
+   end;
+
 begin
+  ///Cant use the UserChoise in GTK2, so check for filename
+  {$IFDEF LCLGTK2}
+  frmain.SavePictureDialog1.FileName:='';
+  {$ELSE}
   if Assigned(flist) then
     frmain.SavePictureDialog1.FileName:=flist[ifile]
   else
     frmain.SavePictureDialog1.FileName:='IMAGEN.BMP';
+  {$ENDIF}
   for i:=1 to 5 do
   begin
     frmain.SavePictureDialog1.FilterIndex:=i;
@@ -2630,10 +2717,10 @@ begin
   if filtroext='.' then
     filtroext:=ExtractFileExt(frmain.SavePictureDialog1.FileName);
   //ShowMessage(inttostr(frmain.SavePictureDialog1.UserChoice));
-  if {$IFDEF LCLQT}frmain.SavePictureDialog1.UserChoice=1{$else}{$IFDEF LCLQT5}frmain.SavePictureDialog1.UserChoice=1{$ELSE}frmain.SavePictureDialog1.UserChoice=1{$endif}{$ENDIF}then
+  if {$IFDEF LCLQT}frmain.SavePictureDialog1.UserChoice=1{$else}{$IFDEF LCLQT5}frmain.SavePictureDialog1.UserChoice=1{$ELSE}frmain.SavePictureDialog1.FileName<>''{$endif}{$ENDIF}then
   begin
-    if FileExists(ExtractFilePath(frmain.SavePictureDialog1.FileName)+pathdelim+ExtractFileName(frmain.SavePictureDialog1.FileName)+'.'+frmain.SavePictureDialog1.GetFilterExt) then
-      confirmar:=(Application.MessageBox('Desea reemplazar la imagen?','Confirmar',MB_ICONQUESTION + MB_YESNO)=IDYES)
+    if FileExists(correctfilename) then
+      confirmar:=(Application.MessageBox(PChar('Do you want to replace the image file '+ExtractFileName(correctfilename)+'?'),'Confirm',MB_ICONQUESTION + MB_YESNO)=IDYES)
     else
     begin
       confirmar:=true;
@@ -2647,13 +2734,13 @@ begin
           calidadjpg:=frquality.TrackBar1.Position;
           frmain.Image1.Picture.Jpeg.CompressionQuality:=calidadjpg;
           frmain.Image1.Refresh;
-          frmain.Image1.Picture.Jpeg.SaveToFile(ExtractFilePath(frmain.SavePictureDialog1.FileName)+pathdelim+ExtractFileName(frmain.SavePictureDialog1.FileName)+'.'+frmain.SavePictureDialog1.GetFilterExt);
+          frmain.Image1.Picture.Jpeg.SaveToFile(correctfilename);
         end;
         2:
         begin
           if ifapng then
           begin
-            APNGImage.SaveMultiToFile(ExtractFilePath(frmain.SavePictureDialog1.FileName)+pathdelim+ExtractFileName(frmain.SavePictureDialog1.FileName)+'.'+frmain.SavePictureDialog1.GetFilterExt);
+            APNGImage.SaveMultiToFile(correctfilename);
           end;
           //Convert BGRAGif to APNG
           if ifgif then
@@ -2669,34 +2756,25 @@ begin
               APNGImage.InsertImage(i,baseimg);
               GlobalMetadata.SetMetaItem('FrameDelay',BGRAGif.FrameDelayMs[i],i);
             end;
-            APNGImage.SaveMultiToFile(ExtractFilePath(frmain.SavePictureDialog1.FileName)+pathdelim+ExtractFileName(frmain.SavePictureDialog1.FileName)+'.'+frmain.SavePictureDialog1.GetFilterExt);
+            APNGImage.SaveMultiToFile(correctfilename);
           end;
           if (ifgif=false) and (ifapng=false) then
-            frmain.Image1.Picture.PNG.SaveToFile(ExtractFilePath(frmain.SavePictureDialog1.FileName)+pathdelim+ExtractFileName(frmain.SavePictureDialog1.FileName)+'.'+frmain.SavePictureDialog1.GetFilterExt);
+            frmain.Image1.Picture.PNG.SaveToFile(correctfilename);
         end;
-        3:frmain.Image1.Picture.Bitmap.SaveToFile(ExtractFilePath(frmain.SavePictureDialog1.FileName)+pathdelim+ExtractFileName(frmain.SavePictureDialog1.FileName)+'.'+frmain.SavePictureDialog1.GetFilterExt);
-        4:frmain.Image1.Picture.Icon.SaveToFile(ExtractFilePath(frmain.SavePictureDialog1.FileName)+pathdelim+ExtractFileName(frmain.SavePictureDialog1.FileName)+'.'+frmain.SavePictureDialog1.GetFilterExt);
+        3:frmain.Image1.Picture.Bitmap.SaveToFile(correctfilename);
+        4:frmain.Image1.Picture.Icon.SaveToFile(correctfilename);
         5:
          begin
            if ifgif then
            begin
-             BGRAGif.SaveToFile(ExtractFilePath(frmain.SavePictureDialog1.FileName)+pathdelim+ExtractFileName(frmain.SavePictureDialog1.FileName)+'.'+frmain.SavePictureDialog1.GetFilterExt);
+             BGRAGif.SaveToFile(correctfilename);
            end;
            //Convert APNG to BGRAGif
            if ifapng then
            begin
-             BGRAgif:=TBGRAAnimatedGif.Create;
-             for i:=0 to APNGImage.ImageCount-1 do
-             begin
-               bgrtmp:=TBGRABitmap.Create;
-               BGRAgif.SetSize(APNGImage.Width,APNGImage.Height);
-               ImagingComponents.ConvertDataToBitmap(APNGImage.Images[i],bgrtmp.Bitmap);
-               BGRAgif.InsertFrame(i,bgrtmp,0,0,APNGDelays[i],dmKeep,true);
-             end;
-             BGRAGif.SaveToFile(ExtractFilePath(frmain.SavePictureDialog1.FileName)+pathdelim+ExtractFileName(frmain.SavePictureDialog1.FileName)+'.'+frmain.SavePictureDialog1.GetFilterExt);
-             bgrtmp.Destroy;
-             BGRAGif.Destroy;
+             APNGImage.SaveMultiToFile(correctfilename);
            end;
+           //Convert others to BGRAGif
            if (ifgif=false) and (ifapng=false) then
            begin
              BGRAgif:=TBGRAAnimatedGif.Create;
@@ -2704,7 +2782,7 @@ begin
              BGRAgif.SetSize(bgrtmp.Width,bgrtmp.Height);
              BGRAgif.InsertFrame(0,bgrtmp,0,0,0,dmKeep,true);
              frmain.Image1.Picture.Assign(bgrtmp);
-             BGRAGif.SaveToFile(ExtractFilePath(frmain.SavePictureDialog1.FileName)+pathdelim+ExtractFileName(frmain.SavePictureDialog1.FileName)+'.'+frmain.SavePictureDialog1.GetFilterExt);
+             BGRAGif.SaveToFile(correctfilename);
              bgrtmp.Destroy;
              BGRAGif.Destroy;
            end;
@@ -2868,12 +2946,14 @@ end;
 
 procedure Tfrmain.mnuBrightPlusClick(Sender: TObject);
 begin
-  efectimagen(10);
+  //efectimagen(10);
+ filterimagen(21);
 end;
 
 procedure Tfrmain.mnuBrightLessClick(Sender: TObject);
 begin
-  efectimagen(11);
+  filterimagen(22);
+  //efectimagen(11);
 end;
 
 procedure Tfrmain.mnuHighlightRedClick(Sender: TObject);

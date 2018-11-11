@@ -25,5 +25,15 @@
 {"hash":51719207,"name":"tfreffect.button10.caption","sourcebytes":[82,71,66,32,45,62,32,66,82,71],"value":"RGB -> BRG"},
 {"hash":6021260,"name":"tfreffect.button23.caption","sourcebytes":[84,119,105,114,108],"value":"Twirl"},
 {"hash":15478229,"name":"tfreffect.button24.caption","sourcebytes":[80,105,120,101,108,97,116,101],"value":"Pixelate"},
-{"hash":371876,"name":"tfreffect.button25.caption","sourcebytes":[84,101,115,116],"value":"Test"}
+{"hash":313253,"name":"tfreffect.button25.caption","sourcebytes":[70,97,100,101],"value":"Fade"},
+{"hash":86821939,"name":"tfreffect.groupbox2.caption","sourcebytes":[76,101,118,101,108,115],"value":"Levels"},
+{"hash":266337603,"name":"tfreffect.label1.caption","sourcebytes":[66,114,105,103,104,116,110,101,115],"value":"Brightnes"},
+{"hash":106662916,"name":"tfreffect.label2.caption","sourcebytes":[67,111,110,116,114,97,115,116],"value":"Contrast"},
+{"hash":5080113,"name":"tfreffect.label3.caption","sourcebytes":[71,97,109,109,97],"value":"Gamma"},
+{"hash":45,"name":"tfreffect.button26.caption","sourcebytes":[45],"value":"-"},
+{"hash":43,"name":"tfreffect.button27.caption","sourcebytes":[43],"value":"+"},
+{"hash":45,"name":"tfreffect.button28.caption","sourcebytes":[45],"value":"-"},
+{"hash":43,"name":"tfreffect.button29.caption","sourcebytes":[43],"value":"+"},
+{"hash":45,"name":"tfreffect.button30.caption","sourcebytes":[45],"value":"-"},
+{"hash":43,"name":"tfreffect.button31.caption","sourcebytes":[43],"value":"+"}
 ]}

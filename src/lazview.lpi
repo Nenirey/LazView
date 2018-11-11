@@ -22,7 +22,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="1"/>
-      <BuildNr Value="3204"/>
+      <BuildNr Value="3274"/>
       <StringTable Comments="Pequeño visor de imagenes" CompanyName="Independiente" FileDescription="Visor de imágenes LazView" InternalName="lazview" LegalCopyright="R.Mir" LegalTrademarks="Reinier Romero Mir (c)" OriginalFilename="lazview" ProductName="LazView" ProductVersion="0.1"/>
     </VersionInfo>
     <BuildModes Count="2">
@@ -41,6 +41,7 @@
           </SearchPaths>
           <CodeGeneration>
             <SmartLinkUnit Value="True"/>
+            <TargetCPU Value="x86_64"/>
             <Optimizations>
               <OptimizationLevel Value="3"/>
             </Optimizations>
@@ -202,7 +203,7 @@
     </Linking>
   </CompilerOptions>
   <Debugging>
-    <Exceptions Count="5">
+    <Exceptions Count="8">
       <Item1>
         <Name Value="EListError"/>
       </Item1>
@@ -218,6 +219,15 @@
       <Item5>
         <Name Value="RunError(201)"/>
       </Item5>
+      <Item6>
+        <Name Value="EImagingCanvasError"/>
+      </Item6>
+      <Item7>
+        <Name Value="EReadError"/>
+      </Item7>
+      <Item8>
+        <Name Value="PNGImageException"/>
+      </Item8>
     </Exceptions>
   </Debugging>
 </CONFIG>

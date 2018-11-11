@@ -81,13 +81,43 @@ msgid "Pixelate"
 msgstr "Pixelate"
 
 #: tfreffect.button25.caption
-msgid "Test"
+msgid "Fade"
+msgstr ""
+
+#: tfreffect.button26.caption
+msgctxt "tfreffect.button26.caption"
+msgid "-"
+msgstr ""
+
+#: tfreffect.button27.caption
+msgctxt "tfreffect.button27.caption"
+msgid "+"
+msgstr ""
+
+#: tfreffect.button28.caption
+msgctxt "tfreffect.button28.caption"
+msgid "-"
+msgstr ""
+
+#: tfreffect.button29.caption
+msgctxt "tfreffect.button29.caption"
+msgid "+"
 msgstr ""
 
 #: tfreffect.button3.caption
 msgctxt "tfreffect.button3.caption"
 msgid "Highlight green"
 msgstr "Highlight green"
+
+#: tfreffect.button30.caption
+msgctxt "tfreffect.button30.caption"
+msgid "-"
+msgstr ""
+
+#: tfreffect.button31.caption
+msgctxt "tfreffect.button31.caption"
+msgid "+"
+msgstr ""
 
 #: tfreffect.button4.caption
 msgctxt "tfreffect.button4.caption"
@@ -118,20 +148,36 @@ msgstr ""
 #: tfreffect.caption
 msgctxt "tfreffect.caption"
 msgid "Effects"
-msgstr ""
+msgstr "Effects"
 
 #: tfreffect.groupbox1.caption
 msgid "Change colors"
-msgstr ""
+msgstr "Change colors"
+
+#: tfreffect.groupbox2.caption
+msgid "Levels"
+msgstr "Levels"
+
+#: tfreffect.label1.caption
+msgid "Brightnes"
+msgstr "Brightnes"
+
+#: tfreffect.label2.caption
+msgid "Contrast"
+msgstr "Contrast"
+
+#: tfreffect.label3.caption
+msgid "Gamma"
+msgstr "Gamma"
 
 #: tfrexif.caption
 msgctxt "tfrexif.caption"
 msgid "EXIF"
-msgstr ""
+msgstr "EXIF"
 
 #: tfrgoto.caption
 msgid "Go to image number..."
-msgstr ""
+msgstr "Go to image number..."
 
 #: tfrgoto.edit1.text
 msgid "0"
@@ -139,7 +185,7 @@ msgstr ""
 
 #: tfrgoto.label1.caption
 msgid "Go to image number:"
-msgstr ""
+msgstr "Go to image number:"
 
 #: tfrmain.caption
 msgid "LazView"
@@ -157,39 +203,31 @@ msgstr ""
 
 #: tfrmain.mnuabout.caption
 msgid "About..."
-msgstr ""
+msgstr "About..."
 
 #: tfrmain.mnualwaysontop.caption
 msgid "Always on top"
-msgstr ""
+msgstr "Always on top"
 
 #: tfrmain.mnuantialiasing.caption
 msgid "Antialiasing"
-msgstr ""
+msgstr "Antialiasing"
 
 #: tfrmain.mnubgr.caption
 msgid "Invert color (RGB)-(BGR)"
-msgstr ""
+msgstr "Invert color (RGB)-(BGR)"
 
 #: tfrmain.mnubrg.caption
 msgid "Invert color (RGB)-(BRG)"
-msgstr ""
-
-#: tfrmain.mnubrightless.caption
-msgid "Brightness -"
-msgstr ""
-
-#: tfrmain.mnubrightplus.caption
-msgid "Brightness +"
-msgstr ""
+msgstr "Invert color (RGB)-(BRG)"
 
 #: tfrmain.mnucompact.caption
 msgid "Compact mode"
-msgstr ""
+msgstr "Compact mode"
 
 #: tfrmain.mnucopy.caption
 msgid "Copy"
-msgstr ""
+msgstr "Copy"
 
 #: tfrmain.mnucrop.caption
 msgid "Crop"
@@ -197,27 +235,27 @@ msgstr "Crop"
 
 #: tfrmain.mnudeletefile.caption
 msgid "Delete"
-msgstr ""
+msgstr "Delete"
 
 #: tfrmain.mnudesktopcenter.caption
 msgid "Center"
-msgstr ""
+msgstr "Center"
 
 #: tfrmain.mnudesktopexpand.caption
 msgid "Expand"
-msgstr ""
+msgstr "Expand"
 
 #: tfrmain.mnudesktopimage.caption
 msgid "Set as desktop image"
-msgstr ""
+msgstr "Set as desktop image"
 
 #: tfrmain.mnudesktopmosaic.caption
 msgid "Mosaic"
-msgstr ""
+msgstr "Mosaic"
 
 #: tfrmain.mnudesktopstrech.caption
 msgid "Strech"
-msgstr ""
+msgstr "Strech"
 
 #: tfrmain.mnuedit.caption
 msgid "&Edit"
@@ -226,17 +264,18 @@ msgstr "&Edit"
 #: tfrmain.mnueffects.caption
 msgctxt "tfrmain.mnueffects.caption"
 msgid "Effects"
-msgstr ""
+msgstr "Effects"
 
 #: tfrmain.mnuexif.caption
+#, fuzzy
 msgctxt "tfrmain.mnuexif.caption"
 msgid "EXIF"
-msgstr ""
+msgstr "EXIF"
 
 #: tfrmain.mnuexit.caption
 msgctxt "tfrmain.mnuexit.caption"
 msgid "Exit"
-msgstr ""
+msgstr "Exit"
 
 #: tfrmain.mnufile.caption
 msgid "&File"
@@ -245,12 +284,12 @@ msgstr "&File"
 #: tfrmain.mnufliph.caption
 msgctxt "tfrmain.mnufliph.caption"
 msgid "Flip horizontal"
-msgstr ""
+msgstr "Flip horizontal"
 
 #: tfrmain.mnuflipv.caption
 msgctxt "tfrmain.mnuflipv.caption"
 msgid "Flip vertical"
-msgstr ""
+msgstr "Flip vertical"
 
 #: tfrmain.mnugbr.caption
 msgid "Invert color (RGB)-(GBR)"
@@ -465,9 +504,10 @@ msgid "Adjust image"
 msgstr ""
 
 #: tfrmain.tbexit.hint
+#, fuzzy
 msgctxt "tfrmain.tbexit.hint"
 msgid "Exit"
-msgstr ""
+msgstr "Exit"
 
 #: tfrmain.tbfastanim.caption
 msgid "tbFastAnim"
@@ -486,14 +526,16 @@ msgid "First image"
 msgstr ""
 
 #: tfrmain.tbfliphorizontal.hint
+#, fuzzy
 msgctxt "tfrmain.tbfliphorizontal.hint"
 msgid "Flip horizontal"
-msgstr ""
+msgstr "Flip horizontal"
 
 #: tfrmain.tbflipvertical.hint
+#, fuzzy
 msgctxt "tfrmain.tbflipvertical.hint"
 msgid "Flip vertical"
-msgstr ""
+msgstr "Flip vertical"
 
 #: tfrmain.tbfullscreen.hint
 msgid "Full screen"

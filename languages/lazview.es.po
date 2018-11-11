@@ -81,13 +81,43 @@ msgid "Pixelate"
 msgstr "Pixelar"
 
 #: tfreffect.button25.caption
-msgid "Test"
-msgstr "Prueva"
+msgid "Fade"
+msgstr "Fade"
+
+#: tfreffect.button26.caption
+msgctxt "tfreffect.button26.caption"
+msgid "-"
+msgstr ""
+
+#: tfreffect.button27.caption
+msgctxt "tfreffect.button27.caption"
+msgid "+"
+msgstr ""
+
+#: tfreffect.button28.caption
+msgctxt "tfreffect.button28.caption"
+msgid "-"
+msgstr ""
+
+#: tfreffect.button29.caption
+msgctxt "tfreffect.button29.caption"
+msgid "+"
+msgstr ""
 
 #: tfreffect.button3.caption
 msgctxt "tfreffect.button3.caption"
 msgid "Highlight green"
 msgstr "Resaltar verde"
+
+#: tfreffect.button30.caption
+msgctxt "tfreffect.button30.caption"
+msgid "-"
+msgstr ""
+
+#: tfreffect.button31.caption
+msgctxt "tfreffect.button31.caption"
+msgid "+"
+msgstr ""
 
 #: tfreffect.button4.caption
 msgctxt "tfreffect.button4.caption"
@@ -123,6 +153,22 @@ msgstr "Efectos"
 #: tfreffect.groupbox1.caption
 msgid "Change colors"
 msgstr "Cambiar colores"
+
+#: tfreffect.groupbox2.caption
+msgid "Levels"
+msgstr "Niveles"
+
+#: tfreffect.label1.caption
+msgid "Brightnes"
+msgstr "Brillo"
+
+#: tfreffect.label2.caption
+msgid "Contrast"
+msgstr "Contraste"
+
+#: tfreffect.label3.caption
+msgid "Gamma"
+msgstr "Gamma"
 
 #: tfrexif.caption
 msgctxt "tfrexif.caption"
@@ -176,14 +222,6 @@ msgstr "Invertir color (RGB)-(BGR)"
 #: tfrmain.mnubrg.caption
 msgid "Invert color (RGB)-(BRG)"
 msgstr "Invert color (RGB)-(BRG"
-
-#: tfrmain.mnubrightless.caption
-msgid "Brightness -"
-msgstr "Brillo -"
-
-#: tfrmain.mnubrightplus.caption
-msgid "Brightness +"
-msgstr "Brillo +"
 
 #: tfrmain.mnucompact.caption
 msgid "Compact mode"
@@ -448,7 +486,7 @@ msgstr ""
 
 #: tfrmain.statusbar1.panels[2].text
 msgid "Frame 0/0"
-msgstr ""
+msgstr "Fotograma 0/0"
 
 #: tfrmain.statusbar1.panels[3].text
 msgid "Size: 0"

@@ -105,8 +105,6 @@
 {"hash":51087876,"name":"tfrmain.mnuhighlightred.caption","sourcebytes":[72,105,103,104,108,105,103,104,116,32,114,101,100],"value":"Highlight red"},
 {"hash":194787518,"name":"tfrmain.mnuhighlightgreen.caption","sourcebytes":[72,105,103,104,108,105,103,104,116,32,103,114,101,101,110],"value":"Highlight green"},
 {"hash":12171397,"name":"tfrmain.mnuhighlightblue.caption","sourcebytes":[72,105,103,104,108,105,103,104,116,32,98,108,117,101],"value":"Highlight blue"},
-{"hash":265574619,"name":"tfrmain.mnubrightplus.caption","sourcebytes":[66,114,105,103,104,116,110,101,115,115,32,43],"value":"Brightness +"},
-{"hash":265574621,"name":"tfrmain.mnubrightless.caption","sourcebytes":[66,114,105,103,104,116,110,101,115,115,32,45],"value":"Brightness -"},
 {"hash":185984647,"name":"tfrmain.mnuwindoweffects.caption","sourcebytes":[69,102,102,101,99,116,115,32,119,105,110,100,111,119],"value":"Effects window"},
 {"hash":81828933,"name":"tfrmain.mnudesktopimage.caption","sourcebytes":[83,101,116,32,97,115,32,100,101,115,107,116,111,112,32,105,109,97,103,101],"value":"Set as desktop image"},
 {"hash":95128472,"name":"tfrmain.mnudesktopstrech.caption","sourcebytes":[83,116,114,101,99,104],"value":"Strech"},

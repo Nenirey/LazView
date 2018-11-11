@@ -31,7 +31,13 @@ type
     Button23: TButton;
     Button24: TButton;
     Button25: TButton;
+    Button26: TButton;
+    Button27: TButton;
+    Button28: TButton;
+    Button29: TButton;
     Button3: TButton;
+    Button30: TButton;
+    Button31: TButton;
     Button4: TButton;
     Button5: TButton;
     Button6: TButton;
@@ -39,6 +45,10 @@ type
     Button8: TButton;
     Button9: TButton;
     GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
     TrackBar1: TTrackBar;
     TrackBar2: TTrackBar;
     TrackBar3: TTrackBar;
@@ -59,7 +69,13 @@ type
     procedure Button23Click(Sender: TObject);
     procedure Button24Click(Sender: TObject);
     procedure Button25Click(Sender: TObject);
+    procedure Button26Click(Sender: TObject);
+    procedure Button27Click(Sender: TObject);
+    procedure Button28Click(Sender: TObject);
+    procedure Button29Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
+    procedure Button30Click(Sender: TObject);
+    procedure Button31Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
     procedure Button4Click(Sender: TObject);
     procedure Button5Click(Sender: TObject);
@@ -119,6 +135,26 @@ begin
   filterimagen(16);
 end;
 
+procedure Tfreffect.Button26Click(Sender: TObject);
+begin
+  filterimagen(21,-10);
+end;
+
+procedure Tfreffect.Button27Click(Sender: TObject);
+begin
+  filterimagen(21,10);
+end;
+
+procedure Tfreffect.Button28Click(Sender: TObject);
+begin
+  filterimagen(22,-10);
+end;
+
+procedure Tfreffect.Button29Click(Sender: TObject);
+begin
+  filterimagen(22,10);
+end;
+
 procedure Tfreffect.Button10Click(Sender: TObject);
 begin
   efectimagen(8);
@@ -174,6 +210,16 @@ begin
   efectimagen(12,freffect.TrackBar1.Position);
 end;
 
+procedure Tfreffect.Button30Click(Sender: TObject);
+begin
+  filterimagen(23,0.8);
+end;
+
+procedure Tfreffect.Button31Click(Sender: TObject);
+begin
+  filterimagen(23,1.2);
+end;
+
 procedure Tfreffect.Button3Click(Sender: TObject);
 begin
   efectimagen(13,freffect.TrackBar2.Position);
@@ -208,6 +254,7 @@ procedure Tfreffect.Button9Click(Sender: TObject);
 begin
   efectimagen(9);
 end;
+
 
 end.
 
