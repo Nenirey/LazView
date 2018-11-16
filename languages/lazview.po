@@ -379,6 +379,10 @@ msgstr ""
 msgid "Real mode"
 msgstr ""
 
+#: tfrmain.mnuredo.caption
+msgid "Redo"
+msgstr ""
+
 #: tfrmain.mnuresize.caption
 msgid "Resize..."
 msgstr ""
@@ -445,7 +449,7 @@ msgid "Tool bar"
 msgstr ""
 
 #: tfrmain.mnutools.caption
-msgid "&Tools"
+msgid "Image"
 msgstr ""
 
 #: tfrmain.mnutreeview.caption
@@ -454,6 +458,10 @@ msgstr ""
 
 #: tfrmain.mnutv.caption
 msgid "TV"
+msgstr ""
+
+#: tfrmain.mnuundo.caption
+msgid "Undo"
 msgstr ""
 
 #: tfrmain.mnuview.caption

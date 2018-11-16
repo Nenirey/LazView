@@ -22,6 +22,12 @@ type
     Label1: TLabel;
     Label2: TLabel;
     MainMenu1: TMainMenu;
+    MenuItem1: TMenuItem;
+    MenuItem2: TMenuItem;
+    mnuResize: TMenuItem;
+    mnuWindowEffects: TMenuItem;
+    mnuRedo: TMenuItem;
+    mnuUndo: TMenuItem;
     mnuCrop: TMenuItem;
     mnuAlwaysOnTop: TMenuItem;
     mnuLanguage: TMenuItem;
@@ -54,8 +60,6 @@ type
     mnuView: TMenuItem;
     mnuExit: TMenuItem;
     mnuShowThumbs: TMenuItem;
-    mnuResize: TMenuItem;
-    MenuItem32: TMenuItem;
     mnuBRG: TMenuItem;
     mnuGBR: TMenuItem;
     MenuItem38: TMenuItem;
@@ -77,7 +81,6 @@ type
     mnuDesktopStrech: TMenuItem;
     mnuThumbCustom: TMenuItem;
     mnuStrech: TMenuItem;
-    mnuWindowEffects: TMenuItem;
     mnuNegative: TMenuItem;
     mnuSmooth: TMenuItem;
     mnuRealMode: TMenuItem;
@@ -169,6 +172,7 @@ type
     procedure mnuOpenClick(Sender: TObject);
     procedure mnuPasteClick(Sender: TObject);
     procedure mnuCopyClick(Sender: TObject);
+    procedure mnuRedoClick(Sender: TObject);
     procedure mnuSaveAsClick(Sender: TObject);
     procedure mnuGrayscaleClick(Sender: TObject);
     procedure mnuBGRClick(Sender: TObject);
@@ -201,6 +205,7 @@ type
     procedure mnuDesktopStrechClick(Sender: TObject);
     procedure mnuThumbCustomClick(Sender: TObject);
     procedure mnuStrechClick(Sender: TObject);
+    procedure mnuUndoClick(Sender: TObject);
     procedure mnuWindowEffectsClick(Sender: TObject);
     procedure mnuNegativeClick(Sender: TObject);
     procedure mnuSmoothClick(Sender: TObject);
@@ -350,6 +355,11 @@ var
   scrollthumbpos:integer;
   xpercent,ypercent,rigthpercent,bottompercent,wpercent,hpercent:float;
   exactx,exacty,exactright,exactbottom,exactw,exacth:int64;
+  //This is for Undo/Redo function because TStream no need to memorey;
+  historyeditbitmap:array of Graphics.TBitmap;
+  historyeditbgragif:array of TBGRAAnimatedGif;
+  historyeditapng:array of ImagingClasses.TMultiImage;
+  historyindex:integer;
   procedure rendermosaic;
   procedure fullsc;
   procedure compact;
@@ -367,6 +377,56 @@ uses
 {$R *.lfm}
 
 { Tfrmain }
+procedure sethistory;
+begin
+  if ifgif then
+  begin
+    SetLength(historyeditbgragif,1);
+    historyeditbgragif[Length(historyeditbgragif)-1]:=TBGRAAnimatedGif.Create;
+    historyeditbgragif[Length(historyeditbgragif)-1]:=BGRAGif;
+    historyindex:=Length(historyeditbgragif);
+  end;
+  if ifapng then
+  begin
+    SetLength(historyeditapng,1);
+    historyeditapng[Length(historyeditapng)-1]:=ImagingClasses.TMultiImage.Create;
+    historyeditapng[Length(historyeditapng)-1].Assign(APNGImage);
+    historyindex:=Length(historyeditapng);
+  end;
+  if (ifgif=false) and (ifapng=false) then
+  begin
+    SetLength(historyeditbitmap,1);
+    historyeditbitmap[Length(historyeditbitmap)-1]:=Graphics.TBitmap.Create;
+    historyeditbitmap[Length(historyeditbitmap)-1].Assign(frmain.Image1.Picture.Bitmap);
+    historyindex:=Length(historyeditbitmap);
+  end;
+end;
+
+procedure setafterhistory;
+begin
+  if ifgif then
+  begin
+    SetLength(historyeditbgragif,2);
+    historyeditbgragif[Length(historyeditbgragif)-1]:=TBGRAAnimatedGif.Create;
+    historyeditbgragif[Length(historyeditbgragif)-1]:=BGRAGif;
+    frmain.mnuUndo.Enabled:=true;
+  end;
+  if ifapng then
+  begin
+    SetLength(historyeditapng,2);
+    historyeditapng[Length(historyeditapng)-1]:=ImagingClasses.TMultiImage.Create;
+    historyeditapng[Length(historyeditapng)-1].Assign(APNGImage);
+    frmain.mnuUndo.Enabled:=true;
+  end;
+  if (ifgif=false) and (ifapng=false) then
+  begin
+    SetLength(historyeditbitmap,2);
+    historyeditbitmap[Length(historyeditbitmap)-1]:=Graphics.TBitmap.Create;
+    historyeditbitmap[Length(historyeditbitmap)-1].Assign(frmain.Image1.Picture.Bitmap);
+    frmain.mnuUndo.Enabled:=true;
+  end;
+end;
+
 procedure extractrealtivearea;
 begin
   xpercent:=((frmain.Shape1.BaseBounds.Left-frmain.Image1.DestRect.Left)/frmain.Image1.DestRect.Width)*100;
@@ -979,8 +1039,8 @@ begin
         Orientation:=ImgData.ExifObj.TagByName['Orientation'].Data;
         frmain.StatusBar1.Panels.Items[5].Text:=FormatDateTime(ISO_DATETIME_FORMAT, ImgData.ExifObj.GetImgDateTime)+' Orientation:'+Orientation;
       end;
-      ImgData.Free;
     end;
+    ImgData.Destroy;
     case UpperCase(ExtractFileExt(fimagen)) of
       '.GIF':
       begin
@@ -1264,6 +1324,12 @@ begin
       //////////////
     end;
   end;
+  historyindex:=0;
+  SetLength(historyeditbgragif,0);
+  SetLength(historyeditapng,0);
+  SetLength(historyeditbitmap,0);
+  frmain.mnuRedo.Enabled:=false;
+  frmain.mnuUndo.Enabled:=false;
   if frmain.mnuShowThumbs.Checked then
   begin
     if scrollthumbs {and (frmain.sboxthumb.ComponentCount>ifile)} then
@@ -1482,8 +1548,12 @@ begin
   frmain.Caption:='Aplicando efecto espere...';
   imgrect.Left:=0;
   imgrect.Top:=0;
+  sethistory;
   if ifgif and (BGRAGif.Count>0) then
   begin
+    //historyedit[Length(historyedit)-1].Assign(BGRAGif);
+    //BGRAGif.SaveToStream(historyedit[Length(historyedit)-1]);
+
     tmpgif:=TBGRAAnimatedGif.Create;
     tmpgif.SetSize(BGRAGif.Width,BGRAGif.Height);
     imgrect.Bottom:=BGRAGif.Height;
@@ -1535,6 +1605,7 @@ begin
   end;
   if ifapng then
   begin
+    //historyedit[Length(historyedit)-1].Assign(APNGImage);
     for i:=0 to APNGImage.ImageCount-1 do
     begin
       case filter of
@@ -1638,6 +1709,7 @@ begin
     end;
     end;
   end;
+  setafterhistory;
   frmain.Caption:=title;
 end;
 
@@ -1673,6 +1745,7 @@ var
    FImageCanvas: TImagingCanvas;
 begin
   realmode;
+  sethistory;
   title:=frmain.Caption;
   frmain.Caption:='Aplicando efecto porfavor espere...';
   if ifgif and (BGRAGif.Count>0) then
@@ -2053,6 +2126,7 @@ begin
     imagen.Destroy;
     imagen2.Destroy;
   end;
+  setafterhistory;
   frmain.Caption:=title;
 end;
 
@@ -2417,6 +2491,7 @@ begin
   begin
     frmain.Shape1.Visible:=true;
     frmain.Shape1.SetBounds(imgx,imgy,X-imgx,Y-imgy);
+    frmain.mnuCrop.Enabled:=true;
   end;
   if (compactmode or full) and ((frmain.Image1.Stretch=false) or frmain.tbStrech.Down) and (startselect=false) then
   begin
@@ -2445,8 +2520,16 @@ begin
     end
     else
     begin
-      frmain.Image1.Cursor:=crDefault;
-      frmain.Cursor:=crDefault;
+      if frmain.tbSelect.Down then
+      begin
+        frmain.Image1.Cursor:=crCross;
+        frmain.Cursor:=crCross;
+      end
+      else
+      begin
+        frmain.Image1.Cursor:=crDefault;
+        frmain.Cursor:=crDefault;
+      end;
     end;
   end;
 end;
@@ -2551,6 +2634,7 @@ var
 begin
   realmode;
   extractrealtivearea;
+  sethistory;
   if ifgif then
   begin
     tmpgif:=TBGRAAnimatedGif.Create;
@@ -2593,6 +2677,8 @@ begin
     tmpbitmap.Destroy;
   end;
   frmain.Shape1.Visible:=false;
+  frmain.mnuCrop.Enabled:=false;
+  setafterhistory;
 end;
 
 
@@ -2602,8 +2688,6 @@ begin
   OpenPictureDialog1.Execute;
   if FileExists(UTF8ToSys(OpenPictureDialog1.FileName)) then
   begin
-  //if flist.Count>0 then
-  //flist.Clear;
     loadfiles(ExtractFilePath(ExpandFileNameUTF8(OpenPictureDialog1.FileName)),ExtractFileName(OpenPictureDialog1.FileName));
     frmain.ShellTreeView1.OnSelectionChanged:=nil;
     if DirectoryExists(ExtractFilePath(ExpandFileNameUTF8(OpenPictureDialog1.FileName))) then
@@ -2614,6 +2698,7 @@ end;
 
 procedure Tfrmain.mnuPasteClick(Sender: TObject);
 begin
+  sethistory;
   modethumb:=false;
   frmain.Timer3.Enabled:=false;
   frmain.Timer5.Enabled:=false;
@@ -2646,6 +2731,7 @@ begin
   ifapng:=false;
   frmain.StatusBar1.Panels.Items[1].Text:='Resolution:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height);
   frmain.Caption:='LazView [Clipboard]';
+  setafterhistory;
 end;
 
 procedure Tfrmain.mnuCopyClick(Sender: TObject);
@@ -2667,6 +2753,22 @@ begin
   end
   else
     Clipboard.Assign(frmain.Image1.Picture.Bitmap);
+end;
+
+procedure Tfrmain.mnuRedoClick(Sender: TObject);
+begin
+  inc(historyindex);
+  if ifgif then
+     BGRAGif:=historyeditbgragif[historyindex];
+  if ifapng then
+     APNGImage.Assign(historyeditapng[historyindex]);
+  if (ifgif=false) and (ifapng=false) then
+    frmain.Image1.Picture.Graphic.Assign(historyeditbitmap[historyindex]);
+  if historyindex=Length(historyeditbitmap)-1 then
+  begin
+    frmain.mnuRedo.Enabled:=false;
+    frmain.mnuUndo.Enabled:=true;
+  end;
 end;
 
 procedure Tfrmain.mnuSaveAsClick(Sender: TObject);
@@ -2708,7 +2810,6 @@ begin
   for i:=1 to 5 do
   begin
     frmain.SavePictureDialog1.FilterIndex:=i;
-    //ShowMessage('.'+UpperCase(frmain.SavePictureDialog1.GetFilterExt)+' ---- '+UpperCase(ExtractFileExt(frmain.SavePictureDialog1.FileName)));
     if UpperCase('.'+frmain.SavePictureDialog1.GetFilterExt)=UpperCase(ExtractFileExt(frmain.SavePictureDialog1.FileName)) then
       break;
   end;
@@ -2716,7 +2817,6 @@ begin
   filtroext:=StringReplace(frmain.SavePictureDialog1.GetFilterExt,'*','',[rfReplaceAll]);
   if filtroext='.' then
     filtroext:=ExtractFileExt(frmain.SavePictureDialog1.FileName);
-  //ShowMessage(inttostr(frmain.SavePictureDialog1.UserChoice));
   if {$IFDEF LCLQT}frmain.SavePictureDialog1.UserChoice=1{$else}{$IFDEF LCLQT5}frmain.SavePictureDialog1.UserChoice=1{$ELSE}frmain.SavePictureDialog1.FileName<>''{$endif}{$ENDIF}then
   begin
     if FileExists(correctfilename) then
@@ -3158,6 +3258,23 @@ begin
     frmain.tbStrech.Down:=true;
     frmain.mnuStrech.Checked:=true;
     zoomstrech();
+  end;
+end;
+
+procedure Tfrmain.mnuUndoClick(Sender: TObject);
+begin
+   Dec(historyindex);
+   if ifgif then
+     BGRAGif:=historyeditbgragif[historyindex];
+   if ifapng then
+     APNGImage.Assign(historyeditapng[historyindex]);
+   if (ifgif=false) and (ifapng=false) then
+     frmain.Image1.Picture.Graphic.Assign(historyeditbitmap[historyindex]);
+
+  if historyindex=0 then
+  begin
+    frmain.mnuUndo.Enabled:=false;
+    frmain.mnuRedo.Enabled:=true;
   end;
 end;
 
@@ -3796,6 +3913,7 @@ begin
   else
   begin
     frmain.Shape1.Hide;
+    frmain.mnuCrop.Enabled:=false;
   end;
 end;
 
@@ -4033,6 +4151,8 @@ end;
 
 procedure Tfrmain.tbExitClick(Sender: TObject);
 begin
+  if Assigned(ththumbs) then
+    ththumbs.stop;
   saveconfig;
   Application.Terminate;
 end;
@@ -4115,8 +4235,8 @@ begin
       end
       else
         Orientation:='Horizontal (normal)';
-      ImgData.Free;
     end;
+    ImgData.Destroy;
     thumb:=Graphics.TBitMap.Create;
     thumb.Width:=thumbsize;
     thumb.Height:=thumbsize;
@@ -4131,12 +4251,12 @@ begin
       bmp:=BGRABitMap.TBGRABitmap.Create(GetStreamThumbnail(streamimage,thumbsize,thumbsize, bgcolor, false));
       bmp.HorizontalFlip;
       thumbtmp.Bitmap.Assign(bmp);
-      bmp.Free;
+      bmp.Destroy;
     end;
       else
         thumbtmp.Bitmap.Assign(GetStreamThumbnail(streamimage,thumbsize,thumbsize, bgcolor, false));
     end;
-    streamimage.Free;
+    streamimage.Destroy;
     thumb.Canvas.Rectangle(0,0,thumbsize,thumbsize);
     thumb.Canvas.CopyRect(Types.Rect(2,2,thumbsize-2,thumbsize-2),thumbtmp.Bitmap.Canvas,Types.Rect(0,0,thumbtmp.Bitmap.Width,thumbtmp.Bitmap.Height));
     thumbtmp.Destroy;
@@ -4147,7 +4267,7 @@ begin
     //ShowMessage(inttostr(thumbindex)+'   '+inttostr(ifile));
     //frmain.StatusBar1.Panels[5].Text:=inttostr(frmain.sboxthumb.ControlCount);
     (frmain.sboxthumb.Controls[thumbindex] as TImage).Picture.Bitmap.Assign(thumb);
-    thumb.Free;
+    thumb.Destroy;
     //This is wrong but is workin for linux and windows
     {$IFDEF LINUX}
     Application.ProcessMessages;
@@ -4210,7 +4330,6 @@ begin
         thumbimages.OnMouseUp:=@thumbimages.thumbmouseup;
         thumbimages.Show;
         frmain.sboxthumb.InsertControl(thumbimages);
-        //creados[i]:=true;
       end;
     end;
     frmain.sboxthumb.Visible:=false;
@@ -4262,7 +4381,7 @@ end;
 
 procedure thumbsthread.Execute;
 var
-   n,x,minv,maxv,icenter:longint;
+   n,minv,maxv,icenter:longint;
    exactcenter:float;
 begin
   if starting then///gift time to load the current image

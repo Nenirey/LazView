@@ -1,12 +1,12 @@
 object frmain: Tfrmain
-  Left = 363
+  Left = 296
   Height = 609
-  Top = 106
+  Top = 105
   Width = 902
   ActiveControl = ShellTreeView1
   AllowDropFiles = True
   Caption = 'LazView'
-  ClientHeight = 580
+  ClientHeight = 589
   ClientWidth = 902
   KeyPreview = True
   Menu = MainMenu1
@@ -24,11 +24,11 @@ object frmain: Tfrmain
   OnShow = FormShow
   OnWindowStateChange = FormWindowStateChange
   Position = poDesktopCenter
-  LCLVersion = '2.1.0.0'
+  LCLVersion = '1.8.4.0'
   object StatusBar1: TStatusBar
     Left = 0
-    Height = 21
-    Top = 559
+    Height = 23
+    Top = 566
     Width = 902
     Panels = <    
       item
@@ -65,9 +65,9 @@ object frmain: Tfrmain
     AnchorSideBottom.Control = Splitter1
     AnchorSideBottom.Side = asrBottom
     Left = 0
-    Height = 535
+    Height = 542
     Top = 24
-    Width = 1
+    Width = 0
     TabStop = False
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Right = 3
@@ -94,7 +94,7 @@ object frmain: Tfrmain
     AnchorSideTop.Side = asrBottom
     AnchorSideBottom.Control = StatusBar1
     Left = 2
-    Height = 535
+    Height = 542
     Top = 24
     Width = 5
     Align = alNone
@@ -425,7 +425,7 @@ object frmain: Tfrmain
     AnchorSideBottom.Control = Splitter2
     AnchorSideBottom.Side = asrBottom
     Left = 5
-    Height = 455
+    Height = 462
     Top = 24
     Width = 897
     HorzScrollBar.Increment = 37
@@ -440,7 +440,7 @@ object frmain: Tfrmain
     BorderSpacing.Left = 3
     BorderSpacing.Bottom = 3
     BorderStyle = bsNone
-    ClientHeight = 455
+    ClientHeight = 462
     ClientWidth = 897
     Enabled = False
     Color = clBlack
@@ -454,7 +454,7 @@ object frmain: Tfrmain
     OnPaint = ScrollBox1Paint
     object Image1: TImage
       Left = 0
-      Height = 455
+      Height = 462
       Top = 0
       Width = 897
       AntialiasingMode = amOn
@@ -475,7 +475,7 @@ object frmain: Tfrmain
       AnchorSideRight.Control = ScrollBox1
       AnchorSideRight.Side = asrBottom
       Left = 3
-      Height = 23
+      Height = 21
       Top = 0
       Width = 894
       Anchors = [akTop, akLeft, akRight]
@@ -495,7 +495,7 @@ object frmain: Tfrmain
       AnchorSideRight.Control = ScrollBox1
       AnchorSideRight.Side = asrBottom
       Left = 5
-      Height = 23
+      Height = 21
       Top = 2
       Width = 891
       Anchors = [akTop, akLeft, akRight]
@@ -531,7 +531,7 @@ object frmain: Tfrmain
     AnchorSideBottom.Control = StatusBar1
     Left = 2
     Height = 77
-    Top = 482
+    Top = 489
     Width = 900
     HorzScrollBar.Increment = 1
     HorzScrollBar.Page = 1
@@ -560,7 +560,7 @@ object frmain: Tfrmain
     Cursor = crVSplit
     Left = 2
     Height = 3
-    Top = 479
+    Top = 486
     Width = 900
     Align = alNone
     Anchors = [akLeft, akRight]
@@ -572,8 +572,8 @@ object frmain: Tfrmain
     ResizeStyle = rsLine
   end
   object ImageList1: TImageList
-    Left = 8
-    Top = 207
+    left = 8
+    top = 207
     Bitmap = {
       4C69240000001000000010000000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF0004733A6404753BC5FFFFFF00FFFF
@@ -1732,8 +1732,8 @@ object frmain: Tfrmain
   end
   object MainMenu1: TMainMenu
     OwnerDraw = True
-    Left = 40
-    Top = 208
+    left = 40
+    top = 207
     object mnuFile: TMenuItem
       Caption = '&File'
       object mnuOpen: TMenuItem
@@ -1770,6 +1770,19 @@ object frmain: Tfrmain
     end
     object mnuEdit: TMenuItem
       Caption = '&Edit'
+      object mnuUndo: TMenuItem
+        Caption = 'Undo'
+        ShortCut = 16474
+        OnClick = mnuUndoClick
+      end
+      object mnuRedo: TMenuItem
+        Caption = 'Redo'
+        ShortCut = 24666
+        OnClick = mnuRedoClick
+      end
+      object MenuItem2: TMenuItem
+        Caption = '-'
+      end
       object mnuCopy: TMenuItem
         Caption = 'Copy'
         Enabled = False
@@ -1784,92 +1797,17 @@ object frmain: Tfrmain
         Caption = 'Select'
         OnClick = tbSelectClick
       end
-    end
-    object mnuView: TMenuItem
-      Caption = '&View'
-      object mnuShowThumbs: TMenuItem
-        Caption = 'Thumbail panel'
-        ShortCut = 77
-        OnClick = mnuShowThumbsClick
-      end
-      object mnuThumbSize: TMenuItem
-        Caption = 'Thumbail size'
-        object mnuThumb32: TMenuItem
-          Caption = '32x32'
-          OnClick = mnuThumb32Click
-        end
-        object mnuThumb64: TMenuItem
-          Caption = '64x64'
-          Checked = True
-          OnClick = mnuThumb64Click
-        end
-        object mnuThumb128: TMenuItem
-          Caption = '128x128'
-          OnClick = mnuThumb128Click
-        end
-        object mnuThumbCustom: TMenuItem
-          Caption = 'Custom...'
-          OnClick = mnuThumbCustomClick
-        end
-      end
-      object mnuTreeView: TMenuItem
-        Caption = 'Tree view'
-        ShortCut = 84
-        OnClick = mnuTreeViewClick
-      end
-      object mnuToolBar: TMenuItem
-        Caption = 'Tool bar'
-        Checked = True
-        OnClick = mnuToolBarClick
-      end
-      object mnuStatusBar: TMenuItem
-        Caption = 'Status bar'
-        Checked = True
-        OnClick = mnuStatusBarClick
-      end
-      object mnuMenus: TMenuItem
-        Caption = 'Menus'
-        Checked = True
-        OnClick = mnuMenusClick
-      end
-      object mnuMosaic: TMenuItem
-        Caption = 'Mosaic background'
-        OnClick = mnuMosaicClick
-      end
-      object mnuCompact: TMenuItem
-        Caption = 'Compact mode'
-        OnClick = mnuCompactClick
-      end
-      object mnuGoTo: TMenuItem
-        Caption = 'Go to number image...'
-        OnClick = mnuGoToClick
-      end
-      object MenuItem45: TMenuItem
+      object MenuItem1: TMenuItem
         Caption = '-'
       end
-      object mnuAntialiasing: TMenuItem
-        Caption = 'Antialiasing'
-        Checked = True
-        OnClick = mnuAntialiasingClick
-      end
-      object mnuRealMode: TMenuItem
-        Caption = 'Real mode'
-        OnClick = mnuRealModeClick
-      end
-      object mnuStrech: TMenuItem
-        Caption = 'Strech image'
-        OnClick = mnuStrechClick
-      end
-      object mnuAlwaysOnTop: TMenuItem
-        Caption = 'Always on top'
-        OnClick = mnuAlwaysOnTopClick
-      end
-      object mnuLanguage: TMenuItem
-        Caption = 'Language'
+      object mnuCrop: TMenuItem
+        Caption = 'Crop'
+        Enabled = False
+        OnClick = mnuCropClick
       end
     end
     object mnuTools: TMenuItem
-      Caption = '&Tools'
+      Caption = 'Image'
       OnClick = mnuToolsClick
       object mnuFlipH: TMenuItem
         Caption = 'Flip horizontal'
@@ -1903,15 +1841,7 @@ object frmain: Tfrmain
       end
       object mnuResize: TMenuItem
         Caption = 'Resize...'
-        ShortCut = 83
         OnClick = mnuResizeClick
-      end
-      object mnuCrop: TMenuItem
-        Caption = 'Crop'
-        OnClick = mnuCropClick
-      end
-      object MenuItem32: TMenuItem
-        Caption = '-'
       end
       object mnuEffects: TMenuItem
         Caption = 'Effects'
@@ -2004,10 +1934,6 @@ object frmain: Tfrmain
           OnClick = mnuHighlightBlueClick
         end
       end
-      object mnuWindowEffects: TMenuItem
-        Caption = 'Effects window'
-        OnClick = mnuWindowEffectsClick
-      end
       object MenuItem47: TMenuItem
         Caption = '-'
       end
@@ -2035,6 +1961,93 @@ object frmain: Tfrmain
         OnClick = mnuEXIFClick
       end
     end
+    object mnuView: TMenuItem
+      Caption = '&View'
+      object mnuShowThumbs: TMenuItem
+        Caption = 'Thumbail panel'
+        ShortCut = 77
+        OnClick = mnuShowThumbsClick
+      end
+      object mnuThumbSize: TMenuItem
+        Caption = 'Thumbail size'
+        object mnuThumb32: TMenuItem
+          Caption = '32x32'
+          OnClick = mnuThumb32Click
+        end
+        object mnuThumb64: TMenuItem
+          Caption = '64x64'
+          Checked = True
+          OnClick = mnuThumb64Click
+        end
+        object mnuThumb128: TMenuItem
+          Caption = '128x128'
+          OnClick = mnuThumb128Click
+        end
+        object mnuThumbCustom: TMenuItem
+          Caption = 'Custom...'
+          OnClick = mnuThumbCustomClick
+        end
+      end
+      object mnuTreeView: TMenuItem
+        Caption = 'Tree view'
+        ShortCut = 84
+        OnClick = mnuTreeViewClick
+      end
+      object mnuToolBar: TMenuItem
+        Caption = 'Tool bar'
+        Checked = True
+        OnClick = mnuToolBarClick
+      end
+      object mnuStatusBar: TMenuItem
+        Caption = 'Status bar'
+        Checked = True
+        OnClick = mnuStatusBarClick
+      end
+      object mnuMenus: TMenuItem
+        Caption = 'Menus'
+        Checked = True
+        OnClick = mnuMenusClick
+      end
+      object mnuMosaic: TMenuItem
+        Caption = 'Mosaic background'
+        OnClick = mnuMosaicClick
+      end
+      object mnuCompact: TMenuItem
+        Caption = 'Compact mode'
+        OnClick = mnuCompactClick
+      end
+      object mnuWindowEffects: TMenuItem
+        Caption = 'Effects window'
+        OnClick = mnuWindowEffectsClick
+      end
+      object mnuGoTo: TMenuItem
+        Caption = 'Go to number image...'
+        OnClick = mnuGoToClick
+      end
+      object MenuItem45: TMenuItem
+        Caption = '-'
+      end
+      object mnuAntialiasing: TMenuItem
+        Caption = 'Antialiasing'
+        Checked = True
+        OnClick = mnuAntialiasingClick
+      end
+      object mnuRealMode: TMenuItem
+        Caption = 'Real mode'
+        OnClick = mnuRealModeClick
+      end
+      object mnuStrech: TMenuItem
+        Caption = 'Strech image'
+        OnClick = mnuStrechClick
+      end
+      object mnuAlwaysOnTop: TMenuItem
+        Caption = 'Always on top'
+        OnClick = mnuAlwaysOnTopClick
+      end
+      object mnuLanguage: TMenuItem
+        Caption = 'Language'
+      end
+    end
     object mnuHelp: TMenuItem
       Caption = '&Help'
       object mnuAbout: TMenuItem
@@ -2045,49 +2058,49 @@ object frmain: Tfrmain
   end
   object OpenPictureDialog1: TOpenPictureDialog
     Filter = 'Gráfico (*.png;*.xpm;*.bmp;*.cur;*.ico;*.icns;*.jpeg;*.jpg;*.jpe;*.jfif;*.tif;*.tiff;*.gif;*.pbm;*.pgm;*.ppm;*.gif;*.pcx;*.psd)|*.png;*.xpm;*.bmp;*.cur;*.ico;*.icns;*.jpeg;*.jpg;*.jpe;*.jfif;*.tif;*.tiff;*.gif;*.pbm;*.pgm;*.ppm;*.gif;*.pcx;*.psd|Portable Network Graphic (*.png)|*.png|Pixmap (*.xpm)|*.xpm|Bitmaps (*.bmp)|*.bmp|Cursor (*.cur)|*.cur|Icon (*.ico)|*.ico|Mac OS X Icon (*.icns)|*.icns|Joint Picture Expert Group (*.jpeg;*.jpg;*.jpe;*.jfif)|*.jpeg;*.jpg;*.jpe;*.jfif|Tagged Image File Format (*.tif;*.tiff)|*.tif;*.tiff|Graphics Interchange Format (*.gif)|*.gif|Portable PixMap (*.pbm;*.pgm;*.ppm)|*.pbm;*.pgm;*.ppm'
-    Left = 72
-    Top = 208
+    left = 72
+    top = 208
   end
   object Timer1: TTimer
     Enabled = False
     Interval = 10000
     OnTimer = Timer1Timer
-    Left = 104
-    Top = 208
+    left = 104
+    top = 208
   end
   object SavePictureDialog1: TSavePictureDialog
     Filter = 'Joint Picture Expert Group (*.jpeg;*.jpg;*.jpe;*.jfif)|*.jpg|Portable Network Graphic (*.png)|*.png|Bitmaps (*.bmp)|*.bmp|Icon (*.ico)|*.ico|Graphics Interchange Format (*.gif)|*.gif'
-    Left = 136
-    Top = 208
+    left = 136
+    top = 208
   end
   object Timer2: TTimer
     Enabled = False
     OnTimer = Timer2Timer
-    Left = 168
-    Top = 208
+    left = 168
+    top = 208
   end
   object Timer3: TTimer
     OnTimer = Timer3Timer
-    Left = 200
-    Top = 208
+    left = 200
+    top = 208
   end
   object PopupMenu1: TPopupMenu
     OnPopup = PopupMenu1Popup
-    Left = 232
-    Top = 208
+    left = 232
+    top = 208
   end
   object Timer4: TTimer
     Enabled = False
     Interval = 500
     OnTimer = Timer4Timer
-    Left = 264
-    Top = 207
+    left = 264
+    top = 207
   end
   object Timer5: TTimer
     Enabled = False
     Interval = 41
     OnTimer = Timer5Timer
-    Left = 312
-    Top = 207
+    left = 312
+    top = 207
   end
 end

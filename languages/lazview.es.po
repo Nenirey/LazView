@@ -389,6 +389,10 @@ msgstr "Invertir color (RGB)-(RBG)"
 msgid "Real mode"
 msgstr "Modo real"
 
+#: tfrmain.mnuredo.caption
+msgid "Redo"
+msgstr ""
+
 #: tfrmain.mnuresize.caption
 msgid "Resize..."
 msgstr "Redimencionar"
@@ -456,7 +460,9 @@ msgid "Tool bar"
 msgstr "Barra de herramientas"
 
 #: tfrmain.mnutools.caption
-msgid "&Tools"
+#, fuzzy
+#| msgid "&Tools"
+msgid "Image"
 msgstr "&Herramientas"
 
 #: tfrmain.mnutreeview.caption
@@ -466,6 +472,10 @@ msgstr "Arbol de directorios"
 #: tfrmain.mnutv.caption
 msgid "TV"
 msgstr "TV"
+
+#: tfrmain.mnuundo.caption
+msgid "Undo"
+msgstr ""
 
 #: tfrmain.mnuview.caption
 msgid "&View"
