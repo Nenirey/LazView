@@ -112,6 +112,7 @@
 {"hash":108868039,"name":"tfrmain.mnuantialiasing.caption","sourcebytes":[65,110,116,105,97,108,105,97,115,105,110,103],"value":"Antialiasing"},
 {"hash":132611349,"name":"tfrmain.mnurealmode.caption","sourcebytes":[82,101,97,108,32,109,111,100,101],"value":"Real mode"},
 {"hash":264617029,"name":"tfrmain.mnustrech.caption","sourcebytes":[83,116,114,101,99,104,32,105,109,97,103,101],"value":"Strech image"},
+{"hash":254604937,"name":"tfrmain.mnuautorotate.caption","sourcebytes":[65,117,116,111,32,114,111,116,97,116,101,32,40,69,88,73,70,41],"value":"Auto rotate (EXIF)"},
 {"hash":259910512,"name":"tfrmain.mnualwaysontop.caption","sourcebytes":[65,108,119,97,121,115,32,111,110,32,116,111,112],"value":"Always on top"},
 {"hash":139375349,"name":"tfrmain.mnulanguage.caption","sourcebytes":[76,97,110,103,117,97,103,101],"value":"Language"},
 {"hash":2812976,"name":"tfrmain.mnuhelp.caption","sourcebytes":[38,72,101,108,112],"value":"&Help"},

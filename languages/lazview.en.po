@@ -213,6 +213,10 @@ msgstr "Always on top"
 msgid "Antialiasing"
 msgstr "Antialiasing"
 
+#: tfrmain.mnuautorotate.caption
+msgid "Auto rotate (EXIF)"
+msgstr ""
+
 #: tfrmain.mnubgr.caption
 msgid "Invert color (RGB)-(BGR)"
 msgstr "Invert color (RGB)-(BGR)"

@@ -30,10 +30,10 @@ type
           biClrImportant : DWORD;
 end;
 
-procedure GetJPGSize(f: TFileStream; var wWidth, wHeight: word);
-procedure GetPNGSize(f: TFileStream; var wWidth, wHeight: word);
+procedure GetJPGSize(var f: TFileStream; var wWidth, wHeight: word);
+procedure GetPNGSize(var f: TFileStream; var wWidth, wHeight: word);
 procedure GetGIFSize(const sGIFFile: string; var wWidth, wHeight: word);
-procedure GetBMPSize(f: TFileStream; var wWidth, wHeight: word);
+procedure GetBMPSize(var f: TFileStream; var wWidth, wHeight: word);
 
 implementation
 
@@ -60,7 +60,7 @@ begin
   Result := MW.Value;
 end;
 
-procedure GetJPGSize(f: TFileStream; var wWidth, wHeight: word);
+procedure GetJPGSize(var f: TFileStream; var wWidth, wHeight: word);
 const
   ValidSig : array[0..1] of byte = ($FF, $D8);
   Parameterless = [$01, $D0, $D1, $D2, $D3, $D4, $D5, $D6, $D7];
@@ -113,7 +113,7 @@ begin
   end;
 end;
 
-procedure GetPNGSize(f: TFileStream; var wWidth, wHeight: word);
+procedure GetPNGSize(var f: TFileStream; var wWidth, wHeight: word);
 type
   TPNGSig = array[0..7] of byte;
 const
@@ -228,7 +228,7 @@ close(f);
 
 end;
 
-procedure GetBMPSize(f: TFileStream; var wWidth, wHeight: word);
+procedure GetBMPSize(var f: TFileStream; var wWidth, wHeight: word);
 const
   BMP_MAGIC_WORD = ord('M') shl 8 or ord('B');
 var

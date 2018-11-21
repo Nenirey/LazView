@@ -215,6 +215,10 @@ msgstr "Siempre sobre todo"
 msgid "Antialiasing"
 msgstr "Suavizado"
 
+#: tfrmain.mnuautorotate.caption
+msgid "Auto rotate (EXIF)"
+msgstr ""
+
 #: tfrmain.mnubgr.caption
 msgid "Invert color (RGB)-(BGR)"
 msgstr "Invertir color (RGB)-(BGR)"

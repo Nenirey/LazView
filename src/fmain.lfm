@@ -1,7 +1,7 @@
 object frmain: Tfrmain
-  Left = 296
+  Left = 379
   Height = 609
-  Top = 105
+  Top = 119
   Width = 902
   ActiveControl = ShellTreeView1
   AllowDropFiles = True
@@ -519,7 +519,10 @@ object frmain: Tfrmain
       Pen.Mode = pmNotXor
       Pen.Style = psDash
       Pen.Width = 2
-      OnMouseMove = FormMouseMove
+      OnMouseDown = Shape1MouseDown
+      OnMouseLeave = Shape1MouseLeave
+      OnMouseMove = Shape1MouseMove
+      OnMouseUp = Shape1MouseUp
       Visible = False
     end
   end
@@ -1733,7 +1736,7 @@ object frmain: Tfrmain
   object MainMenu1: TMainMenu
     OwnerDraw = True
     left = 40
-    top = 207
+    top = 208
     object mnuFile: TMenuItem
       Caption = '&File'
       object mnuOpen: TMenuItem
@@ -1803,6 +1806,7 @@ object frmain: Tfrmain
       object mnuCrop: TMenuItem
         Caption = 'Crop'
         Enabled = False
+        ShortCut = 16473
         OnClick = mnuCropClick
       end
     end
@@ -2039,6 +2043,11 @@ object frmain: Tfrmain
       object mnuStrech: TMenuItem
         Caption = 'Strech image'
         OnClick = mnuStrechClick
+      end
+      object mnuAutoRotate: TMenuItem
+        Caption = 'Auto rotate (EXIF)'
+        Checked = True
+        OnClick = mnuAutoRotateClick
       end
       object mnuAlwaysOnTop: TMenuItem
         Caption = 'Always on top'

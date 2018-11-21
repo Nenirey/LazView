@@ -24,6 +24,7 @@ type
     MainMenu1: TMainMenu;
     MenuItem1: TMenuItem;
     MenuItem2: TMenuItem;
+    mnuAutoRotate: TMenuItem;
     mnuResize: TMenuItem;
     mnuWindowEffects: TMenuItem;
     mnuRedo: TMenuItem;
@@ -166,6 +167,7 @@ type
     procedure Image1MouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure mnuAlwaysOnTopClick(Sender: TObject);
+    procedure mnuAutoRotateClick(Sender: TObject);
     procedure mnuContrastLessClick(Sender: TObject);
     procedure mnuContrastPlusClick(Sender: TObject);
     procedure mnuCropClick(Sender: TObject);
@@ -241,6 +243,13 @@ type
     procedure sboxthumbMouseMove(Sender: TObject; Shift: TShiftState; X,
       Y: Integer);
     procedure sboxthumbMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure Shape1MouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure Shape1MouseLeave(Sender: TObject);
+    procedure Shape1MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer
+      );
+    procedure Shape1MouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure ShellTreeView1Change(Sender: TObject; Node: TTreeNode);
     procedure ShellTreeView1Click(Sender: TObject);
@@ -360,6 +369,7 @@ var
   historyeditbgragif:array of TBGRAAnimatedGif;
   historyeditapng:array of ImagingClasses.TMultiImage;
   historyindex:integer;
+  shapemousedown:boolean=false;
   procedure rendermosaic;
   procedure fullsc;
   procedure compact;
@@ -378,7 +388,27 @@ uses
 
 { Tfrmain }
 procedure sethistory;
+var
+   i:integer;
 begin
+  for i:=0 to 1 do
+  begin
+    if Assigned(historyeditbgragif) then
+    begin
+      if Length(historyeditbgragif)>=i+1 then
+        FreeAndNil(historyeditbgragif[i]);
+    end;
+    if Assigned(historyeditapng) then
+    begin
+      if Length(historyeditapng)>=i+1 then
+        FreeAndNil(historyeditapng[i]);
+    end;
+    if Assigned(historyeditbitmap) then
+    begin
+      if Length(historyeditbitmap)>=i+1 then
+        FreeAndNil(historyeditbitmap[i]);
+    end;
+  end;
   if ifgif then
   begin
     SetLength(historyeditbgragif,1);
@@ -505,7 +535,8 @@ begin
   iniconfigfile.WriteBool('Config','backgroundmosaic',frmain.mnuMosaic.Checked);
   iniconfigfile.WriteInteger('Config','thumbpanelsize',thumbsize);
   iniconfigfile.UpdateFile;
-  iniconfigfile.Free;
+  //iniconfigfile.Free;
+  FreeAndNil(iniconfigfile);
 end;
 
 procedure loadconfig;
@@ -581,7 +612,8 @@ begin
   end
   else
     frmain.mnuMosaic.Checked:=false;
-  iniconfigfile.Free;
+  //iniconfigfile.Free;
+  FreeAndNil(iniconfigfile);
 end;
 
 procedure showthumbnails;
@@ -793,7 +825,8 @@ begin
       BGRAGif.CurrentImage:=i;
       tmpbitmap.Canvas.CopyRect(Types.Rect(0,0,w,h),BGRAGif.Bitmap.Canvas,Types.Rect(0,0,BGRAGif.Width,BGRAGif.Height));
       tmpgif.InsertFrame(i,tmpbitmap,0,0,BGRAGif.FrameDelayMs[i],BGRAGif.FrameDisposeMode[i],BGRAGif.FrameHasLocalPalette[i]);
-      tmpbitmap.Destroy;
+      //tmpbitmap.Destroy;
+      FreeAndNil(tmpbitmap);
     end;
     tmpgif.LoopCount:=BGRAGif.LoopCount;
     BGRAGif.SetSize(w,h);
@@ -808,7 +841,8 @@ begin
     tmpbitmap:=BGRABitmap.TBGRABitmap.Create(w,h);
     tmpbitmap.Canvas.CopyRect(Types.Rect(0,0,w,h),frmain.Image1.Picture.Bitmap.Canvas,Types.Rect(0,0,frmain.Image1.Picture.Bitmap.Width,frmain.Image1.Picture.Bitmap.Height));
     frmain.Image1.Picture.Bitmap.Assign(tmpbitmap);
-    tmpbitmap.Destroy;
+    //tmpbitmap.Destroy;
+    FreeAndNil(tmpbitmap);
   end;
   realimgwidth:=w;
   realimgheight:=h;
@@ -850,7 +884,8 @@ begin
         if frmain.Image1.Visible then
           wallp.Canvas.CopyRect(Types.Rect(0,0,nw,nh),frmain.Image1.Picture.Bitmap.Canvas,Types.Rect(0,0,frmain.Image1.Picture.Bitmap.Width,frmain.Image1.Picture.Bitmap.Height));
         wallp.SaveToFile(wallstr);
-        wallp.Destroy;
+        //wallp.Destroy;
+        FreeAndNil(wallp);
       end;
       else
       begin
@@ -869,7 +904,8 @@ begin
       registro.WriteString('WallpaperStyle',style);
     registro.WriteString('TileWallpaper',mosaic);
     registro.CloseKey;
-    registro.Free;
+    //registro.Free;
+    FreeAndNil(registro);
     //SystemParametersInfoA(SPI_SETDESKWALLPAPER,NULL,nil,SPIF_SENDCHANGE);
     ExecuteProcess('Rundll32.exe','user32.dll UpdatePerUserSystemParameters ,1, true');
     {$ENDIF}
@@ -997,7 +1033,9 @@ var
    pngrect:TRect;
    Item: TMetadataItem;
    Orientation:string='Horizontal (normal)';
+   vmp:ImagingClasses.TSingleImage;
 begin
+  //frmain.Image1.Picture.Bitmap.Clear;
   {$IFDEF WINDOWS}
   wimagen:=UTF16LongName(fimagen);
   {$ELSE}
@@ -1010,7 +1048,8 @@ begin
   frmain.StatusBar1.Panels.Items[5].Text:='';
   starttime:=Now();
   if Assigned(APNGImage) then
-    APNGImage.ClearAll;
+    FreeAndNil(APNGImage);
+    //APNGImage.ClearAll;
   try
     frmain.Caption:='LazView '+fimagen;
     frmain.Label1.Caption:=inttostr(ifile+1)+'/'+inttostr(nfile)+'  '+fimagen;
@@ -1040,9 +1079,12 @@ begin
         frmain.StatusBar1.Panels.Items[5].Text:=FormatDateTime(ISO_DATETIME_FORMAT, ImgData.ExifObj.GetImgDateTime)+' Orientation:'+Orientation;
       end;
     end;
-    ImgData.Destroy;
+    if frmain.mnuAutoRotate.Checked=false then
+      Orientation:=Orientation+'*';
+    //ImgData.Destroy;
+    FreeAndNil(ImgData);
     case UpperCase(ExtractFileExt(fimagen)) of
-      '.GIF':
+      {'.GIF':
       begin
         ifgif:=true;
         frmain.Image1.Picture.Clear;
@@ -1062,8 +1104,8 @@ begin
         modethumb:=false;
         realimgwidth:=frmain.Image1.Picture.Width;
         realimgheight:=frmain.Image1.Picture.Height;
-      end;
-      '.PNG','.APNG','.MNG':
+      end;}
+      '.PNG','.APNG','.MNG','.GIF':
       begin
         ifgif:=false;
         SetLength(APNGDelays,0);
@@ -1079,7 +1121,8 @@ begin
         ImagingComponents.ConvertImageToBitmap(APNGImage,ebitmap);
         frmain.StatusBar1.Panels.Items[1].Text:='Resolution:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
         frmain.Image1.Picture.Bitmap.Assign(ebitmap);
-        ebitmap.Destroy;
+        //ebitmap.Destroy;
+        FreeAndNil(ebitmap);
         pngrect.Top:=0;
         pngrect.Left:=0;
         pngrect.Width:=APNGImage.Width;
@@ -1136,14 +1179,41 @@ begin
         begin
           //*******Implement orientation image********
           case Orientation of
-          'Rotate 90 CW': frmain.Image1.Picture.Bitmap.Assign(BGRABitMap.TBGRABitmap.Create(streamimage).RotateCW);
-          'Rotate 270 CW':frmain.Image1.Picture.Bitmap.Assign(BGRABitMap.TBGRABitmap.Create(streamimage).RotateCCW);
+          'Rotate 90 CW':
+          begin
+            BGRAImage:=BGRABitMap.TBGRABitmap.Create(streamimage);
+            ebitmap:=Graphics.TBitmap.Create;
+            ebitmap.Assign(BGRAImage);
+            FreeAndNil(BGRAImage);
+            vmp:=ImagingClasses.TSingleImage.Create;
+            ImagingComponents.ConvertBitmapToImage(ebitmap,vmp);
+            vmp.Rotate(270);
+            ImagingComponents.ConvertImageToBitmap(vmp,ebitmap);
+            FreeAndNil(vmp);
+            frmain.Image1.Picture.Bitmap.Assign(ebitmap);
+            FreeAndNil(ebitmap);
+          end;
+          'Rotate 270 CW':
+          begin
+            BGRAImage:=BGRABitMap.TBGRABitmap.Create(streamimage);
+            ebitmap:=Graphics.TBitmap.Create;
+            ebitmap.Assign(BGRAImage);
+            FreeAndNil(BGRAImage);
+            vmp:=ImagingClasses.TSingleImage.Create;
+            ImagingComponents.ConvertBitmapToImage(ebitmap,vmp);
+            vmp.Rotate(90);
+            ImagingComponents.ConvertImageToBitmap(vmp,ebitmap);
+            FreeAndNil(vmp);
+            frmain.Image1.Picture.Bitmap.Assign(ebitmap);
+            FreeAndNil(ebitmap);
+          end;
           'Rotate 180 CW':
           begin
             bmp:=BGRABitMap.TBGRABitmap.Create(streamimage);
             bmp.HorizontalFlip;
             frmain.Image1.Picture.Bitmap.Assign(bmp);
-            bmp.Free;
+            //bmp.Free;
+            FreeAndNil(bmp);
           end;
             else
               frmain.Image1.Picture.LoadFromStream(streamimage);
@@ -1185,17 +1255,51 @@ begin
             end;
             //*******Implement orientation image********
             case Orientation of
-            'Rotate 90 CW': frmain.Image1.Picture.Bitmap.Assign(BGRABitMap.TBGRABitmap.Create(GetStreamThumbnail(streamimage,tw,th, bgcolor, false)).RotateCW);
-            'Rotate 270 CW':frmain.Image1.Picture.Bitmap.Assign(BGRABitMap.TBGRABitmap.Create(GetStreamThumbnail(streamimage,tw,th, bgcolor, false)).RotateCCW);
+            'Rotate 90 CW':
+            begin
+              BGRAImage:=BGRABitMap.TBGRABitmap.Create;
+              GetStreamThumbnail(streamimage,tw,th, bgcolor, false,'',BGRAImage);
+              ebitmap:=Graphics.TBitmap.Create;
+              ebitmap.Assign(BGRAImage);
+              FreeAndNil(BGRAImage);
+              vmp:=ImagingClasses.TSingleImage.Create;
+              ImagingComponents.ConvertBitmapToImage(ebitmap,vmp);
+              vmp.Rotate(270);
+              ImagingComponents.ConvertImageToBitmap(vmp,ebitmap);
+              FreeAndNil(vmp);
+              frmain.Image1.Picture.Bitmap.Assign(ebitmap);
+              FreeAndNil(ebitmap);
+            end;
+            'Rotate 270 CW':
+            begin
+              BGRAImage:=BGRABitMap.TBGRABitmap.Create;
+              GetStreamThumbnail(streamimage,tw,th, bgcolor, false,'',BGRAImage);
+              ebitmap:=Graphics.TBitmap.Create;
+              ebitmap.Assign(BGRAImage);
+              FreeAndNil(BGRAImage);
+              vmp:=ImagingClasses.TSingleImage.Create;
+              ImagingComponents.ConvertBitmapToImage(ebitmap,vmp);
+              vmp.Rotate(90);
+              ImagingComponents.ConvertImageToBitmap(vmp,ebitmap);
+              FreeAndNil(vmp);
+              frmain.Image1.Picture.Bitmap.Assign(ebitmap);
+              FreeAndNil(ebitmap);
+            end;
             'Rotate 180 CW':
             begin
               bmp:=BGRABitMap.TBGRABitmap.Create(GetStreamThumbnail(streamimage,tw,th, bgcolor, false));
               bmp.HorizontalFlip;
               frmain.Image1.Picture.Bitmap.Assign(bmp);
-              bmp.Free;
+              //bmp.Free;
+              FreeAndNil(bmp);
             end;
               else
-                frmain.Image1.Picture.Bitmap.Assign(GetStreamThumbnail(streamimage,tw,th, bgcolor, false));
+              begin
+                BGRAImage:=BGRABitMap.TBGRABitmap.Create;
+                GetStreamThumbnail(streamimage,tw,th, bgcolor, false,'',BGRAImage);
+                frmain.Image1.Picture.Bitmap.Assign(BGRAImage);
+                FreeAndNil(BGRAImage);
+              end;
             end;
             if LowerCase(ExtractFileExt(fimagen))='.pcx' then
               modethumb:=false
@@ -1209,14 +1313,25 @@ begin
           begin
              //*******Implement orientation image********
             case Orientation of
-            'Rotate 90 CW': frmain.Image1.Picture.Bitmap.Assign(BGRABitMap.TBGRABitmap.Create(streamimage).RotateCW);
-            'Rotate 270 CW':frmain.Image1.Picture.Bitmap.Assign(BGRABitMap.TBGRABitmap.Create(streamimage).RotateCCW);
+            'Rotate 90 CW':
+              begin
+                bmp:=BGRABitMap.TBGRABitmap.Create(streamimage).RotateCW;
+                frmain.Image1.Picture.Bitmap.Assign(bmp);
+                FreeAndNil(bmp);
+              end;
+            'Rotate 270 CW':
+            begin
+              bmp:=BGRABitMap.TBGRABitmap.Create(streamimage).RotateCCW;
+              frmain.Image1.Picture.Bitmap.Assign(bmp);
+              FreeAndNil(bmp);
+            end;
             'Rotate 180 CW':
             begin
               bmp:=BGRABitMap.TBGRABitmap.Create(streamimage);
               bmp.HorizontalFlip;
               frmain.Image1.Picture.Bitmap.Assign(bmp);
-              bmp.Free;
+              //bmp.Free;
+              FreeAndNil(bmp);
             end;
               else
                 frmain.Image1.Picture.LoadFromStream(streamimage);
@@ -1228,7 +1343,8 @@ begin
             realimgheight:=frmain.Image1.Picture.Height;
           end;
         end;
-        streamimage.Destroy;
+        //streamimage.Destroy;
+        FreeAndNil(streamimage);
       end;
       '.ICO':
       begin
@@ -1246,7 +1362,8 @@ begin
         modethumb:=false;
         realimgwidth:=frmain.Image1.Picture.Width;
         realimgheight:=frmain.Image1.Picture.Height;
-        BGRAImage.Destroy;
+        //BGRAImage.Destroy;
+        FreeAndNil(BGRAImage);
       end;
       else/////Try to load as Image
       begin
@@ -1256,7 +1373,8 @@ begin
         modethumb:=false;
         realimgwidth:=frmain.Image1.Picture.Width;
         realimgheight:=frmain.Image1.Picture.Height;
-        streamimage.Destroy;
+        //streamimage.Destroy;
+        FreeAndNil(streamimage);
       end;
     end;
     frmain.StatusBar1.Panels.Items[4].Text:='Time:'+prettytime(MilliSecondsBetween(Now,starttime));
@@ -1298,7 +1416,8 @@ begin
       tw:=ebitmap.Canvas.TextWidth('Error al cargar la imagen:'+e.ToString);
       ebitmap.Canvas.TextOut(Round((frmain.Image1.Width-tw)/2),Round((frmain.Image1.Height-th)/2),'Error al cargar la imagen:'+e.ToString);
       frmain.Image1.Picture.Bitmap.Assign(ebitmap);
-      ebitmap.Destroy;
+      //ebitmap.Destroy;
+      FreeAndNil(ebitmap);
       /////////*****Update buttons and menus****///////////////////
      frmain.tbFlipHorizontal.Enabled:=false;
     frmain.tbFlipVertical.Enabled:=false;
@@ -1325,9 +1444,25 @@ begin
     end;
   end;
   historyindex:=0;
-  SetLength(historyeditbgragif,0);
-  SetLength(historyeditapng,0);
-  SetLength(historyeditbitmap,0);
+  //Free history images;
+  for i:=0 to 1 do
+  begin
+    if Assigned(historyeditbgragif) then
+    begin
+      if Length(historyeditbgragif)>=i+1 then
+        FreeAndNil(historyeditbgragif[i]);
+    end;
+    if Assigned(historyeditapng) then
+    begin
+      if Length(historyeditapng)>=i+1 then
+        FreeAndNil(historyeditapng[i]);
+    end;
+    if Assigned(historyeditbitmap) then
+    begin
+      if Length(historyeditbitmap)>=i+1 then
+        FreeAndNil(historyeditbitmap[i]);
+    end;
+  end;
   frmain.mnuRedo.Enabled:=false;
   frmain.mnuUndo.Enabled:=false;
   if frmain.mnuShowThumbs.Checked then
@@ -1542,6 +1677,8 @@ var
    FImageCanvas: TImagingCanvas;
    FImage:TMultiImage;
    baseimg:ImagingClasses.TSingleImage;
+   ebitmap:Graphics.TBitmap;
+   vmp:ImagingClasses.TSingleImage;
 begin
   realmode;
   title:=frmain.Caption;
@@ -1599,7 +1736,8 @@ begin
       tmpgif.LoopCount:=BGRAGif.LoopCount;
     end;
     tmpgif.LoopCount:=BGRAGif.LoopCount;
-    tmpbitmap.Destroy;
+    //tmpbitmap.Destroy;
+    FreeAndNil(tmpbitmap);
     BGRAGif.SetSize(BGRAGif.Width,BGRAGif.Height);
     BGRAGif:=tmpgif;
   end;
@@ -1664,8 +1802,32 @@ begin
      14:bmp:=BGRABitMap.TBGRABitmap.Create(frmain.Image1.Picture.Bitmap).FilterSharpen;
      15:bmp:=BGRABitMap.TBGRABitmap.Create(frmain.Image1.Picture.Bitmap).FilterSmooth;
      16:bmp:=BGRABitMap.TBGRABitmap.Create(frmain.Image1.Picture.Bitmap).FilterBlurMotion(50,0,false);
-     17:bmp:=BGRABitMap.TBGRABitmap.Create(frmain.Image1.Picture.Bitmap).RotateCW;
-     18:bmp:=BGRABitMap.TBGRABitmap.Create(frmain.Image1.Picture.Bitmap).RotateCCW;
+     17:begin
+          //bmp:=BGRABitMap.TBGRABitmap.Create(frmain.Image1.Picture.Bitmap).RotateCW;
+            bmp:=BGRABitMap.TBGRABitmap.Create(frmain.Image1.Picture.Bitmap);
+            ebitmap:=Graphics.TBitmap.Create;
+            ebitmap.Assign(bmp);
+            vmp:=ImagingClasses.TSingleImage.Create;
+            ImagingComponents.ConvertBitmapToImage(ebitmap,vmp);
+            vmp.Rotate(270);
+            ImagingComponents.ConvertImageToBitmap(vmp,ebitmap);
+            bmp.Assign(ebitmap);
+            FreeAndNil(ebitmap);
+            FreeAndNil(vmp);
+        end;
+     18:begin
+          //bmp:=BGRABitMap.TBGRABitmap.Create(frmain.Image1.Picture.Bitmap).RotateCCW;
+            bmp:=BGRABitMap.TBGRABitmap.Create(frmain.Image1.Picture.Bitmap);
+            ebitmap:=Graphics.TBitmap.Create;
+            ebitmap.Assign(bmp);
+            vmp:=ImagingClasses.TSingleImage.Create;
+            ImagingComponents.ConvertBitmapToImage(ebitmap,vmp);
+            vmp.Rotate(90);
+            ImagingComponents.ConvertImageToBitmap(vmp,ebitmap);
+            bmp.Assign(ebitmap);
+            FreeAndNil(ebitmap);
+            FreeAndNil(vmp);
+        end;
      19:begin
           bmp:=BGRABitMap.TBGRABitmap.Create(frmain.Image1.Picture.Bitmap);
           bmp.HorizontalFlip;
@@ -1692,9 +1854,12 @@ begin
           if filter=23 then
             FImageCanvas.GammaCorection(nivel, nivel, nivel);
           ImagingComponents.ConvertDataToBitmap(FImage.Images[0],frmain.Image1.Picture.Bitmap);
-          FImage.Destroy;
-          FimageCanvas.Destroy;
-          baseimg.Destroy;
+          //FImage.Destroy;
+          //FimageCanvas.Destroy;
+          //baseimg.Destroy;
+          FreeAndNil(FImage);
+          FreeAndNil(FImageCanvas);
+          FreeAndNil(baseimg);
         end;
      end;
     end;
@@ -1705,7 +1870,8 @@ begin
     else
     begin
       frmain.Image1.Picture.Bitmap.Assign(bmp);
-      bmp.Free;
+      //bmp.Free;
+      FreeAndNil(bmp);
     end;
     end;
   end;
@@ -1903,7 +2069,8 @@ begin
       end;
       tmpgif.InsertFrame(i,tmpbitmap,0,0,BGRAGif.FrameDelayMs[i],BGRAGif.FrameDisposeMode[i],BGRAGif.FrameHasLocalPalette[i]);
     end;
-    tmpbitmap.Destroy;
+    //tmpbitmap.Destroy;
+    FreeAndNil(tmpbitmap);
     BGRAGif.SetSize(BGRAGif.Width,BGRAGif.Height);
     BGRAGif:=tmpgif;
   end;
@@ -2123,8 +2290,10 @@ begin
     end;
     frmain.Image1.Picture.Bitmap.LoadFromIntfImage(imagen);
     frmain.Image1.AntialiasingMode:=amOn;
-    imagen.Destroy;
-    imagen2.Destroy;
+    //imagen.Destroy;
+    //imagen2.Destroy;
+    FreeAndNil(imagen);
+    FreeAndNil(imagen2);
   end;
   setafterhistory;
   frmain.Caption:=title;
@@ -2215,7 +2384,8 @@ begin
       ththumbs.Start;
     end;
   end;
-  flisttmp.Destroy;
+  //flisttmp.Destroy;
+  FreeAndNil(flisttmp);
 end;
 procedure Tfrmain.FormCreate(Sender: TObject);
 var
@@ -2271,7 +2441,8 @@ end;
 procedure Tfrmain.FormDestroy(Sender: TObject);
 begin
   if Assigned(flist) then
-    flist.Destroy;
+    FreeAndNil(flist);
+    //flist.Destroy;
   refreshthumbs;
   if frmain.Image1.Picture.Bitmap.Empty=false then
     frmain.Image1.Picture.Clear;
@@ -2615,6 +2786,11 @@ begin
     frmain.FormStyle:=fsNormal;
 end;
 
+procedure Tfrmain.mnuAutoRotateClick(Sender: TObject);
+begin
+  frmain.mnuAutoRotate.Checked:=not frmain.mnuAutoRotate.Checked;
+end;
+
 procedure Tfrmain.mnuContrastLessClick(Sender: TObject);
 begin
   filterimagen(24);
@@ -2645,7 +2821,8 @@ begin
       BGRAGif.CurrentImage:=i;
       tmpbitmap.Canvas.CopyRect(Types.Rect(0,0,exactw,exacth),BGRAGif.Bitmap.Canvas,Types.Rect(exactx,exacty,exactright,exactbottom));
       tmpgif.InsertFrame(i,tmpbitmap,0,0,BGRAGif.FrameDelayMs[i],BGRAGif.FrameDisposeMode[i],BGRAGif.FrameHasLocalPalette[i]);
-      tmpbitmap.Destroy;
+      //tmpbitmap.Destroy;
+      FreeAndNil(tmpbitmap);
     end;
     tmpgif.LoopCount:=BGRAGif.LoopCount;
     BGRAGif.SetSize(exactw,exacth);
@@ -2666,7 +2843,8 @@ begin
       APNGImage.CopyTo(exactx,exacty,exactw,exacth,tmpapng,0,0);
     end;
     APNGImage.Assign(tmpapng);
-    tmpapng.Destroy;
+    //tmpapng.Destroy;
+    FreeAndNil(tmpapng);
   end;
 
   if (ifgif=false) and (ifapng=false) then
@@ -2674,7 +2852,8 @@ begin
     tmpbitmap:=BGRABitmap.TBGRABitmap.Create(exactw,exacth);
     tmpbitmap.Canvas.CopyRect(Types.Rect(0,0,exactw,exacth),frmain.Image1.Picture.Bitmap.Canvas,Types.Rect(exactx,exacty,exactright,exactbottom));
     frmain.Image1.Picture.Bitmap.Assign(tmpbitmap);
-    tmpbitmap.Destroy;
+    //tmpbitmap.Destroy;
+    FreeAndNil(tmpbitmap);
   end;
   frmain.Shape1.Visible:=false;
   frmain.mnuCrop.Enabled:=false;
@@ -2776,7 +2955,7 @@ var
    confirmar:boolean=true;
    filtroext:string;
    calidadjpg:integer;
-   i:integer;
+   i,n:integer;
    bgrtmp:TBGRABitmap;
    baseimg:ImagingClasses.TSingleImage;
    function correctfilename:string;
@@ -2840,6 +3019,19 @@ begin
         begin
           if ifapng then
           begin
+            n:=0;
+            if GlobalMetadata.MetaItemCount > 0 then
+            begin
+              for I := 0 to GlobalMetadata.MetaItemCount - 1 do
+              begin
+                if GlobalMetadata.MetaItemsByIdx[I].Id='FrameDelay' then
+                begin
+                  GlobalMetadata.MetaItemsByIdx[I].Value:=APNGDelays[n];
+                  inc(n);
+                end;
+              end;
+            end;
+            GlobalMetadata.CopyLoadedMetaItemsForSaving;
             APNGImage.SaveMultiToFile(correctfilename);
           end;
           //Convert BGRAGif to APNG
@@ -2872,6 +3064,19 @@ begin
            //Convert APNG to BGRAGif
            if ifapng then
            begin
+             n:=0;
+             if GlobalMetadata.MetaItemCount > 0 then
+             begin
+               for I := 0 to GlobalMetadata.MetaItemCount - 1 do
+               begin
+                 if GlobalMetadata.MetaItemsByIdx[I].Id='FrameDelay' then
+                 begin
+                   GlobalMetadata.MetaItemsByIdx[I].Value:=APNGDelays[n];
+                   inc(n);
+                 end;
+               end;
+             end;
+             GlobalMetadata.CopyLoadedMetaItemsForSaving;
              APNGImage.SaveMultiToFile(correctfilename);
            end;
            //Convert others to BGRAGif
@@ -2883,8 +3088,10 @@ begin
              BGRAgif.InsertFrame(0,bgrtmp,0,0,0,dmKeep,true);
              frmain.Image1.Picture.Assign(bgrtmp);
              BGRAGif.SaveToFile(correctfilename);
-             bgrtmp.Destroy;
-             BGRAGif.Destroy;
+             //bgrtmp.Destroy;
+             //BGRAGif.Destroy;
+             FreeAndNil(bgrtmp);
+             FreeAndNil(BGRAGif);
            end;
          end
       end;
@@ -2994,7 +3201,8 @@ begin
          frexif.ValueListEditor1.InsertRow(ImgData.ExifObj.ThumbTagByIndex[i].Name,ImgData.ExifObj.ThumbTagByIndex[i].Data,true);
        end;
      end;
-     ImgData.Free;
+     //ImgData.Free;
+     FreeAndNil(ImgData);
    end;
     frexif.ShowModal;
  end;
@@ -3674,6 +3882,79 @@ begin
   mosaicmousedown:=false;
 end;
 
+procedure Tfrmain.Shape1MouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  shapemousedown:=true;
+end;
+
+procedure Tfrmain.Shape1MouseLeave(Sender: TObject);
+begin
+  //shapemousedown:=false;
+end;
+
+procedure Tfrmain.Shape1MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+  //Right Top Corner
+  if (Y>0) and (Y<10) and (X>0) and (X<10) then
+  begin
+    frmain.Shape1.Cursor:=crSizeNW;
+  end;
+  //Top
+  if (Y<10) and (X>10) and (X<frmain.Shape1.Width-10) then
+  begin
+    frmain.Shape1.Cursor:=crSizeS;
+  end;
+  //Left
+  if (Y>10) and (X<10) and (Y<frmain.Shape1.Height-10) then
+  begin
+    frmain.Shape1.Cursor:=crSizeW;
+  end;
+  //Left Top Corner
+  if (Y<10) and (X>frmain.Shape1.Width-10) then
+  begin
+    frmain.Shape1.Cursor:=crSizeNE;
+  end;
+  //Right
+  if (Y>10) and (Y<frmain.Shape1.Height-10) and (X>frmain.Shape1.Width-10) then
+  begin
+    frmain.Shape1.Cursor:=crSizeW;
+    if shapemousedown then
+      frmain.Shape1.Width:=X+5;
+  end;
+  //Bottom
+  if (Y>frmain.Shape1.Height-10) and (X>10) and (X<frmain.Shape1.Width-10) then
+  begin
+    frmain.Shape1.Cursor:=crSizeS;
+    if shapemousedown then
+      frmain.Shape1.Height:=Y+5;
+  end;
+  //Right Bottom Corner
+  if (Y>frmain.Shape1.Height-10) and (X<10) then
+  begin
+    frmain.Shape1.Cursor:=crSizeNE;
+  end;
+  //Left Bottom Corner
+  if (Y>frmain.Shape1.Height-10) and (X>frmain.Shape1.Width-10) then
+  begin
+    frmain.Shape1.Cursor:=crSizeNW;
+    if shapemousedown then
+    begin
+      frmain.Shape1.Width:=X+5;
+      frmain.Shape1.Height:=Y+5;
+    end;
+  end;
+  if (Y>10) and (X>10) and (Y<frmain.Shape1.Height-10) and (X<frmain.Shape1.Width-10) then
+    frmain.Shape1.Cursor:=crSizeALL;
+end;
+
+procedure Tfrmain.Shape1MouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  shapemousedown:=false;
+end;
+
 procedure Tfrmain.ShellTreeView1Change(Sender: TObject; Node: TTreeNode);
 begin
   if Node.Parent=nil then
@@ -3833,7 +4114,8 @@ begin
     frmain.Timer5.Interval:=APNGDelays[APNGImage.ActiveImage];
     frmain.Image1.Refresh;
     frmain.StatusBar1.Panels[2].Text:=inttostr(APNGImage.ActiveImage+1)+'/'+inttostr(APNGImage.ImageCount);
-    tmpbitmap.Destroy;
+    //tmpbitmap.Destroy;
+    FreeAndNil(tmpbitmap);
   end;
 end;
 
@@ -4122,8 +4404,10 @@ begin
     myPrinter.Canvas.CopyRect(Classes.Rect(0, 0, myPrinter.PaperSize.Width, myPrinter.PaperSize.Height),
     myBitMap.Canvas, Classes.Rect(0, 0, myBitMap.Width, myBitMap.Height));
     MyPrinter.EndDoc;
-    myBitMap.Free;
-    tmpbgra.Free;
+    //myBitMap.Free;
+    //tmpbgra.Free;
+    FreeAndNil(myBitMap);
+    FreeAndNil(tmpbgra);
   end;
  except on e:exception do
    ShowMessage(e.Message);
@@ -4212,7 +4496,9 @@ var
    wthumb:UnicodeString;
    ImgData: TImgData;
    Orientation:string='Horizontal (normal)';
-   bmp:BGRABitMap.TBGRABitmap;
+   BGRAImage:BGRABitMap.TBGRABitmap;
+   vmp:ImagingClasses.TSingleImage;
+   ebitmap:Graphics.TBitmap;
 begin
   wthumb:=UTF16LongName(carpeta+iname);
   {$IFDEF WINDOWS}
@@ -4236,7 +4522,8 @@ begin
       else
         Orientation:='Horizontal (normal)';
     end;
-    ImgData.Destroy;
+    //ImgData.Destroy;
+    FreeAndNil(ImgData);
     thumb:=Graphics.TBitMap.Create;
     thumb.Width:=thumbsize;
     thumb.Height:=thumbsize;
@@ -4244,22 +4531,73 @@ begin
     streamimage:=TFileStream.Create(wthumb, fmOpenRead or fmShareDenyNone);
         //*******Implement orientation image********
     case Orientation of
-    'Rotate 90 CW': thumbtmp.Bitmap.Assign(GetStreamThumbnail(streamimage,thumbsize,thumbsize, bgcolor, false).RotateCW);
-    'Rotate 270 CW':thumbtmp.Bitmap.Assign(GetStreamThumbnail(streamimage,thumbsize,thumbsize, bgcolor, false).RotateCCW);
+    'Rotate 90 CW':
+    begin
+      BGRAImage:=BGRABitMap.TBGRABitmap.Create;
+      GetStreamThumbnail(streamimage,thumbsize,thumbsize, bgcolor, false,'',BGRAImage);
+      ebitmap:=Graphics.TBitmap.Create;
+      ebitmap.Assign(BGRAImage);
+      FreeAndNil(BGRAImage);
+      vmp:=ImagingClasses.TSingleImage.Create;
+      ImagingComponents.ConvertBitmapToImage(ebitmap,vmp);
+      vmp.Rotate(270);
+      ImagingComponents.ConvertImageToBitmap(vmp,ebitmap);
+      FreeAndNil(vmp);
+      thumbtmp.Bitmap.Assign(ebitmap);
+      FreeAndNil(ebitmap);
+    end;
+    'Rotate 270 CW':
+    begin
+      BGRAImage:=BGRABitMap.TBGRABitmap.Create;
+      GetStreamThumbnail(streamimage,thumbsize,thumbsize, bgcolor, false,'',BGRAImage);
+      ebitmap:=Graphics.TBitmap.Create;
+      ebitmap.Assign(BGRAImage);
+      FreeAndNil(BGRAImage);
+      vmp:=ImagingClasses.TSingleImage.Create;
+      ImagingComponents.ConvertBitmapToImage(ebitmap,vmp);
+      vmp.Rotate(90);
+      ImagingComponents.ConvertImageToBitmap(vmp,ebitmap);
+      FreeAndNil(vmp);
+      thumbtmp.Bitmap.Assign(ebitmap);
+      FreeAndNil(ebitmap);
+    end;
     'Rotate 180 CW':
     begin
-      bmp:=BGRABitMap.TBGRABitmap.Create(GetStreamThumbnail(streamimage,thumbsize,thumbsize, bgcolor, false));
-      bmp.HorizontalFlip;
-      thumbtmp.Bitmap.Assign(bmp);
-      bmp.Destroy;
+      BGRAImage:=BGRABitMap.TBGRABitmap.Create(GetStreamThumbnail(streamimage,thumbsize,thumbsize, bgcolor, false));
+      BGRAImage.HorizontalFlip;
+      thumbtmp.Bitmap.Assign(BGRAImage);
+      //BGRAImage.Destroy;
+      FreeAndNil(BGRAImage);
     end;
       else
-        thumbtmp.Bitmap.Assign(GetStreamThumbnail(streamimage,thumbsize,thumbsize, bgcolor, false));
+      begin
+        case UpperCase(ExtractFileExt(wthumb)) of
+        '.TIF','.TIFF':
+        begin
+          thumbtmp.LoadFromStream(streamimage);
+          ebitmap:=Graphics.TBitmap.Create;
+          ebitmap.Assign(thumbtmp.Bitmap);
+          vmp:=ImagingClasses.TSingleImage.Create;
+          ImagingComponents.ConvertBitmapToImage(ebitmap,vmp);
+          vmp.Resize(thumbsize,thumbsize,rfLanczos);
+          ebitmap.Width:=thumbsize;
+          ebitmap.Height:=thumbsize;
+          ImagingComponents.ConvertImageToBitmap(vmp,ebitmap);
+          FreeAndNil(vmp);
+          thumbtmp.Bitmap.Assign(ebitmap);
+          FreeAndNil(ebitmap);
+        end;
+        else
+          thumbtmp.Bitmap.Assign(GetStreamThumbnail(streamimage,thumbsize,thumbsize, bgcolor, false));
+        end;
+      end;
     end;
-    streamimage.Destroy;
+    //streamimage.Destroy;
+    FreeAndNil(streamimage);
     thumb.Canvas.Rectangle(0,0,thumbsize,thumbsize);
     thumb.Canvas.CopyRect(Types.Rect(2,2,thumbsize-2,thumbsize-2),thumbtmp.Bitmap.Canvas,Types.Rect(0,0,thumbtmp.Bitmap.Width,thumbtmp.Bitmap.Height));
-    thumbtmp.Destroy;
+    //thumbtmp.Destroy;
+    FreeAndNil(thumbtmp);
     {ShowMessage('Imagen #: '+inttostr(thumbindex)+#13+
     'Left: '+inttostr((frmain.sboxthumb.Controls[thumbindex] as TImage).Left)+#13+
     'Scroll: '+inttostr(frmain.sboxthumb.HorzScrollBar.Position)+#13+
@@ -4267,13 +4605,15 @@ begin
     //ShowMessage(inttostr(thumbindex)+'   '+inttostr(ifile));
     //frmain.StatusBar1.Panels[5].Text:=inttostr(frmain.sboxthumb.ControlCount);
     (frmain.sboxthumb.Controls[thumbindex] as TImage).Picture.Bitmap.Assign(thumb);
-    thumb.Destroy;
+    //thumb.Destroy;
+    FreeAndNil(thumb);
     //This is wrong but is workin for linux and windows
     {$IFDEF LINUX}
     Application.ProcessMessages;
     {$ENDIF}
     except on e:exception do
     begin
+      thumb:=Graphics.TBitMap.Create;
       thumb.Width:=thumbsize;
       thumb.Height:=thumbsize;
       thumb.Canvas.Brush.Color:=clWhite;
@@ -4284,6 +4624,7 @@ begin
       tw:=thumb.Canvas.TextWidth('Error:'+e.ToString);
       thumb.Canvas.TextOut(Round((thumbsize-tw)/2),Round((thumbsize-th)/2),'Error:'+e.ToString);
       (frmain.sboxthumb.Controls[thumbindex] as TImage).Picture.Bitmap.Assign(thumb);
+      FreeAndNil(thumb);
     end;
     end;
   //end;
