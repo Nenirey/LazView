@@ -1,7 +1,7 @@
 object frmain: Tfrmain
-  Left = 379
+  Left = 229
   Height = 609
-  Top = 119
+  Top = 104
   Width = 902
   ActiveControl = ShellTreeView1
   AllowDropFiles = True
@@ -20,6 +20,7 @@ object frmain: Tfrmain
   OnKeyDown = FormKeyDown
   OnKeyPress = FormKeyPress
   OnMouseDown = FormMouseDown
+  OnMouseMove = FormMouseMove
   OnResize = FormResize
   OnShow = FormShow
   OnWindowStateChange = FormWindowStateChange

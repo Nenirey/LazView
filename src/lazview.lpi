@@ -22,7 +22,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="1"/>
-      <BuildNr Value="3453"/>
+      <BuildNr Value="3646"/>
       <StringTable Comments="Pequeño visor de imagenes" CompanyName="Independiente" FileDescription="Visor de imágenes LazView" InternalName="lazview" LegalCopyright="R.Mir" LegalTrademarks="Reinier Romero Mir (c)" OriginalFilename="lazview" ProductName="LazView" ProductVersion="0.1"/>
     </VersionInfo>
     <BuildModes Count="2">

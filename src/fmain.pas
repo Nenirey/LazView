@@ -370,6 +370,7 @@ var
   historyeditapng:array of ImagingClasses.TMultiImage;
   historyindex:integer;
   shapemousedown:boolean=false;
+  shaperect:TRect;
   procedure rendermosaic;
   procedure fullsc;
   procedure compact;
@@ -1020,20 +1021,21 @@ end;
 
 procedure loadpicture(fimagen:string;restorezoom:boolean=true;scrollthumbs:boolean=true;realimage:boolean=false);
 var
-   ebitmap:Graphics.TBitmap;
+   ebitmap,ebitmap2:Graphics.TBitmap;
    bmp:TBGRACustomBitMap;
    th,tw,i:integer;
    iw,ih:word;
    streamimage:TFileStream;
    starttime:TDateTime;
    bgcolor:TBGRAPixel;
-   BGRAImage:BGRABitmap.TBGRABitmap;
+   BGRAImage,tmpbitmap:BGRABitmap.TBGRABitmap;
    wimagen:UnicodeString;
    ImgData: TImgData;
    pngrect:TRect;
    Item: TMetadataItem;
    Orientation:string='Horizontal (normal)';
    vmp:ImagingClasses.TSingleImage;
+   apngtmp:ImagingClasses.TMultiImage;
 begin
   //frmain.Image1.Picture.Bitmap.Clear;
   {$IFDEF WINDOWS}
@@ -1112,32 +1114,75 @@ begin
         GlobalMetadata.ClearMetaItems;
         APNGImage:=ImagingClasses.TMultiImage.Create;
         if Imaging.DetermineFileFormat(fimagen) <> '' then
-          APNGImage.LoadMultiFromFile(fimagen);
-        GlobalMetadata.CopyLoadedMetaItemsForSaving;
-        frmain.Image1.Picture.PNG.Create;
-        frmain.Image1.Picture.PNG.Width:=APNGImage.Width;
-        frmain.Image1.Picture.PNG.Height:=APNGImage.Height;
-        ebitmap:=Graphics.TBitmap.Create;
-        ImagingComponents.ConvertImageToBitmap(APNGImage,ebitmap);
+        begin
+          try
+            APNGImage.LoadMultiFromFile(fimagen);
+            GlobalMetadata.CopyLoadedMetaItemsForSaving;
+            frmain.Image1.Picture.PNG.Create;
+            frmain.Image1.Picture.PNG.Width:=APNGImage.Width;
+            frmain.Image1.Picture.PNG.Height:=APNGImage.Height;
+            ebitmap:=Graphics.TBitmap.Create;
+            ImagingComponents.ConvertImageToBitmap(APNGImage,ebitmap);
+            frmain.Image1.Picture.Bitmap.Assign(ebitmap);
+          except on e:exception do
+          begin
+            //Attempt to fix blending animation
+            tmpbitmap:=BGRABitmap.TBGRABitmap.Create;
+            tmpbitmap.LoadFromFile(fimagen);
+            ebitmap2:=Graphics.TBitmap.Create;
+            ebitmap2.Assign(tmpbitmap);
+            apngtmp:=ImagingClasses.TMultiImage.Create;
+            apngtmp.Width:=ebitmap2.Width;
+            apngtmp.Height:=ebitmap2.Height;
+            frmain.Image1.Picture.Bitmap.Assign(ebitmap2);
+            FreeAndNil(tmpbitmap);
+            for i:=0 to APNGImage.ImageCount-1 do
+            begin
+              try
+              APNGImage.ActiveImage:=i;
+              vmp:=ImagingClasses.TSingleImage.Create;
+              vmp.Assign(APNGImage);
+              ebitmap:=Graphics.TBitmap.Create;
+              ImagingComponents.ConvertImageToBitmap(vmp,ebitmap);
+              ebitmap2.Canvas.Draw(0,0,ebitmap);
+              ImagingComponents.ConvertBitmapToImage(ebitmap2,vmp);
+              apngtmp.AddImage(vmp);
+              FreeAndNil(ebitmap);
+              FreeAndNil(vmp);
+              except on e:exception do
+              begin
+                vmp:=ImagingClasses.TSingleImage.Create;
+                ImagingComponents.ConvertBitmapToImage(ebitmap2,vmp);
+                apngtmp.AddImage(vmp);
+                FreeAndNil(vmp);
+              end;
+              end;
+            end;
+            APNGImage.Assign(apngtmp);
+            FreeAndNil(ebitmap2);
+            FreeAndNil(apngtmp);
+          end;
+          end;
+        end;
         frmain.StatusBar1.Panels.Items[1].Text:='Resolution:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
-        frmain.Image1.Picture.Bitmap.Assign(ebitmap);
-        //ebitmap.Destroy;
         FreeAndNil(ebitmap);
         pngrect.Top:=0;
         pngrect.Left:=0;
-        pngrect.Width:=APNGImage.Width;
-        pngrect.Height:=APNGImage.Height;
+        pngrect.Width:=frmain.Image1.Picture.Width;
+        pngrect.Height:=frmain.Image1.Picture.Height;
         if GlobalMetadata.MetaItemCount > 0 then
         begin
           for I := 0 to GlobalMetadata.MetaItemCount - 1 do
           begin
             Item := GlobalMetadata.MetaItemsByIdx[I];
-              if Item.Id='FrameDelay' then
-              begin
-                //ShowMessage(Item.Id);
-                SetLength(APNGDelays,Length(APNGDelays)+1);
-                APNGDelays[Length(APNGDelays)-1]:=Item.Value;
-              end;
+            if Item.Id='FrameDelay' then
+            begin
+              SetLength(APNGDelays,Length(APNGDelays)+1);
+              if Item.Value<>0 then
+                APNGDelays[Length(APNGDelays)-1]:=Item.Value
+              else
+                APNGDelays[Length(APNGDelays)-1]:=1;
+            end;
           end;
         end
         else
@@ -1658,7 +1703,7 @@ procedure filterimagen(filter:integer;nivel:float=0);
 /////////      13:Negative
 /////////      14:Sharpen
 /////////      15:Smooth
-/////////      16:TestFilter
+/////////      16:Fade
 /////////      17:RotateCW
 /////////      18:RotateCCW
 /////////      19:HorizontalFlip
@@ -1679,6 +1724,7 @@ var
    baseimg:ImagingClasses.TSingleImage;
    ebitmap:Graphics.TBitmap;
    vmp:ImagingClasses.TSingleImage;
+   apngtmp:ImagingClasses.TMultiImage;
 begin
   realmode;
   title:=frmain.Caption;
@@ -1736,7 +1782,6 @@ begin
       tmpgif.LoopCount:=BGRAGif.LoopCount;
     end;
     tmpgif.LoopCount:=BGRAGif.LoopCount;
-    //tmpbitmap.Destroy;
     FreeAndNil(tmpbitmap);
     BGRAGif.SetSize(BGRAGif.Width,BGRAGif.Height);
     BGRAGif:=tmpgif;
@@ -1744,6 +1789,23 @@ begin
   if ifapng then
   begin
     //historyedit[Length(historyedit)-1].Assign(APNGImage);
+    imgrect.Bottom:=APNGImage.Height;
+    imgrect.Right:=APNGImage.Width;
+    imgpoint:=TPoint.Create(Round(APNGImage.Width/2),Round(APNGImage.Height/2));
+    case filter of
+    2,3,4,5,6,7,8,9,10,11,13,14,15,16:
+      begin
+        apngtmp:=ImagingClasses.TMultiImage.Create;
+        apngtmp.Width:=APNGImage.Width;
+        apngtmp.Height:=APNGImage.Height;
+      end;
+    12:
+      begin
+        apngtmp:=ImagingClasses.TMultiImage.Create;
+        apngtmp.Width:=APNGImage.Width*3;
+        apngtmp.Height:=APNGImage.Height*3;
+      end;
+    end;
     for i:=0 to APNGImage.ImageCount-1 do
     begin
       case filter of
@@ -1751,6 +1813,246 @@ begin
            APNGImage.ActiveImage:=i;
            APNGImage.Format:=ifA16Gray16;
          end;
+      2:begin
+          APNGImage.ActiveImage:=i;
+          vmp:=ImagingClasses.TSingleImage.Create;
+          vmp.Assign(APNGImage);
+          ebitmap:=Graphics.TBitmap.Create;
+          ImagingComponents.ConvertImageToBitmap(vmp,ebitmap);
+          tmpbitmap:=BGRABitmap.TBGRABitmap.Create(APNGImage.Width,APNGImage.Height);
+          tmpbitmap.Assign(ebitmap);
+          tmpbitmap.Assign(tmpbitmap.FilterPlane);
+          ebitmap.Assign(tmpbitmap);
+          ImagingComponents.ConvertBitmapToImage(ebitmap,vmp);
+          apngtmp.AddImage(vmp);
+          FreeAndNil(ebitmap);
+          FreeAndNil(vmp);
+          FreeAndNil(tmpbitmap);
+        end;
+      3:begin
+          APNGImage.ActiveImage:=i;
+          vmp:=ImagingClasses.TSingleImage.Create;
+          vmp.Assign(APNGImage);
+          ebitmap:=Graphics.TBitmap.Create;
+          ImagingComponents.ConvertImageToBitmap(vmp,ebitmap);
+          tmpbitmap:=BGRABitmap.TBGRABitmap.Create(APNGImage.Width,APNGImage.Height);
+          tmpbitmap.Assign(ebitmap);
+          tmpbitmap.Assign(tmpbitmap.FilterContour);
+          ebitmap.Assign(tmpbitmap);
+          ImagingComponents.ConvertBitmapToImage(ebitmap,vmp);
+          apngtmp.AddImage(vmp);
+          FreeAndNil(ebitmap);
+          FreeAndNil(vmp);
+          FreeAndNil(tmpbitmap);
+        end;
+      4:begin
+          APNGImage.ActiveImage:=i;
+          vmp:=ImagingClasses.TSingleImage.Create;
+          vmp.Assign(APNGImage);
+          ebitmap:=Graphics.TBitmap.Create;
+          ImagingComponents.ConvertImageToBitmap(vmp,ebitmap);
+          tmpbitmap:=BGRABitmap.TBGRABitmap.Create(APNGImage.Width,APNGImage.Height);
+          tmpbitmap.Assign(ebitmap);
+          tmpbitmap.Assign(tmpbitmap.FilterCylinder);
+          ebitmap.Assign(tmpbitmap);
+          ImagingComponents.ConvertBitmapToImage(ebitmap,vmp);
+          apngtmp.AddImage(vmp);
+          FreeAndNil(ebitmap);
+          FreeAndNil(vmp);
+          FreeAndNil(tmpbitmap);
+        end;
+      5:begin
+          APNGImage.ActiveImage:=i;
+          vmp:=ImagingClasses.TSingleImage.Create;
+          vmp.Assign(APNGImage);
+          ebitmap:=Graphics.TBitmap.Create;
+          ImagingComponents.ConvertImageToBitmap(vmp,ebitmap);
+          tmpbitmap:=BGRABitmap.TBGRABitmap.Create(APNGImage.Width,APNGImage.Height);
+          tmpbitmap.Assign(ebitmap);
+          tmpbitmap.Assign(tmpbitmap.FilterEmboss(5));
+          ebitmap.Assign(tmpbitmap);
+          ImagingComponents.ConvertBitmapToImage(ebitmap,vmp);
+          apngtmp.AddImage(vmp);
+          FreeAndNil(ebitmap);
+          FreeAndNil(vmp);
+          FreeAndNil(tmpbitmap);
+        end;
+      6:begin
+          APNGImage.ActiveImage:=i;
+          vmp:=ImagingClasses.TSingleImage.Create;
+          vmp.Assign(APNGImage);
+          ebitmap:=Graphics.TBitmap.Create;
+          ImagingComponents.ConvertImageToBitmap(vmp,ebitmap);
+          tmpbitmap:=BGRABitmap.TBGRABitmap.Create(APNGImage.Width,APNGImage.Height);
+          tmpbitmap.Assign(ebitmap);
+          tmpbitmap.Assign(tmpbitmap.FilterEmbossHighLight(true));
+          ebitmap.Assign(tmpbitmap);
+          ImagingComponents.ConvertBitmapToImage(ebitmap,vmp);
+          apngtmp.AddImage(vmp);
+          FreeAndNil(ebitmap);
+          FreeAndNil(vmp);
+          FreeAndNil(tmpbitmap);
+        end;
+      7:begin
+          APNGImage.ActiveImage:=i;
+          vmp:=ImagingClasses.TSingleImage.Create;
+          vmp.Assign(APNGImage);
+          ebitmap:=Graphics.TBitmap.Create;
+          ImagingComponents.ConvertImageToBitmap(vmp,ebitmap);
+          tmpbitmap:=BGRABitmap.TBGRABitmap.Create(APNGImage.Width,APNGImage.Height);
+          tmpbitmap.Assign(ebitmap);
+          tmpbitmap.Assign(tmpbitmap.FilterNormalize);
+          ebitmap.Assign(tmpbitmap);
+          ImagingComponents.ConvertBitmapToImage(ebitmap,vmp);
+          apngtmp.AddImage(vmp);
+          FreeAndNil(ebitmap);
+          FreeAndNil(vmp);
+          FreeAndNil(tmpbitmap);
+        end;
+      8:begin
+          APNGImage.ActiveImage:=i;
+          vmp:=ImagingClasses.TSingleImage.Create;
+          vmp.Assign(APNGImage);
+          ebitmap:=Graphics.TBitmap.Create;
+          ImagingComponents.ConvertImageToBitmap(vmp,ebitmap);
+          tmpbitmap:=BGRABitmap.TBGRABitmap.Create(APNGImage.Width,APNGImage.Height);
+          tmpbitmap.Assign(ebitmap);
+          tmpbitmap.Assign(tmpbitmap.FilterSphere);
+          ebitmap.Assign(tmpbitmap);
+          ImagingComponents.ConvertBitmapToImage(ebitmap,vmp);
+          apngtmp.AddImage(vmp);
+          FreeAndNil(ebitmap);
+          FreeAndNil(vmp);
+          FreeAndNil(tmpbitmap);
+        end;
+      9:begin
+          APNGImage.ActiveImage:=i;
+          vmp:=ImagingClasses.TSingleImage.Create;
+          vmp.Assign(APNGImage);
+          ebitmap:=Graphics.TBitmap.Create;
+          ImagingComponents.ConvertImageToBitmap(vmp,ebitmap);
+          tmpbitmap:=BGRABitmap.TBGRABitmap.Create(APNGImage.Width,APNGImage.Height);
+          tmpbitmap.Assign(ebitmap);
+          tmpbitmap.Assign(tmpbitmap.FilterTwirl(imgrect,imgpoint,Round(APNGImage.Width/4)));
+          ebitmap.Assign(tmpbitmap);
+          ImagingComponents.ConvertBitmapToImage(ebitmap,vmp);
+          apngtmp.AddImage(vmp);
+          FreeAndNil(ebitmap);
+          FreeAndNil(vmp);
+          FreeAndNil(tmpbitmap);
+        end;
+      10:begin
+          APNGImage.ActiveImage:=i;
+          vmp:=ImagingClasses.TSingleImage.Create;
+          vmp.Assign(APNGImage);
+          ebitmap:=Graphics.TBitmap.Create;
+          ImagingComponents.ConvertImageToBitmap(vmp,ebitmap);
+          tmpbitmap:=BGRABitmap.TBGRABitmap.Create(APNGImage.Width,APNGImage.Height);
+          tmpbitmap.Assign(ebitmap);
+          tmpbitmap.Assign(tmpbitmap.FilterPixelate(5,false));
+          ebitmap.Assign(tmpbitmap);
+          ImagingComponents.ConvertBitmapToImage(ebitmap,vmp);
+          apngtmp.AddImage(vmp);
+          FreeAndNil(ebitmap);
+          FreeAndNil(vmp);
+          FreeAndNil(tmpbitmap);
+        end;
+      11:begin
+          APNGImage.ActiveImage:=i;
+          vmp:=ImagingClasses.TSingleImage.Create;
+          vmp.Assign(APNGImage);
+          ebitmap:=Graphics.TBitmap.Create;
+          ImagingComponents.ConvertImageToBitmap(vmp,ebitmap);
+          tmpbitmap:=BGRABitmap.TBGRABitmap.Create(APNGImage.Width,APNGImage.Height);
+          tmpbitmap.Assign(ebitmap);
+          tmpbitmap.Assign(tmpbitmap.FilterMedian(moMediumSmooth));
+          ebitmap.Assign(tmpbitmap);
+          ImagingComponents.ConvertBitmapToImage(ebitmap,vmp);
+          apngtmp.AddImage(vmp);
+          FreeAndNil(ebitmap);
+          FreeAndNil(vmp);
+          FreeAndNil(tmpbitmap);
+        end;
+      12:begin
+          APNGImage.ActiveImage:=i;
+          vmp:=ImagingClasses.TSingleImage.Create;
+          vmp.Assign(APNGImage);
+          ebitmap:=Graphics.TBitmap.Create;
+          ImagingComponents.ConvertImageToBitmap(vmp,ebitmap);
+          tmpbitmap:=BGRABitmap.TBGRABitmap.Create(APNGImage.Width,APNGImage.Height);
+          tmpbitmap.Assign(ebitmap);
+          tmpbitmap.Assign(tmpbitmap.FilterSmartZoom3(moMediumSmooth));
+          ebitmap.Assign(tmpbitmap);
+          ImagingComponents.ConvertBitmapToImage(ebitmap,vmp);
+          apngtmp.AddImage(vmp);
+          FreeAndNil(ebitmap);
+          FreeAndNil(vmp);
+          FreeAndNil(tmpbitmap);
+        end;
+      13:begin
+          APNGImage.ActiveImage:=i;
+          vmp:=ImagingClasses.TSingleImage.Create;
+          vmp.Assign(APNGImage);
+          ebitmap:=Graphics.TBitmap.Create;
+          ImagingComponents.ConvertImageToBitmap(vmp,ebitmap);
+          tmpbitmap:=BGRABitmap.TBGRABitmap.Create(APNGImage.Width,APNGImage.Height);
+          tmpbitmap.Assign(ebitmap);
+          tmpbitmap.Negative;
+          ebitmap.Assign(tmpbitmap);
+          ImagingComponents.ConvertBitmapToImage(ebitmap,vmp);
+          apngtmp.AddImage(vmp);
+          FreeAndNil(ebitmap);
+          FreeAndNil(vmp);
+          FreeAndNil(tmpbitmap);
+        end;
+      14:begin
+          APNGImage.ActiveImage:=i;
+          vmp:=ImagingClasses.TSingleImage.Create;
+          vmp.Assign(APNGImage);
+          ebitmap:=Graphics.TBitmap.Create;
+          ImagingComponents.ConvertImageToBitmap(vmp,ebitmap);
+          tmpbitmap:=BGRABitmap.TBGRABitmap.Create(APNGImage.Width,APNGImage.Height);
+          tmpbitmap.Assign(ebitmap);
+          tmpbitmap.Assign(tmpbitmap.FilterSharpen);
+          ebitmap.Assign(tmpbitmap);
+          ImagingComponents.ConvertBitmapToImage(ebitmap,vmp);
+          apngtmp.AddImage(vmp);
+          FreeAndNil(ebitmap);
+          FreeAndNil(vmp);
+          FreeAndNil(tmpbitmap);
+        end;
+      15:begin
+          APNGImage.ActiveImage:=i;
+          vmp:=ImagingClasses.TSingleImage.Create;
+          vmp.Assign(APNGImage);
+          ebitmap:=Graphics.TBitmap.Create;
+          ImagingComponents.ConvertImageToBitmap(vmp,ebitmap);
+          tmpbitmap:=BGRABitmap.TBGRABitmap.Create(APNGImage.Width,APNGImage.Height);
+          tmpbitmap.Assign(ebitmap);
+          tmpbitmap.Assign(tmpbitmap.FilterSmooth);
+          ebitmap.Assign(tmpbitmap);
+          ImagingComponents.ConvertBitmapToImage(ebitmap,vmp);
+          apngtmp.AddImage(vmp);
+          FreeAndNil(ebitmap);
+          FreeAndNil(vmp);
+          FreeAndNil(tmpbitmap);
+        end;
+      16:begin
+          APNGImage.ActiveImage:=i;
+          vmp:=ImagingClasses.TSingleImage.Create;
+          vmp.Assign(APNGImage);
+          ebitmap:=Graphics.TBitmap.Create;
+          ImagingComponents.ConvertImageToBitmap(vmp,ebitmap);
+          tmpbitmap:=BGRABitmap.TBGRABitmap.Create(APNGImage.Width,APNGImage.Height);
+          tmpbitmap.Assign(ebitmap);
+          tmpbitmap.Assign(tmpbitmap.FilterBlurMotion(50,0,false));
+          ebitmap.Assign(tmpbitmap);
+          ImagingComponents.ConvertBitmapToImage(ebitmap,vmp);
+          apngtmp.AddImage(vmp);
+          FreeAndNil(ebitmap);
+          FreeAndNil(vmp);
+          FreeAndNil(tmpbitmap);
+        end;
       17:begin
            APNGImage.ActiveImage:=i;
            APNGImage.Rotate(270);
@@ -1767,11 +2069,37 @@ begin
            APNGImage.ActiveImage:=i;
            APNGImage.Flip;
          end;
+      21,22,23,24:
+        begin
+          APNGImage.ActiveImage:=i;
+          FImageCanvas := TImagingCanvas.Create;
+          FImageCanvas.CreateForImage(APNGImage);
+          if filter=21 then
+            FImageCanvas.ModifyContrastBrightness(0, nivel);
+          if filter=22 then
+            FImageCanvas.ModifyContrastBrightness(nivel, 0);
+          if filter=23 then
+            FImageCanvas.GammaCorection(nivel, nivel, nivel);
+          FreeAndNil(FImageCanvas);
+        end;
         else
         begin
           ShowMessage('Not implemented!!');
           break;
         end;
+      end;
+    end;
+    case filter of
+    2,3,4,5,6,7,8,9,10,11,13,14,15,16:
+      begin
+        APNGImage.Assign(apngtmp);
+        FreeAndNil(apngtmp);
+      end;
+    12:
+      begin
+        APNGImage.ResizeImages(APNGImage.Width*3,APNGImage.Height*3,rfLanczos);
+        APNGImage.Assign(apngtmp);
+        FreeAndNil(apngtmp);
       end;
     end;
   end;
@@ -1803,40 +2131,55 @@ begin
      15:bmp:=BGRABitMap.TBGRABitmap.Create(frmain.Image1.Picture.Bitmap).FilterSmooth;
      16:bmp:=BGRABitMap.TBGRABitmap.Create(frmain.Image1.Picture.Bitmap).FilterBlurMotion(50,0,false);
      17:begin
-          //bmp:=BGRABitMap.TBGRABitmap.Create(frmain.Image1.Picture.Bitmap).RotateCW;
-            bmp:=BGRABitMap.TBGRABitmap.Create(frmain.Image1.Picture.Bitmap);
-            ebitmap:=Graphics.TBitmap.Create;
-            ebitmap.Assign(bmp);
-            vmp:=ImagingClasses.TSingleImage.Create;
-            ImagingComponents.ConvertBitmapToImage(ebitmap,vmp);
-            vmp.Rotate(270);
-            ImagingComponents.ConvertImageToBitmap(vmp,ebitmap);
-            bmp.Assign(ebitmap);
-            FreeAndNil(ebitmap);
-            FreeAndNil(vmp);
+          bmp:=BGRABitMap.TBGRABitmap.Create(frmain.Image1.Picture.Bitmap);
+          ebitmap:=Graphics.TBitmap.Create;
+          ebitmap.Assign(bmp);
+          vmp:=ImagingClasses.TSingleImage.Create;
+          ImagingComponents.ConvertBitmapToImage(ebitmap,vmp);
+          vmp.Rotate(270);
+          ImagingComponents.ConvertImageToBitmap(vmp,ebitmap);
+          bmp.Assign(ebitmap);
+          FreeAndNil(ebitmap);
+          FreeAndNil(vmp);
         end;
      18:begin
-          //bmp:=BGRABitMap.TBGRABitmap.Create(frmain.Image1.Picture.Bitmap).RotateCCW;
-            bmp:=BGRABitMap.TBGRABitmap.Create(frmain.Image1.Picture.Bitmap);
-            ebitmap:=Graphics.TBitmap.Create;
-            ebitmap.Assign(bmp);
-            vmp:=ImagingClasses.TSingleImage.Create;
-            ImagingComponents.ConvertBitmapToImage(ebitmap,vmp);
-            vmp.Rotate(90);
-            ImagingComponents.ConvertImageToBitmap(vmp,ebitmap);
-            bmp.Assign(ebitmap);
-            FreeAndNil(ebitmap);
-            FreeAndNil(vmp);
+          bmp:=BGRABitMap.TBGRABitmap.Create(frmain.Image1.Picture.Bitmap);
+          ebitmap:=Graphics.TBitmap.Create;
+          ebitmap.Assign(bmp);
+          vmp:=ImagingClasses.TSingleImage.Create;
+          ImagingComponents.ConvertBitmapToImage(ebitmap,vmp);
+          vmp.Rotate(90);
+          ImagingComponents.ConvertImageToBitmap(vmp,ebitmap);
+          bmp.Assign(ebitmap);
+          FreeAndNil(ebitmap);
+          FreeAndNil(vmp);
         end;
      19:begin
           bmp:=BGRABitMap.TBGRABitmap.Create(frmain.Image1.Picture.Bitmap);
-          bmp.HorizontalFlip;
+          ebitmap:=Graphics.TBitmap.Create;
+          ebitmap.Assign(bmp);
+          vmp:=ImagingClasses.TSingleImage.Create;
+          ImagingComponents.ConvertBitmapToImage(ebitmap,vmp);
+          vmp.Mirror;
+          ImagingComponents.ConvertImageToBitmap(vmp,ebitmap);
+          bmp.Assign(ebitmap);
+          FreeAndNil(ebitmap);
+          FreeAndNil(vmp);
         end;
      20:begin
           bmp:=BGRABitMap.TBGRABitmap.Create(frmain.Image1.Picture.Bitmap);
-          bmp.VerticalFlip;
+          ebitmap:=Graphics.TBitmap.Create;
+          ebitmap.Assign(bmp);
+          vmp:=ImagingClasses.TSingleImage.Create;
+          ImagingComponents.ConvertBitmapToImage(ebitmap,vmp);
+          vmp.Flip;
+          ImagingComponents.ConvertImageToBitmap(vmp,ebitmap);
+          bmp.Assign(ebitmap);
+          FreeAndNil(ebitmap);
+          FreeAndNil(vmp);
         end;
-     21,22,23,24:begin
+     21,22,23,24:
+        begin
           FImage:=TMultiImage.Create;
           FImageCanvas := TImagingCanvas.Create;
           FImage.Width:=frmain.Image1.Picture.Bitmap.Width;
@@ -1854,9 +2197,6 @@ begin
           if filter=23 then
             FImageCanvas.GammaCorection(nivel, nivel, nivel);
           ImagingComponents.ConvertDataToBitmap(FImage.Images[0],frmain.Image1.Picture.Bitmap);
-          //FImage.Destroy;
-          //FimageCanvas.Destroy;
-          //baseimg.Destroy;
           FreeAndNil(FImage);
           FreeAndNil(FImageCanvas);
           FreeAndNil(baseimg);
@@ -1870,7 +2210,6 @@ begin
     else
     begin
       frmain.Image1.Picture.Bitmap.Assign(bmp);
-      //bmp.Free;
       FreeAndNil(bmp);
     end;
     end;
@@ -1907,8 +2246,7 @@ var
    tmpbitmap:BGRABitmap.TBGRABitmap;
    redbrig,greenbrig,bluebrig:word;
    inzone:boolean;
-   FImage: TMultiImage;
-   FImageCanvas: TImagingCanvas;
+   //FImageCanvas: TImagingCanvas;
 begin
   realmode;
   sethistory;
@@ -2117,6 +2455,27 @@ begin
             APNGImage.SwapChannels(2,3);
             APNGImage.SwapChannels(1,3);
           end;
+        {12:begin
+             APNGImage.ActiveImage:=i;
+             FImageCanvas := TImagingCanvas.Create;
+             FImageCanvas.CreateForImage(APNGImage);
+             FImageCanvas.Threshold(nivel/600000,0.5,0.5);
+             FreeAndNil(FImageCanvas)
+           end;
+        13:begin
+             APNGImage.ActiveImage:=i;
+             FImageCanvas := TImagingCanvas.Create;
+             FImageCanvas.CreateForImage(APNGImage);
+             FImageCanvas.Threshold(0.5,nivel/600000,0.5);
+             FreeAndNil(FImageCanvas)
+           end;
+        14:begin
+             APNGImage.ActiveImage:=i;
+             FImageCanvas := TImagingCanvas.Create;
+             FImageCanvas.CreateForImage(APNGImage);
+             FImageCanvas.Threshold(0.5,0.5,nivel/600000);
+             FreeAndNil(FImageCanvas)
+           end;}
         else
         begin
           ShowMessage('Not implemented!!');
@@ -3885,6 +4244,10 @@ end;
 procedure Tfrmain.Shape1MouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
+  shaperect.Left:=X;
+  shaperect.Top:=Y;
+  shaperect.Bottom:=frmain.Shape1.BaseBounds.Bottom;
+  shaperect.Right:=frmain.Shape1.BaseBounds.Right;
   shapemousedown:=true;
 end;
 
@@ -3900,21 +4263,59 @@ begin
   if (Y>0) and (Y<10) and (X>0) and (X<10) then
   begin
     frmain.Shape1.Cursor:=crSizeNW;
+    if shapemousedown then
+    begin
+      frmain.Shape1.Top:=Mouse.CursorPos.Y-shaperect.Top-frmain.Image1.ClientOrigin.Y;
+      frmain.Shape1.Left:=Mouse.CursorPos.X-shaperect.Left-frmain.Image1.ClientOrigin.X;
+      while frmain.Shape1.BoundsRect.Bottom<shaperect.Bottom do
+        frmain.Shape1.Height:=frmain.Shape1.Height+1;
+      while frmain.Shape1.BoundsRect.Right<shaperect.Right do
+        frmain.Shape1.Width:=frmain.Shape1.Width+1;
+      while frmain.Shape1.BoundsRect.Bottom>shaperect.Bottom do
+        frmain.Shape1.Height:=frmain.Shape1.Height-1;
+      while frmain.Shape1.BoundsRect.Right>shaperect.Right do
+        frmain.Shape1.Width:=frmain.Shape1.Width-1;
+    end;
   end;
   //Top
   if (Y<10) and (X>10) and (X<frmain.Shape1.Width-10) then
   begin
     frmain.Shape1.Cursor:=crSizeS;
+    if shapemousedown then
+    begin
+      frmain.Shape1.Top:=Mouse.CursorPos.Y-shaperect.Top-frmain.Image1.ClientOrigin.Y;
+      while frmain.Shape1.BoundsRect.Bottom<shaperect.Bottom do
+        frmain.Shape1.Height:=frmain.Shape1.Height+1;
+      while frmain.Shape1.BoundsRect.Bottom>shaperect.Bottom do
+        frmain.Shape1.Height:=frmain.Shape1.Height-1;
+    end;
   end;
   //Left
   if (Y>10) and (X<10) and (Y<frmain.Shape1.Height-10) then
   begin
     frmain.Shape1.Cursor:=crSizeW;
+    if shapemousedown then
+    begin
+      frmain.Shape1.Left:=Mouse.CursorPos.X-shaperect.Left-frmain.Image1.ClientOrigin.X;
+      while frmain.Shape1.BoundsRect.Right<shaperect.Right do
+        frmain.Shape1.Width:=frmain.Shape1.Width+1;
+      while frmain.Shape1.BoundsRect.Right>shaperect.Right do
+        frmain.Shape1.Width:=frmain.Shape1.Width-1;
+    end;
   end;
   //Left Top Corner
   if (Y<10) and (X>frmain.Shape1.Width-10) then
   begin
     frmain.Shape1.Cursor:=crSizeNE;
+    if shapemousedown then
+    begin
+      frmain.Shape1.Top:=Mouse.CursorPos.Y-shaperect.Top-frmain.Image1.ClientOrigin.Y;
+      frmain.Shape1.Width:=X+5;
+      while frmain.Shape1.BoundsRect.Bottom<shaperect.Bottom do
+        frmain.Shape1.Height:=frmain.Shape1.Height+1;
+      while frmain.Shape1.BoundsRect.Bottom>shaperect.Bottom do
+        frmain.Shape1.Height:=frmain.Shape1.Height-1;
+    end;
   end;
   //Right
   if (Y>10) and (Y<frmain.Shape1.Height-10) and (X>frmain.Shape1.Width-10) then
@@ -3930,12 +4331,21 @@ begin
     if shapemousedown then
       frmain.Shape1.Height:=Y+5;
   end;
-  //Right Bottom Corner
+  //Left Bottom Corner
   if (Y>frmain.Shape1.Height-10) and (X<10) then
   begin
     frmain.Shape1.Cursor:=crSizeNE;
+    if shapemousedown then
+    begin
+      frmain.Shape1.Height:=Y+5;
+      frmain.Shape1.Left:=Mouse.CursorPos.X-shaperect.Left-frmain.Image1.ClientOrigin.X;
+      while frmain.Shape1.BoundsRect.Right<shaperect.Right do
+        frmain.Shape1.Width:=frmain.Shape1.Width+1;
+      while frmain.Shape1.BoundsRect.Right>shaperect.Right do
+        frmain.Shape1.Width:=frmain.Shape1.Width-1;
+    end;
   end;
-  //Left Bottom Corner
+  //Right Bottom Corner
   if (Y>frmain.Shape1.Height-10) and (X>frmain.Shape1.Width-10) then
   begin
     frmain.Shape1.Cursor:=crSizeNW;
@@ -3946,7 +4356,14 @@ begin
     end;
   end;
   if (Y>10) and (X>10) and (Y<frmain.Shape1.Height-10) and (X<frmain.Shape1.Width-10) then
+  begin
     frmain.Shape1.Cursor:=crSizeALL;
+    if shapemousedown then
+    begin
+      frmain.Shape1.Top:=Mouse.CursorPos.Y-shaperect.Top-frmain.Image1.ClientOrigin.Y;
+      frmain.Shape1.Left:=Mouse.CursorPos.X-shaperect.Left-frmain.Image1.ClientOrigin.X;
+    end;
+  end;
 end;
 
 procedure Tfrmain.Shape1MouseUp(Sender: TObject; Button: TMouseButton;
@@ -4095,27 +4512,29 @@ var
    pngrect:TRect;
    tmpbitmap:Graphics.TBitmap;
 begin
-  if Assigned(APNGImage) then
-  begin
-    if Sender<>nil then
+  try
+    if Assigned(APNGImage) then
     begin
-      if APNGImage.ActiveImage<APNGImage.ImageCount-1 then
-        APNGImage.ActiveImage:=APNGImage.ActiveImage+1
-      else
-        APNGImage.ActiveImage:=0;
+      if Sender<>nil then
+      begin
+        if APNGImage.ActiveImage<APNGImage.ImageCount-1 then
+          APNGImage.ActiveImage:=APNGImage.ActiveImage+1
+        else
+          APNGImage.ActiveImage:=0;
+      end;
+      pngrect.Top:=0;
+      pngrect.Left:=0;
+      pngrect.Width:=APNGImage.Width;
+      pngrect.Height:=APNGImage.Height;
+      tmpbitmap:=Graphics.TBitmap.Create;
+      ImagingComponents.ConvertImageToBitmap(APNGImage,tmpbitmap);
+      frmain.Image1.Picture.Bitmap.Assign(tmpbitmap);
+      frmain.Timer5.Interval:=APNGDelays[APNGImage.ActiveImage];
+      frmain.Image1.Refresh;
+      frmain.StatusBar1.Panels[2].Text:=inttostr(APNGImage.ActiveImage+1)+'/'+inttostr(APNGImage.ImageCount);
+      FreeAndNil(tmpbitmap);
     end;
-    pngrect.Top:=0;
-    pngrect.Left:=0;
-    pngrect.Width:=APNGImage.Width;
-    pngrect.Height:=APNGImage.Height;
-    tmpbitmap:=Graphics.TBitmap.Create;
-    ImagingComponents.ConvertImageToBitmap(APNGImage,tmpbitmap);
-    frmain.Image1.Picture.Bitmap.Assign(tmpbitmap);
-    frmain.Timer5.Interval:=APNGDelays[APNGImage.ActiveImage];
-    frmain.Image1.Refresh;
-    frmain.StatusBar1.Panels[2].Text:=inttostr(APNGImage.ActiveImage+1)+'/'+inttostr(APNGImage.ImageCount);
-    //tmpbitmap.Destroy;
-    FreeAndNil(tmpbitmap);
+  except on e:exception do
   end;
 end;
 
