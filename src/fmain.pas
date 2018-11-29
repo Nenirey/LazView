@@ -1144,6 +1144,8 @@ begin
               vmp.Assign(APNGImage);
               ebitmap:=Graphics.TBitmap.Create;
               ImagingComponents.ConvertImageToBitmap(vmp,ebitmap);
+              //Need to now in what x,y position to draw the frames, for now use 0,0,
+              //maybe in the imagedata
               ebitmap2.Canvas.Draw(0,0,ebitmap);
               ImagingComponents.ConvertBitmapToImage(ebitmap2,vmp);
               apngtmp.AddImage(vmp);
@@ -3904,7 +3906,7 @@ end;
 
 procedure Tfrmain.mnuAboutClick(Sender: TObject);
 begin
-  ShowMessage('Imagen viewer: LazView'+#13#10+'Version: 0.1'+#13#10+'Created by: nenirey@gmail.com'+#13#10+'CopyLeft: 2018');
+  ShowMessage('Imagen viewer: LazView'+#13#10+'Version: 0.1'+#13#10+'Created by: nenirey@gmail.com'+#13#10+'CopyLeft: 2018'+lineending+lineending+'Thanks to the creators of the next libraries used by the project:'+lineending+lineending+'BGRABitmap by circular at operamail.com'+lineending+lineending+'Vampyre Imaging Library by Marek Mauder (marekmauder@gmail.com)'+lineending+lineending+'dEXIF by Gerry McGuire (mcguirez@hotmail.com)');
 end;
 
 procedure Tfrmain.mnuToolBarClick(Sender: TObject);

@@ -1,7 +1,7 @@
 object frmain: Tfrmain
-  Left = 229
+  Left = 405
   Height = 609
-  Top = 104
+  Top = 71
   Width = 902
   ActiveControl = ShellTreeView1
   AllowDropFiles = True
@@ -118,7 +118,7 @@ object frmain: Tfrmain
     OnMouseLeave = ToolBar1MouseLeave
     OnMouseMove = ToolBar1MouseMove
     object tbPrevImage: TToolButton
-      Left = 308
+      Left = 331
       Hint = 'Prev image'
       Top = 2
       ImageIndex = 0
@@ -127,7 +127,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbNextImage: TToolButton
-      Left = 354
+      Left = 377
       Hint = 'Next image'
       Top = 2
       ImageIndex = 1
@@ -214,7 +214,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbAdjust: TToolButton
-      Left = 469
+      Left = 254
       Hint = 'Adjust image'
       Top = 2
       Enabled = False
@@ -224,7 +224,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbPlayShow: TToolButton
-      Left = 331
+      Left = 354
       Hint = 'Start presentation'
       Top = 2
       ImageIndex = 13
@@ -233,7 +233,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbRandom: TToolButton
-      Left = 400
+      Left = 423
       Hint = 'Random presentation'
       Top = 2
       ImageIndex = 11
@@ -253,7 +253,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbReload: TToolButton
-      Left = 446
+      Left = 469
       Hint = 'Reload image'
       Top = 2
       Enabled = False
@@ -281,7 +281,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbSelect: TToolButton
-      Left = 423
+      Left = 446
       Hint = 'Selection tool'
       Top = 2
       Caption = 'tbSelect'
@@ -338,7 +338,7 @@ object frmain: Tfrmain
       Style = tbsSeparator
     end
     object tbStrech: TToolButton
-      Left = 254
+      Left = 277
       Hint = 'Large'
       Top = 2
       Caption = 'tbStrech'
@@ -348,7 +348,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object ToolButton25: TToolButton
-      Left = 277
+      Left = 300
       Height = 22
       Top = 2
       Caption = 'ToolButton25'
@@ -387,7 +387,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbFirstImage: TToolButton
-      Left = 285
+      Left = 308
       Hint = 'First image'
       Top = 2
       Caption = 'tbFirstImage'
@@ -397,7 +397,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbLastImage: TToolButton
-      Left = 377
+      Left = 400
       Hint = 'Last image'
       Top = 2
       Caption = 'tbLastImage'

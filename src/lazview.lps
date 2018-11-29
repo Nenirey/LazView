@@ -3,12 +3,12 @@
   <ProjectSession>
     <Version Value="10"/>
     <BuildModes Active="Release"/>
-    <Units Count="33">
+    <Units Count="14">
       <Unit0>
         <Filename Value="lazview.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="LazView"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="1"/>
         <WindowIndex Value="1"/>
         <CursorPos Y="27"/>
         <UsageCount Value="200"/>
@@ -20,7 +20,7 @@
         <ComponentName Value="frresize"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="1"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
@@ -43,7 +43,7 @@
         <ComponentName Value="freffect"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="4"/>
         <WindowIndex Value="1"/>
         <TopLine Value="208"/>
         <CursorPos X="8" Y="210"/>
@@ -57,7 +57,7 @@
         <ComponentName Value="frgoto"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="5"/>
         <WindowIndex Value="1"/>
         <CursorPos X="11"/>
         <UsageCount Value="208"/>
@@ -67,7 +67,7 @@
         <Filename Value="imgsize.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="ImgSize"/>
-        <EditorIndex Value="9"/>
+        <EditorIndex Value="7"/>
         <WindowIndex Value="1"/>
         <TopLine Value="217"/>
         <CursorPos X="26" Y="231"/>
@@ -80,7 +80,7 @@
         <ComponentName Value="frthumbsize"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="1"/>
         <CursorPos X="16"/>
         <UsageCount Value="217"/>
@@ -94,13 +94,13 @@
         <ResourceBaseClass Value="Form"/>
         <IsVisibleTab Value="True"/>
         <WindowIndex Value="1"/>
-        <TopLine Value="1116"/>
-        <CursorPos X="54" Y="1177"/>
+        <TopLine Value="3895"/>
+        <CursorPos X="190" Y="3909"/>
         <UsageCount Value="200"/>
         <Bookmarks Count="3">
-          <Item0 X="17" Y="3425"/>
-          <Item1 X="3" Y="1729" ID="1"/>
-          <Item2 X="30" Y="2188" ID="2"/>
+          <Item0 X="17" Y="3427"/>
+          <Item1 X="3" Y="1731" ID="1"/>
+          <Item2 X="30" Y="2190" ID="2"/>
         </Bookmarks>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -121,7 +121,7 @@
         <ComponentName Value="frprint"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="10"/>
+        <EditorIndex Value="8"/>
         <WindowIndex Value="1"/>
         <CursorPos X="21" Y="36"/>
         <UsageCount Value="200"/>
@@ -133,7 +133,7 @@
         <ComponentName Value="frexif"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="2"/>
         <WindowIndex Value="1"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
@@ -145,315 +145,83 @@
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
         <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="49"/>
+        <UsageCount Value="54"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit11>
       <Unit12>
-        <Filename Value="../../fpcupdeluxe/lazarus/lcl/graphics.pp"/>
-        <UnitName Value="Graphics"/>
+        <Filename Value="../components/vampireimaging/Source/ImagingClasses.pas"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="1"/>
-        <TopLine Value="879"/>
-        <CursorPos X="15" Y="894"/>
-        <UsageCount Value="6"/>
+        <TopLine Value="15"/>
+        <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit12>
       <Unit13>
-        <Filename Value="../../fpcupdeluxe/lazarus/lcl/lcltype.pp"/>
-        <UnitName Value="LCLType"/>
+        <Filename Value="../../../../../fpcupdeluxe/fpcsrc/rtl/objpas/sysutils/sysutilh.inc"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="1"/>
-        <TopLine Value="2686"/>
-        <CursorPos X="17" Y="2699"/>
-        <UsageCount Value="6"/>
-      </Unit13>
-      <Unit14>
-        <Filename Value="../../fpcupdeluxe/fpcsrc/rtl/inc/systemh.inc"/>
-        <EditorIndex Value="-1"/>
-        <WindowIndex Value="1"/>
-        <TopLine Value="496"/>
-        <CursorPos X="3" Y="376"/>
-        <UsageCount Value="6"/>
-      </Unit14>
-      <Unit15>
-        <Filename Value="../components/vampireimaging/Source/ImagingClasses.pas"/>
-        <EditorIndex Value="1"/>
-        <WindowIndex Value="1"/>
-        <TopLine Value="88"/>
-        <CursorPos X="67" Y="96"/>
-        <UsageCount Value="19"/>
-        <Loaded Value="True"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit15>
-      <Unit16>
-        <Filename Value="../components/vampireimaging/Source/ImagingTypes.pas"/>
-        <EditorIndex Value="-1"/>
-        <WindowIndex Value="1"/>
-        <TopLine Value="274"/>
-        <CursorPos X="37" Y="288"/>
-        <UsageCount Value="12"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit16>
-      <Unit17>
-        <Filename Value="/lazarus/fpc/3.0.4/source/rtl/objpas/classes/classesh.inc"/>
-        <EditorIndex Value="-1"/>
-        <WindowIndex Value="1"/>
-        <TopLine Value="1830"/>
-        <CursorPos X="15" Y="1843"/>
-        <UsageCount Value="14"/>
-      </Unit17>
-      <Unit18>
-        <Filename Value="../components/bgrabitmap/bgragifformat.pas"/>
-        <UnitName Value="BGRAGifFormat"/>
-        <EditorIndex Value="-1"/>
-        <WindowIndex Value="1"/>
-        <TopLine Value="983"/>
-        <CursorPos X="13" Y="995"/>
-        <UsageCount Value="6"/>
-      </Unit18>
-      <Unit19>
-        <Filename Value="../../fpcupdeluxe/fpcsrc/rtl/objpas/sysutils/finah.inc"/>
-        <EditorIndex Value="-1"/>
-        <WindowIndex Value="1"/>
-        <TopLine Value="11"/>
-        <CursorPos X="10" Y="25"/>
-        <UsageCount Value="6"/>
-      </Unit19>
-      <Unit20>
-        <Filename Value="../../fpcupdeluxe/fpcsrc/rtl/inc/varianth.inc"/>
-        <EditorIndex Value="-1"/>
-        <WindowIndex Value="1"/>
-        <TopLine Value="477"/>
-        <CursorPos X="10" Y="503"/>
-        <UsageCount Value="6"/>
-      </Unit20>
-      <Unit21>
-        <Filename Value="/lazarus/lcl/controls.pp"/>
-        <UnitName Value="Controls"/>
-        <EditorIndex Value="-1"/>
-        <WindowIndex Value="1"/>
-        <TopLine Value="1509"/>
-        <CursorPos X="15" Y="1521"/>
-        <UsageCount Value="11"/>
-      </Unit21>
-      <Unit22>
-        <Filename Value="../components/bgrabitmap/bgrathumbnail.pas"/>
-        <UnitName Value="BGRAThumbnail"/>
-        <EditorIndex Value="-1"/>
-        <WindowIndex Value="1"/>
-        <TopLine Value="237"/>
-        <CursorPos X="3" Y="242"/>
-        <UsageCount Value="7"/>
-      </Unit22>
-      <Unit23>
-        <Filename Value="../components/bgrabitmap/bgradefaultbitmap.pas"/>
-        <UnitName Value="BGRADefaultBitmap"/>
-        <EditorIndex Value="-1"/>
-        <WindowIndex Value="1"/>
-        <TopLine Value="5491"/>
-        <CursorPos X="3" Y="5502"/>
-        <UsageCount Value="8"/>
-      </Unit23>
-      <Unit24>
-        <Filename Value="../components/bgrabitmap/bgracustombitmap.inc"/>
-        <EditorIndex Value="-1"/>
-        <WindowIndex Value="1"/>
-        <TopLine Value="762"/>
-        <CursorPos X="19" Y="775"/>
-        <UsageCount Value="8"/>
-      </Unit24>
-      <Unit25>
-        <Filename Value="../components/vampireimaging/Source/Imaging.pas"/>
-        <EditorIndex Value="2"/>
-        <WindowIndex Value="1"/>
-        <TopLine Value="208"/>
-        <CursorPos X="63" Y="215"/>
-        <UsageCount Value="13"/>
-        <Loaded Value="True"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit25>
-      <Unit26>
-        <Filename Value="../components/vampireimaging/Source/ImagingJpeg.pas"/>
-        <EditorIndex Value="-1"/>
-        <WindowIndex Value="1"/>
-        <TopLine Value="54"/>
-        <CursorPos X="3" Y="68"/>
-        <UsageCount Value="8"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit26>
-      <Unit27>
-        <Filename Value="../components/vampireimaging/Source/ImagingNetworkGraphics.pas"/>
-        <EditorIndex Value="-1"/>
-        <WindowIndex Value="1"/>
-        <TopLine Value="29"/>
-        <CursorPos X="84" Y="43"/>
-        <UsageCount Value="9"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit27>
-      <Unit28>
-        <Filename Value="../components/vampireimaging/Extras/Extensions/ImagingTiff.pas"/>
-        <EditorIndex Value="-1"/>
-        <WindowIndex Value="1"/>
-        <TopLine Value="33"/>
-        <CursorPos X="13" Y="47"/>
-        <UsageCount Value="9"/>
-      </Unit28>
-      <Unit29>
-        <Filename Value="../components/bgrabitmap/bgrawinresource.pas"/>
-        <UnitName Value="BGRAWinResource"/>
-        <EditorIndex Value="-1"/>
-        <WindowIndex Value="1"/>
-        <TopLine Value="1011"/>
-        <CursorPos X="74" Y="1033"/>
-        <UsageCount Value="9"/>
-      </Unit29>
-      <Unit30>
-        <Filename Value="../../fpcupdeluxe/lazarus/lcl/controls.pp"/>
-        <UnitName Value="Controls"/>
-        <EditorIndex Value="-1"/>
-        <WindowIndex Value="1"/>
-        <TopLine Value="1635"/>
-        <CursorPos X="15" Y="1645"/>
-        <UsageCount Value="8"/>
-      </Unit30>
-      <Unit31>
-        <Filename Value="../components/vampireimaging/Source/ImagingCanvases.pas"/>
-        <EditorIndex Value="-1"/>
-        <WindowIndex Value="1"/>
-        <TopLine Value="1821"/>
-        <CursorPos X="3" Y="1808"/>
-        <UsageCount Value="10"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit31>
-      <Unit32>
-        <Filename Value="../../../../../lazarus/fpc/3.0.4/source/rtl/objpas/sysutils/sysutilh.inc"/>
-        <EditorIndex Value="-1"/>
-        <WindowIndex Value="1"/>
-        <TopLine Value="101"/>
+        <TopLine Value="97"/>
         <CursorPos X="4" Y="107"/>
         <UsageCount Value="10"/>
-      </Unit32>
+      </Unit13>
     </Units>
-    <JumpHistory Count="30" HistoryIndex="29">
+    <JumpHistory Count="14" HistoryIndex="13">
       <Position1>
         <Filename Value="fmain.pas"/>
-        <Caret Line="2416" Column="14" TopLine="2412"/>
+        <Caret Line="1179" Column="54" TopLine="1159"/>
       </Position1>
       <Position2>
         <Filename Value="fmain.pas"/>
-        <Caret Line="2419" Column="46" TopLine="2403"/>
+        <Caret Line="4215" Column="3" TopLine="4211"/>
       </Position2>
       <Position3>
         <Filename Value="fmain.pas"/>
-        <Caret Line="2418" Column="35" TopLine="2406"/>
+        <Caret Line="4216" Column="4" TopLine="4212"/>
       </Position3>
       <Position4>
         <Filename Value="fmain.pas"/>
-        <Caret Line="2418" Column="33" TopLine="2406"/>
+        <Caret Line="4220" Column="14" TopLine="4214"/>
       </Position4>
       <Position5>
         <Filename Value="fmain.pas"/>
-        <Caret Line="2418" Column="49" TopLine="2406"/>
+        <Caret Line="4228" Column="3" TopLine="4216"/>
       </Position5>
       <Position6>
         <Filename Value="fmain.pas"/>
-        <Caret Line="2418" Column="31" TopLine="2406"/>
+        <Caret Line="4219" Column="26" TopLine="4216"/>
       </Position6>
       <Position7>
-        <Filename Value="feffects.pas"/>
-        <Caret Line="210" Column="8" TopLine="208"/>
+        <Filename Value="fmain.pas"/>
+        <Caret Line="4214" Column="5" TopLine="4213"/>
       </Position7>
       <Position8>
-        <Filename Value="feffects.pas"/>
-        <Caret Line="209" Column="8" TopLine="207"/>
+        <Filename Value="fmain.pas"/>
+        <Caret Line="6" Column="58"/>
       </Position8>
       <Position9>
         <Filename Value="fmain.pas"/>
-        <Caret Line="1656" Column="22" TopLine="1646"/>
+        <Caret Line="381" Column="24" TopLine="358"/>
       </Position9>
       <Position10>
         <Filename Value="fmain.pas"/>
-        <Caret Line="1117" Column="41" TopLine="1103"/>
+        <Caret Line="778" Column="16" TopLine="755"/>
       </Position10>
       <Position11>
         <Filename Value="fmain.pas"/>
-        <Caret Line="1116" Column="33" TopLine="1103"/>
+        <Caret Line="1142" Column="20" TopLine="1127"/>
       </Position11>
       <Position12>
-        <Filename Value="../components/vampireimaging/Source/ImagingClasses.pas"/>
-        <Caret Line="276" Column="26" TopLine="263"/>
+        <Filename Value="fmain.pas"/>
+        <Caret Line="1149" Column="36" TopLine="1136"/>
       </Position12>
       <Position13>
-        <Filename Value="../components/vampireimaging/Source/ImagingClasses.pas"/>
-        <Caret Line="1013" Column="22" TopLine="1011"/>
+        <Filename Value="fmain.pas"/>
+        <Caret Line="1154" Column="31" TopLine="1136"/>
       </Position13>
       <Position14>
-        <Filename Value="../components/vampireimaging/Source/Imaging.pas"/>
-        <Caret Line="115" Column="23" TopLine="101"/>
+        <Filename Value="fmain.pas"/>
+        <Caret Line="3909" Column="243" TopLine="3907"/>
       </Position14>
-      <Position15>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="1115" Column="59" TopLine="1103"/>
-      </Position15>
-      <Position16>
-        <Filename Value="../components/vampireimaging/Source/Imaging.pas"/>
-        <Caret Line="5" Column="69"/>
-      </Position16>
-      <Position17>
-        <Filename Value="../components/vampireimaging/Source/Imaging.pas"/>
-        <Caret Line="215" Column="63" TopLine="201"/>
-      </Position17>
-      <Position18>
-        <Filename Value="../components/vampireimaging/Source/Imaging.pas"/>
-        <Caret Line="231" Column="40" TopLine="208"/>
-      </Position18>
-      <Position19>
-        <Filename Value="../components/vampireimaging/Source/ImagingClasses.pas"/>
-        <Caret Line="4" Column="35"/>
-      </Position19>
-      <Position20>
-        <Filename Value="../components/vampireimaging/Source/ImagingClasses.pas"/>
-        <Caret Line="96" Column="67" TopLine="75"/>
-      </Position20>
-      <Position21>
-        <Filename Value="../components/vampireimaging/Source/ImagingClasses.pas"/>
-        <Caret Line="102" Column="50" TopLine="81"/>
-      </Position21>
-      <Position22>
-        <Filename Value="../components/vampireimaging/Source/ImagingClasses.pas"/>
-        <Caret Line="109" Column="44" TopLine="88"/>
-      </Position22>
-      <Position23>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="1132" Column="36" TopLine="1120"/>
-      </Position23>
-      <Position24>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="1131" Column="51" TopLine="1118"/>
-      </Position24>
-      <Position25>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="1162" Column="11" TopLine="1154"/>
-      </Position25>
-      <Position26>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="1139" Column="17" TopLine="1124"/>
-      </Position26>
-      <Position27>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="1135" Column="21" TopLine="1122"/>
-      </Position27>
-      <Position28>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="1132" Column="30" TopLine="1123"/>
-      </Position28>
-      <Position29>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="1152" Column="36" TopLine="1130"/>
-      </Position29>
-      <Position30>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="1127" Column="40" TopLine="1114"/>
-      </Position30>
     </JumpHistory>
   </ProjectSession>
 </CONFIG>
