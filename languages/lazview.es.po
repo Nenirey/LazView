@@ -463,6 +463,10 @@ msgstr "Tamaño de las miniaturas"
 msgid "Tool bar"
 msgstr "Barra de herramientas"
 
+#: tfrmain.mnutoolbarinfull.caption
+msgid "Tool bar in fullscreen"
+msgstr ""
+
 #: tfrmain.mnutools.caption
 #, fuzzy
 #| msgid "&Tools"

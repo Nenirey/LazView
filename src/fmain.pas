@@ -24,6 +24,7 @@ type
     MainMenu1: TMainMenu;
     MenuItem1: TMenuItem;
     MenuItem2: TMenuItem;
+    mnuToolBarInFull: TMenuItem;
     mnuAutoRotate: TMenuItem;
     mnuResize: TMenuItem;
     mnuWindowEffects: TMenuItem;
@@ -184,6 +185,7 @@ type
     procedure mnuQuitGreenClick(Sender: TObject);
     procedure mnuQuitBlueClick(Sender: TObject);
     procedure mnuNoiseClick(Sender: TObject);
+    procedure mnuToolBarInFullClick(Sender: TObject);
     procedure mnuTvClick(Sender: TObject);
     procedure mnuToolsClick(Sender: TObject);
     procedure mnuDeleteFileClick(Sender: TObject);
@@ -228,6 +230,7 @@ type
     procedure mnuRotateRClick(Sender: TObject);
     procedure PairSplitterSide2Resize(Sender: TObject);
     procedure PairSplitterSide3Resize(Sender: TObject);
+    procedure PopupMenu1Close(Sender: TObject);
     procedure PopupMenu1Popup(Sender: TObject);
     procedure sboxthumbPaint(Sender: TObject);
     procedure ScrollBox1MouseDown(Sender: TObject; Button: TMouseButton;
@@ -364,13 +367,14 @@ var
   scrollthumbpos:integer;
   xpercent,ypercent,rigthpercent,bottompercent,wpercent,hpercent:float;
   exactx,exacty,exactright,exactbottom,exactw,exacth:int64;
-  //This is for Undo/Redo function because TStream no need to memorey;
+  //This is for Undo/Redo function
   historyeditbitmap:array of Graphics.TBitmap;
   historyeditbgragif:array of TBGRAAnimatedGif;
   historyeditapng:array of ImagingClasses.TMultiImage;
   historyindex:integer;
   shapemousedown:boolean=false;
   shaperect:TRect;
+  validx,validy,validw,validh:integer;
   procedure rendermosaic;
   procedure fullsc;
   procedure compact;
@@ -1557,6 +1561,7 @@ begin
     frmain.Timer2.Enabled:=true;
     full:=true;
     frmain.ToolBar1.Left:=Round((screen.Width-frmain.ToolBar1.Width)/2);
+    frmain.ToolBar1.Visible:=false;
     frmain.MainMenu1.Items.Visible:=false;
   end
   else
@@ -2979,13 +2984,13 @@ end;
 procedure Tfrmain.FormMouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
-  if frmain.tbSelect.Down=false then
+  if (frmain.tbSelect.Down=false) and (frmain.Image1.Align=alnone) then
   begin
     startdraw:=true;
     imgx:=X+frmain.Image1.ClientOrigin.x-frmain.Image1.Left;
     imgy:=Y+frmain.Image1.ClientOrigin.Y-frmain.Image1.Top;
-  end
-  else
+  end;
+  if frmain.tbSelect.Down then
   begin
     startselect:=true;
     imgx:=X;
@@ -3001,17 +3006,19 @@ begin
   else
     frmain.Image1.Cursor:=crDefault;}
 
-  hidetoolbardelay:=5;
+  if frmain.mnuToolBarInFull.Checked then
+  begin
+    hidetoolbardelay:=5;
+    if frmain.mnuShowThumbs.Checked then
+      frmain.ToolBar1.Top:=frmain.Splitter2.Top-frmain.ToolBar1.Height
+    else
+      frmain.ToolBar1.Top:=screen.Height-frmain.ToolBar1.Height;
 
-  //if frmain.mnuShowThumbs.Checked then
-    //frmain.ToolBar1.Top:=frmain.pssThumbs.Top-frmain.ToolBar1.Height
-  //else
-    //frmain.ToolBar1.Top:=screen.Height-frmain.ToolBar1.Height;
+    frmain.ToolBar1.Left:=Round((screen.Width-frmain.ToolBar1.Width)/2);
 
-  frmain.ToolBar1.Left:=Round((screen.Width-frmain.ToolBar1.Width)/2);
-
-  if full and (frmain.ToolBar1.Visible=false) then
-    frmain.ToolBar1.Visible:=true;
+    if full and (frmain.ToolBar1.Visible=false) then
+      frmain.ToolBar1.Visible:=true;
+  end;
 
   if startdraw and (not startselect) then
   begin
@@ -3021,46 +3028,73 @@ begin
   end;
   if startselect then
   begin
-    frmain.Shape1.Visible:=true;
-    frmain.Shape1.SetBounds(imgx,imgy,X-imgx,Y-imgy);
-    frmain.mnuCrop.Enabled:=true;
+    if (imgx>=frmain.Image1.DestRect.Left) then
+      validx:=imgx
+    else
+    begin
+      if (x>=frmain.Image1.DestRect.Left) then
+      imgx:=x;
+    end;
+    if (imgy>=frmain.Image1.DestRect.Top) then
+      validy:=imgy
+    else
+    begin
+      if (y>=frmain.Image1.DestRect.Top) then
+      imgy:=y;
+    end;
+
+    if X<=frmain.Image1.DestRect.Right then
+      validw:=X-imgx
+    else
+    begin
+      //validw:=frmain.Image1.DestRect.width;
+      //frmain.Caption:='width limit';
+    end;
+    if Y<=frmain.Image1.DestRect.Bottom then
+      validh:=Y-imgy
+    else
+    begin
+      //validh:=frmain.Image1.DestRect.Height;
+      //frmain.Caption:='height limit';
+    end;
+    if (x>=frmain.Image1.DestRect.Left) and (y>=frmain.Image1.DestRect.Top) {and (validw<=frmain.Image1.DestRect.Width) and (validh<=frmain.Image1.DestRect.Height)} then
+    begin
+      frmain.Shape1.SetBounds(validx,validy,validw,validh);
+      frmain.StatusBar1.Panels[6].Text:='Selection: '+inttostr(X)+'/'+inttostr(Y);
+      frmain.Shape1.Visible:=true;
+      frmain.mnuCrop.Enabled:=true;
+    end;
   end;
-  if (compactmode or full) and ((frmain.Image1.Stretch=false) or frmain.tbStrech.Down) and (startselect=false) then
+  if (compactmode or full) and (frmain.Image1.Align=alClient) and (frmain.tbSelect.Down=false) then
   begin
     if x>(frmain.Width/3)*2 then
     begin
-      frmain.Image1.Cursor:=2;
-      frmain.Cursor:=2;
+      Screen.Cursor:=2;
     end;
     if x<(frmain.Width/3) then
     begin
-      frmain.Image1.Cursor:=1;
-      frmain.Cursor:=1;
+      Screen.Cursor:=1;
     end;
     if (x<(frmain.Width/3)*2) and (x>(frmain.Width/3)) then
     begin
-      frmain.Image1.Cursor:=crDefault;
-      frmain.Cursor:=crDefault;
+      Screen.Cursor:=crDefault;
     end;
   end
   else
   begin
-    if frmain.Image1.Stretch and (frmain.tbStrech.Down=false)  then
+    if (frmain.Image1.Align=alNone)  then
     begin
-      frmain.Image1.Cursor:=crSizeAll;
-      //frmain.Cursor:=crSizeAll;
+      Screen.Cursor:=crSizeAll;
     end
     else
     begin
       if frmain.tbSelect.Down then
       begin
-        frmain.Image1.Cursor:=crCross;
-        frmain.Cursor:=crCross;
+        Screen.Cursor:=crCross;
       end
       else
       begin
-        frmain.Image1.Cursor:=crDefault;
-        frmain.Cursor:=crDefault;
+        Screen.Cursor:=crDefault;
       end;
     end;
   end;
@@ -3108,24 +3142,22 @@ procedure Tfrmain.Image1Click(Sender: TObject);
 begin
   if startselect=false then
     frmain.Shape1.Visible:=false;
-  if (compactmode or full) and ((frmain.Image1.Stretch=false) or frmain.tbStrech.Down) and (startselect=false) then
+  if (compactmode or full) and (frmain.Image1.Align=alClient) and (startselect=false) then
   begin
-    if frmain.Image1.Cursor=2 then
+    if Screen.Cursor=2 then
     begin
       nextfile();
-      frmain.Image1.Cursor:=2;
     end;
-    if frmain.Image1.Cursor=1 then
+    if Screen.Cursor=1 then
     begin
       prevfile();
-      frmain.Image1.Cursor:=1;
     end;
   end;
 end;
 
 procedure Tfrmain.Image1DblClick(Sender: TObject);
 begin
- if (frmain.Image1.Cursor=crDefault) and (frmain.Cursor=crDefault) then
+ if Screen.Cursor=crDefault then
   fullsc();
 end;
 
@@ -3499,6 +3531,11 @@ end;
 procedure Tfrmain.mnuNoiseClick(Sender: TObject);
 begin
   efectimagen(18);
+end;
+
+procedure Tfrmain.mnuToolBarInFullClick(Sender: TObject);
+begin
+  frmain.mnuToolBarInFull.Checked:=not frmain.mnuToolBarInFull.Checked;
 end;
 
 procedure Tfrmain.mnuTvClick(Sender: TObject);
@@ -4094,6 +4131,11 @@ begin
   end;
 end;
 
+procedure Tfrmain.PopupMenu1Close(Sender: TObject);
+begin
+  frmain.PopupMenu1.Tag:=0;
+end;
+
 procedure Tfrmain.PopupMenu1Popup(Sender: TObject);
 var
    i,s,c:integer;
@@ -4101,6 +4143,7 @@ var
    sm:TMenuItem;
    cm:TMenuItem;
 begin
+ frmain.PopupMenu1.Tag:=1;
  if frmain.PopupMenu1.Items.Count<2 then
  begin
    for i:=0 to frmain.MainMenu1.Items.Count-1 do
@@ -4480,10 +4523,10 @@ procedure Tfrmain.Timer2Timer(Sender: TObject);
 begin
   if hidetoolbardelay>0 then
     Dec(hidetoolbardelay);
-  if full and (hidetoolbardelay=0) then
+  if full and (hidetoolbardelay=0) and (Screen.Cursor=crDefault) and (frmain.PopupMenu1.Tag<>1) then
   begin
     frmain.ToolBar1.Visible:=false;
-    frmain.Image1.Cursor:=crNone;
+    Screen.Cursor:=crNone;
   end;
 end;
 

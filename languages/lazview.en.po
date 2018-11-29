@@ -458,6 +458,10 @@ msgstr ""
 msgid "Tool bar"
 msgstr ""
 
+#: tfrmain.mnutoolbarinfull.caption
+msgid "Tool bar in fullscreen"
+msgstr ""
+
 #: tfrmain.mnutools.caption
 #, fuzzy
 #| msgid "&Tools"
