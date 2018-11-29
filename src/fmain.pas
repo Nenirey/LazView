@@ -4298,7 +4298,7 @@ end;
 
 procedure Tfrmain.Shape1MouseLeave(Sender: TObject);
 begin
-  //shapemousedown:=false;
+
 end;
 
 procedure Tfrmain.Shape1MouseMove(Sender: TObject; Shift: TShiftState; X,
@@ -4307,7 +4307,7 @@ begin
   //Right Top Corner
   if (Y>0) and (Y<10) and (X>0) and (X<10) then
   begin
-    frmain.Shape1.Cursor:=crSizeNW;
+    Screen.Cursor:=crSizeNW;
     if shapemousedown then
     begin
       frmain.Shape1.Top:=Mouse.CursorPos.Y-shaperect.Top-frmain.Image1.ClientOrigin.Y;
@@ -4325,7 +4325,7 @@ begin
   //Top
   if (Y<10) and (X>10) and (X<frmain.Shape1.Width-10) then
   begin
-    frmain.Shape1.Cursor:=crSizeS;
+    Screen.Cursor:=crSizeS;
     if shapemousedown then
     begin
       frmain.Shape1.Top:=Mouse.CursorPos.Y-shaperect.Top-frmain.Image1.ClientOrigin.Y;
@@ -4338,7 +4338,7 @@ begin
   //Left
   if (Y>10) and (X<10) and (Y<frmain.Shape1.Height-10) then
   begin
-    frmain.Shape1.Cursor:=crSizeW;
+    Screen.Cursor:=crSizeW;
     if shapemousedown then
     begin
       frmain.Shape1.Left:=Mouse.CursorPos.X-shaperect.Left-frmain.Image1.ClientOrigin.X;
@@ -4351,7 +4351,7 @@ begin
   //Left Top Corner
   if (Y<10) and (X>frmain.Shape1.Width-10) then
   begin
-    frmain.Shape1.Cursor:=crSizeNE;
+    Screen.Cursor:=crSizeNE;
     if shapemousedown then
     begin
       frmain.Shape1.Top:=Mouse.CursorPos.Y-shaperect.Top-frmain.Image1.ClientOrigin.Y;
@@ -4365,21 +4365,21 @@ begin
   //Right
   if (Y>10) and (Y<frmain.Shape1.Height-10) and (X>frmain.Shape1.Width-10) then
   begin
-    frmain.Shape1.Cursor:=crSizeW;
+    Screen.Cursor:=crSizeW;
     if shapemousedown then
       frmain.Shape1.Width:=X+5;
   end;
   //Bottom
   if (Y>frmain.Shape1.Height-10) and (X>10) and (X<frmain.Shape1.Width-10) then
   begin
-    frmain.Shape1.Cursor:=crSizeS;
+    Screen.Cursor:=crSizeS;
     if shapemousedown then
       frmain.Shape1.Height:=Y+5;
   end;
   //Left Bottom Corner
   if (Y>frmain.Shape1.Height-10) and (X<10) then
   begin
-    frmain.Shape1.Cursor:=crSizeNE;
+    Screen.Cursor:=crSizeNE;
     if shapemousedown then
     begin
       frmain.Shape1.Height:=Y+5;
@@ -4393,7 +4393,7 @@ begin
   //Right Bottom Corner
   if (Y>frmain.Shape1.Height-10) and (X>frmain.Shape1.Width-10) then
   begin
-    frmain.Shape1.Cursor:=crSizeNW;
+    Screen.Cursor:=crSizeNW;
     if shapemousedown then
     begin
       frmain.Shape1.Width:=X+5;
@@ -4402,11 +4402,13 @@ begin
   end;
   if (Y>10) and (X>10) and (Y<frmain.Shape1.Height-10) and (X<frmain.Shape1.Width-10) then
   begin
-    frmain.Shape1.Cursor:=crSizeALL;
+    Screen.Cursor:=crSizeALL;
     if shapemousedown then
     begin
-      frmain.Shape1.Top:=Mouse.CursorPos.Y-shaperect.Top-frmain.Image1.ClientOrigin.Y;
-      frmain.Shape1.Left:=Mouse.CursorPos.X-shaperect.Left-frmain.Image1.ClientOrigin.X;
+      if (Mouse.CursorPos.Y-shaperect.Top-frmain.Image1.ClientOrigin.Y>=frmain.Image1.DestRect.Top) and (Mouse.CursorPos.Y-shaperect.Top-frmain.Image1.ClientOrigin.Y+frmain.Shape1.Height<=frmain.Image1.DestRect.Bottom) then
+        frmain.Shape1.Top:=Mouse.CursorPos.Y-shaperect.Top-frmain.Image1.ClientOrigin.Y;
+      if (Mouse.CursorPos.X-shaperect.Left-frmain.Image1.ClientOrigin.X>=frmain.Image1.DestRect.Left) and (Mouse.CursorPos.X-shaperect.Left-frmain.Image1.ClientOrigin.X+frmain.Shape1.Width<=frmain.Image1.DestRect.Right) then
+        frmain.Shape1.Left:=Mouse.CursorPos.X-shaperect.Left-frmain.Image1.ClientOrigin.X;
     end;
   end;
 end;
@@ -4655,11 +4657,12 @@ begin
   frmain.mnuSelect.Checked:=not frmain.mnuSelect.Checked;
   frmain.tbSelect.Down:=frmain.mnuSelect.Checked;
   if frmain.mnuSelect.Checked then
-    frmain.Image1.Cursor:=crCross
+    Screen.Cursor:=crCross
   else
   begin
     frmain.Shape1.Hide;
     frmain.mnuCrop.Enabled:=false;
+    Screen.Cursor:=crDefault;
   end;
 end;
 
