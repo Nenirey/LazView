@@ -3,5 +3,7 @@
 {"hash":98548410,"name":"tfrresize.label1.caption","sourcebytes":[87,105,100,116,104,58],"value":"Width:"},
 {"hash":247455546,"name":"tfrresize.label2.caption","sourcebytes":[72,101,105,103,104,116,58],"value":"Height:"},
 {"hash":8609151,"name":"tfrresize.togglebox1.hint","sourcebytes":[107,101,101,112,32,97,115,112,101,99,116,32,114,97,116,105,111],"value":"keep aspect ratio"},
-{"hash":93,"name":"tfrresize.togglebox1.caption","sourcebytes":[93],"value":"]"}
+{"hash":93,"name":"tfrresize.togglebox1.caption","sourcebytes":[93],"value":"]"},
+{"hash":218344474,"name":"tfrresize.lblfilter.caption","sourcebytes":[70,105,108,116,101,114,58],"value":"Filter:"},
+{"hash":42250547,"name":"tfrresize.cbfilter.text","sourcebytes":[76,97,110,99,122,111,115],"value":"Lanczos"}
 ]}

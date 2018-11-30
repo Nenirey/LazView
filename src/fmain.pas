@@ -24,6 +24,7 @@ type
     MainMenu1: TMainMenu;
     MenuItem1: TMenuItem;
     MenuItem2: TMenuItem;
+    mnuSave: TMenuItem;
     mnuToolBarInFull: TMenuItem;
     mnuAutoRotate: TMenuItem;
     mnuResize: TMenuItem;
@@ -103,6 +104,7 @@ type
     mnuRotateR: TMenuItem;
     OpenPictureDialog1: TOpenPictureDialog;
     PopupMenu1: TPopupMenu;
+    FakePopup: TPopupMenu;
     SavePictureDialog1: TSavePictureDialog;
     ScrollBox1: TScrollBox;
     sboxthumb: TScrollBox;
@@ -132,6 +134,10 @@ type
     tbNextImage: TToolButton;
     tbNextFrame: TToolButton;
     tbPauseAnim: TToolButton;
+    tbSave: TToolButton;
+    ToolButton1: TToolButton;
+    tbOpen: TToolButton;
+    ToolButton2: TToolButton;
     ToolButton22: TToolButton;
     ToolButton23: TToolButton;
     tbStrech: TToolButton;
@@ -165,6 +171,7 @@ type
     procedure FormWindowStateChange(Sender: TObject);
     procedure Image1Click(Sender: TObject);
     procedure Image1DblClick(Sender: TObject);
+    procedure Image1MouseLeave(Sender: TObject);
     procedure Image1MouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure mnuAlwaysOnTopClick(Sender: TObject);
@@ -185,6 +192,7 @@ type
     procedure mnuQuitGreenClick(Sender: TObject);
     procedure mnuQuitBlueClick(Sender: TObject);
     procedure mnuNoiseClick(Sender: TObject);
+    procedure mnuSaveClick(Sender: TObject);
     procedure mnuToolBarInFullClick(Sender: TObject);
     procedure mnuTvClick(Sender: TObject);
     procedure mnuToolsClick(Sender: TObject);
@@ -262,6 +270,8 @@ type
     procedure tbFirstImageClick(Sender: TObject);
     procedure tbInformationClick(Sender: TObject);
     procedure tbLastImageClick(Sender: TObject);
+    procedure tbOpenClick(Sender: TObject);
+    procedure tbSaveClick(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure Timer2Timer(Sender: TObject);
     procedure Timer3Timer(Sender: TObject);
@@ -479,6 +489,54 @@ begin
   exacth:=Round(hpercent*0.01*frmain.Image1.Picture.Bitmap.Height);
 end;
 
+procedure fakemenu;
+var
+   i,s,c:integer;
+   mi:TMenuItem;
+   sm:TMenuItem;
+   cm:TMenuItem;
+begin
+   if frmain.FakePopup.Items.Count<2 then
+   begin
+     for i:=0 to frmain.MainMenu1.Items.Count-1 do
+     begin
+       mi:=TMenuItem.Create(frmain.FakePopup);
+       mi.Caption:=frmain.MainMenu1.Items[i].Caption;
+       mi.Visible:=false;
+       frmain.FakePopup.Items.Add(mi);
+       for s:=0 to frmain.MainMenu1.Items[i].Count-1 do
+       begin
+         sm:=TMenuItem.Create(frmain.FakePopup);
+         sm.Caption:=frmain.MainMenu1.Items[i].Items[s].Caption;
+         sm.OnClick:=frmain.MainMenu1.Items[i].Items[s].OnClick;
+         sm.Checked:=frmain.MainMenu1.Items[i].Items[s].Checked;
+         sm.Enabled:=frmain.MainMenu1.Items[i].Items[s].Enabled;
+         sm.ShortCut:=frmain.MainMenu1.Items[i].Items[s].ShortCut;
+         frmain.FakePopup.Items[i].Add(sm);
+         for c:=0 to frmain.MainMenu1.Items[i].Items[s].Count-1 do
+         begin
+           cm:=TMenuItem.Create(frmain.FakePopup);
+           cm.Caption:=frmain.MainMenu1.Items[i].Items[s].Items[c].Caption;
+           cm.OnClick:=frmain.MainMenu1.Items[i].Items[s].Items[c].OnClick;
+           cm.Checked:=frmain.MainMenu1.Items[i].Items[s].Items[c].Checked;
+           cm.Enabled:=frmain.MainMenu1.Items[i].Items[s].Items[c].Enabled;
+           cm.ShortCut:=frmain.MainMenu1.Items[i].Items[s].Items[c].ShortCut;
+           frmain.FakePopup.Items[i].Items[s].Add(cm);
+         end;
+       end;
+     end;
+   end;
+  for i:=0 to frmain.MainMenu1.Items.Count-1 do
+  begin
+    for s:=0 to frmain.MainMenu1.Items[i].Count-1 do
+    begin
+      frmain.FakePopup.Items[i].Items[s].Caption:=frmain.MainMenu1.Items[i].Items[s].Caption;
+      frmain.FakePopup.Items[i].Items[s].Checked:=frmain.MainMenu1.Items[i].Items[s].Checked;
+      frmain.FakePopup.Items[i].Items[s].Enabled:=frmain.MainMenu1.Items[i].Items[s].Enabled;
+    end;
+  end;
+end;
+
 procedure showmainmenu(ifshow:boolean);
 begin
   with frMain do
@@ -501,7 +559,8 @@ begin
     end
     else if Assigned(Menu) then
     begin
-      Menu := nil;
+      fakemenu;
+      Menu := TMainMenu(FakePopup);
     end;
   end;
 end;
@@ -556,7 +615,7 @@ begin
   else
     iniconfigfile:=TMEMINIFile.Create(GetAppConfigDir(false)+'lazview.ini');
     if iniconfigfile.ReadBool('Config','compactmode',compactmode) then
-    compact;
+      compact;
   case iniconfigfile.ReadString('Config','mainwindowstate','wsMaximized') of
   'wsMaximized':
     begin
@@ -581,6 +640,11 @@ begin
       frmain.Splitter2.Top:=frmain.StatusBar1.Top-frmain.Splitter2.Height+frmain.StatusBar1.Height-iniconfigfile.ReadInteger('Config','thumbpanelsize',64)
     else
       frmain.Splitter2.Top:=frmain.Height-frmain.Splitter2.Height-iniconfigfile.ReadInteger('Config','thumbpanelsize',64);
+    {$IFDEF LCLGTK2}
+    {$ELSE}
+    if compactmode then
+      frmain.Splitter2.Top:=frmain.Splitter2.Top-frmain.MainMenu1.Height;
+    {$ENDIF}
     thumbsize:=frmain.sboxthumb.Height;
     frmain.PairSplitterSide2Resize(nil);
   end
@@ -813,13 +877,15 @@ begin
     result:=inttostr(ms)+' ms';
 end;
 
-procedure resizeto(w:integer;h:integer);
+procedure resizeto(w:integer;h:integer;filtro:TResizeFilter=rfLanczos);
 var
    tmpbitmap:BGRABitmap.TBGRABitmap;
    i:integer;
    tmpgif:TBGRAAnimatedGif;
+   vmp:ImagingClasses.TSingleImage;
 begin
   realmode;
+  sethistory;
   if ifgif then
   begin
     tmpgif:=TBGRAAnimatedGif.Create;
@@ -830,7 +896,6 @@ begin
       BGRAGif.CurrentImage:=i;
       tmpbitmap.Canvas.CopyRect(Types.Rect(0,0,w,h),BGRAGif.Bitmap.Canvas,Types.Rect(0,0,BGRAGif.Width,BGRAGif.Height));
       tmpgif.InsertFrame(i,tmpbitmap,0,0,BGRAGif.FrameDelayMs[i],BGRAGif.FrameDisposeMode[i],BGRAGif.FrameHasLocalPalette[i]);
-      //tmpbitmap.Destroy;
       FreeAndNil(tmpbitmap);
     end;
     tmpgif.LoopCount:=BGRAGif.LoopCount;
@@ -839,16 +904,22 @@ begin
   end;
   if ifapng then
   begin
-    APNGImage.ResizeImages(w,h,rfLanczos);
+    APNGImage.ResizeImages(w,h,filtro);
   end;
-  if ifgif=false and ifapng=false then
+  if (ifgif=false) and (ifapng=false) then
   begin
-    tmpbitmap:=BGRABitmap.TBGRABitmap.Create(w,h);
-    tmpbitmap.Canvas.CopyRect(Types.Rect(0,0,w,h),frmain.Image1.Picture.Bitmap.Canvas,Types.Rect(0,0,frmain.Image1.Picture.Bitmap.Width,frmain.Image1.Picture.Bitmap.Height));
-    frmain.Image1.Picture.Bitmap.Assign(tmpbitmap);
-    //tmpbitmap.Destroy;
-    FreeAndNil(tmpbitmap);
+    //tmpbitmap:=BGRABitmap.TBGRABitmap.Create(w,h);
+    //tmpbitmap.Assign(frmain.Image1.Picture.Bitmap);
+    //tmpbitmap.SetSize(w,h);
+    //tmpbitmap.Canvas.CopyRect(Types.Rect(0,0,w,h),frmain.Image1.Picture.Bitmap.Canvas,Types.Rect(0,0,frmain.Image1.Picture.Bitmap.Width,frmain.Image1.Picture.Bitmap.Height));
+    vmp:=ImagingClasses.TSingleImage.Create;
+    ImagingComponents.ConvertBitmapToImage(frmain.Image1.Picture.Bitmap,vmp);
+    vmp.Resize(w,h,filtro);
+    ImagingComponents.ConvertImageToBitmap(vmp,frmain.Image1.Picture.Bitmap);
+    //frmain.Image1.Picture.Bitmap.Assign(tmpbitmap);
+    FreeAndNil(vmp);
   end;
+  setafterhistory;
   realimgwidth:=w;
   realimgheight:=h;
   frmain.StatusBar1.Panels.Items[1].Text:='Resolution:'+inttostr(w)+'x'+inttostr(h)+' '+zoomfactor(w,h,frmain.Image1.Width,frmain.Image1.Height)+'%';
@@ -1516,6 +1587,7 @@ begin
   end;
   frmain.mnuRedo.Enabled:=false;
   frmain.mnuUndo.Enabled:=false;
+  frmain.Shape1.Visible:=false;
   if frmain.mnuShowThumbs.Checked then
   begin
     if scrollthumbs {and (frmain.sboxthumb.ComponentCount>ifile)} then
@@ -2887,10 +2959,25 @@ begin
     begin//Enter, F, F11
       fullsc();
     end;
-  27,81://Escape, Q
+  27://Escape
     begin
-      saveconfig;
-      Application.Terminate;
+      if frmain.Shape1.Visible then
+        frmain.Shape1.Visible:=false
+      else
+      begin
+        if frmain.tbSelect.Down then
+        begin
+          frmain.tbSelect.Down:=false;
+          frmain.Image1.Cursor:=crDefault;
+        end
+        else
+        begin
+          if Assigned(ththumbs) then
+            ththumbs.stop;
+          saveconfig;
+          Application.Terminate;
+        end;
+      end;
     end;
   67://Letra C
     begin
@@ -2907,6 +2994,13 @@ begin
   73://Letra i
     begin
       filterimagen(13);
+    end;
+  81://Letra Q
+    begin
+      if Assigned(ththumbs) then
+        ththumbs.stop;
+      saveconfig;
+      Application.Terminate;
     end;
   86://Letra V
     begin
@@ -3044,23 +3138,14 @@ begin
     end;
 
     if X<=frmain.Image1.DestRect.Right then
-      validw:=X-imgx
-    else
-    begin
-      //validw:=frmain.Image1.DestRect.width;
-      //frmain.Caption:='width limit';
-    end;
+      validw:=X-imgx;
     if Y<=frmain.Image1.DestRect.Bottom then
-      validh:=Y-imgy
-    else
-    begin
-      //validh:=frmain.Image1.DestRect.Height;
-      //frmain.Caption:='height limit';
-    end;
+      validh:=Y-imgy;
+
     if (x>=frmain.Image1.DestRect.Left) and (y>=frmain.Image1.DestRect.Top) {and (validw<=frmain.Image1.DestRect.Width) and (validh<=frmain.Image1.DestRect.Height)} then
     begin
       frmain.Shape1.SetBounds(validx,validy,validw,validh);
-      frmain.StatusBar1.Panels[6].Text:='Selection: '+inttostr(X)+'/'+inttostr(Y);
+      //frmain.StatusBar1.Panels[6].Text:='Selection: '+inttostr(X)+'/'+inttostr(Y);
       frmain.Shape1.Visible:=true;
       frmain.mnuCrop.Enabled:=true;
     end;
@@ -3077,6 +3162,7 @@ begin
     end;
     if (x<(frmain.Width/3)*2) and (x>(frmain.Width/3)) then
     begin
+      frmain.Image1.Cursor:=crDefault;
       Screen.Cursor:=crDefault;
     end;
   end
@@ -3084,17 +3170,20 @@ begin
   begin
     if (frmain.Image1.Align=alNone)  then
     begin
-      Screen.Cursor:=crSizeAll;
+      Screen.Cursor:=crDefault;
+      frmain.Image1.Cursor:=crSizeAll;
     end
     else
     begin
       if frmain.tbSelect.Down then
       begin
-        Screen.Cursor:=crCross;
+        Screen.Cursor:=crDefault;
+        frmain.Image1.Cursor:=crCross;
       end
       else
       begin
         Screen.Cursor:=crDefault;
+        frmain.Image1.Cursor:=crDefault;
       end;
     end;
   end;
@@ -3140,8 +3229,6 @@ end;
 
 procedure Tfrmain.Image1Click(Sender: TObject);
 begin
-  if startselect=false then
-    frmain.Shape1.Visible:=false;
   if (compactmode or full) and (frmain.Image1.Align=alClient) and (startselect=false) then
   begin
     if Screen.Cursor=2 then
@@ -3153,12 +3240,30 @@ begin
       prevfile();
     end;
   end;
+  if startselect=false then
+    frmain.Shape1.Visible:=false;
 end;
 
 procedure Tfrmain.Image1DblClick(Sender: TObject);
 begin
- if Screen.Cursor=crDefault then
-  fullsc();
+  if (compactmode or full) and (frmain.Image1.Align=alClient) and (startselect=false) then
+  begin
+    if Screen.Cursor=2 then
+    begin
+      nextfile();
+    end;
+    if Screen.Cursor=1 then
+    begin
+      prevfile();
+    end;
+  end;
+  if Screen.Cursor=crDefault then
+    fullsc();
+end;
+
+procedure Tfrmain.Image1MouseLeave(Sender: TObject);
+begin
+  Screen.Cursor:=crDefault;
 end;
 
 
@@ -3365,7 +3470,10 @@ var
        namewithoutext:=Copy(name,0,LastDelimiter(ext,name)-length(ext)+1)
      else
        namewithoutext:=name;
-     result:=path+pathdelim+namewithoutext+frmain.SavePictureDialog1.GetFilterExt;
+     if Sender<>nil then
+       result:=path+pathdelim+namewithoutext+frmain.SavePictureDialog1.GetFilterExt
+     else
+       result:=carpeta+flist[ifile];
      //ExtractFilePath(frmain.SavePictureDialog1.FileName)+pathdelim+ExtractFileName(frmain.SavePictureDialog1.FileName)+'.'+frmain.SavePictureDialog1.GetFilterExt;
    end;
 
@@ -3385,11 +3493,12 @@ begin
     if UpperCase('.'+frmain.SavePictureDialog1.GetFilterExt)=UpperCase(ExtractFileExt(frmain.SavePictureDialog1.FileName)) then
       break;
   end;
-  frmain.SavePictureDialog1.Execute;
+  if Sender<>nil then
+    frmain.SavePictureDialog1.Execute;
   filtroext:=StringReplace(frmain.SavePictureDialog1.GetFilterExt,'*','',[rfReplaceAll]);
   if filtroext='.' then
     filtroext:=ExtractFileExt(frmain.SavePictureDialog1.FileName);
-  if {$IFDEF LCLQT}frmain.SavePictureDialog1.UserChoice=1{$else}{$IFDEF LCLQT5}frmain.SavePictureDialog1.UserChoice=1{$ELSE}frmain.SavePictureDialog1.FileName<>''{$endif}{$ENDIF}then
+  if ({$IFDEF LCLQT}frmain.SavePictureDialog1.UserChoice=1{$else}{$IFDEF LCLQT5}frmain.SavePictureDialog1.UserChoice=1{$ELSE}frmain.SavePictureDialog1.FileName<>''{$endif}{$ENDIF}) or (Sender=nil) then
   begin
     if FileExists(correctfilename) then
       confirmar:=(Application.MessageBox(PChar('Do you want to replace the image file '+ExtractFileName(correctfilename)+'?'),'Confirm',MB_ICONQUESTION + MB_YESNO)=IDYES)
@@ -3402,10 +3511,13 @@ begin
       case frmain.SavePictureDialog1.FilterIndex of
         1:
         begin
-          frquality.ShowModal;
-          calidadjpg:=frquality.TrackBar1.Position;
-          frmain.Image1.Picture.Jpeg.CompressionQuality:=calidadjpg;
-          frmain.Image1.Refresh;
+          if Sender<>nil then
+          begin
+            frquality.ShowModal;
+            calidadjpg:=frquality.TrackBar1.Position;
+            frmain.Image1.Picture.Jpeg.CompressionQuality:=calidadjpg;
+            frmain.Image1.Refresh;
+          end;
           frmain.Image1.Picture.Jpeg.SaveToFile(correctfilename);
         end;
         2:
@@ -3533,6 +3645,12 @@ begin
   efectimagen(18);
 end;
 
+procedure Tfrmain.mnuSaveClick(Sender: TObject);
+begin
+  if Assigned(flist) then
+    frmain.mnuSaveAsClick(nil);
+end;
+
 procedure Tfrmain.mnuToolBarInFullClick(Sender: TObject);
 begin
   frmain.mnuToolBarInFull.Checked:=not frmain.mnuToolBarInFull.Checked;
@@ -3637,7 +3755,7 @@ begin
   frresize.SpinEdit2.Value:=realimgheight;
   frresize.ShowModal;
   if okresize then
-    resizeto(frresize.SpinEdit1.Value,frresize.SpinEdit2.Value);
+    resizeto(frresize.SpinEdit1.Value,frresize.SpinEdit2.Value,TResizeFilter(frresize.cbFilter.ItemIndex));
 end;
 
 procedure Tfrmain.mnuBRGClick(Sender: TObject);
@@ -4304,14 +4422,17 @@ end;
 procedure Tfrmain.Shape1MouseMove(Sender: TObject; Shift: TShiftState; X,
   Y: Integer);
 begin
-  //Right Top Corner
+  Screen.Cursor:=crDefault;
+  //left Top Corner
   if (Y>0) and (Y<10) and (X>0) and (X<10) then
   begin
-    Screen.Cursor:=crSizeNW;
+    frmain.Shape1.Cursor:=crSizeNW;
     if shapemousedown then
     begin
-      frmain.Shape1.Top:=Mouse.CursorPos.Y-shaperect.Top-frmain.Image1.ClientOrigin.Y;
-      frmain.Shape1.Left:=Mouse.CursorPos.X-shaperect.Left-frmain.Image1.ClientOrigin.X;
+      if (Mouse.CursorPos.Y-shaperect.Top-frmain.Image1.ClientOrigin.Y>=frmain.Image1.DestRect.Top) then
+        frmain.Shape1.Top:=Mouse.CursorPos.Y-shaperect.Top-frmain.Image1.ClientOrigin.Y;
+      if (Mouse.CursorPos.X-shaperect.Left-frmain.Image1.ClientOrigin.X>=frmain.Image1.DestRect.Left) then
+        frmain.Shape1.Left:=Mouse.CursorPos.X-shaperect.Left-frmain.Image1.ClientOrigin.X;
       while frmain.Shape1.BoundsRect.Bottom<shaperect.Bottom do
         frmain.Shape1.Height:=frmain.Shape1.Height+1;
       while frmain.Shape1.BoundsRect.Right<shaperect.Right do
@@ -4325,10 +4446,11 @@ begin
   //Top
   if (Y<10) and (X>10) and (X<frmain.Shape1.Width-10) then
   begin
-    Screen.Cursor:=crSizeS;
+    frmain.Shape1.Cursor:=crSizeS;
     if shapemousedown then
     begin
-      frmain.Shape1.Top:=Mouse.CursorPos.Y-shaperect.Top-frmain.Image1.ClientOrigin.Y;
+      if (Mouse.CursorPos.Y-shaperect.Top-frmain.Image1.ClientOrigin.Y>=frmain.Image1.DestRect.Top) then
+        frmain.Shape1.Top:=Mouse.CursorPos.Y-shaperect.Top-frmain.Image1.ClientOrigin.Y;
       while frmain.Shape1.BoundsRect.Bottom<shaperect.Bottom do
         frmain.Shape1.Height:=frmain.Shape1.Height+1;
       while frmain.Shape1.BoundsRect.Bottom>shaperect.Bottom do
@@ -4338,24 +4460,27 @@ begin
   //Left
   if (Y>10) and (X<10) and (Y<frmain.Shape1.Height-10) then
   begin
-    Screen.Cursor:=crSizeW;
+    frmain.Shape1.Cursor:=crSizeW;
     if shapemousedown then
     begin
-      frmain.Shape1.Left:=Mouse.CursorPos.X-shaperect.Left-frmain.Image1.ClientOrigin.X;
+      if (Mouse.CursorPos.X-shaperect.Left-frmain.Image1.ClientOrigin.X>=frmain.Image1.DestRect.Left) then
+        frmain.Shape1.Left:=Mouse.CursorPos.X-shaperect.Left-frmain.Image1.ClientOrigin.X;
       while frmain.Shape1.BoundsRect.Right<shaperect.Right do
         frmain.Shape1.Width:=frmain.Shape1.Width+1;
       while frmain.Shape1.BoundsRect.Right>shaperect.Right do
         frmain.Shape1.Width:=frmain.Shape1.Width-1;
     end;
   end;
-  //Left Top Corner
+  //Right Top Corner
   if (Y<10) and (X>frmain.Shape1.Width-10) then
   begin
-    Screen.Cursor:=crSizeNE;
+    frmain.Shape1.Cursor:=crSizeNE;
     if shapemousedown then
     begin
-      frmain.Shape1.Top:=Mouse.CursorPos.Y-shaperect.Top-frmain.Image1.ClientOrigin.Y;
-      frmain.Shape1.Width:=X+5;
+      if (Mouse.CursorPos.Y-shaperect.Top-frmain.Image1.ClientOrigin.Y+frmain.Shape1.Height<=frmain.Image1.DestRect.Bottom) then
+        frmain.Shape1.Top:=Mouse.CursorPos.Y-shaperect.Top-frmain.Image1.ClientOrigin.Y;
+      if (Mouse.CursorPos.X-shaperect.Left-frmain.Image1.ClientOrigin.X+frmain.Shape1.Width<=frmain.Image1.DestRect.Right+5) then
+        frmain.Shape1.Width:=X+5;
       while frmain.Shape1.BoundsRect.Bottom<shaperect.Bottom do
         frmain.Shape1.Height:=frmain.Shape1.Height+1;
       while frmain.Shape1.BoundsRect.Bottom>shaperect.Bottom do
@@ -4365,25 +4490,27 @@ begin
   //Right
   if (Y>10) and (Y<frmain.Shape1.Height-10) and (X>frmain.Shape1.Width-10) then
   begin
-    Screen.Cursor:=crSizeW;
-    if shapemousedown then
+    frmain.Shape1.Cursor:=crSizeW;
+    if shapemousedown and (Mouse.CursorPos.X-shaperect.Left-frmain.Image1.ClientOrigin.X+frmain.Shape1.Width<=frmain.Image1.DestRect.Right+5) then
       frmain.Shape1.Width:=X+5;
   end;
   //Bottom
   if (Y>frmain.Shape1.Height-10) and (X>10) and (X<frmain.Shape1.Width-10) then
   begin
-    Screen.Cursor:=crSizeS;
-    if shapemousedown then
+    frmain.Shape1.Cursor:=crSizeS;
+    if shapemousedown and (Mouse.CursorPos.Y-shaperect.Top-frmain.Image1.ClientOrigin.Y+frmain.Shape1.Height<=frmain.Image1.DestRect.Bottom+5) then
       frmain.Shape1.Height:=Y+5;
   end;
   //Left Bottom Corner
   if (Y>frmain.Shape1.Height-10) and (X<10) then
   begin
-    Screen.Cursor:=crSizeNE;
+    frmain.Shape1.Cursor:=crSizeNE;
     if shapemousedown then
     begin
-      frmain.Shape1.Height:=Y+5;
-      frmain.Shape1.Left:=Mouse.CursorPos.X-shaperect.Left-frmain.Image1.ClientOrigin.X;
+      if (Mouse.CursorPos.Y-shaperect.Top-frmain.Image1.ClientOrigin.Y+frmain.Shape1.Height<=frmain.Image1.DestRect.Bottom) then
+        frmain.Shape1.Height:=Y+5;
+      if (Mouse.CursorPos.X-shaperect.Left-frmain.Image1.ClientOrigin.X>=frmain.Image1.DestRect.Left) then
+        frmain.Shape1.Left:=Mouse.CursorPos.X-shaperect.Left-frmain.Image1.ClientOrigin.X;
       while frmain.Shape1.BoundsRect.Right<shaperect.Right do
         frmain.Shape1.Width:=frmain.Shape1.Width+1;
       while frmain.Shape1.BoundsRect.Right>shaperect.Right do
@@ -4393,16 +4520,18 @@ begin
   //Right Bottom Corner
   if (Y>frmain.Shape1.Height-10) and (X>frmain.Shape1.Width-10) then
   begin
-    Screen.Cursor:=crSizeNW;
+    frmain.Shape1.Cursor:=crSizeNW;
     if shapemousedown then
     begin
-      frmain.Shape1.Width:=X+5;
-      frmain.Shape1.Height:=Y+5;
+      if (Mouse.CursorPos.X-shaperect.Left-frmain.Image1.ClientOrigin.X+frmain.Shape1.Width<=frmain.Image1.DestRect.Right+5) then
+        frmain.Shape1.Width:=X+5;
+      if (Mouse.CursorPos.Y-shaperect.Top-frmain.Image1.ClientOrigin.Y+frmain.Shape1.Height<=frmain.Image1.DestRect.Bottom+5) then
+        frmain.Shape1.Height:=Y+5;
     end;
   end;
   if (Y>10) and (X>10) and (Y<frmain.Shape1.Height-10) and (X<frmain.Shape1.Width-10) then
   begin
-    Screen.Cursor:=crSizeALL;
+    frmain.Shape1.Cursor:=crSizeALL;
     if shapemousedown then
     begin
       if (Mouse.CursorPos.Y-shaperect.Top-frmain.Image1.ClientOrigin.Y>=frmain.Image1.DestRect.Top) and (Mouse.CursorPos.Y-shaperect.Top-frmain.Image1.ClientOrigin.Y+frmain.Shape1.Height<=frmain.Image1.DestRect.Bottom) then
@@ -4495,6 +4624,17 @@ begin
   end;
 end;
 
+procedure Tfrmain.tbOpenClick(Sender: TObject);
+begin
+  frmain.mnuOpenClick(nil);
+end;
+
+procedure Tfrmain.tbSaveClick(Sender: TObject);
+begin
+  if Assigned(flist) then
+    frmain.mnuSaveAsClick(nil);
+end;
+
 procedure Tfrmain.Timer1Timer(Sender: TObject);
 begin
   if nfile>0 then
@@ -4525,7 +4665,7 @@ procedure Tfrmain.Timer2Timer(Sender: TObject);
 begin
   if hidetoolbardelay>0 then
     Dec(hidetoolbardelay);
-  if full and (hidetoolbardelay=0) and (Screen.Cursor=crDefault) and (frmain.PopupMenu1.Tag<>1) then
+  if full and (hidetoolbardelay=0) and (Screen.Cursor=crDefault) and (frmain.Image1.Cursor=crDefault) and (frmain.PopupMenu1.Tag<>1) then
   begin
     frmain.ToolBar1.Visible:=false;
     Screen.Cursor:=crNone;
@@ -4657,12 +4797,16 @@ begin
   frmain.mnuSelect.Checked:=not frmain.mnuSelect.Checked;
   frmain.tbSelect.Down:=frmain.mnuSelect.Checked;
   if frmain.mnuSelect.Checked then
-    Screen.Cursor:=crCross
+  begin
+    Screen.Cursor:=crDefault;
+    frmain.Image1.Cursor:=crCross;
+  end
   else
   begin
     frmain.Shape1.Hide;
     frmain.mnuCrop.Enabled:=false;
     Screen.Cursor:=crDefault;
+    frmain.Image1.Cursor:=crDefault;
   end;
 end;
 

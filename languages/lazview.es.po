@@ -409,6 +409,10 @@ msgstr "Rotar a la izquierda"
 msgid "Rotate right"
 msgstr "Rotar a la derecha"
 
+#: tfrmain.mnusave.caption
+msgid "Save"
+msgstr ""
+
 #: tfrmain.mnusaveas.caption
 msgid "Save as..."
 msgstr "Guardar como..."
@@ -589,6 +593,14 @@ msgstr "Fotograma siguiente"
 msgid "Next image"
 msgstr "Imagen siguiente"
 
+#: tfrmain.tbopen.caption
+msgid "tbOpen"
+msgstr ""
+
+#: tfrmain.tbopen.hint
+msgid "Open image"
+msgstr ""
+
 #: tfrmain.tbpauseanim.caption
 msgid "tbPauseAnim"
 msgstr ""
@@ -639,6 +651,14 @@ msgstr "Rotar a la izquierda"
 msgid "Flip right"
 msgstr "Rotar a la derecha"
 
+#: tfrmain.tbsave.caption
+msgid "tbSave"
+msgstr ""
+
+#: tfrmain.tbsave.hint
+msgid "Save image"
+msgstr ""
+
 #: tfrmain.tbselect.caption
 msgid "tbSelect"
 msgstr ""
@@ -683,6 +703,14 @@ msgstr "Zoom +"
 msgid "Zoom -"
 msgstr "Zoom -"
 
+#: tfrmain.toolbutton1.caption
+msgid "ToolButton1"
+msgstr ""
+
+#: tfrmain.toolbutton2.caption
+msgid "ToolButton2"
+msgstr ""
+
 #: tfrmain.toolbutton22.caption
 msgid "ToolButton22"
 msgstr ""
@@ -724,6 +752,10 @@ msgstr "Vertical"
 msgid "Resize"
 msgstr "Redimensionar"
 
+#: tfrresize.cbfilter.text
+msgid "Lanczos"
+msgstr ""
+
 #: tfrresize.label1.caption
 msgid "Width:"
 msgstr "Ancho:"
@@ -731,6 +763,10 @@ msgstr "Ancho:"
 #: tfrresize.label2.caption
 msgid "Height:"
 msgstr "Alto:"
+
+#: tfrresize.lblfilter.caption
+msgid "Filter:"
+msgstr ""
 
 #: tfrresize.togglebox1.caption
 msgid "]"

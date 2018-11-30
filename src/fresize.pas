@@ -14,8 +14,10 @@ type
 
   Tfrresize = class(TForm)
     ButtonPanel1: TButtonPanel;
+    cbFilter: TComboBox;
     Label1: TLabel;
     Label2: TLabel;
+    lblFilter: TLabel;
     SpinEdit1: TSpinEdit;
     SpinEdit2: TSpinEdit;
     ToggleBox1: TToggleBox;

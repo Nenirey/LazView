@@ -1,7 +1,7 @@
 object frmain: Tfrmain
-  Left = 348
+  Left = 310
   Height = 609
-  Top = 107
+  Top = 103
   Width = 902
   ActiveControl = ShellTreeView1
   AllowDropFiles = True
@@ -20,6 +20,7 @@ object frmain: Tfrmain
   OnKeyDown = FormKeyDown
   OnKeyPress = FormKeyPress
   OnMouseDown = FormMouseDown
+  OnMouseLeave = Image1MouseLeave
   OnMouseMove = FormMouseMove
   OnResize = FormResize
   OnShow = FormShow
@@ -54,9 +55,6 @@ object frmain: Tfrmain
       end    
       item
         Text = 'EXIF:'
-        Width = 50
-      end    
-      item
         Width = 50
       end>
     SimpleText = 'Marco 1.0'
@@ -153,6 +151,7 @@ object frmain: Tfrmain
       OnClick = Image1Click
       OnDblClick = Image1DblClick
       OnMouseDown = FormMouseDown
+      OnMouseLeave = Image1MouseLeave
       OnMouseMove = FormMouseMove
       OnMouseUp = Image1MouseUp
       ParentShowHint = False
@@ -279,7 +278,7 @@ object frmain: Tfrmain
     OnMouseLeave = ToolBar1MouseLeave
     OnMouseMove = ToolBar1MouseMove
     object tbPrevImage: TToolButton
-      Left = 331
+      Left = 393
       Hint = 'Prev image'
       Top = 2
       ImageIndex = 0
@@ -288,7 +287,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbNextImage: TToolButton
-      Left = 377
+      Left = 439
       Hint = 'Next image'
       Top = 2
       ImageIndex = 1
@@ -297,7 +296,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbFullScreen: TToolButton
-      Left = 162
+      Left = 224
       Hint = 'Full screen'
       Top = 2
       ImageIndex = 2
@@ -306,7 +305,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbFlipHorizontal: TToolButton
-      Left = 70
+      Left = 132
       Hint = 'Flip horizontal'
       Top = 2
       Enabled = False
@@ -316,7 +315,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbFlipVertical: TToolButton
-      Left = 93
+      Left = 155
       Hint = 'Flip vertical'
       Top = 2
       Enabled = False
@@ -326,7 +325,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbRotateLeft: TToolButton
-      Left = 116
+      Left = 178
       Hint = 'Flip left'
       Top = 2
       Enabled = False
@@ -336,7 +335,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbRotateRight: TToolButton
-      Left = 139
+      Left = 201
       Hint = 'Flip right'
       Top = 2
       Enabled = False
@@ -346,7 +345,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbExit: TToolButton
-      Left = 646
+      Left = 708
       Hint = 'Exit'
       Top = 2
       ImageIndex = 7
@@ -355,7 +354,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbZoomIn: TToolButton
-      Left = 185
+      Left = 247
       Hint = 'Zoom +'
       Top = 2
       Enabled = False
@@ -365,7 +364,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbZoomOut: TToolButton
-      Left = 208
+      Left = 270
       Hint = 'Zoom -'
       Top = 2
       Enabled = False
@@ -375,7 +374,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbAdjust: TToolButton
-      Left = 254
+      Left = 316
       Hint = 'Adjust image'
       Top = 2
       Enabled = False
@@ -385,7 +384,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbPlayShow: TToolButton
-      Left = 354
+      Left = 416
       Hint = 'Start presentation'
       Top = 2
       ImageIndex = 13
@@ -394,7 +393,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbRandom: TToolButton
-      Left = 423
+      Left = 485
       Hint = 'Random presentation'
       Top = 2
       ImageIndex = 11
@@ -403,7 +402,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbZoom100: TToolButton
-      Left = 231
+      Left = 293
       Hint = 'Zoom 100%'
       Top = 2
       Enabled = False
@@ -414,7 +413,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbReload: TToolButton
-      Left = 469
+      Left = 531
       Hint = 'Reload image'
       Top = 2
       Enabled = False
@@ -442,7 +441,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbSelect: TToolButton
-      Left = 446
+      Left = 508
       Hint = 'Selection tool'
       Top = 2
       Caption = 'tbSelect'
@@ -452,7 +451,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbPrevFrame: TToolButton
-      Left = 546
+      Left = 608
       Hint = 'Prev frame'
       Top = 2
       Caption = 'tbPrevFrame'
@@ -463,7 +462,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbNextFrame: TToolButton
-      Left = 592
+      Left = 654
       Hint = 'Next frame'
       Top = 2
       Caption = 'tbNextFrame'
@@ -474,7 +473,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbPauseAnim: TToolButton
-      Left = 569
+      Left = 631
       Hint = 'Play/Pause animation'
       Top = 2
       Caption = 'tbPauseAnim'
@@ -485,21 +484,21 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object ToolButton22: TToolButton
-      Left = 515
+      Left = 577
       Height = 22
       Top = 2
       Caption = 'ToolButton22'
       Style = tbsSeparator
     end
     object ToolButton23: TToolButton
-      Left = 638
+      Left = 700
       Height = 22
       Top = 2
       Caption = 'ToolButton23'
       Style = tbsSeparator
     end
     object tbStrech: TToolButton
-      Left = 277
+      Left = 339
       Hint = 'Large'
       Top = 2
       Caption = 'tbStrech'
@@ -509,14 +508,14 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object ToolButton25: TToolButton
-      Left = 300
+      Left = 362
       Height = 22
       Top = 2
       Caption = 'ToolButton25'
       Style = tbsSeparator
     end
     object tbSlowAnim: TToolButton
-      Left = 523
+      Left = 585
       Hint = 'Speed down'
       Top = 2
       Caption = 'tbSlowAnim'
@@ -527,7 +526,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbFastAnim: TToolButton
-      Left = 615
+      Left = 677
       Hint = 'Speed up'
       Top = 2
       Caption = 'tbFastAnim'
@@ -538,7 +537,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbPrint: TToolButton
-      Left = 47
+      Left = 101
       Hint = 'Print'
       Top = 2
       Caption = 'tbPrint'
@@ -548,7 +547,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbFirstImage: TToolButton
-      Left = 308
+      Left = 370
       Hint = 'First image'
       Top = 2
       Caption = 'tbFirstImage'
@@ -558,7 +557,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbLastImage: TToolButton
-      Left = 400
+      Left = 462
       Hint = 'Last image'
       Top = 2
       Caption = 'tbLastImage'
@@ -568,7 +567,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbInformation: TToolButton
-      Left = 492
+      Left = 554
       Hint = 'Information'
       Top = 2
       Caption = 'tbInformation'
@@ -577,12 +576,46 @@ object frmain: Tfrmain
       ParentShowHint = False
       ShowHint = True
     end
+    object tbSave: TToolButton
+      Left = 78
+      Hint = 'Save image'
+      Top = 2
+      Caption = 'tbSave'
+      ImageIndex = 36
+      OnClick = tbSaveClick
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object ToolButton1: TToolButton
+      Left = 124
+      Height = 22
+      Top = 2
+      Caption = 'ToolButton1'
+      Style = tbsSeparator
+    end
+    object tbOpen: TToolButton
+      Left = 55
+      Hint = 'Open image'
+      Top = 2
+      Caption = 'tbOpen'
+      ImageIndex = 37
+      OnClick = tbOpenClick
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object ToolButton2: TToolButton
+      Left = 47
+      Height = 22
+      Top = 2
+      Caption = 'ToolButton2'
+      Style = tbsSeparator
+    end
   end
   object ImageList1: TImageList
     left = 8
     top = 207
     Bitmap = {
-      4C69240000001000000010000000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      4C69260000001000000010000000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF0004733A6404753BC5FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF0004733A0C04743BAC298B59F604733AFFFFFFFF00FFFF
@@ -1734,7 +1767,71 @@ object frmain: Tfrmain
       35239453347D925234DB8A5034F3884F34F3895035DB8950357D84503623FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-      FF00FFFFFF00FFFFFF00FFFFFF00
+      FF00FFFFFF00FFFFFF00FFFFFF00BC6B3671BC6B3690BC6B36CCBC6B36EEBC6B
+      36FABB6B36FEBB6B36FFBB6A36FFBB6A36FFBC6C39FFBD6E3BFFBB6D3AFFBB6B
+      38EFBB703ECBB6693554FFFFFF00BC6B369BF6E0D1FFF7E0D1FFFEFBF8FFFEFB
+      F7FFFDF9F6FFFCF5F0FFFAF0EAFFFBF2EDFFFDF9F6FFFDFAF7FFFBF1EBFFF8E9
+      DFFEECD0BDFBC9895EECB5693563BC6B36D8F6DFD1FFE9AA80FFFEFAF6FFFDFA
+      F6FFC88C64FFFBF3EEFFFBF1EAFFFCF6F2FFFEFBF8FFFCF6F1FFF9ECE2FFF8E7
+      DBFFEED0BAFFECD0BDFFBB703EF8BC6B36F0F6DFD0FFE8A87EFFFCF6F1FFFCF6
+      F1FFC88C64FFFAF1E9FFFBF4EEFFFDFAF7FFFDF9F6FFFAF0E8FFF8E8DDFFF7E6
+      DBFFE1A37AFFEFD5C3FFB76935FEBC6B36FAF5DDCCFFE7A87EFFFAF0E8FFFAF0
+      E8FFC98D66FFFAF0E9FFFDF8F3FFFEFAF8FFFCF4EFFFF9E9DFFFF7E7DBFFF7E5
+      D9FFE0A278FFE7C2A9FFB66835FFBB6B36FEF4DCC9FFE7A77DFFF9ECE1FFF9EC
+      E1FFF9EDE3FFFCF4EEFFFDFAF7FFFDF7F3FFFAEDE5FFF7E7DBFFF7E5D9FFF6E5
+      D8FFDEA077FFE4BEA4FFB46734FFBB6B36FFF4D9C7FFE6A67DFFC88C64FFC98D
+      65FFC98E67FFCB926CFFCB926DFFCA9069FFC88C65FFC88C64FFC88C64FFC88C
+      64FFDA9C74FFE1BA9FFFB36634FFBB6A36FFF2D8C5FFE3A47BFFE3A37AFFE3A4
+      7AFFE2A47BFFE2A37BFFE1A37BFFE1A279FFDFA077FFDE9F76FFDD9E74FFDB9C
+      72FFDC9D74FFDDB59AFFB16534FFBB6A36FFF2D5C2FFE3A37AFFE3A37AFFE2A3
+      7BFFE2A37BFFE2A47BFFE1A279FFE0A178FFDEA077FFDE9E75FFDC9D74FFDA9B
+      73FFD99B73FFDAB095FFAF6433FFBB6A36FFF0D2BEFFE2A37AFFE2A37AFFE1A3
+      7AFFE2A37BFFE1A37BFFE0A178FFDE9F77FFDD9F76FFDC9D74FFD99B72FFD899
+      71FFD69970FFD5AB8EFFAD6333FFBA6A36FFEFD0BBFFE2A27AFFFEFBF8FFFEFB
+      F8FFFEFBF8FFFEFBF8FFFEFBF8FFFEFBF8FFFEFBF8FFFEFBF8FFFEFBF8FFFEFB
+      F8FFD3966DFFD2A78AFFAB6232FFBB6B38FFEFCEB8FFE1A279FFFEFAF7FF62C0
+      88FF62C088FF62C088FF62C088FF62C088FF62C088FF62C088FF62C088FFFDF9
+      F6FFCF936AFFCEA384FFAA6132FFBB6C38FFEECCB6FFE1A27AFFFEFAF7FFBFDC
+      C2FFBFDCC2FFBFDCC2FFBFDCC2FFBFDCC2FFBFDCC2FFBFDCC2FFBFDCC2FFFDF9
+      F6FFCD9068FFCC9E81FFA86132FFBA6B37FEEDCAB3FFE0A27AFFFEFAF7FF62C0
+      88FF62C088FF62C088FF62C088FF62C088FF62C088FF62C088FF62C088FFFDF9
+      F6FFCA8D65FFC99B7CFFA76031FEBA6A35DEEBC6ADFFEAC5ADFFFEFBF8FFFEFB
+      F8FFFEFBF8FFFEFBF8FFFEFBF8FFFEFBF8FFFEFBF8FFFEFBF8FFFEFBF8FFFEFB
+      F8FFC89A7CFFC79879FFA76031EDBA6A3600B96935B5B86935EEB76835FFB568
+      35FFB46734FFB26634FFB06533FFAE6433FFAC6332FFAA6232FFA96132FFA860
+      31FFA76031FEA66031F1A86131C4FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00AF816552AE8165E7AE8165FFAF8164FFAF8064FFAE8064FFAE80
+      64FFAE8064FFAE8064FFAE806496FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00AE8165F5DEDEDCFFF3F3F2FFF7F4F3FFF7F4F2FFF8F2EDFFF8F2
+      EBFFF7F2EBFFF1EEE8FFAE7F63FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00AE8064FFF3F2F1FF95805BFFBAA57FFFBAA57FFFBAA57FFFBBA7
+      82FF8E7F64FFF7F1EAFFAD7E61FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00AE8064FFF7F4F3FFB5A380FFF2DCACFFF5DEAFFFFAE1B1FFFCE3
+      B3FFBDAA87FFF7EFE8FFAC7C5FFFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00AD7F62FFF7F4F1FFBDAA87FFFEE5B4FFFDE4B4FFFDE4B4FFFDE4
+      B4FFBDAA87FFF6EFE7FFAB7A5CFF34B4D9D05EC2E1FA60C3E2FA60C3E2FA60C3
+      E2FA5FC3E2FAAD7E61FFF7F2EDFFA57E55FFDEA972FFDEA972FFDCA671FFDCA6
+      71FFA37C54FFF6EDE6FFA97858FF36B3DAF8FDFEFEFFFEFFFFFFFEFEFFFFFDFE
+      FFFFFEFFFFFFAC7C5EFFF7F1ECFFAB8157FFE5AC74FFE5AC74FFE5AC74FFE5AC
+      74FFAB8157FFF6EDE5FFA77454FF35AFDAF0F7FCFEFF8EE4F8FF91DEF5FF9FE0
+      F5FFACE1F6FFAA795AFFF7F0ECFF806141FFAB8157FFAB8157FFAB8157FFAB81
+      57FF806141FFF6ECE5FFA5714FFF36AADAF2F1FAFDFF94DEF5FF93DCF4FF81D5
+      F2FF6ACAEDFF54ABD3FF64B9E3FF62B8E1FF60B8E1FF5FB7E1FF5DB7E1FF5AB1
+      DFFF60BBD9F6F7ECE5FFA36E4BFF35ABDAFAE8F6FBFF94D4EFFF88CEEEFF73C1
+      E9FFC9E9F6FFE2DFD9FFF2F9FAFFF3FAFBFFF2FAFBFFF1F9FBFFF0F9FBFFFDFC
+      FBFF60BADEF9F1EEEAFCA26B48ED37A6DAFAFEFFFFFFF8FDFFFFF6FDFFFFF5FC
+      FFFFF3FCFEFFD1E4E5FF97CED6FF8CCAD3FF80C7D1FF74C3D0FF6BC1CFFFCCD7
+      D5FF4D97BAF9A26946EBA269453F36A1DAF9F6FCFEFFC8F2FCFFB9EFFBFFACEC
+      FAFF9CE8F9FF8BE3F7FF7CE0F6FF6CDCF6FF5DD9F5FF4FD6F4FF44D3F3FFD0F3
+      FCFF359FDAF7FFFFFF00FFFFFF00369ADAF8F2FAFDFFB3EDFAFFA4E9F9FF95E6
+      F8FF85E2F7FF76DEF6FF65DBF5FF57D7F4FF49D4F3FF3BD1F2FF30CEF1FFCCF2
+      FBFF3598DAF7FFFFFF00FFFFFF003594DAF7EFFAFEFFA1E9F9FF91E5F8FF81E1
+      F7FF72DEF6FF63DAF5FF54D7F4FF47D3F3FF39D0F2FF2ECDF1FF26CBF0FFCAF2
+      FBFF3594DAF7FFFFFF00FFFFFF00338ED9E6DCF0FAF0A7DDF4FD9EDBF4FF96DA
+      F3FF8ED8F3FF86D7F3FF7FD4F2FF79D3F2FF72D2F1FF6CD0F1FF69CFF1FFC2EA
+      F8FE338ED9F0FFFFFF00FFFFFF002C86D8002D88D8A62D87D8EA2D88D8F72D88
+      D8F72D88D8F72D88D8F72D88D8F72D88D8F72D88D8F72D88D8F72D87D8F72D88
+      D8F12C86D893FFFFFF00FFFFFF00
     }
   end
   object MainMenu1: TMainMenu
@@ -1748,10 +1845,15 @@ object frmain: Tfrmain
         ShortCut = 16449
         OnClick = mnuOpenClick
       end
+      object mnuSave: TMenuItem
+        Caption = 'Save'
+        ShortCut = 16455
+        OnClick = mnuSaveClick
+      end
       object mnuSaveAs: TMenuItem
         Caption = 'Save as...'
         Enabled = False
-        ShortCut = 16455
+        ShortCut = 49223
         OnClick = mnuSaveAsClick
       end
       object mnuPrint: TMenuItem
@@ -2121,5 +2223,9 @@ object frmain: Tfrmain
     OnTimer = Timer5Timer
     left = 312
     top = 207
+  end
+  object FakePopup: TPopupMenu
+    left = 380
+    top = 206
   end
 end

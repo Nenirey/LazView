@@ -3,13 +3,14 @@
   <ProjectSession>
     <Version Value="10"/>
     <BuildModes Active="Release"/>
-    <Units Count="13">
+    <Units Count="12">
       <Unit0>
         <Filename Value="lazview.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="LazView"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="1"/>
+        <TopLine Value="2"/>
         <CursorPos Y="27"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
@@ -22,8 +23,10 @@
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="3"/>
         <WindowIndex Value="1"/>
+        <CursorPos X="13" Y="13"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit1>
       <Unit2>
         <Filename Value="unit3.pas"/>
@@ -94,13 +97,13 @@
         <ResourceBaseClass Value="Form"/>
         <IsVisibleTab Value="True"/>
         <WindowIndex Value="1"/>
-        <TopLine Value="4299"/>
-        <CursorPos Y="4301"/>
+        <TopLine Value="497"/>
+        <CursorPos X="25" Y="505"/>
         <UsageCount Value="200"/>
         <Bookmarks Count="3">
-          <Item0 X="17" Y="3459"/>
-          <Item1 X="3" Y="1736" ID="1"/>
-          <Item2 X="30" Y="2195" ID="2"/>
+          <Item0 X="17" Y="3571"/>
+          <Item1 X="3" Y="1808" ID="1"/>
+          <Item2 X="30" Y="2267" ID="2"/>
         </Bookmarks>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -145,39 +148,47 @@
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
         <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="62"/>
+        <UsageCount Value="72"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit11>
-      <Unit12>
-        <Filename Value="../../../../../lazarus/fpc/3.0.4/source/packages/fcl-base/src/contnrs.pp"/>
-        <EditorIndex Value="-1"/>
-        <WindowIndex Value="1"/>
-        <TopLine Value="211"/>
-        <CursorPos X="70" Y="225"/>
-        <UsageCount Value="10"/>
-      </Unit12>
     </Units>
-    <JumpHistory Count="5" HistoryIndex="4">
+    <JumpHistory Count="9" HistoryIndex="8">
       <Position1>
         <Filename Value="fmain.pas"/>
-        <Caret Line="4527" Column="27" TopLine="4515"/>
+        <Caret Line="882" Column="13" TopLine="869"/>
       </Position1>
       <Position2>
         <Filename Value="fmain.pas"/>
-        <Caret Line="4660" Column="21" TopLine="4653"/>
+        <Caret Line="884" Column="13" TopLine="871"/>
       </Position2>
       <Position3>
         <Filename Value="fmain.pas"/>
-        <Caret Line="4663" Column="29" TopLine="4653"/>
+        <Caret Line="4624" Column="3" TopLine="4601"/>
       </Position3>
       <Position4>
         <Filename Value="fmain.pas"/>
-        <Caret Line="4403" Column="72" TopLine="4388"/>
+        <Caret Line="3645" TopLine="3643"/>
       </Position4>
       <Position5>
         <Filename Value="fmain.pas"/>
-        <Caret Line="4312" Column="10" TopLine="4308"/>
+        <Caret Line="4625" Column="5" TopLine="4622"/>
       </Position5>
+      <Position6>
+        <Filename Value="fmain.pas"/>
+        <Caret Line="4626" Column="5" TopLine="4623"/>
+      </Position6>
+      <Position7>
+        <Filename Value="fmain.pas"/>
+        <Caret Line="4627" Column="5" TopLine="4624"/>
+      </Position7>
+      <Position8>
+        <Filename Value="fmain.pas"/>
+        <Caret Line="3360" Column="48" TopLine="3360"/>
+      </Position8>
+      <Position9>
+        <Filename Value="fmain.pas"/>
+        <Caret Line="4627" Column="28" TopLine="4625"/>
+      </Position9>
     </JumpHistory>
   </ProjectSession>
 </CONFIG>
