@@ -8,8 +8,8 @@ uses
   StdCtrls, Menus, ExtDlgs, LazFileUtils, FileUtil, IntfGraphics,
   types, LCLType, ShellCtrls, FPImage, fresize, fquality, feffects, fgoto, fthumbsize,
   LazUTF8, print{$IFDEF WINDOWS}, Registry, Windows, Windirs{$ENDIF},
-  BGRABitmapTypes, BGRABitmap, BGRAThumbnail, BGRAAnimatedGif,
-  DateUtils, Math, ImgSize, BGRAGifFormat, Printers, LCLintf, fexif, INIFiles, LCLTranslator,
+  BGRABitmapTypes, BGRABitmap, BGRAThumbnail, {BGRAAnimatedGif,}
+  DateUtils, Math, ImgSize, {BGRAGifFormat,} Printers, LCLintf, fexif, INIFiles, LCLTranslator,
   Imaging, ImagingClasses, ImagingComponents, ImagingTypes, ImagingCanvases, Variants, Clipbrd;
 
 type
@@ -359,7 +359,7 @@ var
   modethumb:boolean;//when the image is too large and prefere this for performance
   folderchange:boolean=true;
   starting:boolean=true;
-  BGRAgif:TBGRAAnimatedGif;
+  //BGRAgif:TBGRAAnimatedGif;
   APNGImage: ImagingClasses.TMultiImage;
   APNGDelays:Array of integer;
   scrollchange:boolean=true;
@@ -379,7 +379,7 @@ var
   exactx,exacty,exactright,exactbottom,exactw,exacth:int64;
   //This is for Undo/Redo function
   historyeditbitmap:array of Graphics.TBitmap;
-  historyeditbgragif:array of TBGRAAnimatedGif;
+  //historyeditbgragif:array of TBGRAAnimatedGif;
   historyeditapng:array of ImagingClasses.TMultiImage;
   historyindex:integer;
   shapemousedown:boolean=false;
@@ -408,11 +408,11 @@ var
 begin
   for i:=0 to 1 do
   begin
-    if Assigned(historyeditbgragif) then
+    {if Assigned(historyeditbgragif) then
     begin
       if Length(historyeditbgragif)>=i+1 then
         FreeAndNil(historyeditbgragif[i]);
-    end;
+    end;}
     if Assigned(historyeditapng) then
     begin
       if Length(historyeditapng)>=i+1 then
@@ -424,13 +424,13 @@ begin
         FreeAndNil(historyeditbitmap[i]);
     end;
   end;
-  if ifgif then
+  {if ifgif then
   begin
     SetLength(historyeditbgragif,1);
     historyeditbgragif[Length(historyeditbgragif)-1]:=TBGRAAnimatedGif.Create;
     historyeditbgragif[Length(historyeditbgragif)-1]:=BGRAGif;
     historyindex:=Length(historyeditbgragif);
-  end;
+  end;}
   if ifapng then
   begin
     SetLength(historyeditapng,1);
@@ -449,13 +449,13 @@ end;
 
 procedure setafterhistory;
 begin
-  if ifgif then
+  {if ifgif then
   begin
     SetLength(historyeditbgragif,2);
     historyeditbgragif[Length(historyeditbgragif)-1]:=TBGRAAnimatedGif.Create;
     historyeditbgragif[Length(historyeditbgragif)-1]:=BGRAGif;
     frmain.mnuUndo.Enabled:=true;
-  end;
+  end;}
   if ifapng then
   begin
     SetLength(historyeditapng,2);
@@ -881,12 +881,12 @@ procedure resizeto(w:integer;h:integer;filtro:TResizeFilter=rfLanczos);
 var
    tmpbitmap:BGRABitmap.TBGRABitmap;
    i:integer;
-   tmpgif:TBGRAAnimatedGif;
+   //tmpgif:TBGRAAnimatedGif;
    vmp:ImagingClasses.TSingleImage;
 begin
   realmode;
   sethistory;
-  if ifgif then
+  {if ifgif then
   begin
     tmpgif:=TBGRAAnimatedGif.Create;
     tmpgif.SetSize(w,h);
@@ -901,7 +901,7 @@ begin
     tmpgif.LoopCount:=BGRAGif.LoopCount;
     BGRAGif.SetSize(w,h);
     BGRAGif:=tmpgif;
-  end;
+  end;}
   if ifapng then
   begin
     APNGImage.ResizeImages(w,h,filtro);
@@ -1096,21 +1096,20 @@ end;
 
 procedure loadpicture(fimagen:string;restorezoom:boolean=true;scrollthumbs:boolean=true;realimage:boolean=false);
 var
-   ebitmap,ebitmap2:Graphics.TBitmap;
+   ebitmap:Graphics.TBitmap;
    bmp:TBGRACustomBitMap;
    th,tw,i:integer;
    iw,ih:word;
    streamimage:TFileStream;
    starttime:TDateTime;
    bgcolor:TBGRAPixel;
-   BGRAImage,tmpbitmap:BGRABitmap.TBGRABitmap;
+   BGRAImage:BGRABitmap.TBGRABitmap;
    wimagen:UnicodeString;
    ImgData: TImgData;
    pngrect:TRect;
    Item: TMetadataItem;
    Orientation:string='Horizontal (normal)';
    vmp:ImagingClasses.TSingleImage;
-   apngtmp:ImagingClasses.TMultiImage;
 begin
   //frmain.Image1.Picture.Bitmap.Clear;
   {$IFDEF WINDOWS}
@@ -1126,7 +1125,6 @@ begin
   starttime:=Now();
   if Assigned(APNGImage) then
     FreeAndNil(APNGImage);
-    //APNGImage.ClearAll;
   try
     frmain.Caption:='LazView '+fimagen;
     frmain.Label1.Caption:=inttostr(ifile+1)+'/'+inttostr(nfile)+'  '+fimagen;
@@ -1190,56 +1188,14 @@ begin
         APNGImage:=ImagingClasses.TMultiImage.Create;
         if Imaging.DetermineFileFormat(fimagen) <> '' then
         begin
-          try
-            APNGImage.LoadMultiFromFile(fimagen);
-            GlobalMetadata.CopyLoadedMetaItemsForSaving;
-            frmain.Image1.Picture.PNG.Create;
-            frmain.Image1.Picture.PNG.Width:=APNGImage.Width;
-            frmain.Image1.Picture.PNG.Height:=APNGImage.Height;
-            ebitmap:=Graphics.TBitmap.Create;
-            ImagingComponents.ConvertImageToBitmap(APNGImage,ebitmap);
-            frmain.Image1.Picture.Bitmap.Assign(ebitmap);
-          except on e:exception do
-          begin
-            //Attempt to fix blending animation
-            tmpbitmap:=BGRABitmap.TBGRABitmap.Create;
-            tmpbitmap.LoadFromFile(fimagen);
-            ebitmap2:=Graphics.TBitmap.Create;
-            ebitmap2.Assign(tmpbitmap);
-            apngtmp:=ImagingClasses.TMultiImage.Create;
-            apngtmp.Width:=ebitmap2.Width;
-            apngtmp.Height:=ebitmap2.Height;
-            frmain.Image1.Picture.Bitmap.Assign(ebitmap2);
-            FreeAndNil(tmpbitmap);
-            for i:=0 to APNGImage.ImageCount-1 do
-            begin
-              try
-              APNGImage.ActiveImage:=i;
-              vmp:=ImagingClasses.TSingleImage.Create;
-              vmp.Assign(APNGImage);
-              ebitmap:=Graphics.TBitmap.Create;
-              ImagingComponents.ConvertImageToBitmap(vmp,ebitmap);
-              //Need to now in what x,y position to draw the frames, for now use 0,0,
-              //maybe in the imagedata
-              ebitmap2.Canvas.Draw(0,0,ebitmap);
-              ImagingComponents.ConvertBitmapToImage(ebitmap2,vmp);
-              apngtmp.AddImage(vmp);
-              FreeAndNil(ebitmap);
-              FreeAndNil(vmp);
-              except on e:exception do
-              begin
-                vmp:=ImagingClasses.TSingleImage.Create;
-                ImagingComponents.ConvertBitmapToImage(ebitmap2,vmp);
-                apngtmp.AddImage(vmp);
-                FreeAndNil(vmp);
-              end;
-              end;
-            end;
-            APNGImage.Assign(apngtmp);
-            FreeAndNil(ebitmap2);
-            FreeAndNil(apngtmp);
-          end;
-          end;
+          APNGImage.LoadMultiFromFile(fimagen);
+          GlobalMetadata.CopyLoadedMetaItemsForSaving;
+          frmain.Image1.Picture.PNG.Create;
+          frmain.Image1.Picture.PNG.Width:=APNGImage.Width;
+          frmain.Image1.Picture.PNG.Height:=APNGImage.Height;
+          ebitmap:=Graphics.TBitmap.Create;
+          ImagingComponents.ConvertImageToBitmap(APNGImage,ebitmap);
+          frmain.Image1.Picture.Bitmap.Assign(ebitmap);
         end;
         frmain.StatusBar1.Panels.Items[1].Text:='Resolution:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
         FreeAndNil(ebitmap);
@@ -1569,11 +1525,11 @@ begin
   //Free history images;
   for i:=0 to 1 do
   begin
-    if Assigned(historyeditbgragif) then
+    {if Assigned(historyeditbgragif) then
     begin
       if Length(historyeditbgragif)>=i+1 then
         FreeAndNil(historyeditbgragif[i]);
-    end;
+    end;}
     if Assigned(historyeditapng) then
     begin
       if Length(historyeditapng)>=i+1 then
@@ -1793,7 +1749,7 @@ procedure filterimagen(filter:integer;nivel:float=0);
 var
    bmp:TBGRACustomBitmap;
    title:string;
-   tmpgif:TBGRAAnimatedGif;
+   //tmpgif:TBGRAAnimatedGif;
    tmpbitmap:BGRABitmap.TBGRABitmap;
    i:integer;
    imgrect:TRect;
@@ -1811,7 +1767,7 @@ begin
   imgrect.Left:=0;
   imgrect.Top:=0;
   sethistory;
-  if ifgif and (BGRAGif.Count>0) then
+  {if ifgif and (BGRAGif.Count>0) then
   begin
     //historyedit[Length(historyedit)-1].Assign(BGRAGif);
     //BGRAGif.SaveToStream(historyedit[Length(historyedit)-1]);
@@ -1864,7 +1820,7 @@ begin
     FreeAndNil(tmpbitmap);
     BGRAGif.SetSize(BGRAGif.Width,BGRAGif.Height);
     BGRAGif:=tmpgif;
-  end;
+  end;}
   if ifapng then
   begin
     //historyedit[Length(historyedit)-1].Assign(APNGImage);
@@ -2321,7 +2277,7 @@ var
    imagen:TLazIntfImage=nil;
    imagen2:TLazIntfImage=nil;
    xpix,ypix,ancho,alto,i,ramnum:integer;
-   tmpgif:TBGRAAnimatedGif;
+   //tmpgif:TBGRAAnimatedGif;
    tmpbitmap:BGRABitmap.TBGRABitmap;
    redbrig,greenbrig,bluebrig:word;
    inzone:boolean;
@@ -2331,7 +2287,7 @@ begin
   sethistory;
   title:=frmain.Caption;
   frmain.Caption:='Aplicando efecto porfavor espere...';
-  if ifgif and (BGRAGif.Count>0) then
+  {if ifgif and (BGRAGif.Count>0) then
   begin
     tmpgif:=TBGRAAnimatedGif.Create;
     case efect of
@@ -2490,7 +2446,7 @@ begin
     FreeAndNil(tmpbitmap);
     BGRAGif.SetSize(BGRAGif.Width,BGRAGif.Height);
     BGRAGif:=tmpgif;
-  end;
+  end;}
   if ifapng then
   begin
     for i:=0 to APNGImage.ImageCount-1 do
@@ -3303,13 +3259,13 @@ procedure Tfrmain.mnuCropClick(Sender: TObject);
 var
    tmpbitmap:BGRABitmap.TBGRABitmap;
    i:integer;
-   tmpgif:TBGRAAnimatedGif;
+   //tmpgif:TBGRAAnimatedGif;
    tmpapng:TMultiImage;
 begin
   realmode;
   extractrealtivearea;
   sethistory;
-  if ifgif then
+  {if ifgif then
   begin
     tmpgif:=TBGRAAnimatedGif.Create;
     tmpgif.SetSize(exactw,exacth);
@@ -3327,7 +3283,7 @@ begin
     BGRAGif:=tmpgif;
     //Cant destroy this because not work fine
     //tmpgif.Destroy;
-  end;
+  end;}
 
   if ifapng then
   begin
@@ -3435,8 +3391,8 @@ end;
 procedure Tfrmain.mnuRedoClick(Sender: TObject);
 begin
   inc(historyindex);
-  if ifgif then
-     BGRAGif:=historyeditbgragif[historyindex];
+  {if ifgif then
+     BGRAGif:=historyeditbgragif[historyindex];}
   if ifapng then
      APNGImage.Assign(historyeditapng[historyindex]);
   if (ifgif=false) and (ifapng=false) then
@@ -3540,7 +3496,7 @@ begin
             APNGImage.SaveMultiToFile(correctfilename);
           end;
           //Convert BGRAGif to APNG
-          if ifgif then
+          {if ifgif then
           begin
             APNGImage:=ImagingClasses.TMultiImage.Create;
             APNGImage.Width:=BGRAGif.Width;
@@ -3554,7 +3510,7 @@ begin
               GlobalMetadata.SetMetaItem('FrameDelay',BGRAGif.FrameDelayMs[i],i);
             end;
             APNGImage.SaveMultiToFile(correctfilename);
-          end;
+          end;}
           if (ifgif=false) and (ifapng=false) then
             frmain.Image1.Picture.PNG.SaveToFile(correctfilename);
         end;
@@ -3562,10 +3518,10 @@ begin
         4:frmain.Image1.Picture.Icon.SaveToFile(correctfilename);
         5:
          begin
-           if ifgif then
+           {if ifgif then
            begin
              BGRAGif.SaveToFile(correctfilename);
-           end;
+           end;}
            //Convert APNG to BGRAGif
            if ifapng then
            begin
@@ -3585,7 +3541,7 @@ begin
              APNGImage.SaveMultiToFile(correctfilename);
            end;
            //Convert others to BGRAGif
-           if (ifgif=false) and (ifapng=false) then
+           {if (ifgif=false) and (ifapng=false) then
            begin
              BGRAgif:=TBGRAAnimatedGif.Create;
              bgrtmp:=TBGRABitmap.Create(frmain.Image1.Picture.Bitmap);
@@ -3597,7 +3553,7 @@ begin
              //BGRAGif.Destroy;
              FreeAndNil(bgrtmp);
              FreeAndNil(BGRAGif);
-           end;
+           end;}
          end
       end;
       ShowMessage('Done!!');
@@ -3988,8 +3944,8 @@ end;
 procedure Tfrmain.mnuUndoClick(Sender: TObject);
 begin
    Dec(historyindex);
-   if ifgif then
-     BGRAGif:=historyeditbgragif[historyindex];
+   {if ifgif then
+     BGRAGif:=historyeditbgragif[historyindex];}
    if ifapng then
      APNGImage.Assign(historyeditapng[historyindex]);
    if (ifgif=false) and (ifapng=false) then
@@ -4674,12 +4630,12 @@ end;
 
 procedure Tfrmain.Timer3Timer(Sender: TObject);
 begin
-  if Assigned(BGRAGif) then
+  {if Assigned(BGRAGif) then
   begin
     frmain.Image1.Picture.Bitmap.Assign(BGRAgif.Bitmap);
     frmain.Timer3.Interval:=BGRAgif.FrameDelayMs[BGRAGif.CurrentImage];
     frmain.StatusBar1.Panels[2].Text:='Frame '+inttostr(BGRAGif.CurrentImage+1)+'/'+inttostr(BGRAGif.Count);
-  end;
+  end;}
 end;
 
 procedure Tfrmain.Timer4Timer(Sender: TObject);
@@ -4812,7 +4768,7 @@ end;
 
 procedure Tfrmain.tbPrevFrameClick(Sender: TObject);
 begin
-  if ifgif then
+  {if ifgif then
   begin
     BGRAGif.Pause;
     frmain.Timer3.Enabled:=false;
@@ -4822,7 +4778,7 @@ begin
       BGRAGif.CurrentImage:=BGRAGif.Count-1;
     frmain.tbPauseAnim.ImageIndex:=21;
     frmain.Timer3Timer(nil);
-  end;
+  end;}
   if ifapng then
   begin
     frmain.Timer5.Enabled:=false;
@@ -4842,7 +4798,7 @@ end;
 
 procedure Tfrmain.tbNextFrameClick(Sender: TObject);
 begin
-  if ifgif then
+  {if ifgif then
   begin
     BGRAGif.Pause;
     frmain.Timer3.Enabled:=false;
@@ -4852,7 +4808,7 @@ begin
       BGRAGif.CurrentImage:=0;
     frmain.tbPauseAnim.ImageIndex:=21;
     frmain.Timer3Timer(nil);
-  end;
+  end;}
   if ifapng then
   begin
     frmain.Timer5.Enabled:=false;
@@ -4863,7 +4819,7 @@ end;
 
 procedure Tfrmain.tbPauseAnimClick(Sender: TObject);
 begin
-  if ifgif then
+  {if ifgif then
     begin
     if BGRAGif.Paused then
     begin
@@ -4876,7 +4832,7 @@ begin
       BGRAGif.Pause;
     end;
     frmain.Timer3.Enabled:=not BGRAGif.Paused;
-  end;
+  end;}
   if ifapng then
   begin
     if frmain.Timer5.Enabled=false then
@@ -4906,11 +4862,11 @@ procedure Tfrmain.tbSlowAnimClick(Sender: TObject);
 var
    i:integer;
 begin
-  if ifgif then
+  {if ifgif then
   begin
     for i:=0 to BGRAGif.Count-1 do
       BGRAGif.FrameDelayMs[i]:=BGRAGif.FrameDelayMs[i]+10;
-  end;
+  end;}
   if ifapng then
   begin
     for i:=0 to Length(APNGDelays)-1 do
@@ -4922,7 +4878,7 @@ procedure Tfrmain.tbFastAnimClick(Sender: TObject);
   var
    i:integer;
 begin
-  if ifgif then
+  {if ifgif then
   begin
     for i:=0 to BGRAGif.Count-1 do
     begin
@@ -4931,7 +4887,7 @@ begin
       if BGRAGif.FrameDelayMs[i]>1 then
         BGRAGif.FrameDelayMs[i]:=BGRAGif.FrameDelayMs[i]-1;
     end;
-  end;
+  end;}
   if ifapng then
   begin
     for i:=0 to Length(APNGDelays)-1 do
