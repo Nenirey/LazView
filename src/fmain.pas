@@ -642,7 +642,7 @@ begin
       frmain.Splitter2.Top:=frmain.Height-frmain.Splitter2.Height-iniconfigfile.ReadInteger('Config','thumbpanelsize',64);
     {$IFDEF LCLGTK2}
     {$ELSE}
-    if compactmode then
+    if compactmode and (frmain.WindowState=wsNormal) then
       frmain.Splitter2.Top:=frmain.Splitter2.Top-frmain.MainMenu1.Height;
     {$ENDIF}
     thumbsize:=frmain.sboxthumb.Height;
