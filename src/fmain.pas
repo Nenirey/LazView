@@ -1293,6 +1293,20 @@ begin
             //bmp.Free;
             FreeAndNil(bmp);
           end;
+          'Rotate 180':
+          begin
+            BGRAImage:=BGRABitMap.TBGRABitmap.Create(streamimage);
+            ebitmap:=Graphics.TBitmap.Create;
+            ebitmap.Assign(BGRAImage);
+            FreeAndNil(BGRAImage);
+            vmp:=ImagingClasses.TSingleImage.Create;
+            ImagingComponents.ConvertBitmapToImage(ebitmap,vmp);
+            vmp.Rotate(180);
+            ImagingComponents.ConvertImageToBitmap(vmp,ebitmap);
+            FreeAndNil(vmp);
+            frmain.Image1.Picture.Bitmap.Assign(ebitmap);
+            FreeAndNil(ebitmap);
+          end;
             else
               frmain.Image1.Picture.LoadFromStream(streamimage);
           end;
@@ -1371,6 +1385,21 @@ begin
               //bmp.Free;
               FreeAndNil(bmp);
             end;
+            'Rotate 180':
+            begin
+              BGRAImage:=BGRABitMap.TBGRABitmap.Create;
+              GetStreamThumbnail(streamimage,tw,th, bgcolor, false,'',BGRAImage);
+              ebitmap:=Graphics.TBitmap.Create;
+              ebitmap.Assign(BGRAImage);
+              FreeAndNil(BGRAImage);
+              vmp:=ImagingClasses.TSingleImage.Create;
+              ImagingComponents.ConvertBitmapToImage(ebitmap,vmp);
+              vmp.Rotate(180);
+              ImagingComponents.ConvertImageToBitmap(vmp,ebitmap);
+              FreeAndNil(vmp);
+              frmain.Image1.Picture.Bitmap.Assign(ebitmap);
+              FreeAndNil(ebitmap);
+            end;
               else
               begin
                 BGRAImage:=BGRABitMap.TBGRABitmap.Create;
@@ -1408,8 +1437,21 @@ begin
               bmp:=BGRABitMap.TBGRABitmap.Create(streamimage);
               bmp.HorizontalFlip;
               frmain.Image1.Picture.Bitmap.Assign(bmp);
-              //bmp.Free;
               FreeAndNil(bmp);
+            end;
+            'Rotate 180':
+            begin
+              BGRAImage:=BGRABitMap.TBGRABitmap.Create(streamimage);
+              ebitmap:=Graphics.TBitmap.Create;
+              ebitmap.Assign(BGRAImage);
+              FreeAndNil(BGRAImage);
+              vmp:=ImagingClasses.TSingleImage.Create;
+              ImagingComponents.ConvertBitmapToImage(ebitmap,vmp);
+              vmp.Rotate(180);
+              ImagingComponents.ConvertImageToBitmap(vmp,ebitmap);
+              FreeAndNil(vmp);
+              frmain.Image1.Picture.Bitmap.Assign(ebitmap);
+              FreeAndNil(ebitmap);
             end;
               else
                 frmain.Image1.Picture.LoadFromStream(streamimage);
@@ -5133,8 +5175,22 @@ begin
       BGRAImage:=BGRABitMap.TBGRABitmap.Create(GetStreamThumbnail(streamimage,thumbsize,thumbsize, bgcolor, false));
       BGRAImage.HorizontalFlip;
       thumbtmp.Bitmap.Assign(BGRAImage);
-      //BGRAImage.Destroy;
       FreeAndNil(BGRAImage);
+    end;
+    'Rotate 180':
+    begin
+      BGRAImage:=BGRABitMap.TBGRABitmap.Create;
+      GetStreamThumbnail(streamimage,thumbsize,thumbsize, bgcolor, false,'',BGRAImage);
+      ebitmap:=Graphics.TBitmap.Create;
+      ebitmap.Assign(BGRAImage);
+      FreeAndNil(BGRAImage);
+      vmp:=ImagingClasses.TSingleImage.Create;
+      ImagingComponents.ConvertBitmapToImage(ebitmap,vmp);
+      vmp.Rotate(180);
+      ImagingComponents.ConvertImageToBitmap(vmp,ebitmap);
+      FreeAndNil(vmp);
+      thumbtmp.Bitmap.Assign(ebitmap);
+      FreeAndNil(ebitmap);
     end;
       else
       begin
