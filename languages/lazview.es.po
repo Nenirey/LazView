@@ -192,13 +192,11 @@ msgid "LazView"
 msgstr "LazView"
 
 #: tfrmain.label1.caption
-#, fuzzy
 msgctxt "tfrmain.label1.caption"
 msgid "0/0"
 msgstr "0/0"
 
 #: tfrmain.label2.caption
-#, fuzzy
 msgctxt "tfrmain.label2.caption"
 msgid "0/0"
 msgstr "0/0"
@@ -268,19 +266,16 @@ msgid "&Edit"
 msgstr "&Editar"
 
 #: tfrmain.mnueffects.caption
-#, fuzzy
 msgctxt "tfrmain.mnueffects.caption"
 msgid "Effects"
 msgstr "Efectos"
 
 #: tfrmain.mnuexif.caption
-#, fuzzy
 msgctxt "tfrmain.mnuexif.caption"
 msgid "EXIF"
 msgstr "EXIF"
 
 #: tfrmain.mnuexit.caption
-#, fuzzy
 msgctxt "tfrmain.mnuexit.caption"
 msgid "Exit"
 msgstr "Salir"
@@ -320,7 +315,6 @@ msgid "&Help"
 msgstr "&Ayuda"
 
 #: tfrmain.mnuhighlightblue.caption
-#, fuzzy
 msgctxt "tfrmain.mnuhighlightblue.caption"
 msgid "Highlight blue"
 msgstr "Resaltar azul"
@@ -332,7 +326,6 @@ msgid "Highlight green"
 msgstr "Resaltar verde"
 
 #: tfrmain.mnuhighlightred.caption
-#, fuzzy
 msgctxt "tfrmain.mnuhighlightred.caption"
 msgid "Highlight red"
 msgstr "Resaltar rojo"
@@ -350,7 +343,6 @@ msgid "Mosaic background"
 msgstr "Fondo en mosaico"
 
 #: tfrmain.mnunegative.caption
-#, fuzzy
 msgctxt "tfrmain.mnunegative.caption"
 msgid "Negative"
 msgstr "Negativo"
@@ -368,7 +360,6 @@ msgid "Paste"
 msgstr "Pegar"
 
 #: tfrmain.mnuprint.caption
-#, fuzzy
 msgctxt "tfrmain.mnuprint.caption"
 msgid "Print"
 msgstr "Imprimir"
@@ -395,7 +386,7 @@ msgstr "Modo real"
 
 #: tfrmain.mnuredo.caption
 msgid "Redo"
-msgstr ""
+msgstr "Rehacer"
 
 #: tfrmain.mnuresize.caption
 msgid "Resize..."
@@ -411,7 +402,7 @@ msgstr "Rotar a la derecha"
 
 #: tfrmain.mnusave.caption
 msgid "Save"
-msgstr ""
+msgstr "Guardar"
 
 #: tfrmain.mnusaveas.caption
 msgid "Save as..."
@@ -426,7 +417,6 @@ msgid "Thumbail panel"
 msgstr "Vista en minuaturas"
 
 #: tfrmain.mnusmooth.caption
-#, fuzzy
 msgctxt "tfrmain.mnusmooth.caption"
 msgid "Smooth"
 msgstr "Suavizar"
@@ -469,13 +459,11 @@ msgstr "Barra de herramientas"
 
 #: tfrmain.mnutoolbarinfull.caption
 msgid "Tool bar in fullscreen"
-msgstr ""
+msgstr "Barra en pantalla completa"
 
 #: tfrmain.mnutools.caption
-#, fuzzy
-#| msgid "&Tools"
 msgid "Image"
-msgstr "&Herramientas"
+msgstr "&Imagen"
 
 #: tfrmain.mnutreeview.caption
 msgid "Tree view"
@@ -487,7 +475,7 @@ msgstr "TV"
 
 #: tfrmain.mnuundo.caption
 msgid "Undo"
-msgstr ""
+msgstr "Deshacer"
 
 #: tfrmain.mnuview.caption
 msgid "&View"
@@ -599,7 +587,7 @@ msgstr ""
 
 #: tfrmain.tbopen.hint
 msgid "Open image"
-msgstr ""
+msgstr "Abrir imagen"
 
 #: tfrmain.tbpauseanim.caption
 msgid "tbPauseAnim"
@@ -657,7 +645,7 @@ msgstr ""
 
 #: tfrmain.tbsave.hint
 msgid "Save image"
-msgstr ""
+msgstr "Guardar imagen"
 
 #: tfrmain.tbselect.caption
 msgid "tbSelect"
@@ -766,7 +754,7 @@ msgstr "Alto:"
 
 #: tfrresize.lblfilter.caption
 msgid "Filter:"
-msgstr ""
+msgstr "Filtro:"
 
 #: tfrresize.togglebox1.caption
 msgid "]"

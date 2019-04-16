@@ -1,7 +1,7 @@
 object freffect: Tfreffect
-  Left = 795
+  Left = 618
   Height = 457
-  Top = 148
+  Top = 134
   Width = 470
   Caption = 'Effects'
   ClientHeight = 457

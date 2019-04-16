@@ -385,6 +385,7 @@ var
   shapemousedown:boolean=false;
   shaperect:TRect;
   validx,validy,validw,validh:integer;
+  mainwindowstate:string;
   procedure rendermosaic;
   procedure fullsc;
   procedure compact;
@@ -574,12 +575,16 @@ begin
     iniconfigfile:=TMEMINIFile.Create(ExtractFilePath(Application.Params[0])+'lazview.ini')
   else
     iniconfigfile:=TMEMINIFile.Create(GetAppConfigDir(false)+'lazview.ini');
-  case frmain.WindowState of
-  wsMaximized:
+  case mainwindowstate of
+  'wsFullScreen':
+    begin
+      iniconfigfile.WriteString('Config','mainwindowstate','wsFullScreen');
+    end;
+  'wsMaximized':
     begin
       iniconfigfile.WriteString('Config','mainwindowstate','wsMaximized');
     end;
-  wsNormal:
+  'wsNormal':
     begin
       iniconfigfile.WriteString('Config','mainwindowstate','wsNormal');
       iniconfigfile.WriteInteger('Config','mainwindowxpos',frmain.Left);
@@ -616,20 +621,6 @@ begin
     iniconfigfile:=TMEMINIFile.Create(GetAppConfigDir(false)+'lazview.ini');
     if iniconfigfile.ReadBool('Config','compactmode',compactmode) then
       compact;
-  case iniconfigfile.ReadString('Config','mainwindowstate','wsMaximized') of
-  'wsMaximized':
-    begin
-      frmain.WindowState:=wsMaximized;
-    end;
-  'wsNormal':
-    begin
-      frmain.WindowState:=wsNormal;
-      frmain.Left:=iniconfigfile.ReadInteger('Config','mainwindowxpos',frmain.Left);
-      frmain.Top:=iniconfigfile.ReadInteger('Config','mainwindowypos',frmain.Top);
-      frmain.Width:=iniconfigfile.ReadInteger('Config','mainwindowwidth',frmain.Width);
-      frmain.Height:=iniconfigfile.ReadInteger('Config','mainwindowheight',frmain.Height);
-    end;
-  end;
   if iniconfigfile.ReadBool('Config','showthumbs',showthumbs) then
   begin
     frmain.mnuShowThumbs.Checked:=true;
@@ -681,7 +672,26 @@ begin
   end
   else
     frmain.mnuMosaic.Checked:=false;
-  //iniconfigfile.Free;
+  mainwindowstate:=iniconfigfile.ReadString('Config','mainwindowstate','wsMaximized');
+  case mainwindowstate of
+  'wsFullScreen':
+    begin
+      fullsc;
+      showmainmenu(false);
+    end;
+  'wsMaximized':
+    begin
+      frmain.WindowState:=wsMaximized;
+    end;
+  'wsNormal':
+    begin
+      frmain.WindowState:=wsNormal;
+      frmain.Left:=iniconfigfile.ReadInteger('Config','mainwindowxpos',frmain.Left);
+      frmain.Top:=iniconfigfile.ReadInteger('Config','mainwindowypos',frmain.Top);
+      frmain.Width:=iniconfigfile.ReadInteger('Config','mainwindowwidth',frmain.Width);
+      frmain.Height:=iniconfigfile.ReadInteger('Config','mainwindowheight',frmain.Height);
+    end;
+  end;
   FreeAndNil(iniconfigfile);
 end;
 
@@ -1627,12 +1637,13 @@ begin
     frmain.Label2.Visible:=true;
     frmain.Splitter1.Left:=0-frmain.Splitter1.Width;
     frmain.WindowState:=wsFullScreen;
+    mainwindowstate:='wsFullScreen';
     frmain.MainMenu1.Items.Visible:=false;
     frmain.Timer2.Enabled:=true;
     full:=true;
     frmain.ToolBar1.Left:=Round((screen.Width-frmain.ToolBar1.Width)/2);
     frmain.ToolBar1.Visible:=false;
-    frmain.MainMenu1.Items.Visible:=false;
+    showmainmenu(false);
   end
   else
   begin
@@ -1640,6 +1651,7 @@ begin
     frmain.Width:=fwidth;
     frmain.Height:=fheight;
     frmain.WindowState:=wsNormal;
+    mainwindowstate:='wsNormal';
     frmain.BorderStyle:=bsSizeable;
     frmain.ToolBar1.Align:=alTop;
     if frmain.mnuToolBar.Checked then
@@ -1714,8 +1726,7 @@ begin
       else
         frmain.Splitter2.Top:=frmain.StatusBar1.Top-frmain.StatusBar1.Height;
     end;
-
-    frmain.MainMenu1.Items.Visible:=frmain.mnuMenus.Checked;
+    showmainmenu(frmain.mnuMenus.Checked);
   end;
 end;
 
@@ -4059,7 +4070,7 @@ end;
 
 procedure Tfrmain.mnuAboutClick(Sender: TObject);
 begin
-  ShowMessage('Imagen viewer: LazView'+#13#10+'Version: 0.1'+#13#10+'Created by: nenirey@gmail.com'+#13#10+'CopyLeft: 2018'+lineending+lineending+'Thanks to the creators of the next libraries used by the project:'+lineending+lineending+'BGRABitmap by circular at operamail.com'+lineending+lineending+'Vampyre Imaging Library by Marek Mauder (marekmauder@gmail.com)'+lineending+lineending+'dEXIF by Gerry McGuire (mcguirez@hotmail.com)');
+  ShowMessage('Imagen viewer: LazView'+#13#10+'Version: 0.1'+#13#10+'Created by: nenirey@gmail.com'+#13#10+'CopyLeft: 2019'+lineending+lineending+'Thanks to the creators of the next libraries used by the project:'+lineending+lineending+'BGRABitmap by circular at operamail.com'+lineending+lineending+'Vampyre Imaging Library by Marek Mauder (marekmauder@gmail.com)'+lineending+lineending+'dEXIF by Gerry McGuire (mcguirez@hotmail.com)');
 end;
 
 procedure Tfrmain.mnuToolBarClick(Sender: TObject);
@@ -4580,6 +4591,7 @@ end;
 
 procedure Tfrmain.ShellTreeView1Enter(Sender: TObject);
 begin
+ if frmain.ScrollBox1.Visible and frmain.ScrollBox1.Enabled then
   frmain.ScrollBox1.SetFocus;
 end;
 
