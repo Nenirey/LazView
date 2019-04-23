@@ -225,6 +225,10 @@ msgstr ""
 msgid "Invert color (RGB)-(BRG)"
 msgstr ""
 
+#: tfrmain.mnucache.caption
+msgid "Use cahe (experimental but faster)"
+msgstr ""
+
 #: tfrmain.mnucompact.caption
 msgid "Compact mode"
 msgstr ""

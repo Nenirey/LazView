@@ -119,6 +119,7 @@
 {"hash":121642590,"name":"tfrmain.mnugoto.caption","sourcebytes":[71,111,32,116,111,32,110,117,109,98,101,114,32,105,109,97,103,101,46,46,46],"value":"Go to number image..."},
 {"hash":108868039,"name":"tfrmain.mnuantialiasing.caption","sourcebytes":[65,110,116,105,97,108,105,97,115,105,110,103],"value":"Antialiasing"},
 {"hash":132611349,"name":"tfrmain.mnurealmode.caption","sourcebytes":[82,101,97,108,32,109,111,100,101],"value":"Real mode"},
+{"hash":176452233,"name":"tfrmain.mnucache.caption","sourcebytes":[85,115,101,32,99,97,104,101,32,40,101,120,112,101,114,105,109,101,110,116,97,108,32,98,117,116,32,102,97,115,116,101,114,41],"value":"Use cahe (experimental but faster)"},
 {"hash":264617029,"name":"tfrmain.mnustrech.caption","sourcebytes":[83,116,114,101,99,104,32,105,109,97,103,101],"value":"Strech image"},
 {"hash":254604937,"name":"tfrmain.mnuautorotate.caption","sourcebytes":[65,117,116,111,32,114,111,116,97,116,101,32,40,69,88,73,70,41],"value":"Auto rotate (EXIF)"},
 {"hash":259910512,"name":"tfrmain.mnualwaysontop.caption","sourcebytes":[65,108,119,97,121,115,32,111,110,32,116,111,112],"value":"Always on top"},

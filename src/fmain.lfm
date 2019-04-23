@@ -1,7 +1,7 @@
 object frmain: Tfrmain
-  Left = 299
+  Left = 325
   Height = 609
-  Top = 86
+  Top = 135
   Width = 902
   ActiveControl = ShellTreeView1
   AllowDropFiles = True
@@ -29,8 +29,8 @@ object frmain: Tfrmain
   LCLVersion = '1.8.4.0'
   object StatusBar1: TStatusBar
     Left = 0
-    Height = 22
-    Top = 567
+    Height = 23
+    Top = 566
     Width = 902
     Panels = <    
       item
@@ -67,7 +67,7 @@ object frmain: Tfrmain
     AnchorSideBottom.Control = Splitter1
     AnchorSideBottom.Side = asrBottom
     Left = 0
-    Height = 543
+    Height = 542
     Top = 24
     Width = 0
     TabStop = False
@@ -96,7 +96,7 @@ object frmain: Tfrmain
     AnchorSideTop.Side = asrBottom
     AnchorSideBottom.Control = StatusBar1
     Left = 2
-    Height = 543
+    Height = 542
     Top = 24
     Width = 5
     Align = alNone
@@ -222,7 +222,7 @@ object frmain: Tfrmain
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = StatusBar1
     Left = 2
-    Height = 78
+    Height = 77
     Top = 489
     Width = 900
     HorzScrollBar.Increment = 1
@@ -2151,6 +2151,10 @@ object frmain: Tfrmain
         Caption = 'Real mode'
         OnClick = mnuRealModeClick
       end
+      object mnuCache: TMenuItem
+        Caption = 'Use cahe (experimental but faster)'
+        OnClick = mnuCacheClick
+      end
       object mnuStrech: TMenuItem
         Caption = 'Strech image'
         OnClick = mnuStrechClick
@@ -2226,6 +2230,13 @@ object frmain: Tfrmain
   end
   object FakePopup: TPopupMenu
     left = 380
+    top = 206
+  end
+  object cacheTimer: TTimer
+    Enabled = False
+    Interval = 100
+    OnTimer = cacheTimerTimer
+    left = 448
     top = 206
   end
 end
