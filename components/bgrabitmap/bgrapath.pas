@@ -39,13 +39,16 @@ interface
 uses
   Classes, BGRABitmapTypes, BGRATransform;
 
+const
+  DefaultDeviation = 0.1;
+
 type
   TBGRAPathElementType = (peNone, peMoveTo, peLineTo, peCloseSubPath,
     peQuadraticBezierTo, peCubicBezierTo, peArc, peOpenedSpline,
     peClosedSpline);
 
-  TBGRAPathDrawProc = procedure(const APoints: array of TPointF; AClosed: boolean; AData: Pointer) of object;
-  TBGRAPathFillProc = procedure(const APoints: array of TPointF; AData: pointer) of object;
+  TBGRAPathDrawProc = BGRABitmapTypes.TBGRAPathDrawProc;
+  TBGRAPathFillProc = BGRABitmapTypes.TBGRAPathFillProc;
 
   TBGRAPath = class;
 
@@ -99,7 +102,7 @@ type
     function GetCurrentCoord: TPointF; override;
     function GetPath: TBGRAPath; virtual;
   public
-    constructor Create(APath: TBGRAPath; AAcceptedDeviation: single = 0.1);
+    constructor Create(APath: TBGRAPath; AAcceptedDeviation: single = DefaultDeviation);
     function MoveForward(ADistance: single; ACanJump: boolean = true): single; override;
     function MoveBackward(ADistance: single; ACanJump: boolean = true): single; override;
     destructor Destroy; override;
@@ -117,7 +120,7 @@ type
 
   { TBGRAPath }
 
-  TBGRAPath = class(IBGRAPath)
+  TBGRAPath = class(TBGRACustomPath)
   protected
     FData: PByte;
     FDataCapacity: PtrInt;
@@ -159,21 +162,22 @@ type
     procedure QuadraticCurveFromTransformed(tcp, pt: TPointF);
     function LastCoordDefined: boolean; inline;
     function GetPolygonalApprox(APos: IntPtr; AAcceptedDeviation: single; AIncludeFirstPoint: boolean): ArrayOfTPointF;
-    function getPoints: ArrayOfTPointF;
-    function getPoints(AMatrix: TAffineMatrix): ArrayOfTPointF;
-    function getCursor: TBGRACustomPathCursor;
+    function getPoints: ArrayOfTPointF; overload;override;
+    function getPoints(AMatrix: TAffineMatrix): ArrayOfTPointF; overload;override;
+    function getLength: single; override;
+    function getCursor: TBGRACustomPathCursor; override;
     procedure InternalDraw(ADrawProc: TBGRAPathDrawProc; const AMatrix: TAffineMatrix; AAcceptedDeviation: single; AData: pointer);
     procedure BitmapDrawSubPathProc(const APoints: array of TPointF; AClosed: boolean; AData: pointer);
     function CorrectAcceptedDeviation(AAcceptedDeviation: single; const AMatrix: TAffineMatrix): single;
   public
-    constructor Create; overload;
+    constructor Create; overload; override;
     constructor Create(ASvgString: string); overload;
     constructor Create(const APoints: ArrayOfTPointF); overload;
     constructor Create(APath: IBGRAPath); overload;
     destructor Destroy; override;
-    procedure beginPath;
+    procedure beginPath; override;
     procedure beginSubPath;
-    procedure closePath;
+    procedure closePath; override;
     procedure translate(x,y: single);
     procedure resetTransform;
     procedure rotate(angleRadCW: single); overload;
@@ -183,19 +187,19 @@ type
     procedure scale(factor: single);
     procedure moveTo(x,y: single); overload;
     procedure lineTo(x,y: single); overload;
-    procedure moveTo(const pt: TPointF); overload;
-    procedure lineTo(const pt: TPointF); overload;
+    procedure moveTo(constref pt: TPointF); overload; override;
+    procedure lineTo(constref pt: TPointF); overload; override;
     procedure polyline(const pts: array of TPointF);
-    procedure polylineTo(const pts: array of TPointF);
+    procedure polylineTo(const pts: array of TPointF); override;
     procedure polygon(const pts: array of TPointF);
     procedure quadraticCurveTo(cpx,cpy,x,y: single); overload;
-    procedure quadraticCurveTo(const cp,pt: TPointF); overload;
+    procedure quadraticCurveTo(constref cp,pt: TPointF); overload; override;
     procedure quadraticCurve(const curve: TQuadraticBezierCurve); overload;
     procedure quadraticCurve(p1,cp,p2: TPointF); overload;
     procedure smoothQuadraticCurveTo(x,y: single); overload;
     procedure smoothQuadraticCurveTo(const pt: TPointF); overload;
     procedure bezierCurveTo(cp1x,cp1y,cp2x,cp2y,x,y: single); overload;
-    procedure bezierCurveTo(const cp1,cp2,pt: TPointF); overload;
+    procedure bezierCurveTo(constref cp1,cp2,pt: TPointF); overload; override;
     procedure bezierCurve(const curve: TCubicBezierCurve); overload;
     procedure bezierCurve(p1,cp1,cp2,p2: TPointF); overload;
     procedure smoothBezierCurveTo(cp2x,cp2y,x,y: single); overload;
@@ -208,60 +212,64 @@ type
     procedure arcDeg(cx, cy, radius, startAngleDeg, endAngleDeg: single); overload;
     procedure arcTo(x1, y1, x2, y2, radius: single); overload;
     procedure arcTo(const p1,p2: TPointF; radius: single); overload;
-    procedure arc(const arcDef: TArcDef); overload;
+    procedure arc(constref arcDef: TArcDef); overload; override;
     procedure arc(cx, cy, rx,ry: single; xAngleRadCW, startAngleRadCW, endAngleRadCW: single); overload;
     procedure arc(cx, cy, rx,ry, xAngleRadCW, startAngleRadCW, endAngleRadCW: single; anticlockwise: boolean); overload;
-    procedure arcTo(rx,ry, xAngleRadCW: single; largeArc, anticlockwise: boolean; x,y:single);
-    procedure copyTo(dest: IBGRAPath);
+    procedure arcTo(rx,ry, xAngleRadCW: single; largeArc, anticlockwise: boolean; x,y:single); overload;
+    procedure copyTo(dest: IBGRAPath); override;
     procedure addPath(const AValue: string); overload;
     procedure addPath(source: IBGRAPath); overload;
-    procedure openedSpline(const pts: array of TPointF; style: TSplineStyle);
-    procedure closedSpline(const pts: array of TPointF; style: TSplineStyle);
+    procedure openedSpline(const pts: array of TPointF; style: TSplineStyle); override;
+    procedure closedSpline(const pts: array of TPointF; style: TSplineStyle); override;
     property SvgString: string read GetSvgString write SetSvgString;
-    function ComputeLength(AAcceptedDeviation: single = 0.1): single;
-    function ToPoints(AAcceptedDeviation: single = 0.1): ArrayOfTPointF; overload;
-    function ToPoints(AMatrix: TAffineMatrix; AAcceptedDeviation: single = 0.1): ArrayOfTPointF; overload;
+    function ComputeLength(AAcceptedDeviation: single = DefaultDeviation): single;
+    function ToPoints(AAcceptedDeviation: single = DefaultDeviation): ArrayOfTPointF; overload;
+    function ToPoints(AMatrix: TAffineMatrix; AAcceptedDeviation: single = DefaultDeviation): ArrayOfTPointF; overload;
     function IsEmpty: boolean;
-    function GetBounds(AAcceptedDeviation: single = 0.1): TRectF;
+    function GetBounds(AAcceptedDeviation: single = DefaultDeviation): TRectF;
     procedure SetPoints(const APoints: ArrayOfTPointF);
-    procedure stroke(ABitmap: TBGRACustomBitmap; AColor: TBGRAPixel; AWidth: single; AAcceptedDeviation: single = 0.1);
-    procedure stroke(ABitmap: TBGRACustomBitmap; ATexture: IBGRAScanner; AWidth: single; AAcceptedDeviation: single = 0.1);
-    procedure stroke(ABitmap: TBGRACustomBitmap; x,y: single; AColor: TBGRAPixel; AWidth: single; AAcceptedDeviation: single = 0.1);
-    procedure stroke(ABitmap: TBGRACustomBitmap; x,y: single; ATexture: IBGRAScanner; AWidth: single; AAcceptedDeviation: single = 0.1);
-    procedure stroke(ABitmap: TBGRACustomBitmap; const AMatrix: TAffineMatrix; AColor: TBGRAPixel; AWidth: single; AAcceptedDeviation: single = 0.1);
-    procedure stroke(ABitmap: TBGRACustomBitmap; const AMatrix: TAffineMatrix; ATexture: IBGRAScanner; AWidth: single; AAcceptedDeviation: single = 0.1);
-    procedure stroke(ADrawProc: TBGRAPathDrawProc; const AMatrix: TAffineMatrix; AAcceptedDeviation: single = 0.1; AData: pointer = nil);
-    procedure fill(ABitmap: TBGRACustomBitmap; AColor: TBGRAPixel; AAcceptedDeviation: single = 0.1);
-    procedure fill(ABitmap: TBGRACustomBitmap; ATexture: IBGRAScanner; AAcceptedDeviation: single = 0.1);
-    procedure fill(ABitmap: TBGRACustomBitmap; x,y: single; AColor: TBGRAPixel; AAcceptedDeviation: single = 0.1);
-    procedure fill(ABitmap: TBGRACustomBitmap; x,y: single; ATexture: IBGRAScanner; AAcceptedDeviation: single = 0.1);
-    procedure fill(ABitmap: TBGRACustomBitmap; const AMatrix: TAffineMatrix; AColor: TBGRAPixel; AAcceptedDeviation: single = 0.1);
-    procedure fill(ABitmap: TBGRACustomBitmap; const AMatrix: TAffineMatrix; ATexture: IBGRAScanner; AAcceptedDeviation: single = 0.1);
-    procedure fill(AFillProc: TBGRAPathFillProc; const AMatrix: TAffineMatrix; AAcceptedDeviation: single = 0.1; AData: pointer = nil);
-    function CreateCursor(AAcceptedDeviation: single = 0.1): TBGRAPathCursor;
-    procedure Fit(ARect: TRectF; AAcceptedDeviation: single = 0.1);
-    procedure FitInto(ADest: TBGRAPath; ARect: TRectF; AAcceptedDeviation: single = 0.1);
-  protected
-    function QueryInterface({$IFDEF FPC_HAS_CONSTREF}constref{$ELSE}const{$ENDIF} IID: TGUID; out Obj): HResult; {$IF (not defined(WINDOWS)) AND (FPC_FULLVERSION>=20501)}cdecl{$ELSE}stdcall{$IFEND};
-    function _AddRef: Integer; {$IF (not defined(WINDOWS)) AND (FPC_FULLVERSION>=20501)}cdecl{$ELSE}stdcall{$IFEND};
-    function _Release: Integer; {$IF (not defined(WINDOWS)) AND (FPC_FULLVERSION>=20501)}cdecl{$ELSE}stdcall{$IFEND};
+    procedure stroke(ABitmap: TBGRACustomBitmap; AColor: TBGRAPixel; AWidth: single; AAcceptedDeviation: single = DefaultDeviation); overload;
+    procedure stroke(ABitmap: TBGRACustomBitmap; ATexture: IBGRAScanner; AWidth: single; AAcceptedDeviation: single = DefaultDeviation); overload;
+    procedure stroke(ABitmap: TBGRACustomBitmap; x,y: single; AColor: TBGRAPixel; AWidth: single; AAcceptedDeviation: single = DefaultDeviation); overload;
+    procedure stroke(ABitmap: TBGRACustomBitmap; x,y: single; ATexture: IBGRAScanner; AWidth: single; AAcceptedDeviation: single = DefaultDeviation); overload;
+    procedure stroke(ABitmap: TBGRACustomBitmap; const AMatrix: TAffineMatrix; AColor: TBGRAPixel; AWidth: single; AAcceptedDeviation: single = DefaultDeviation); overload;
+    procedure stroke(ABitmap: TBGRACustomBitmap; const AMatrix: TAffineMatrix; ATexture: IBGRAScanner; AWidth: single; AAcceptedDeviation: single = DefaultDeviation); overload;
+    procedure stroke(ADrawProc: TBGRAPathDrawProc; AData: pointer); overload; override;
+    procedure stroke(ADrawProc: TBGRAPathDrawProc; const AMatrix: TAffineMatrix; AData: pointer); overload; override;
+    procedure stroke(ADrawProc: TBGRAPathDrawProc; const AMatrix: TAffineMatrix; AAcceptedDeviation: single; AData: pointer = nil); overload;
+    procedure fill(ABitmap: TBGRACustomBitmap; AColor: TBGRAPixel; AAcceptedDeviation: single = DefaultDeviation); overload;
+    procedure fill(ABitmap: TBGRACustomBitmap; ATexture: IBGRAScanner; AAcceptedDeviation: single = DefaultDeviation); overload;
+    procedure fill(ABitmap: TBGRACustomBitmap; x,y: single; AColor: TBGRAPixel; AAcceptedDeviation: single = DefaultDeviation); overload;
+    procedure fill(ABitmap: TBGRACustomBitmap; x,y: single; ATexture: IBGRAScanner; AAcceptedDeviation: single = DefaultDeviation); overload;
+    procedure fill(ABitmap: TBGRACustomBitmap; const AMatrix: TAffineMatrix; AColor: TBGRAPixel; AAcceptedDeviation: single = DefaultDeviation); overload;
+    procedure fill(ABitmap: TBGRACustomBitmap; const AMatrix: TAffineMatrix; ATexture: IBGRAScanner; AAcceptedDeviation: single = DefaultDeviation); overload;
+    procedure fill(AFillProc: TBGRAPathFillProc; AData: pointer); overload; override;
+    procedure fill(AFillProc: TBGRAPathFillProc; const AMatrix: TAffineMatrix; AData: pointer); overload; override;
+    procedure fill(AFillProc: TBGRAPathFillProc; const AMatrix: TAffineMatrix; AAcceptedDeviation: single; AData: pointer = nil); overload;
+    function CreateCursor(AAcceptedDeviation: single = DefaultDeviation): TBGRAPathCursor;
+    procedure Fit(ARect: TRectF; AAcceptedDeviation: single = DefaultDeviation);
+    procedure FitInto(ADest: TBGRAPath; ARect: TRectF; AAcceptedDeviation: single = DefaultDeviation);
   end;
 
 {----------------------- Spline ------------------}
 
 function SplineVertexToSide(y0, y1, y2, y3: single; t: single): single;
-function ComputeBezierCurve(const curve: TCubicBezierCurve; AAcceptedDeviation: single = 0.1): ArrayOfTPointF; overload;
-function ComputeBezierCurve(const curve: TQuadraticBezierCurve; AAcceptedDeviation: single = 0.1): ArrayOfTPointF; overload;
-function ComputeBezierSpline(const spline: array of TCubicBezierCurve; AAcceptedDeviation: single = 0.1): ArrayOfTPointF; overload;
-function ComputeBezierSpline(const spline: array of TQuadraticBezierCurve; AAcceptedDeviation: single = 0.1): ArrayOfTPointF; overload;
-function ComputeClosedSpline(const points: array of TPointF; Style: TSplineStyle; AAcceptedDeviation: single = 0.1): ArrayOfTPointF;
-function ComputeOpenedSpline(const points: array of TPointF; Style: TSplineStyle; EndCoeff: single = 0.25; AAcceptedDeviation: single = 0.1): ArrayOfTPointF;
+function ComputeBezierCurve(const curve: TCubicBezierCurve; AAcceptedDeviation: single = DefaultDeviation): ArrayOfTPointF; overload;
+function ComputeBezierCurve(const curve: TQuadraticBezierCurve; AAcceptedDeviation: single = DefaultDeviation): ArrayOfTPointF; overload;
+function ComputeBezierSpline(const spline: array of TCubicBezierCurve; AAcceptedDeviation: single = DefaultDeviation): ArrayOfTPointF; overload;
+function ComputeBezierSpline(const spline: array of TQuadraticBezierCurve; AAcceptedDeviation: single = DefaultDeviation): ArrayOfTPointF; overload;
+function ComputeClosedSpline(const points: array of TPointF; Style: TSplineStyle; AAcceptedDeviation: single = DefaultDeviation): ArrayOfTPointF;
+function ComputeOpenedSpline(const points: array of TPointF; Style: TSplineStyle; EndCoeff: single = 0.25; AAcceptedDeviation: single = DefaultDeviation): ArrayOfTPointF;
 function ClosedSplineStartPoint(const points: array of TPointF; Style: TSplineStyle): TPointF;
+function ComputeEasyBezier(const curve: TEasyBezierCurve; AAcceptedDeviation: single = DefaultDeviation): ArrayOfTPointF;
 
 { Compute points to draw an antialiased ellipse }
-function ComputeEllipse(x,y,rx,ry: single; quality: single = 1): ArrayOfTPointF;
-function ComputeArc65536(x, y, rx, ry: single; start65536,end65536: word; quality: single = 1): ArrayOfTPointF;
-function ComputeArcRad(x, y, rx, ry: single; startRadCCW,endRadCCW: single; quality: single = 1): ArrayOfTPointF;
+function ComputeEllipse(x,y,rx,ry: single; quality: single = 1): ArrayOfTPointF; overload;
+function ComputeEllipse(AOrigin, AXAxis, AYAxis: TPointF; quality: single = 1): ArrayOfTPointF; overload;
+function ComputeArc65536(x, y, rx, ry: single; start65536,end65536: word; quality: single = 1): ArrayOfTPointF; overload;
+function ComputeArc65536(AOrigin, AXAxis, AYAxis: TPointF; start65536,end65536: word; quality: single = 1): ArrayOfTPointF; overload;
+function ComputeArcRad(x, y, rx, ry: single; startRadCCW,endRadCCW: single; quality: single = 1): ArrayOfTPointF; overload;
+function ComputeArcRad(AOrigin, AXAxis, AYAxis: TPointF; startRadCCW,endRadCCW: single; quality: single = 1): ArrayOfTPointF; overload;
 function ComputeArc(const arc: TArcDef; quality: single = 1): ArrayOfTPointF;
 function ComputeRoundRect(x1,y1,x2,y2,rx,ry: single; quality: single = 1): ArrayOfTPointF; overload;
 function ComputeRoundRect(x1,y1,x2,y2,rx,ry: single; options: TRoundRectangleOptions; quality: single = 1): ArrayOfTPointF; overload;
@@ -334,7 +342,7 @@ begin
   Result := a0 * t * t2 + a1 * t2 + a2 * t + a3;
 end;
 
-function ComputeCurvePartPrecision(pt1, pt2, pt3, pt4: TPointF; AAcceptedDeviation: single = 0.1): integer;
+function ComputeCurvePartPrecision(pt1, pt2, pt3, pt4: TPointF; AAcceptedDeviation: single = DefaultDeviation): integer;
 var
   len: single;
 begin
@@ -345,17 +353,17 @@ begin
   if Result<=0 then Result:=1;
 end;
 
-function ComputeBezierCurve(const curve: TCubicBezierCurve; AAcceptedDeviation: single = 0.1): ArrayOfTPointF; overload;
+function ComputeBezierCurve(const curve: TCubicBezierCurve; AAcceptedDeviation: single = DefaultDeviation): ArrayOfTPointF; overload;
 begin
   result := curve.ToPoints(AAcceptedDeviation);
 end;
 
-function ComputeBezierCurve(const curve: TQuadraticBezierCurve; AAcceptedDeviation: single = 0.1): ArrayOfTPointF; overload;
+function ComputeBezierCurve(const curve: TQuadraticBezierCurve; AAcceptedDeviation: single = DefaultDeviation): ArrayOfTPointF; overload;
 begin
   result := curve.ToPoints(AAcceptedDeviation);
 end;
 
-function ComputeBezierSpline(const spline: array of TCubicBezierCurve; AAcceptedDeviation: single = 0.1): ArrayOfTPointF;
+function ComputeBezierSpline(const spline: array of TCubicBezierCurve; AAcceptedDeviation: single = DefaultDeviation): ArrayOfTPointF;
 var
   curves: array of array of TPointF;
   nb: integer;
@@ -405,7 +413,7 @@ begin
 end;
 
 function ComputeBezierSpline(const spline: array of TQuadraticBezierCurve;
-  AAcceptedDeviation: single = 0.1): ArrayOfTPointF;
+  AAcceptedDeviation: single = DefaultDeviation): ArrayOfTPointF;
 var
   curves: array of array of TPointF;
   nb: integer;
@@ -454,7 +462,7 @@ begin
   end;
 end;
 
-function ComputeClosedSpline(const points: array of TPointF; Style: TSplineStyle; AAcceptedDeviation: single = 0.1): ArrayOfTPointF;
+function ComputeClosedSpline(const points: array of TPointF; Style: TSplineStyle; AAcceptedDeviation: single = DefaultDeviation): ArrayOfTPointF;
 var
   i, j, nb, idx, pre: integer;
   ptPrev, ptPrev2, ptNext, ptNext2: TPointF;
@@ -462,6 +470,12 @@ var
   kernel: TWideKernelFilter;
 
 begin
+  if Style = ssEasyBezier then
+  begin
+    result := ComputeEasyBezier(EasyBezierCurve(points, true, cmCurve));
+    exit;
+  end;
+
   if length(points) <= 2 then
   begin
     setlength(result,length(points));
@@ -477,7 +491,7 @@ begin
     ptPrev  := points[i];
     ptNext  := points[(i + 1) mod length(points)];
     ptNext2 := points[(i + 2) mod length(points)];
-    nb      += ComputeCurvePartPrecision(ptPrev2, ptPrev, ptNext, ptNext2, AAcceptedDeviation);
+    inc(nb, ComputeCurvePartPrecision(ptPrev2, ptPrev, ptNext, ptNext2, AAcceptedDeviation) );
   end;
 
   kernel := CreateInterpolator(style);
@@ -506,13 +520,19 @@ begin
   kernel.Free;
 end;
 
-function ComputeOpenedSpline(const points: array of TPointF; Style: TSplineStyle; EndCoeff: single; AAcceptedDeviation: single = 0.1): ArrayOfTPointF;
+function ComputeOpenedSpline(const points: array of TPointF; Style: TSplineStyle; EndCoeff: single; AAcceptedDeviation: single = DefaultDeviation): ArrayOfTPointF;
 var
   i, j, nb, idx, pre: integer;
   ptPrev, ptPrev2, ptNext, ptNext2: TPointF;
   t: single;
   kernel: TWideKernelFilter;
 begin
+  if Style = ssEasyBezier then
+  begin
+    result := ComputeEasyBezier(EasyBezierCurve(points, false, cmCurve));
+    exit;
+  end;
+
   if length(points) <= 2 then
   begin
     setlength(result,length(points));
@@ -536,7 +556,7 @@ begin
       ptNext2 := (ptNext+(ptPrev+points[i - 1])*EndCoeff)*(1/(1+2*EndCoeff))
     else
       ptNext2 := points[i + 2];
-    nb      += ComputeCurvePartPrecision(ptPrev2, ptPrev, ptNext, ptNext2, AAcceptedDeviation);
+    inc(nb, ComputeCurvePartPrecision(ptPrev2, ptPrev, ptNext, ptNext2, AAcceptedDeviation) );
   end;
 
   kernel := CreateInterpolator(style);
@@ -591,22 +611,39 @@ var
   ptNext: TPointF;
   ptNext2: TPointF;
 begin
-  if length(points) = 0 then
-    result := EmptyPointF
-  else
-  if length(points)<=2 then
-    result := points[0]
-  else
+  if Style = ssEasyBezier then
   begin
-    kernel := CreateInterpolator(style);
-    ptPrev2 := points[high(points)];
-    ptPrev  := points[0];
-    ptNext  := points[1];
-    ptNext2 := points[2];
-    result := ptPrev2*kernel.Interpolation(1) + ptPrev*kernel.Interpolation(0) +
-              ptNext*kernel.Interpolation(-1)  + ptNext2*kernel.Interpolation(-2);
-    kernel.free;
+    result := EasyBezierCurve(points, true, cmCurve).CurveStartPoint;
+  end else
+  begin
+    if length(points) = 0 then
+      result := EmptyPointF
+    else
+    if length(points)<=2 then
+      result := points[0]
+    else
+    begin
+      kernel := CreateInterpolator(style);
+      ptPrev2 := points[high(points)];
+      ptPrev  := points[0];
+      ptNext  := points[1];
+      ptNext2 := points[2];
+      result := ptPrev2*kernel.Interpolation(1) + ptPrev*kernel.Interpolation(0) +
+                ptNext*kernel.Interpolation(-1)  + ptNext2*kernel.Interpolation(-2);
+      kernel.free;
+    end;
   end;
+end;
+
+function ComputeEasyBezier(const curve: TEasyBezierCurve;
+  AAcceptedDeviation: single): ArrayOfTPointF;
+var
+  path: TBGRAPath;
+begin
+  path := TBGRAPath.Create;
+  curve.CopyToPath(path);
+  result := path.ToPoints(AAcceptedDeviation);
+  path.Free;
 end;
 
 function ComputeArc65536(x, y, rx, ry: single; start65536,end65536: word; quality: single): ArrayOfTPointF;
@@ -653,12 +690,46 @@ begin
   result := ComputeArc65536(x,y,rx,ry,0,0,quality);
 end;
 
+function ComputeEllipse(AOrigin, AXAxis, AYAxis: TPointF; quality: single): ArrayOfTPointF;
+begin
+  result := ComputeArcRad(AOrigin, AXAxis, AYAxis, 0,0, quality);
+end;
+
+function ComputeArc65536(AOrigin, AXAxis, AYAxis: TPointF; start65536,
+  end65536: word; quality: single): ArrayOfTPointF;
+begin
+  //go back temporarily to radians
+  result := ComputeArcRad(AOrigin,AXAxis,AYAxis, start65536*Pi/326768, end65536*Pi/326768, quality);
+end;
+
 function ComputeArcRad(x, y, rx, ry: single; startRadCCW, endRadCCW: single;
   quality: single): ArrayOfTPointF;
 begin
   result := ComputeArc65536(x,y,rx,ry,round(startRadCCW*32768/Pi) and $ffff,round(endRadCCW*32768/Pi) and $ffff,quality);
   result[0] := PointF(x+cos(startRadCCW)*rx,y-sin(startRadCCW)*ry);
   result[high(result)] := PointF(x+cos(endRadCCW)*rx,y-sin(endRadCCW)*ry);
+end;
+
+function ComputeArcRad(AOrigin, AXAxis, AYAxis: TPointF; startRadCCW,endRadCCW: single; quality: single): ArrayOfTPointF;
+var
+  u, v: TPointF;
+  lenU, lenV: Single;
+  m: TAffineMatrix;
+  i: Integer;
+begin
+  u := AXAxis-AOrigin;
+  lenU := VectLen(u);
+  v := AYAxis-AOrigin;
+  lenV := VectLen(v);
+  if (lenU = 0) and (lenV = 0) then exit(PointsF([AOrigin]));
+
+  result := ComputeArcRad(0, 0, lenU, lenV, startRadCCW, endRadCCW, quality);
+
+  if lenU <> 0 then u.Scale(1/lenU);
+  if lenV <> 0 then v.Scale(1/lenV);
+  m := AffineMatrix(u, v, AOrigin);
+  for i := 0 to high(result) do
+    result[i] := m*result[i];
 end;
 
 function ComputeArc(const arc: TArcDef; quality: single): ArrayOfTPointF;
@@ -1612,6 +1683,17 @@ begin
   InternalDraw(@BitmapDrawSubPathProc, AMatrix, AAcceptedDeviation, @data);
 end;
 
+procedure TBGRAPath.stroke(ADrawProc: TBGRAPathDrawProc; AData: pointer);
+begin
+  stroke(ADrawProc, AffineMatrixIdentity, DefaultDeviation, AData);
+end;
+
+procedure TBGRAPath.stroke(ADrawProc: TBGRAPathDrawProc;
+  const AMatrix: TAffineMatrix; AData: pointer);
+begin
+  stroke(ADrawProc, AMatrix, DefaultDeviation, AData);
+end;
+
 procedure TBGRAPath.stroke(ADrawProc: TBGRAPathDrawProc;
   const AMatrix: TAffineMatrix; AAcceptedDeviation: single; AData: pointer);
 begin
@@ -1652,6 +1734,17 @@ procedure TBGRAPath.fill(ABitmap: TBGRACustomBitmap; const AMatrix: TAffineMatri
   ATexture: IBGRAScanner; AAcceptedDeviation: single);
 begin
   ABitmap.FillPolyAntialias(ToPoints(AMatrix,AAcceptedDeviation), ATexture);
+end;
+
+procedure TBGRAPath.fill(AFillProc: TBGRAPathFillProc; AData: pointer);
+begin
+  fill(AFillProc, AffineMatrixIdentity, DefaultDeviation, AData);
+end;
+
+procedure TBGRAPath.fill(AFillProc: TBGRAPathFillProc;
+  const AMatrix: TAffineMatrix; AData: pointer);
+begin
+  fill(AFillProc, AMatrix, DefaultDeviation, AData);
 end;
 
 procedure TBGRAPath.fill(AFillProc: TBGRAPathFillProc; const AMatrix: TAffineMatrix;
@@ -1781,7 +1874,7 @@ begin
         end;
       peOpenedSpline, peClosedSpline:
         begin
-          pts := GetPolygonalApprox(Pos, 0.1,True);
+          pts := GetPolygonalApprox(Pos, DefaultDeviation,True);
           for i := 0 to high(pts) do
           begin
             if isEmptyPointF(lastPosF) then
@@ -1877,7 +1970,7 @@ begin
         result := BGRABitmapTypes.BezierCurve(GetElementStartCoord(APos),ControlPoint1,ControlPoint2,Destination).ToPoints(AAcceptedDeviation, AIncludeFirstPoint);
     peArc:
       begin
-        result := ComputeArc(PArcElement(elem)^, 0.1/AAcceptedDeviation);
+        result := ComputeArc(PArcElement(elem)^, DefaultDeviation/AAcceptedDeviation);
         pt := GetElementStartCoord(APos);
         if pt <> result[0] then
         begin
@@ -1908,6 +2001,11 @@ end;
 function TBGRAPath.getPoints(AMatrix: TAffineMatrix): ArrayOfTPointF;
 begin
   result := ToPoints(AMatrix);
+end;
+
+function TBGRAPath.getLength: single;
+begin
+  result := ComputeLength;
 end;
 
 function TBGRAPath.getCursor: TBGRACustomPathCursor;
@@ -2316,7 +2414,7 @@ end;
 procedure TBGRAPath.NeedSpace(count: integer);
 begin
   OnModify;
-  count += 4; //avoid memory error
+  inc(count, 4); //avoid memory error
   if FDataPos + count > FDataCapacity then
   begin
     FDataCapacity := (FDataCapacity shl 1)+8;
@@ -2369,7 +2467,7 @@ begin
     if elemType in[peOpenedSpline,peClosedSpline] then
     begin
       p := PSplineElement(FData+(APos+sizeof(TPathElementHeader)));
-      newPos += p^.NbControlPoints * sizeof(TPointF); //extra
+      inc(newPos, p^.NbControlPoints * sizeof(TPointF) ); //extra
     end;
     if newPos < FDataPos then
     begin
@@ -2468,7 +2566,7 @@ begin
       result := BGRABitmapTypes.BezierCurve(GetElementStartCoord(APos),ControlPoint1,ControlPoint2,Destination).ComputeLength(AAcceptedDeviation);
   peArc: begin
       result := VectLen(ArcStartPoint(PArcElement(elem)^) - GetElementStartCoord(APos));
-      result += PolylineLen(ComputeArc(PArcElement(elem)^, 0.1/AAcceptedDeviation));
+      result += PolylineLen(ComputeArc(PArcElement(elem)^, DefaultDeviation/AAcceptedDeviation));
     end;
   peClosedSpline,peOpenedSpline:
     begin
@@ -2637,7 +2735,7 @@ begin
   lineTo(PointF(x,y));
 end;
 
-procedure TBGRAPath.moveTo(const pt: TPointF);
+procedure TBGRAPath.moveTo(constref pt: TPointF);
 begin
   if FLastSubPathElementType <> peMoveTo then
   begin
@@ -2653,7 +2751,7 @@ begin
   FSubPathTransformedStartCoord := FLastTransformedCoord;
 end;
 
-procedure TBGRAPath.lineTo(const pt: TPointF);
+procedure TBGRAPath.lineTo(constref pt: TPointF);
 var lastTransfCoord, newTransfCoord: TPointF;
 begin
   if LastCoordDefined then
@@ -2700,7 +2798,7 @@ begin
   quadraticCurveTo(PointF(cpx,cpy),PointF(x,y));
 end;
 
-procedure TBGRAPath.quadraticCurveTo(const cp, pt: TPointF);
+procedure TBGRAPath.quadraticCurveTo(constref cp, pt: TPointF);
 begin
   if LastCoordDefined then
     QuadraticCurveFromTransformed(FMatrix*cp, pt) else
@@ -2715,7 +2813,7 @@ begin
   bezierCurveTo(PointF(cp1x,cp1y),PointF(cp2x,cp2y),PointF(x,y));
 end;
 
-procedure TBGRAPath.bezierCurveTo(const cp1, cp2, pt: TPointF);
+procedure TBGRAPath.bezierCurveTo(constref cp1, cp2, pt: TPointF);
 begin
   if not LastCoordDefined then moveTo(cp1);
   BezierCurveFromTransformed(FMatrix*cp1, cp2, pt);
@@ -2839,7 +2937,7 @@ begin
   arc(Html5ArcTo(p0,p1,p2,radius));
 end;
 
-procedure TBGRAPath.arc(const arcDef: TArcDef);
+procedure TBGRAPath.arc(constref arcDef: TArcDef);
 var transformedArc: TArcElement;
 begin
   if (arcDef.radius.x = 0) and (arcDef.radius.y = 0) then
@@ -2920,24 +3018,9 @@ begin
   until not GoToNextElement(pos);
 end;
 
-function TBGRAPath.QueryInterface({$IFDEF FPC_HAS_CONSTREF}constref{$ELSE}const{$ENDIF} IID: TGUID; out Obj): HResult; {$IF (not defined(WINDOWS)) AND (FPC_FULLVERSION>=20501)}cdecl{$ELSE}stdcall{$IFEND};
-begin
-  if GetInterface(iid, obj) then
-    Result := S_OK
-  else
-    Result := longint(E_NOINTERFACE);
-end;
+initialization
 
-{ There is no automatic reference counting, but it is compulsory to define these functions }
-function TBGRAPath._AddRef: Integer; {$IF (not defined(WINDOWS)) AND (FPC_FULLVERSION>=20501)}cdecl{$ELSE}stdcall{$IFEND};
-begin
-  result := 0;
-end;
-
-function TBGRAPath._Release: Integer; {$IF (not defined(WINDOWS)) AND (FPC_FULLVERSION>=20501)}cdecl{$ELSE}stdcall{$IFEND};
-begin
-  result := 0;
-end;
+  BGRAPathFactory := TBGRAPath;
 
 end.
 

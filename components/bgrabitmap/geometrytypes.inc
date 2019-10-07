@@ -18,23 +18,155 @@ type
   end;
   {$endif}
 
+  {* Contains an array of points with single-precision floating point coordinates }
+  ArrayOfTPointF = array of TPointF;
+
   {* An affine matrix contains three 2D vectors: the image of x, the image of y and the translation }
   TAffineMatrix = array[1..2,1..3] of single;
 
   {$if FPC_FULLVERSION>=030001}
   TRectF = Types.TRectF;
   {$else}
+  {$define BGRA_DEFINE_TRECTF}
+  { TRectF }
+
   TRectF =
   {$ifndef FPC_REQUIRES_PROPER_ALIGNMENT}
   packed
   {$endif FPC_REQUIRES_PROPER_ALIGNMENT}
   record
+  private
+    function GetHeight: single;
+    function GetWidth: Single;
+  public
+    property Width: Single read GetWidth;
+    property Height: single read GetHeight;
+    procedure Offset (const dx,dy : Single);
     case Integer of
      0: (Left, Top, Right, Bottom: Single);
      1: (TopLeft, BottomRight: TPointF);
   end;
+
+  { TRectHelper }
+
+  TRectHelper = record helper for TRect
+  private
+    function GetHeight: integer;
+    function GetIsEmpty: boolean;
+    function GetWidth: integer;
+    procedure SetHeight(AValue: integer);
+    procedure SetWidth(AValue: integer);
+  public
+    constructor Create(Origin: TPoint; AWidth, AHeight: Longint); overload;
+    constructor Create(ALeft, ATop, ARight, ABottom: Longint); overload;
+    procedure Intersect(R: TRect);
+    class function Intersect(R1: TRect; R2: TRect): TRect; static;
+    function IntersectsWith(R: TRect): Boolean;
+    class function Union(R1, R2: TRect): TRect; static;
+    procedure Union(R: TRect);
+    procedure Offset(DX, DY: Longint);
+    procedure Inflate(DX, DY: Longint);
+    function Contains(const APoint: TPoint): boolean; overload;
+    function Contains(const ARect: TRect): boolean; overload;
+    property Width: integer read GetWidth write SetWidth;
+    property Height: integer read GetHeight write SetHeight;
+    property IsEmpty: boolean read GetIsEmpty;
+  end;
+
+operator=(const ARect1,ARect2: TRect): boolean;
+
+type
+  { TSizeHelper }
+
+  TSizeHelper = record helper for TSize
+  private
+    function GetHeight: integer;
+    function GetWidth: integer;
+  public
+    property Width: integer read GetWidth;
+    property Height: integer read GetHeight;
+  end;
+
   {$endif}
+
+const
+  EmptyPoint : TPoint = (X: -2147483648; Y: -2147483648);
+
+function IsEmptyPoint(const APoint: TPoint): boolean;
+
+type
+
+  { TPointFHelper }
+
+  TPointFHelper = record helper for TPointF
+    procedure Offset(const apt : TPointF); overload;
+    procedure Offset(const apt : TPoint); overload;
+    procedure Offset(dx,dy : longint); overload;
+    procedure Offset(dx,dy : single); overload;
+    procedure Scale(AScale: single);
+
+    function Ceiling: TPoint;
+    function Truncate: TPoint;
+    function Floor: TPoint;
+    function Round: TPoint;
+    function Length: Single;
+  end;
+
+type
+  PRectF = ^TRectF;
+
+  { TRectFHelper }
+
+  TRectFHelper = record helper for TRectF
+    class function Intersect(const R1: TRectF; const R2: TRectF): TRectF; overload; static;
+    class function Union(const R1: TRectF; const R2: TRectF): TRectF; overload; static;
+    class function Union(const R1: TRectF; const R2: TRectF; ADiscardEmpty: boolean): TRectF; overload; static;
+    function Union(const r: TRectF):TRectF;
+    function Union(const r: TRectF; ADiscardEmpty: boolean):TRectF;
+    function IntersectsWith(const r: TRectF): boolean;
+    function IsEmpty: boolean;
+  end;
+
+const
+  {* A value for an empty rectangle }
+  EmptyRectF : TRectF = (left:0; top:0; right:0; bottom: 0);
+
   function RectF(Left, Top, Right, Bottom: Single): TRectF;
+  function RectF(const ATopLeft,ABottomRight: TPointF): TRectF;
+  function RectWithSizeF(left,top,width,height: Single): TRectF;
+  function IsEmptyRectF(const ARect:TRectF): boolean;
+
+type
+  { TAffineBox }
+
+  TAffineBox = object
+  private
+    function GetAsPolygon: ArrayOfTPointF;
+    function GetBottomRight: TPointF;
+    function GetHeight: single;
+    function GetIsEmpty: boolean;
+    function GetRectBounds: TRect;
+    function GetRectBoundsF: TRectF;
+    function GetSurface: single;
+    function GetWidth: single;
+  public
+    TopLeft, TopRight,
+    BottomLeft: TPointF;
+    class function EmptyBox: TAffineBox; static;
+    class function AffineBox(ATopLeft, ATopRight, ABottomLeft: TPointF): TAffineBox; overload; static;
+    class function AffineBox(ARectF: TRectF): TAffineBox; overload; static;
+    procedure Offset(AOfsX, AOfsY: single); overload;
+    procedure Offset(AOfs: TPointF); overload;
+    function Contains(APoint: TPointF): boolean;
+    property RectBounds: TRect read GetRectBounds;
+    property RectBoundsF: TRectF read GetRectBoundsF;
+    property BottomRight: TPointF read GetBottomRight;
+    property IsEmpty: boolean read GetIsEmpty;
+    property AsPolygon: ArrayOfTPointF read GetAsPolygon;
+    property Width: single read GetWidth;
+    property Height: single read GetHeight;
+    property Surface: single read GetSurface;
+  end;
 
   const
     {** Value indicating that there is an empty ''TPointF'' structure.
@@ -43,7 +175,8 @@ type
 
   {----------------- Operators for TPointF --------------------}
   {** Creates a new structure with values ''x'' and ''y'' }
-  function PointF(x, y: single): TPointF;
+  function PointF(x, y: single): TPointF; overload;
+  function PointF(pt: TPoint): TPointF; overload;
   {** Checks if the structure is empty (equal to ''EmptyPointF'') }
   function isEmptyPointF(const pt: TPointF): boolean;
   {** Checks if both ''x'' and ''y'' are equal }
@@ -68,8 +201,6 @@ type
 
 type
   TFaceCulling = (fcNone, fcKeepCW, fcKeepCCW);
-  {* Contains an array of points with single-precision floating point coordinates }
-  ArrayOfTPointF = array of TPointF;
 
   {** Creates an array of ''TPointF'' }
   function PointsF(const pts: array of TPointF): ArrayOfTPointF;
@@ -109,70 +240,9 @@ type
     {** The curve expands outside the polygonal envelope (starting and ending points are reached) }
     ssRoundOutside,
     {** The curve is outside the polygonal envelope and there is a tangeant at vertices (starting and ending points are reached) }
-    ssVertexToSide);
-
-  { TCubicBezierCurve }
-  {* Definition of a Bézier curve of order 3. It has two control points ''c1'' and ''c2''. Those are not reached by the curve }
-  TCubicBezierCurve = object
-  private
-    function SimpleComputePoints(AAcceptedDeviation: single = 0.1; AIncludeFirstPoint: boolean = true): ArrayOfTPointF;
-  public
-    {** Starting point (reached) }
-    p1: TPointF;
-    {** First control point (not reached by the curve) }
-    c1: TPointF;
-    {** Second control point (not reached by the curve) }
-    c2: TPointF;
-    {** Ending point (reached) }
-    p2: TPointF;
-    {** Computes the point at time ''t'', varying from 0 to 1 }
-    function ComputePointAt(t: single): TPointF;
-    {** Split the curve in two such that ''ALeft.p2'' = ''ARight.p1'' }
-    procedure Split(out ALeft, ARight: TCubicBezierCurve);
-    {** Compute an approximation of the length of the curve. ''AAcceptedDeviation'' indicates the
-       maximum orthogonal distance that is ignored and approximated by a straight line. }
-    function ComputeLength(AAcceptedDeviation: single = 0.1): single;
-    {** Computes a polygonal approximation of the curve. ''AAcceptedDeviation'' indicates the
-       maximum orthogonal distance that is ignored and approximated by a straight line.
-       ''AIncludeFirstPoint'' indicates if the first point must be included in the array }
-    function ToPoints(AAcceptedDeviation: single = 0.1; AIncludeFirstPoint: boolean = true): ArrayOfTPointF;
-    function GetBounds: TRectF;
-  end;
-
-  {** Creates a structure for a cubic Bézier curve }
-  function BezierCurve(origin, control1, control2, destination: TPointF) : TCubicBezierCurve; overload;
-
-type
-  { TQuadraticBezierCurve }
-  {* Definition of a Bézier curve of order 2. It has one control point }
-  TQuadraticBezierCurve = object
-  private
-    function SimpleComputePoints(AAcceptedDeviation: single = 0.1; AIncludeFirstPoint: boolean = true): ArrayOfTPointF;
-    function ComputeExtremumPositionOutsideSegment: single;
-  public
-    {** Starting point (reached) }
-    p1: TPointF;
-    {** Control point (not reached by the curve) }
-    c: TPointF;
-    {** Ending point (reached) }
-    p2: TPointF;
-    {** Computes the point at time ''t'', varying from 0 to 1 }
-    function ComputePointAt(t: single): TPointF;
-    {** Split the curve in two such that ''ALeft.p2'' = ''ARight.p1'' }
-    procedure Split(out ALeft, ARight: TQuadraticBezierCurve);
-    {** Compute the '''exact''' length of the curve }
-    function ComputeLength: single;
-    {** Computes a polygonal approximation of the curve. ''AAcceptedDeviation'' indicates the
-       maximum orthogonal distance that is ignored and approximated by a straight line.
-       ''AIncludeFirstPoint'' indicates if the first point must be included in the array }
-    function ToPoints(AAcceptedDeviation: single = 0.1; AIncludeFirstPoint: boolean = true): ArrayOfTPointF;
-    function GetBounds: TRectF;
-  end;
-
-  {** Creates a structure for a quadratic Bézier curve }
-  function BezierCurve(origin, control, destination: TPointF) : TQuadraticBezierCurve; overload;
-  {** Creates a structure for a quadratic Bézier curve without curvature }
-  function BezierCurve(origin, destination: TPointF) : TQuadraticBezierCurve; overload;
+    ssVertexToSide,
+    {** The curve is rounded using Bezier curves when the angle is less than or equal to 45° }
+    ssEasyBezier);
 
 type
   {* Pointer to an arc definition }
@@ -271,8 +341,8 @@ type
       procedure SetPenStyle(AValue: TPenStyle); virtual; abstract;
       procedure SetStrokeMatrix(const AValue: TAffineMatrix); virtual; abstract;
   public
-      function ComputePolyline(const APoints: array of TPointF; AWidth: single; AClosedCap: boolean = true): ArrayOfTPointF; virtual; abstract;
-      function ComputePolyline(const APoints: array of TPointF; AWidth: single; APenColor: TBGRAPixel; AClosedCap: boolean = true): ArrayOfTPointF; virtual; abstract;
+      function ComputePolyline(const APoints: array of TPointF; AWidth: single; AClosedCap: boolean = true): ArrayOfTPointF; overload; virtual; abstract;
+      function ComputePolyline(const APoints: array of TPointF; AWidth: single; APenColor: TBGRAPixel; AClosedCap: boolean = true): ArrayOfTPointF; overload; virtual; abstract;
       function ComputePolylineAutoCycle(const APoints: array of TPointF; AWidth: single): ArrayOfTPointF; virtual; abstract;
       function ComputePolygon(const APoints: array of TPointF; AWidth: single): ArrayOfTPointF; virtual; abstract;
       property Style: TPenStyle read GetPenStyle write SetPenStyle;
@@ -287,7 +357,13 @@ type
 
 type
   {* Point in 3D with single-precision floating point coordinates }
-  TPoint3D = record x,y,z: single;
+
+  { TPoint3D }
+
+  TPoint3D = record
+    x,y,z: single;
+    procedure Offset(const point3D: TPoint3D);
+    procedure Scale(AScale: single);
   end;
 
   {----------------- Operators for TPoint3D ---------------}
@@ -325,11 +401,11 @@ type
   {----------- Line and polygon functions -----------}
   {** Computes the intersection of two lines. If they are parallel, returns
       the middle of the segment between the two origins }
-  function IntersectLine(line1, line2: TLineDef): TPointF;
+  function IntersectLine(line1, line2: TLineDef): TPointF; overload;
   {** Computes the intersection of two lines. If they are parallel, returns
       the middle of the segment between the two origins. The value ''parallel''
       is set to indicate if the lines were parallel }
-  function IntersectLine(line1, line2: TLineDef; out parallel: boolean): TPointF;
+  function IntersectLine(line1, line2: TLineDef; out parallel: boolean): TPointF; overload;
   {** Checks if the polygon formed by the given points is convex. ''IgnoreAlign''
       specifies that if the points are aligned, it should still be considered as convex }
   function IsConvex(const pts: array of TPointF; IgnoreAlign: boolean = true): boolean;
@@ -341,6 +417,8 @@ type
 
 type
   TBGRACustomPathCursor = class;
+  TBGRAPathDrawProc = procedure(const APoints: array of TPointF; AClosed: boolean; AData: Pointer) of object;
+  TBGRAPathFillProc = procedure(const APoints: array of TPointF; AData: pointer) of object;
 
   {* A path is the ability to define a contour with ''moveTo'', ''lineTo''...
      Even if it is an interface, it must not implement reference counting. }
@@ -348,17 +426,17 @@ type
     {** Closes the current path with a line to the starting point }
     procedure closePath;
     {** Moves to a location, disconnected from previous points }
-    procedure moveTo(const pt: TPointF);
+    procedure moveTo(constref pt: TPointF);
     {** Adds a line from the current point }
-    procedure lineTo(const pt: TPointF);
+    procedure lineTo(constref pt: TPointF);
     {** Adds a polyline from the current point }
     procedure polylineTo(const pts: array of TPointF);
     {** Adds a quadratic Bézier curve from the current point }
-    procedure quadraticCurveTo(const cp,pt: TPointF);
+    procedure quadraticCurveTo(constref cp,pt: TPointF);
     {** Adds a cubic Bézier curve from the current point }
-    procedure bezierCurveTo(const cp1,cp2,pt: TPointF);
+    procedure bezierCurveTo(constref cp1,cp2,pt: TPointF);
     {** Adds an arc. If there is a current point, it is connected to the beginning of the arc }
-    procedure arc(const arcDef: TArcDef);
+    procedure arc(constref arcDef: TArcDef);
     {** Adds an opened spline. If there is a current point, it is connected to the beginning of the spline }
     procedure openedSpline(const pts: array of TPointF; style: TSplineStyle);
     {** Adds an closed spline. If there is a current point, it is connected to the beginning of the spline }
@@ -366,12 +444,50 @@ type
     {** Copy the content of this path to the specified destination }
     procedure copyTo(dest: IBGRAPath);
     {** Returns the content of the path as an array of points }
-    function getPoints: ArrayOfTPointF;
+    function getPoints: ArrayOfTPointF; overload;
     {** Returns the content of the path as an array of points with the transformation specified by ''AMatrix'' }
-    function getPoints(AMatrix: TAffineMatrix): ArrayOfTPointF;
+    function getPoints(AMatrix: TAffineMatrix): ArrayOfTPointF; overload;
+    {** Calls a given draw procedure for each sub path with computed coordinates for rendering }
+    procedure stroke(ADrawProc: TBGRAPathDrawProc; AData: pointer); overload;
+    procedure stroke(ADrawProc: TBGRAPathDrawProc; const AMatrix: TAffineMatrix; AData: pointer); overload;
+    {** Calls a given fill procedure for each sub path with computed coordinates for rendering }
+    procedure fill(AFillProc: TBGRAPathFillProc; AData: pointer); overload;
+    procedure fill(AFillProc: TBGRAPathFillProc; const AMatrix: TAffineMatrix; AData: pointer); overload;
     {** Returns a cursor to go through the path. The cursor must be freed by calling ''Free''. }
     function getCursor: TBGRACustomPathCursor;
   end;
+
+  { TBGRACustomPath }
+
+  TBGRACustomPath = class(IBGRAPath)
+    constructor Create; virtual; abstract;
+    procedure beginPath; virtual; abstract;
+    procedure closePath; virtual; abstract;
+    procedure moveTo(constref pt: TPointF); virtual; abstract;
+    procedure lineTo(constref pt: TPointF); virtual; abstract;
+    procedure polylineTo(const pts: array of TPointF); virtual; abstract;
+    procedure quadraticCurveTo(constref cp,pt: TPointF); virtual; abstract;
+    procedure bezierCurveTo(constref cp1,cp2,pt: TPointF); virtual; abstract;
+    procedure arc(constref arcDef: TArcDef); virtual; abstract;
+    procedure openedSpline(const pts: array of TPointF; style: TSplineStyle); virtual; abstract;
+    procedure closedSpline(const pts: array of TPointF; style: TSplineStyle); virtual; abstract;
+    procedure copyTo(dest: IBGRAPath); virtual; abstract;
+  protected
+    function getPoints: ArrayOfTPointF; overload; virtual; abstract;
+    function getPoints(AMatrix: TAffineMatrix): ArrayOfTPointF; overload; virtual; abstract;
+    procedure stroke(ADrawProc: TBGRAPathDrawProc; AData: pointer); overload; virtual; abstract;
+    procedure stroke(ADrawProc: TBGRAPathDrawProc; const AMatrix: TAffineMatrix; AData: pointer); overload; virtual; abstract;
+    procedure fill(AFillProc: TBGRAPathFillProc; AData: pointer); overload; virtual; abstract;
+    procedure fill(AFillProc: TBGRAPathFillProc; const AMatrix: TAffineMatrix; AData: pointer); overload; virtual; abstract;
+    function getLength: single; virtual; abstract;
+    function getCursor: TBGRACustomPathCursor; virtual; abstract;
+  protected
+    function QueryInterface({$IFDEF FPC_HAS_CONSTREF}constref{$ELSE}const{$ENDIF} IID: TGUID; out Obj): HResult; {$IF (not defined(WINDOWS)) AND (FPC_FULLVERSION>=20501)}cdecl{$ELSE}stdcall{$IFEND};
+    function _AddRef: Integer; {$IF (not defined(WINDOWS)) AND (FPC_FULLVERSION>=20501)}cdecl{$ELSE}stdcall{$IFEND};
+    function _Release: Integer; {$IF (not defined(WINDOWS)) AND (FPC_FULLVERSION>=20501)}cdecl{$ELSE}stdcall{$IFEND};
+  end;
+
+  TBGRAPathAny = class of TBGRACustomPath;
 
   { TBGRACustomPathCursor }
   {* Class that contains a cursor to browse an existing path }
@@ -420,6 +536,9 @@ type
     property LoopPath: boolean read GetLoopPath write SetLoopPath;
   end;
 
+var
+  BGRAPathFactory: TBGRAPathAny;
+
 const
   {* A value for an empty rectangle }
   EmptyRect : TRect = (left:0; top:0; right:0; bottom: 0);
@@ -428,6 +547,9 @@ const
 function PtInRect(const pt: TPoint; r: TRect): boolean; overload;
 {* Creates a rectangle with the specified ''width'' and ''height'' }
 function RectWithSize(left,top,width,height: integer): TRect;
+
+{$DEFINE INCLUDE_INTERFACE}
+{$I bezier.inc}
 
 type
   {* Possible options for a round rectangle }
@@ -450,6 +572,7 @@ type
     {** Last polygon is on top }
     poLastOnTop);
 
+  PIntersectionInfo = ^TIntersectionInfo;
   { TIntersectionInfo }
   {* Contains an intersection between an horizontal line and any shape. It
      is used when filling shapes }
@@ -501,11 +624,13 @@ type
     {** The color changes along a diamond shape }
     gtDiamond,
     {** The color changes in a radial way from a given center }
-    gtRadial);
+    gtRadial,
+    {** The color changes according to the angle relative to a given center }
+    gtAngular);
 const
   {** List of string to represent gradient types }
   GradientTypeStr : array[TGradientType] of string
-  = ('Linear','Reflected','Diamond','Radial');
+  = ('Linear','Reflected','Diamond','Radial','Angular');
   {** Returns the gradient type represented by the given string }
   function StrToGradientType(str: string): TGradientType;
 
@@ -538,6 +663,407 @@ type
 
 {$IFDEF INCLUDE_IMPLEMENTATION}
 {$UNDEF INCLUDE_IMPLEMENTATION}
+
+{$IFDEF BGRA_DEFINE_TRECTF}
+{ TRectF }
+
+function TRectF.GetHeight: single;
+begin
+  result := Bottom-Top;
+end;
+
+function TRectF.GetWidth: Single;
+begin
+  result := Right-Left;
+end;
+
+procedure TRectF.Offset(const dx, dy: Single);
+begin
+  left:=left+dx; right:=right+dx;
+  bottom:=bottom+dy; top:=top+dy;
+end;
+
+{ TRectHelper }
+
+function TRectHelper.GetHeight: integer;
+begin
+  result := Bottom-Top;
+end;
+
+function TRectHelper.GetIsEmpty: boolean;
+begin
+  result := (Width = 0) and (Height = 0)
+end;
+
+function TRectHelper.GetWidth: integer;
+begin
+  result := Right-Left;
+end;
+
+procedure TRectHelper.SetHeight(AValue: integer);
+begin
+  Bottom := Top+AValue;
+end;
+
+procedure TRectHelper.SetWidth(AValue: integer);
+begin
+  Right := Left+AValue;
+end;
+
+constructor TRectHelper.Create(Origin: TPoint; AWidth, AHeight: Longint);
+begin
+  self.Left := Origin.X;
+  self.Top := Origin.Y;
+  self.Right := Origin.X+AWidth;
+  self.Bottom := Origin.Y+AHeight;
+end;
+
+constructor TRectHelper.Create(ALeft, ATop, ARight, ABottom: Longint);
+begin
+  self.Left := ALeft;
+  self.Top := ATop;
+  self.Right := ARight;
+  self.Bottom := ABottom;
+end;
+
+procedure TRectHelper.Intersect(R: TRect);
+begin
+  IntersectRect(self, self, R);
+end;
+
+class function TRectHelper.Intersect(R1: TRect; R2: TRect): TRect;
+begin
+  result := EmptyRect;
+  IntersectRect(result, R1, R2);
+end;
+
+function TRectHelper.IntersectsWith(R: TRect): Boolean;
+begin
+  Result := (Left < R.Right) and (R.Left < Right) and (Top < R.Bottom) and (R.Top < Bottom);
+end;
+
+class function TRectHelper.Union(R1, R2: TRect): TRect;
+begin
+  UnionRect(Result, R1, R2);
+end;
+
+procedure TRectHelper.Union(R: TRect);
+begin
+  UnionRect(self, self, R);
+end;
+
+procedure TRectHelper.Offset(DX, DY: Longint);
+begin
+  OffsetRect(self, DX,DY);
+end;
+
+procedure TRectHelper.Inflate(DX, DY: Longint);
+begin
+  InflateRect(self, DX,DY);
+end;
+
+function TRectHelper.Contains(const APoint: TPoint): boolean;
+begin
+  result := (APoint.X >= Left) and (APoint.X < Right) and
+    (APoint.Y >= Top) and (APoint.Y < Bottom);
+end;
+
+function TRectHelper.Contains(const ARect: TRect): boolean;
+begin
+  Result := (Left <= ARect.Left) and (ARect.Right <= Right) and (Top <= ARect.Top) and (ARect.Bottom <= Bottom);
+end;
+
+operator =(const ARect1, ARect2: TRect): boolean;
+begin
+  result:= (ARect1.Left = ARect2.Left) and (ARect1.Top = ARect2.Top) and
+           (ARect1.Right = ARect2.Right) and (ARect1.Bottom = ARect2.Bottom);
+end;
+
+{ TSizeHelper }
+
+function TSizeHelper.GetHeight: integer;
+begin
+  result := cy;
+end;
+
+function TSizeHelper.GetWidth: integer;
+begin
+  result := cx;
+end;
+
+{$ENDIF}
+
+function IsEmptyPoint(const APoint: TPoint): boolean;
+begin
+  result := (APoint.x = -2147483648) or (APoint.y = -2147483648);
+end;
+
+procedure TPointFHelper.Offset(const apt: TPointF);
+begin
+  self.x += apt.x;
+  self.y += apt.y;
+end;
+
+procedure TPointFHelper.Offset(const apt: TPoint);
+begin
+  self.x += apt.x;
+  self.y += apt.y;
+end;
+
+procedure TPointFHelper.Offset(dx, dy: longint);
+begin
+  if isEmptyPointF(self) then exit;
+  self.x += dx;
+  self.y += dy;
+end;
+
+procedure TPointFHelper.Offset(dx, dy: single);
+begin
+  if isEmptyPointF(self) then exit;
+  self.x += dx;
+  self.y += dy;
+end;
+
+procedure TPointFHelper.Scale(AScale: single);
+begin
+  if not isEmptyPointF(self) then
+  begin
+    self.x *= AScale;
+    self.y *= AScale;
+  end;
+end;
+
+function TPointFHelper.Ceiling: TPoint;
+begin
+  if isEmptyPointF(self) then
+    result := EmptyPoint
+  else
+  begin
+    result.x:=ceil(x);
+    result.y:=ceil(y);
+  end;
+end;
+
+function TPointFHelper.Truncate: TPoint;
+begin
+  if isEmptyPointF(self) then
+    result := EmptyPoint
+  else
+  begin
+    result.x:=trunc(x);
+    result.y:=trunc(y);
+  end;
+end;
+
+function TPointFHelper.Floor: TPoint;
+begin
+  if isEmptyPointF(self) then
+    result := EmptyPoint
+  else
+  begin
+    result.x:=Math.floor(x);
+    result.y:=Math.floor(y);
+  end;
+end;
+
+function TPointFHelper.Round: TPoint;
+begin
+  if isEmptyPointF(self) then
+    result := EmptyPoint
+  else
+  begin
+    result.x:=System.round(x);
+    result.y:=System.round(y);
+  end;
+end;
+
+function TPointFHelper.Length: Single;
+begin
+  result:= VectLen(self);
+end;
+
+class function TRectFHelper.Intersect(const R1: TRectF; const R2: TRectF): TRectF;
+begin
+  result.left:=max(R1.left,R2.left);
+  result.top:=max(R1.top,R2.top);
+  result.right:=min(R1.right,R2.right);
+  result.bottom:=min(R1.bottom,R2.bottom);
+  if (result.left >= result.right) or (result.top >= result.bottom) then
+    result := EmptyRectF;
+end;
+
+class function TRectFHelper.Union(const R1: TRectF; const R2: TRectF): TRectF;
+begin
+  result.left:=min(R1.left,R2.left);
+  result.top:=min(R1.top,R2.top);
+  result.right:=max(R1.right,R2.right);
+  result.bottom:=max(R1.bottom,R2.bottom);
+end;
+
+class function TRectFHelper.Union(const R1: TRectF; const R2: TRectF; ADiscardEmpty: boolean): TRectF;
+begin
+  if ADiscardEmpty and IsEmptyRectF(R1) then result:= R2 else
+  if ADiscardEmpty and IsEmptyRectF(R2) then result:= R1 else
+    result := Union(R1,R2);
+end;
+
+function TRectFHelper.Union(const r: TRectF): TRectF;
+begin
+  result := TRectF.Union(self, r);
+end;
+
+function TRectFHelper.Union(const r: TRectF; ADiscardEmpty: boolean): TRectF;
+begin
+  result := TRectF.Union(self, r, ADiscardEmpty);
+end;
+
+function TRectFHelper.IntersectsWith(const r: TRectF): boolean;
+begin
+  result:= not TRectF.Intersect(self, r).IsEmpty;
+end;
+
+function TRectFHelper.IsEmpty: boolean;
+begin
+  result:= IsEmptyRectF(self);
+end;
+
+{ TAffineBox }
+
+function TAffineBox.GetAsPolygon: ArrayOfTPointF;
+begin
+  result := PointsF([TopLeft,TopRight,BottomRight,BottomLeft]);
+end;
+
+function TAffineBox.GetBottomRight: TPointF;
+begin
+  if IsEmpty then
+    result := EmptyPointF
+  else
+    result := TopRight + (BottomLeft-TopLeft);
+end;
+
+function TAffineBox.GetHeight: single;
+begin
+  if isEmptyPointF(TopLeft) or isEmptyPointF(BottomLeft) then
+    result := 0
+  else
+    result := VectLen(BottomLeft-TopLeft);
+end;
+
+function TAffineBox.GetIsEmpty: boolean;
+begin
+  result := isEmptyPointF(TopRight) or isEmptyPointF(BottomLeft) or isEmptyPointF(TopLeft);
+end;
+
+function TAffineBox.GetRectBounds: TRect;
+begin
+  with GetRectBoundsF do
+    result := Rect(floor(Left),floor(Top),ceil(Right),ceil(Bottom));
+end;
+
+function TAffineBox.GetRectBoundsF: TRectF;
+var
+  x1,y1,x2,y2: single;
+begin
+  x1 := TopLeft.x; x2 := x1;
+  y1 := TopLeft.y; y2 := y1;
+  if TopRight.x > x2 then x2 := TopRight.x;
+  if TopRight.x < x1 then x1 := TopRight.x;
+  if TopRight.y > y2 then y2 := TopRight.y;
+  if TopRight.y < y1 then y1 := TopRight.y;
+  if BottomLeft.x > x2 then x2 := BottomLeft.x;
+  if BottomLeft.x < x1 then x1 := BottomLeft.x;
+  if BottomLeft.y > y2 then y2 := BottomLeft.y;
+  if BottomLeft.y < y1 then y1 := BottomLeft.y;
+  if BottomRight.x > x2 then x2 := BottomRight.x;
+  if BottomRight.x < x1 then x1 := BottomRight.x;
+  if BottomRight.y > y2 then y2 := BottomRight.y;
+  if BottomRight.y < y1 then y1 := BottomRight.y;
+  result := RectF(x1,y1,x2,y2);
+end;
+
+function TAffineBox.GetSurface: single;
+var
+  u, v: TPointF;
+  lenU, lenH: Single;
+begin
+  u := TopRight-TopLeft;
+  lenU := VectLen(u);
+  if lenU = 0 then exit(0);
+  u.Scale(1/lenU);
+  v := BottomLeft-TopLeft;
+  lenH := PointF(-u.y,u.x)*v;
+  result := abs(lenU*lenH);
+end;
+
+function TAffineBox.GetWidth: single;
+begin
+  if isEmptyPointF(TopLeft) or isEmptyPointF(TopRight) then
+    result := 0
+  else
+    result := VectLen(TopRight-TopLeft);
+end;
+
+class function TAffineBox.EmptyBox: TAffineBox;
+begin
+  result.TopLeft := EmptyPointF;
+  result.TopRight := EmptyPointF;
+  result.BottomLeft := EmptyPointF;
+end;
+
+class function TAffineBox.AffineBox(ATopLeft, ATopRight, ABottomLeft: TPointF): TAffineBox;
+begin
+  result.TopLeft := ATopLeft;
+  result.TopRight := ATopRight;
+  result.BottomLeft := ABottomLeft;
+end;
+
+class function TAffineBox.AffineBox(ARectF: TRectF): TAffineBox;
+begin
+  result.TopLeft := ARectF.TopLeft;
+  result.TopRight := PointF(ARectF.Right, ARectF.Top);
+  result.BottomLeft := PointF(ARectF.Left, ARectF.Bottom);
+end;
+
+procedure TAffineBox.Offset(AOfsX, AOfsY: single);
+begin
+  TopLeft.Offset(AOfsX,AOfsY);
+  TopRight.Offset(AOfsX,AOfsY);
+  BottomLeft.Offset(AOfsX,AOfsY);
+end;
+
+procedure TAffineBox.Offset(AOfs: TPointF);
+begin
+  Offset(AOfs.X,AOfs.Y);
+end;
+
+function TAffineBox.Contains(APoint: TPointF): boolean;
+var
+  u,v,perpU,perpV: TPointF;
+  posV1, posV2, posU1, posU2: single;
+begin
+  if IsEmpty then exit(false);
+
+  u := TopRight-TopLeft;
+  perpU := PointF(-u.y,u.x);
+  v := BottomLeft-TopLeft;
+  perpV := PointF(v.y,-v.x);
+
+  //reverse normal if not in the same direction as other side
+  if perpU*v < 0 then
+  begin
+    perpU := -perpU;
+    perpV := -perpV;
+  end;
+
+  //determine position along normals
+  posU1 := (APoint-TopLeft)*perpU;
+  posU2 := (APoint-BottomLeft)*perpU;
+  posV1 := (APoint-TopLeft)*perpV;
+  posV2 := (APoint-TopRight)*perpV;
+
+  result := (posU1 >= 0) and (posU2 < 0) and (posV1 >= 0) and (posV2 < 0);
+end;
 
 function StrToGradientType(str: string): TGradientType;
 var gt: TGradientType;
@@ -667,33 +1193,25 @@ begin
       raise exception.Create('Zero is not a valid value');
 end;
 
-//-------------- Bézier curves definitions ----------------
-// See : http://en.wikipedia.org/wiki/B%C3%A9zier_curve
+{ TBGRACustomPath }
 
-// Define a Bézier curve with two control points.
-function BezierCurve(origin, control1, control2, destination: TPointF): TCubicBezierCurve;
+function TBGRACustomPath.QueryInterface({$IFDEF FPC_HAS_CONSTREF}constref{$ELSE}const{$ENDIF} IID: TGUID; out Obj): HResult; {$IF (not defined(WINDOWS)) AND (FPC_FULLVERSION>=20501)}cdecl{$ELSE}stdcall{$IFEND};
 begin
-  result.p1 := origin;
-  result.c1 := control1;
-  result.c2 := control2;
-  result.p2 := destination;
+  if GetInterface(iid, obj) then
+    Result := S_OK
+  else
+    Result := longint(E_NOINTERFACE);
 end;
 
-// Define a Bézier curve with one control point.
-function BezierCurve(origin, control, destination: TPointF
-  ): TQuadraticBezierCurve;
+{ There is no automatic reference counting, but it is compulsory to define these functions }
+function TBGRACustomPath._AddRef: Integer; {$IF (not defined(WINDOWS)) AND (FPC_FULLVERSION>=20501)}cdecl{$ELSE}stdcall{$IFEND};
 begin
-  result.p1 := origin;
-  result.c := control;
-  result.p2 := destination;
+  result := 0;
 end;
 
-//straight line
-function BezierCurve(origin, destination: TPointF): TQuadraticBezierCurve;
+function TBGRACustomPath._Release: Integer; {$IF (not defined(WINDOWS)) AND (FPC_FULLVERSION>=20501)}cdecl{$ELSE}stdcall{$IFEND};
 begin
-  result.p1 := origin;
-  result.c := (origin+destination)*0.5;
-  result.p2 := destination;
+  result := 0;
 end;
 
 function ArcDef(cx, cy, rx, ry, xAngleRadCW, startAngleRadCW, endAngleRadCW: single;
@@ -751,6 +1269,22 @@ begin
   result.x := v1.x*factor;
   result.y := v1.y*factor;
   result.z := v1.z*factor;
+end;
+
+{ TPoint3D }
+
+procedure TPoint3D.Offset(const point3D: TPoint3D);
+begin
+  self.x += point3d.x;
+  self.y += point3d.y;
+  self.z += point3d.z;
+end;
+
+procedure TPoint3D.Scale(AScale: single);
+begin
+  self.x *= AScale;
+  self.y *= AScale;
+  self.z *= AScale;
 end;
 
 function Point3D(x, y, z: single): TPoint3D;
@@ -832,10 +1366,40 @@ begin
   result.Bottom:= Bottom;
 end;
 
+function RectF(const ATopLeft, ABottomRight: TPointF): TRectF;
+begin
+  result.TopLeft:= ATopLeft;
+  result.BottomRight:= ABottomRight;
+end;
+
+function RectWithSizeF(left, top, width, height: Single): TRectF;
+begin
+  result.Left:= Left;
+  result.Top:= Top;
+  result.Right:= left+width;
+  result.Bottom:= top+height;
+end;
+
+function IsEmptyRectF(const ARect: TRectF): boolean;
+begin
+  result:= (ARect.Width = 0) and (ARect.Height = 0);
+end;
+
 function PointF(x, y: single): TPointF;
 begin
   Result.x := x;
   Result.y := y;
+end;
+
+function PointF(pt: TPoint): TPointF;
+begin
+  if IsEmptyPoint(pt) then
+    result:= EmptyPointF
+  else
+  begin
+    Result.x := pt.x;
+    Result.y := pt.y;
+  end;
 end;
 
 function PointsF(const pts: array of TPointF): ArrayOfTPointF;
@@ -867,7 +1431,10 @@ end;
 
 function VectLen(v: TPointF): single;
 begin
-  result := sqrt(v*v);
+  if isEmptyPointF(v) then
+    result := EmptySingle
+  else
+    result := sqrt(v*v);
 end;
 
 function VectDet(v1, v2: TPointF): double;
@@ -1006,23 +1573,23 @@ begin
   { Determine line definitions }
   seg1.origin := pt1;
   seg1.dir := pt2-pt1;
-  seg1len := sqrt(sqr(seg1.dir.X)+sqr(seg1.dir.Y));
+  seg1len := VectLen(seg1.dir);
   if seg1len = 0 then
   begin
     result := false;
     exit;
   end;
-  seg1.dir *= 1/seg1len;
+  seg1.dir.Scale(1/seg1len);
 
   seg2.origin := pt3;
   seg2.dir := pt4-pt3;
-  seg2len := sqrt(sqr(seg2.dir.X)+sqr(seg2.dir.Y));
+  seg2len := VectLen(seg2.dir);
   if seg2len = 0 then
   begin
     result := false;
     exit;
   end;
-  seg2.dir *= 1/seg2len;
+  seg2.dir.Scale(1/seg2len);
 
   //obviously parallel
   if seg1.dir = seg2.dir then
@@ -1069,486 +1636,7 @@ begin
   result := DoesSegmentIntersect(pt1,pt2,pt3,pt4) or DoesSegmentIntersect(pt2,pt3,pt4,pt1);
 end;
 
-{------------------ Bezier curves ------------------------}
+{$DEFINE INCLUDE_IMPLEMENTATION}
+{$I bezier.inc}
 
-function ComputeBezierCurvePrecision(pt1, pt2, pt3, pt4: TPointF; AAcceptedDeviation: single = 0.1): integer;
-var
-  len: single;
-begin
-  len    := sqr(pt1.x - pt2.x) + sqr(pt1.y - pt2.y);
-  len    := max(len, sqr(pt3.x - pt2.x) + sqr(pt3.y - pt2.y));
-  len    := max(len, sqr(pt3.x - pt4.x) + sqr(pt3.y - pt4.y));
-  Result := round(sqrt(sqrt(len)/ AAcceptedDeviation) * 1);
-  if Result<=0 then Result:=1;
-end;
-
-{ TCubicBezierCurve }
-
-function TCubicBezierCurve.SimpleComputePoints(AAcceptedDeviation: single;
-  AIncludeFirstPoint: boolean = true): ArrayOfTPointF;
-var
-  t,step: single;
-  i,nb: Integer;
-begin
-  nb := ComputeBezierCurvePrecision(p1,c1,c2,p2, AAcceptedDeviation/2);
-  if nb <= 1 then nb := 2;
-  if AIncludeFirstPoint then
-  begin
-    setlength(result,nb);
-    result[0] := p1;
-    result[nb-1] := p2;
-    step := 1/(nb-1);
-    t := 0;
-    for i := 1 to nb-2 do
-    begin
-      t += step;
-      result[i] := ComputePointAt(t);
-    end;
-  end else
-  begin
-    setlength(result,nb-1);
-    result[nb-2] := p2;
-    step := 1/(nb-1);
-    t := 0;
-    for i := 0 to nb-3 do
-    begin
-      t += step;
-      result[i] := ComputePointAt(t);
-    end;
-  end;
-end;
-
-function TCubicBezierCurve.ComputePointAt(t: single): TPointF;
-var
-  f1,f2,f3,f4: single;
-begin
-  f1 := (1-t);
-  f2 := f1*f1;
-  f1 *= f2;
-  f2 *= t*3;
-  f4 := t*t;
-  f3 := f4*(1-t)*3;
-  f4 *= t;
-
-  result.x := f1*p1.x + f2*c1.x +
-              f3*c2.x + f4*p2.x;
-  result.y := f1*p1.y + f2*c1.y +
-              f3*c2.y + f4*p2.y;
-end;
-
-procedure TCubicBezierCurve.Split(out ALeft, ARight: TCubicBezierCurve);
-var midc: TPointF;
-begin
-  ALeft.p1 := p1;
-  ALeft.c1 := 0.5*(p1+c1);
-  ARight.p2 := p2;
-  ARight.c2 := 0.5*(p2+c2);
-  midc := 0.5*(c1+c2);
-  ALeft.c2 := 0.5*(ALeft.c1+midc);
-  ARight.c1 := 0.5*(ARight.c2+midc);
-  ALeft.p2 := 0.5*(ALeft.c2+ARight.c1);
-  ARight.p1 := ALeft.p2;
-end;
-
-function TCubicBezierCurve.ComputeLength(AAcceptedDeviation: single): single;
-var
-  t,step: single;
-  i,nb: Integer;
-  curCoord,nextCoord: TPointF;
-begin
-  nb := ComputeBezierCurvePrecision(p1,c1,c2,p2, AAcceptedDeviation);
-  if nb <= 1 then nb := 2;
-  result := 0;
-  curCoord := p1;
-  step := 1/(nb-1);
-  t := 0;
-  for i := 1 to nb-2 do
-  begin
-    t += step;
-    nextCoord := ComputePointAt(t);
-    result += VectLen(nextCoord-curCoord);
-    curCoord := nextCoord;
-  end;
-  result += VectLen(p2-curCoord);
-end;
-
-function TCubicBezierCurve.ToPoints(AAcceptedDeviation: single;
-  AIncludeFirstPoint: boolean = true): ArrayOfTPointF;
-begin
-  result := SimpleComputePoints(AAcceptedDeviation, AIncludeFirstPoint);
-end;
-
-{//The following function computes by splitting the curve. It is slower than the simple function.
-function TCubicBezierCurve.ToPoints(AAcceptedDeviation: single;
-  ARelativeDeviation: boolean): ArrayOfTPointF;
-  function ToPointsRec(const ACurve: TCubicBezierCurve): ArrayOfTPointF;
-  var simpleLen2: single;
-    v: TPointF;
-    left,right: TCubicBezierCurve;
-    subLeft,subRight: ArrayOfTPointF;
-    maxDev,dev1,dev2: single;
-    subLeftLen: integer;
-
-    procedure ComputeExtremum;
-    begin
-      raise Exception.Create('Not implemented');
-      result := nil;
-    end;
-
-  begin
-    v := ACurve.p2-ACurve.p1;
-    simpleLen2 := v*v;
-    if simpleLen2 = 0 then
-    begin
-      if (ACurve.c1.x = ACurve.p1.x) and (ACurve.c1.y = ACurve.p1.y) and
-         (ACurve.c2.x = ACurve.p2.x) and (ACurve.c2.y = ACurve.p2.y) then
-      begin
-        result := nil;
-        exit;
-      end;
-      ACurve.Split(left,right);
-    end else
-    begin
-      ACurve.Split(left,right);
-      if not ARelativeDeviation then simpleLen2:= sqrt(simpleLen2);
-      maxDev := AAcceptedDeviation*simpleLen2;
-      if abs(PointF(v.y,-v.x) * (left.p2-ACurve.p1)) <= maxDev then
-      begin
-        dev1 := PointF(v.y,-v.x) * (ACurve.c1-ACurve.p1);
-        dev2 := PointF(v.y,-v.x) * (ACurve.c2-ACurve.p2);
-        if not ((Sign(dev1)<>Sign(dev2)) and ((abs(dev1) > maxDev) or (abs(dev2) > maxDev))) then
-        begin
-          result := nil;
-          if ((ACurve.c1-ACurve.p1)*v < -maxDev) or
-             ((ACurve.c1-ACurve.p2)*v > maxDev) or
-             ((ACurve.c2-ACurve.p1)*v < -maxDev) or
-             ((ACurve.c2-ACurve.p2)*v > maxDev) then
-            ComputeExtremum;
-          exit;
-        end;
-      end;
-    end;
-    subRight := ToPointsRec(right);
-    subLeft := ToPointsRec(left);
-    subLeftLen := length(subLeft);
-
-    //avoid leaving a gap in memory
-    result := subLeft;
-    subLeft := nil;
-    setlength(result, subLeftLen+1+length(subRight));
-    result[subLeftLen] := left.p2;
-    move(subRight[0], result[subLeftLen+1], length(subRight)*sizeof(TPointF));
-  end;
-
-var
-  subLen: integer;
-
-begin
-  if (c1.x = p1.x) and (c1.y = p1.y) and
-     (c1.x = c2.x) and (c1.y = c2.y) and
-     (c1.x = p2.x) and (c1.y = p2.y) then
-  begin
-    setlength(result,1);
-    result[0] := c1;
-    exit;
-  end else
-  begin
-    result := ToPointsRec(self);
-    subLen := length(result);
-    setlength(result, length(result)+2);
-    move(result[0], result[1], subLen*sizeof(TPointF));
-    result[0] := p1;
-    result[high(result)] := p2;
-  end;
-end;}
-
-function TCubicBezierCurve.GetBounds: TRectF;
-const precision = 1e-5;
-
-  procedure Include(pt: TPointF);
-  begin
-    if pt.x < result.Left then result.Left := pt.x
-    else if pt.x > result.Right then result.Right := pt.x;
-    if pt.y < result.Top then result.Top := pt.y
-    else if pt.y > result.Bottom then result.Bottom := pt.y;
-  end;
-
-  procedure IncludeT(t: single);
-  begin
-    if (t > 0) and (t < 1) then
-      Include(ComputePointAt(t));
-  end;
-
-  procedure IncludeABC(a,b,c: single);
-  var b2ac, sqrtb2ac: single;
-  begin
-    if abs(a) < precision then
-    begin
-      if abs(b) < precision then exit;
-      IncludeT(-c/b);
-    end else
-    begin
-      b2ac := sqr(b) - 4 * a * c;
-      if b2ac >= 0 then
-      begin
-        sqrtb2ac := sqrt(b2ac);
-        IncludeT((-b + sqrtb2ac) / (2 * a));
-        IncludeT((-b - sqrtb2ac) / (2 * a));
-      end;
-    end;
-  end;
-
-var
-  va, vb, vc: TPointF;
-
-begin
-  result.TopLeft := p1;
-  result.BottomRight := p1;
-  Include(p2);
-
-  vb := 6 * p1 - 12 * c1 + 6 * c2;
-  va := -3 * p1 + 9 * c1 - 9 * c2 + 3 * p2;
-  vc := 3 * c1 - 3 * p1;
-
-  IncludeABC(va.x,vb.x,vc.x);
-  IncludeABC(va.y,vb.y,vc.y);
-end;
-
-{ TQuadraticBezierCurve }
-
-function TQuadraticBezierCurve.SimpleComputePoints(AAcceptedDeviation: single;
-  AIncludeFirstPoint: boolean = true): ArrayOfTPointF;
-var
-  t,step: single;
-  i,nb: Integer;
-begin
-  nb := ComputeBezierCurvePrecision(p1,c,c,p2, AAcceptedDeviation);
-  if nb <= 1 then nb := 2;
-  if AIncludeFirstPoint then
-  begin
-    setlength(result,nb);
-    result[0] := p1;
-    result[nb-1] := p2;
-    step := 1/(nb-1);
-    t := 0;
-    for i := 1 to nb-2 do
-    begin
-      t += step;
-      result[i] := ComputePointAt(t);
-    end;
-  end else
-  begin
-    setlength(result,nb-1);
-    result[nb-2] := p2;
-    step := 1/(nb-1);
-    t := 0;
-    for i := 0 to nb-3 do
-    begin
-      t += step;
-      result[i] := ComputePointAt(t);
-    end;
-  end;
-end;
-
-function TQuadraticBezierCurve.ComputeExtremumPositionOutsideSegment: single;
-var a,b: single;
-  v: TPointF;
-begin
-  v := self.p2-self.p1;
-  a := (self.p1-2*self.c+self.p2)*v;
-  if a = 0 then //no solution
-  begin
-    result := -1;
-    exit;
-  end;
-  b := (self.c-self.p1)*v;
-  result := -b/a;
-end;
-
-function TQuadraticBezierCurve.ComputePointAt(t: single): TPointF;
-var
-  rev_t,f2,t2: single;
-begin
-  rev_t := (1-t);
-  f2 := rev_t*t*2;
-  rev_t *= rev_t;
-  t2 := t*t;
-  result.x := rev_t*p1.x + f2*c.x + t2*p2.x;
-  result.y := rev_t*p1.y + f2*c.y + t2*p2.y;
-end;
-
-procedure TQuadraticBezierCurve.Split(out ALeft, ARight: TQuadraticBezierCurve);
-begin
-  ALeft.p1 := p1;
-  ALeft.c := 0.5*(p1+c);
-  ARight.p2 := p2;
-  ARight.c := 0.5*(p2+c);
-  ALeft.p2 := 0.5*(ALeft.c+ARight.c);
-  ARight.p1 := ALeft.p2;
-end;
-
-function TQuadraticBezierCurve.ComputeLength: single;
-var a,b: TPointF;
-  A_,AB_,B_,Sabc,A_2,A_32,B_2,BA,
-  divisor: single;
-  extremumPos: single;
-  extremum: TPointF;
-begin
-  a := p1 - 2*c + p2;
-  b := 2*(c - p1);
-  A_ := 4*(a*a);
-  B_ := b*b;
-  if (A_ = 0) or (B_ = 0) then
-  begin
-    result := VectLen(p2-p1);
-    exit;
-  end;
-  AB_ := 4*(a*b);
-
-  A_2 := sqrt(A_);
-  B_2 := 2*sqrt(B_);
-  BA := AB_/A_2;
-  divisor := BA+B_2;
-  if divisor <= 0 then
-  begin
-    extremumPos:= ComputeExtremumPositionOutsideSegment;
-    if (extremumPos <= 0) or (extremumPos >= 1) then
-      result := VectLen(p2-p1)
-    else
-    begin
-      extremum := ComputePointAt(extremumPos);
-      result := VectLen(extremum-p1)+VectLen(p2-extremum);
-    end;
-    exit;
-  end;
-
-  Sabc := 2*sqrt(A_+AB_+B_);
-  A_32 := 2*A_*A_2;
-  result := ( A_32*Sabc +
-              A_2*AB_*(Sabc-B_2) +
-              (4*B_*A_-AB_*AB_)*ln( (2*A_2+BA+Sabc)/divisor )
-            )/(4*A_32);
-end;
-
-function TQuadraticBezierCurve.ToPoints(AAcceptedDeviation: single;
-  AIncludeFirstPoint: boolean = true): ArrayOfTPointF;
-begin
-  result := SimpleComputePoints(AAcceptedDeviation, AIncludeFirstPoint);
-end;
-
-function TQuadraticBezierCurve.GetBounds: TRectF;
-const precision = 1e-5;
-
-  procedure Include(pt: TPointF);
-  begin
-    if pt.x < result.Left then result.Left := pt.x
-    else if pt.x > result.Right then result.Right := pt.x;
-    if pt.y < result.Top then result.Top := pt.y
-    else if pt.y > result.Bottom then result.Bottom := pt.y;
-  end;
-
-  procedure IncludeT(t: single);
-  begin
-    if (t > 0) and (t < 1) then
-      Include(ComputePointAt(t));
-  end;
-
-  procedure IncludeABC(a,b,c: single);
-  var denom: single;
-  begin
-    denom := a-2*b+c;
-    if abs(denom) < precision then exit;
-    IncludeT((a-b)/denom);
-  end;
-
-begin
-  result.TopLeft := p1;
-  result.BottomRight := p1;
-  Include(p2);
-
-  IncludeABC(p1.x,c.x,p2.x);
-  IncludeABC(p1.y,c.y,p2.y);
-end;
-
-{//The following function computes by splitting the curve. It is slower than the simple function
-function TQuadraticBezierCurve.ToPoints(AAcceptedDeviation: single; ARelativeDeviation: boolean): ArrayOfTPointF;
-
-  function ToPointsRec(const ACurve: TQuadraticBezierCurve): ArrayOfTPointF;
-  var simpleLen2: single;
-    v: TPointF;
-    left,right: TQuadraticBezierCurve;
-    subLeft,subRight: ArrayOfTPointF;
-    subLeftLen: Integer;
-
-    procedure ComputeExtremum;
-    var
-      t: single;
-    begin
-      t := ACurve.ComputeExtremumPositionOutsideSegment;
-      if (t <= 0) or (t >= 1) then
-        result := nil
-      else
-      begin
-        setlength(result,1);
-        result[0] := ACurve.ComputePointAt(t);
-      end;
-    end;
-
-  begin
-    v := ACurve.p2-ACurve.p1;
-    simpleLen2 := v*v;
-    if simpleLen2 = 0 then
-    begin
-      if (ACurve.c.x = ACurve.p1.x) and (ACurve.c.y = ACurve.p1.y) then
-      begin
-        result := nil;
-        exit;
-      end;
-      ACurve.Split(left,right);
-    end else
-    begin
-      ACurve.Split(left,right);
-      if not ARelativeDeviation then simpleLen2:= sqrt(simpleLen2);
-      if abs(PointF(v.y,-v.x) * (left.p2-ACurve.p1))
-          <= AAcceptedDeviation*simpleLen2 then
-      begin
-        result := nil;
-        if ((ACurve.c-ACurve.p1)*v < -AAcceptedDeviation*simpleLen2) or
-           ((ACurve.c-ACurve.p2)*v > AAcceptedDeviation*simpleLen2) then
-          ComputeExtremum;
-        exit;
-      end;
-    end;
-    subRight := ToPointsRec(right);
-    subLeft := ToPointsRec(left);
-    subLeftLen := length(subLeft);
-
-    //avoid leaving a gap in memory
-    result := subLeft;
-    subLeft := nil;
-    setlength(result, subLeftLen+1+length(subRight));
-    result[subLeftLen] := left.p2;
-    move(subRight[0], result[subLeftLen+1], length(subRight)*sizeof(TPointF));
-  end;
-
-var
-  subLen: integer;
-
-begin
-  if (c.x = p1.x) and (c.y = p1.y) and
-     (c.x = p2.x) and (c.y = p2.y) then
-  begin
-    setlength(result,1);
-    result[0] := c;
-    exit;
-  end else
-  begin
-    result := ToPointsRec(self);
-    subLen := length(result);
-    setlength(result, length(result)+2);
-    move(result[0], result[1], subLen*sizeof(TPointF));
-    result[0] := p1;
-    result[high(result)] := p2;
-  end;
-end;}
 {$ENDIF}

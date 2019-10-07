@@ -37,7 +37,6 @@ type
   private
     FPixBuf: Pointer;
     procedure DrawTransparent(ACanvas: TCanvas; Rect: TRect);
-    procedure DrawOpaque(ACanvas: TCanvas; ARect: TRect; ASourceRect: TRect);
     procedure DrawOpaque(ACanvas: TCanvas; ARect: TRect);
   protected
     procedure ReallocData; override;
@@ -50,7 +49,7 @@ type
     procedure Draw(ACanvas: TCanvas; x, y: integer; Opaque: boolean = True); override;
     procedure Draw(ACanvas: TCanvas; Rect: TRect; Opaque: boolean = True); override;
     procedure DataDrawOpaque(ACanvas: TCanvas; ARect: TRect; AData: Pointer;
-      ALineOrder: TRawImageLineOrder; AWidth, AHeight: integer); override; overload;
+      ALineOrder: TRawImageLineOrder; AWidth, AHeight: integer); overload; override;
     procedure DataDrawOpaque(ACanvas: TCanvas; ARect: TRect; ADataFirstRow: Pointer;
       ARowStride: integer; AWidth, AHeight: integer); overload;
     procedure GetImageFromCanvas(CanvasSource: TCanvas; x, y: integer); override;
@@ -68,10 +67,6 @@ uses BGRABitmapTypes, BGRADefaultBitmap, BGRAFilterScanner, LCLType,
   {$ENDIF}
   FPImage, Dialogs;
 
-{$IFDEF LCLgtk2}
-type TGtkDeviceContext = TGtk2DeviceContext;
-{$ENDIF}
-
 procedure TBGRAGtkBitmap.ReallocData;
 begin
   {$IFDEF LCLgtk2}
@@ -83,7 +78,7 @@ begin
   inherited ReallocData;
   if (FWidth <> 0) and (FHeight <> 0) then
   begin  
-    FPixbuf := gdk_pixbuf_new_from_data(pguchar(FData),
+    FPixbuf := gdk_pixbuf_new_from_data(pguchar(FDataByte),
       GDK_COLORSPACE_RGB, True, 8, Width, Height, Width*Sizeof(TBGRAPixel), nil, nil);
     if FPixbuf = nil then
       raise Exception.Create('Error initializing Pixbuf');
@@ -121,7 +116,7 @@ begin
 
   LoadFromBitmapIfNeeded;
 
-  If not TBGRAPixel_RGBAOrder then SwapRedBlue;
+  {$PUSH}{$WARNINGS OFF}If not TBGRAPixel_RGBAOrder then SwapRedBlue;{$POP}
   
   P := Rect.TopLeft;
   LPToDP(ACanvas.Handle, P, 1);
@@ -132,18 +127,12 @@ begin
     Width,Height,
     GDK_RGB_DITHER_NORMAL,0,0);   
 
-  If not TBGRAPixel_RGBAOrder then SwapRedBlue;
-end;
-
-procedure TBGRAGtkBitmap.DrawOpaque(ACanvas: TCanvas; ARect: TRect;
-  ASourceRect: TRect);
-begin
-  DataDrawOpaque(ACanvas,ARect,Data,LineOrder,Width,Height);
+  {$PUSH}{$WARNINGS OFF}If not TBGRAPixel_RGBAOrder then SwapRedBlue;{$POP}
 end;
 
 procedure TBGRAGtkBitmap.DrawOpaque(ACanvas: TCanvas; ARect: TRect);
 begin
-  DrawOpaque(ACanvas, ARect, rect(0,0,Width,Height));
+  DataDrawOpaque(ACanvas,ARect,Data,LineOrder,Width,Height);
 end;
 
 procedure TBGRAGtkBitmap.DataDrawTransparent(ACanvas: TCanvas; Rect: TRect;
@@ -180,7 +169,7 @@ end;
 procedure TBGRAGtkBitmap.DrawPart(ARect: TRect; ACanvas: TCanvas; x,
   y: integer; Opaque: boolean);
 var
-  rowStride: Integer;
+  rowStride,w,h: Integer;
 begin
   if Opaque then
   begin
@@ -188,7 +177,9 @@ begin
       rowStride := Width*sizeof(TBGRAPixel)
     else
       rowStride := -Width*sizeof(TBGRAPixel);
-    DataDrawOpaque(ACanvas, rect(x,y,x+ARect.Width,y+ARect.Height), Scanline[ARect.Top]+ARect.Left, rowStride, ARect.Width,ARect.Height);
+    w:= ARect.Right-ARect.Left;
+    h:= ARect.Bottom-ARect.Top;
+    DataDrawOpaque(ACanvas, rect(x,y,x+w,y+h), Scanline[ARect.Top]+ARect.Left, rowStride, w,h);
   end
   else
     inherited DrawPart(ARect, ACanvas, x, y, Opaque);
@@ -271,7 +262,7 @@ procedure TBGRAGtkBitmap.DataDrawOpaque(ACanvas: TCanvas; ARect: TRect;
       ptr.LineOrder := riloTopToBottom;
     stretched := ptr.Resample(ARect.Right-ARect.Left,ARect.Bottom-ARect.Top);
     ptr.free;
-    DataDrawOpaque(ACanvas,ARect,dataStart,stretched.LineOrder,stretched.Width,stretched.Height);
+    DataDrawOpaque(ACanvas,ARect,stretched.Data,stretched.LineOrder,stretched.Width,stretched.Height);
     stretched.Free;
   end;
 
@@ -305,12 +296,13 @@ begin
     dest := ACanvas.Handle;
     pos := ARect.TopLeft;
     LPtoDP(dest, pos, 1);
-    if not TBGRAPixel_RGBAOrder then DataSwapRedBlue;
+    {$PUSH}{$WARNINGS OFF}if not TBGRAPixel_RGBAOrder then DataSwapRedBlue;{$POP}
     gdk_draw_rgb_32_image(TGtkDeviceContext(dest).Drawable,
       TGtkDeviceContext(Dest).GC, pos.x,pos.y,
       AWidth,AHeight, GDK_RGB_DITHER_NORMAL,
       ADataFirstRow, ARowStride);
-    if not TBGRAPixel_RGBAOrder then DataSwapRedBlue;
+    {$PUSH}{$WARNINGS OFF}if not TBGRAPixel_RGBAOrder then DataSwapRedBlue;{$POP}
+    ACanvas.Changed;
   end;
 end;
 
@@ -350,7 +342,7 @@ begin
   gdk_pixbuf_get_from_drawable(FPixBuf,
     TGtkDeviceContext(CanvasSource.Handle).Drawable,
     nil, P.X,P.Y,0,0,Width,Height);
-  If not TBGRAPixel_RGBAOrder then SwapRedBlue;
+  {$PUSH}{$WARNINGS OFF}If not TBGRAPixel_RGBAOrder then SwapRedBlue;{$POP}
   InvalidateBitmap;
 end;
 

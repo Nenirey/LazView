@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Compiler Value="C:\lazarus\fpc\3.0.4\bin\x86_64-win64\fpc.exe" Date="1325662982"/>
+  <Params Value=" -MObjFPC -Scghi -O1 -g -gl -l -vewnhibq &quot;-FuC:\Users\Reinier Romero Mir\Documents\LazView\components\Abbrevia\source&quot; -FuC:\lazarus\packager\units\x86_64-win64 -FuC:\lazarus\components\lazutils\lib\x86_64-win64 -FuC:\lazarus\lcl\units\x86_64-win64 -FuC:\lazarus\lcl\units\x86_64-win64\win32 &quot;-FuC:\Users\Reinier Romero Mir\Documents\LazView\components\Abbrevia\packages\Lazarus\&quot; &quot;-FUC:\Users\Reinier Romero Mir\Documents\LazView\components\Abbrevia\packages\Lazarus\lib\x86_64-win64\&quot; -dLCL -dLCLwin32 abbrevia.pas"/>
+</CONFIG>

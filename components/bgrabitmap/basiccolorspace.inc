@@ -6,13 +6,18 @@ type
   {** Combination of channels }
   TChannels = set of TChannel;
 
+const
+  TBGRAPixel_ChannelByteOffset : array[TChannel] of integer =
+  (TBGRAPixel_RedByteOffset, TBGRAPixel_GreenByteOffset, TBGRAPixel_BlueByteOffset, TBGRAPixel_AlphaByteOffset);
+
 { Gamma conversion arrays. Should be used as readonly }
 var
   // TBGRAPixel -> TExpandedPixel
-  GammaExpansionTab:   packed array[0..255] of word;
+  GammaExpansionTab:     packed array[0..255] of word;
+  GammaExpansionTabHalf: packed array[0..254] of word;
 
   // TExpandedPixel -> TBGRAPixel
-  GammaCompressionTab: packed array[0..65535] of byte;
+  GammaCompressionTab : packed array[0..65535] of byte;          //rounded value
 
 procedure BGRASetGamma(AGamma: single = 1.7);
 function BGRAGetGamma: single;
@@ -34,6 +39,10 @@ type
   function GammaCompression(const ec: TExpandedPixel): TBGRAPixel; inline; overload;
   {** Converts a pixel from gamma expanded RGB to sRGB }
   function GammaCompression(red,green,blue,alpha: word): TBGRAPixel; inline; overload;
+  {** Apply gamma compression with word values }
+  function GammaCompressionW(AExpanded: word): word;
+  {** Apply gamma expansion with word values }
+  function GammaExpansionW(ACompressed: word): word;
   {** Returns the intensity of an gamma-expanded pixel. The intensity is the
      maximum value reached by any component }
   function GetIntensity(const c: TExpandedPixel): word; inline;
@@ -41,22 +50,26 @@ type
   function SetIntensity(const c: TExpandedPixel; intensity: word): TExpandedPixel;
   {** Returns the lightness of an gamma-expanded pixel. The lightness is the
      perceived brightness, 0 being black and 65535 being white }
-  function GetLightness(const c: TExpandedPixel): word; inline;
+  function GetLightness(const c: TExpandedPixel): word; inline; overload;
   {** Sets the lightness of a gamma-expanded pixel }
-  function SetLightness(const c: TExpandedPixel; lightness: word): TExpandedPixel;
+  function SetLightness(const c: TExpandedPixel; lightness: word): TExpandedPixel; overload;
   {** Sets the lightness of a gamma expanded pixel, provided you already know the current
      value of lightness ''curLightness''. It is a bit faster than the previous function }
-  function SetLightness(const c: TExpandedPixel; lightness: word; curLightness: word): TExpandedPixel;
+  function SetLightness(const c: TExpandedPixel; lightness: word; curLightness: word): TExpandedPixel; overload;
   {** Returns the importance of the color. It is similar to saturation
       in HSL colorspace, except it is gamma corrected. A value of zero indicates
       a black/gray/white, and a value of 65535 indicates a bright color }
   function ColorImportance(ec: TExpandedPixel): word;
   {** Merge two gamma expanded pixels (so taking into account gamma correction) }
   function MergeBGRA(ec1, ec2: TExpandedPixel): TExpandedPixel; overload;
+  function MergeBGRA(ec1: TExpandedPixel; weight1: integer; ec2: TExpandedPixel; weight2: integer): TExpandedPixel; overload;
   {** Computes the difference (with gamma correction) between two pixels,
       taking into account all dimensions, including transparency. The
       result ranges from 0 to 65535 }
   function ExpandedDiff(ec1, ec2: TExpandedPixel): word;
+
+  function FPColorToExpanded(AColor: TFPColor; AGammaExpansion: boolean=true): TExpandedPixel;
+  function ExpandedToFPColor(AExpanded: TExpandedPixel; AGammaCompression: boolean=true): TFPColor;
 
 type
   {* General purpose color variable with single-precision floating point values }
@@ -87,7 +100,7 @@ type
   THSLAPixel = packed record
     {** Hue of the pixel. Extremum values 0 and 65535 are red }
     hue: word;
-    {** Saturation of the color. 0 is gray and 65535 is the brightest color }
+    {** Saturation of the color. 0 is gray and 65535 is the brightest color (including white) }
     saturation: word;
     {** Lightness of the color. 0 is black, 32768 is normal, and 65535 is white }
     lightness: word;
@@ -115,56 +128,135 @@ type
 type
   {* Pixel color defined in corrected HSL colorspace. G stands for corrected hue
      and B stands for actual brightness. Values range from 0 to 65535 }
-  TGSBAPixel = THSLAPixel;
+  TGSBAPixel = packed record
+    {** Hue of the pixel. Extremum values 0 and 65535 are red }
+    hue: word;
+    {** Saturation of the color. 0 is gray and 65535 is the brightest color (excluding white) }
+    saturation: word;
+    {** Actual perceived brightness. 0 is black, 32768 is normal, and 65535 is white }
+    lightness: word;
+    {** Opacity of the pixel. 0 is transparent and 65535 is opaque }
+    alpha: word;
+  end;
 
   {** Converts a pixel from sRGB to correct HSL color space }
   function BGRAToGSBA(c: TBGRAPixel): TGSBAPixel;
   {** Converts a pixel from gamma expanded RGB to correct HSL color space }
-  function ExpandedToGSBA(ec: TExpandedPixel): TGSBAPixel;
+  function ExpandedToGSBA(const ec: TExpandedPixel): TGSBAPixel;
   {** Converts a G hue (GSBA) to a H hue (HSLA) }
   function GtoH(ghue: word): word;
   {** Converts a H hue (HSLA) to a G hue (GSBA) }
   function HtoG(hue: word): word;
   {** Converts a pixel from corrected HSL to sRGB }
-  function GSBAToBGRA(c: TGSBAPixel): TBGRAPixel;
+  function GSBAToBGRA(c: TGSBAPixel): TBGRAPixel; overload;
+  function GSBAToBGRA(const c: THSLAPixel): TBGRAPixel; overload;
   {** Converts a pixel from correct HSL to gamma expanded RGB }
-  function GSBAToExpanded(c: TGSBAPixel): TExpandedPixel;
+  function GSBAToExpanded(c: TGSBAPixel): TExpandedPixel; overload;
+  function GSBAToExpanded(const c: THSLAPixel): TExpandedPixel; overload;
   {** Converts a pixel from correct HSL to usual HSL }
-  function GSBAToHSLA(c: TGSBAPixel): THSLAPixel;
+  function GSBAToHSLA(const c: TGSBAPixel): THSLAPixel; overload;
+  function GSBAToHSLA(const c: THSLAPixel): THSLAPixel; overload;
+  function HSLAToGSBA(const c: THSLAPixel): TGSBAPixel;
 
 type
-  { TBGRAPixelHelper }
+  { TBGRAPixelBasicHelper }
 
-  TBGRAPixelHelper = record helper for TBGRAPixel
+  TBGRAPixelBasicHelper = record helper for TBGRAPixel
     function ToExpanded: TExpandedPixel;
     procedure FromExpanded(const AValue: TExpandedPixel);
     function ToHSLAPixel: THSLAPixel;
     procedure FromHSLAPixel(const AValue: THSLAPixel);
     function ToGSBAPixel: TGSBAPixel;
-    procedure FromGSBAPixel(const AValue: TGSBAPixel);
+    procedure FromGSBAPixel(const AValue: TGSBAPixel); overload;
+    procedure FromGSBAPixel(const AValue: THSLAPixel); overload;
     function ToColorF(AGammaExpansion: boolean): TColorF;
     procedure FromColorF(const AValue: TColorF; AGammaCompression: boolean);
   end;
 
-  { TExpandedPixelHelper }
+  { TExpandedPixelBasicHelper }
 
-  TExpandedPixelHelper = record helper for TExpandedPixel
+  TExpandedPixelBasicHelper = record helper for TExpandedPixel
+    function ToFPColor(AGammaCompression: boolean = true): TFPColor;
+    procedure FromFPColor(const AValue: TFPColor; AGammaExpansion: boolean = true);
+    function ToColor: TColor;
+    procedure FromColor(const AValue: TColor);
+    function ToBGRAPixel: TBGRAPixel;
+    procedure FromBGRAPixel(AValue: TBGRAPixel);
+    function ToHSLAPixel: THSLAPixel;
+    procedure FromHSLAPixel(const AValue: THSLAPixel);
+    function ToGSBAPixel: TGSBAPixel;
+    procedure FromGSBAPixel(const AValue: TGSBAPixel); overload;
+    procedure FromGSBAPixel(const AValue: THSLAPixel); overload;
+  end;
+
+operator := (const AValue: TExpandedPixel): TColor;
+operator := (const AValue: TColor): TExpandedPixel;
+Operator := (const Source: TExpandedPixel): TBGRAPixel;
+Operator := (const Source: TBGRAPixel): TExpandedPixel;
+
+type
+  { TFPColorBasicHelper }
+
+  TFPColorBasicHelper = record helper for TFPColor
+    function ToColor: TColor;
+    procedure FromColor(const AValue: TColor);
+    function ToBGRAPixel: TBGRAPixel;
+    procedure FromBGRAPixel(AValue: TBGRAPixel);
+    function ToExpanded(AGammaExpansion: boolean = true): TExpandedPixel;
+    procedure FromExpanded(const AValue: TExpandedPixel; AGammaCompression: boolean = true);
+    function ToHSLAPixel(AGammaExpansion: boolean = true): THSLAPixel;
+    procedure FromHSLAPixel(const AValue: THSLAPixel; AGammaCompression: boolean = true);
+    function ToGSBAPixel(AGammaExpansion: boolean = true): TGSBAPixel;
+    procedure FromGSBAPixel(const AValue: TGSBAPixel; AGammaCompression: boolean = true); overload;
+    procedure FromGSBAPixel(const AValue: THSLAPixel; AGammaCompression: boolean = true); overload;
+  end;
+
+  { THSLAPixelBasicHelper }
+
+  THSLAPixelBasicHelper = record helper for THSLAPixel
+    function ToColor: TColor;
+    procedure FromColor(const AValue: TColor);
+    function ToBGRAPixel: TBGRAPixel;
+    procedure FromBGRAPixel(AValue: TBGRAPixel);
+    function ToGSBAPixel: TGSBAPixel;
+    procedure FromGSBAPixel(AValue: TGSBAPixel);
+    function ToExpanded: TExpandedPixel;
+    procedure FromExpanded(AValue: TExpandedPixel);
+    function ToFPColor(AGammaCompression: boolean=true): TFPColor;
+    procedure FromFPColor(AValue: TFPColor; AGammaExpansion: boolean=true);
+  end;
+
+Operator := (const Source: THSLAPixel): TBGRAPixel;
+Operator := (const Source: TBGRAPixel): THSLAPixel;
+Operator := (const Source: THSLAPixel): TExpandedPixel;
+Operator := (const Source: TExpandedPixel): THSLAPixel;
+operator := (const AValue: TColor): THSLAPixel;
+operator := (const AValue: THSLAPixel): TColor;
+
+type
+  { TGSBAPixelBasicHelper }
+
+  TGSBAPixelBasicHelper = record helper for TGSBAPixel
+    function ToColor: TColor;
+    procedure FromColor(const AValue: TColor);
     function ToBGRAPixel: TBGRAPixel;
     procedure FromBGRAPixel(AValue: TBGRAPixel);
     function ToHSLAPixel: THSLAPixel;
     procedure FromHSLAPixel(AValue: THSLAPixel);
-  end;
-
-  { THSLAPixelHelper }
-
-  THSLAPixelHelper = record helper for THSLAPixel
-    function ToBGRAPixel: TBGRAPixel;
-    procedure FromBGRAPixel(AValue: TBGRAPixel);
     function ToExpanded: TExpandedPixel;
     procedure FromExpanded(AValue: TExpandedPixel);
+    function ToFPColor(AGammaCompression: boolean=true): TFPColor;
+    procedure FromFPColor(AValue: TFPColor; AGammaExpansion: boolean=true);
   end;
 
-Operator := (Source: TExpandedPixel): TBGRAPixel;
+Operator := (const Source: TGSBAPixel): TBGRAPixel;
+Operator := (const Source: TBGRAPixel): TGSBAPixel;
+Operator := (const Source: TGSBAPixel): TExpandedPixel;
+Operator := (const Source: TExpandedPixel): TGSBAPixel;
+operator := (const AValue: TColor): TGSBAPixel;
+operator := (const AValue: TGSBAPixel): TColor;
+Operator := (const Source: TGSBAPixel): THSLAPixel; //no conversion, just copying for backward compatibility (use ToHSLAPixel instead for conversion)
+Operator := (const Source: THSLAPixel): TGSBAPixel; //no conversion, just copying for backward compatibility (use ToGSBAPixel instead for conversion)
 {$ENDIF}
 
 
@@ -282,13 +374,25 @@ const
   blueWeightShl10  = 117; // = 0.114
 
 procedure BGRANoGamma;
-var i: integer;
+var i,j: integer;
+  prevExp, nextExp: Word;
 begin
   GammaExpFactor := 1;
+  prevExp := 0;
   for i := 0 to 255 do
+  begin
     GammaExpansionTab[i] := (i shl 8) + i;
-  for i := 0 to 65535 do
-    GammaCompressionTab[i] := i shr 8;
+    if i = 255 then nextExp := 65535
+    else
+    begin
+      nextExp := GammaExpansionTab[i]+128;
+      GammaExpansionTabHalf[i] := nextExp+1;
+    end;
+    for j := prevExp to nextExp do
+      GammaCompressionTab[j] := i;
+    if i < 255 then
+      prevExp := nextExp+1;
+  end;
 end;
 
 procedure BGRASetGamma(AGamma: single);
@@ -305,7 +409,6 @@ begin
   //the linear factor is used to normalize expanded values in the range 0..65535
   GammaLinearFactor := 65535 / power(255, GammaExpFactor);
   GammaExpansionTab[0] := 0;
-  GammaCompressionTab[0] := 0;
   nextpos := 0;
   for i := 0 to 255 do
   begin
@@ -316,7 +419,11 @@ begin
     else
       nextpos := round(power(i+0.5, GammaExpFactor) * GammaLinearFactor);
     GammaExpansionTab[i] := midpos;
-    for j := prevpos to nextpos-1 do
+    if i < 255 then
+      GammaExpansionTabHalf[i] := nextpos;
+    for j := prevpos to midpos-1 do
+      GammaCompressionTab[j] := i;
+    for j := midpos to nextpos-1 do
       GammaCompressionTab[j] := i;
   end;
   GammaCompressionTab[0] := 0;
@@ -357,6 +464,76 @@ begin
   Result.green := GammaCompressionTab[green];
   Result.blue  := GammaCompressionTab[blue];
   Result.alpha := alpha shr 8;
+end;
+
+function GammaExpansionW(ACompressed: word): word;
+const
+  fracShift = 8;
+  fracHalf = 1 shl (fracShift-1);
+  fracQuarter = 1 shl (fracShift-2);
+var
+  intPart, fracPart, half: word;
+  byteVal: byte;
+begin
+  if ACompressed = 0 then
+    result := 0
+  else if ACompressed = $ffff then
+    result := $ffff
+  else
+  begin
+    //div 257
+    byteVal := ACompressed shr fracShift;
+    intPart := (byteVal shl fracShift) + byteVal;
+    if ACompressed < intPart then
+    begin
+      dec(byteVal);
+      dec(intPart, 257);
+    end;
+
+    fracPart := ACompressed - intPart;
+    if fracPart >= fracHalf then dec(fracPart);  //[0..256] -> [0..255]
+
+    if fracPart >= fracHalf then
+    begin
+      result := GammaExpansionTab[byteVal+1];
+      half := GammaExpansionTabHalf[byteVal];
+      dec(result, ((result-half)*((1 shl fracShift)-fracPart)+fracQuarter) shr (fracShift-1));
+    end
+    else
+    begin
+      result := GammaExpansionTab[byteVal];
+      if fracPart > 0 then
+      begin
+        half := GammaExpansionTabHalf[byteVal];
+        inc(result, ((half-result)*fracPart+fracQuarter) shr (fracShift-1));
+      end;
+    end;
+  end;
+end;
+
+function GammaCompressionW(AExpanded: word): word;
+var
+  compByte: Byte;
+  reExp, reExpDelta: Word;
+begin
+  if AExpanded=0 then exit(0) else
+  if AExpanded=65535 then exit(65535) else
+  begin
+    compByte := GammaCompressionTab[AExpanded];
+    reExp := GammaExpansionTab[compByte];
+    result := compByte + (compByte shl 8);
+    if reExp < AExpanded then
+    begin
+      reExpDelta := GammaExpansionTabHalf[compByte]-reExp;
+      if reExpDelta<>0 then
+        inc(result, ((AExpanded-reExp)*128+(reExpDelta shr 1)) div reExpDelta);
+    end else
+    begin
+      reExpDelta := reExp-GammaExpansionTabHalf[compByte-1];
+      if reExpDelta<>0 then
+        dec(result, ((reExp-AExpanded)*128+(reExpDelta shr 1)) div reExpDelta);
+    end;
+  end;
 end;
 
 { The intensity is defined here as the maximum value of any color component }
@@ -532,6 +709,43 @@ begin
   end;
 end;
 
+function MergeBGRA(ec1: TExpandedPixel; weight1: integer; ec2: TExpandedPixel;
+  weight2: integer): TExpandedPixel;
+var
+    f1,f2,f12: int64;
+begin
+  if (weight1 = 0) then
+  begin
+    if (weight2 = 0) then
+      result := BGRAPixelTransparent
+    else
+      Result := ec2
+  end
+  else
+  if (weight2 = 0) then
+    Result := ec1
+  else
+  if (weight1+weight2 = 0) then
+    Result := BGRAPixelTransparent
+  else
+  begin
+    f1 := int64(ec1.alpha)*weight1;
+    f2 := int64(ec2.alpha)*weight2;
+    f12 := f1+f2;
+    if f12 = 0 then
+      result := BGRAPixelTransparent
+    else
+    begin
+      Result.red   := (ec1.red * f1 + ec2.red * f2 + f12 shr 1) div f12;
+      Result.green := (ec1.green * f1 + ec2.green * f2 + f12 shr 1) div f12;
+      Result.blue  := (ec1.blue * f1 + ec2.blue * f2 + f12 shr 1) div f12;
+      {$hints off}
+      Result.alpha := (f12 + ((weight1+weight2) shr 1)) div (weight1+weight2);
+      {$hints on}
+    end;
+  end;
+end;
+
 function LessStartSlope65535(value: word): word;
 var factor: word;
 begin
@@ -569,6 +783,16 @@ begin
   DiffAlpha := Abs(integer(ec2.Alpha) - integer(ec1.Alpha));
   if DiffAlpha > Result then
     Result := DiffAlpha;
+end;
+
+function FPColorToExpanded(AColor: TFPColor; AGammaExpansion: boolean): TExpandedPixel;
+begin
+  result.FromFPColor(AColor, AGammaExpansion);
+end;
+
+function ExpandedToFPColor(AExpanded: TExpandedPixel; AGammaCompression: boolean): TFPColor;
+begin
+  result.FromExpanded(AExpanded, AGammaCompression);
 end;
 
 function ColorF(red, green, blue, alpha: single): TColorF;
@@ -868,37 +1092,29 @@ end;
 { TGSBAPixel }
 
 function BGRAToGSBA(c: TBGRAPixel): TGSBAPixel;
-var lightness: UInt32Or64;
-    red,green,blue: Int32or64;
+var
+  ec: TExpandedPixel;
 begin
-  red   := GammaExpansionTab[c.red];
-  green := GammaExpansionTab[c.green];
-  blue  := GammaExpansionTab[c.blue];
-  result.alpha := c.alpha shl 8 + c.alpha;
-
-  lightness := (red * redWeightShl10 + green * greenWeightShl10 +
-    blue * blueWeightShl10 + 512) shr 10;
-
-  ExpandedToHSLAInline(red,green,blue,result);
-  if result.lightness > 32768 then
-    result.saturation := result.saturation* UInt32or64(not result.lightness) div 32767;
-  result.lightness := lightness;
-  result.hue := HtoG(result.hue);
+  ec := GammaExpansion(c);
+  result := ExpandedToGSBA(ec);
 end;
 
-function ExpandedToGSBA(ec: TExpandedPixel): TGSBAPixel;
+function ExpandedToGSBA(const ec: TExpandedPixel): TGSBAPixel;
 var lightness: UInt32Or64;
     red,green,blue: Int32or64;
+    hsla: THSLAPixel;
 begin
   red   := ec.red;
   green := ec.green;
   blue  := ec.blue;
-  result.alpha := ec.alpha;
+  hsla.alpha := ec.alpha;
 
   lightness := (red * redWeightShl10 + green * greenWeightShl10 +
     blue * blueWeightShl10 + 512) shr 10;
 
-  ExpandedToHSLAInline(red,green,blue,result);
+  ExpandedToHSLAInline(red,green,blue,hsla);
+  result := TGSBAPixel(hsla);
+
   if result.lightness > 32768 then
     result.saturation := result.saturation* UInt32or64(not result.lightness) div 32767;
   result.lightness := lightness;
@@ -916,27 +1132,27 @@ begin
     result := g * 10923 div segment[0]
   else
   begin
-    g -= segment[0];
+    dec(g, segment[0]);
     if g < segment[1] then
       result := g * (21845-10923) div segment[1] + 10923
     else
     begin
-      g -= segment[1];
+      dec(g, segment[1]);
       if g < segment[2] then
         result := g * (32768-21845) div segment[2] + 21845
       else
       begin
-        g -= segment[2];
+        dec(g, segment[2]);
         if g < segment[3] then
           result := g * (43691-32768) div segment[3] + 32768
         else
         begin
-          g -= segment[3];
+          dec(g, segment[3]);
           if g < segment[4] then
             result := g * (54613-43691) div segment[4] + 43691
           else
           begin
-            g -= segment[4];
+            dec(g, segment[4]);
             result := g * (65536-54613) div segment[5] + 54613;
           end;
         end;
@@ -960,32 +1176,32 @@ begin
   else
   begin
     g := segmentDest[0];
-    h -= segmentSrc[0];
+    dec(h, segmentSrc[0]);
     if h < segmentSrc[1] then
-      g += h * segmentDest[1] div segmentSrc[1]
+      inc(g, h * segmentDest[1] div segmentSrc[1])
     else
     begin
-      g += segmentDest[1];
-      h -= segmentSrc[1];
+      inc(g, segmentDest[1]);
+      dec(h, segmentSrc[1]);
       if h < segmentSrc[2] then
-        g += h * segmentDest[2] div segmentSrc[2]
+        inc(g, h * segmentDest[2] div segmentSrc[2])
       else
       begin
-        g += segmentDest[2];
-        h -= segmentSrc[2];
+        inc(g, segmentDest[2]);
+        dec(h, segmentSrc[2]);
         if h < segmentSrc[3] then
-          g += h * segmentDest[3] div segmentSrc[3]
+          inc(g, h * segmentDest[3] div segmentSrc[3])
         else
         begin
-          g += segmentDest[3];
-          h -= segmentSrc[3];
+          inc(g, segmentDest[3]);
+          dec(h, segmentSrc[3]);
           if h < segmentSrc[4] then
-            g += h * segmentDest[4] div segmentSrc[4]
+            inc(g, h * segmentDest[4] div segmentSrc[4])
           else
           begin
-            g += segmentDest[4];
-            h -= segmentSrc[4];
-            g += h * segmentDest[5] div segmentSrc[5];
+            inc(g, segmentDest[4]);
+            dec(h, segmentSrc[4]);
+            inc(g, h * segmentDest[5] div segmentSrc[5]);
           end;
         end;
       end;
@@ -996,13 +1212,14 @@ end;
 
 function GSBAToBGRA(c: TGSBAPixel): TBGRAPixel;
 var ec: TExpandedPixel;
-    lightness: word;
 begin
-  c.hue := GtoH(c.hue);
-  lightness := c.lightness;
-  c.lightness := 32768;
-  ec := HSLAToExpanded(c);
-  result := GammaCompression(SetLightness(ec, lightness));
+  ec := GSBAToExpanded(c);
+  result := GammaCompression(ec);
+end;
+
+function GSBAToBGRA(const c: THSLAPixel): TBGRAPixel;
+begin
+  result := GSBAToBGRA(TGSBAPixel(c));
 end;
 
 function GSBAToExpanded(c: TGSBAPixel): TExpandedPixel;
@@ -1011,103 +1228,399 @@ begin
   c.hue := GtoH(c.hue);
   lightness := c.lightness;
   c.lightness := 32768;
-  result := SetLightness(HSLAToExpanded(c),lightness);
+  result := SetLightness(HSLAToExpanded(THSLAPixel(c)),lightness);
 end;
 
-function GSBAToHSLA(c: TGSBAPixel): THSLAPixel;
+function GSBAToExpanded(const c: THSLAPixel): TExpandedPixel;
 begin
-  result := BGRAToHSLA(GSBAToBGRA(c));
+  result := GSBAToExpanded(TGSBAPixel(c));
 end;
 
-{ TBGRAPixelHelper }
+function GSBAToHSLA(const c: TGSBAPixel): THSLAPixel;
+begin
+  result := ExpandedToHSLA(GSBAToExpanded(c));
+end;
 
-function TBGRAPixelHelper.ToExpanded: TExpandedPixel;
+function GSBAToHSLA(const c: THSLAPixel): THSLAPixel;
+begin
+  result := ExpandedToHSLA(GSBAToExpanded(TGSBAPixel(c)));
+end;
+
+function HSLAToGSBA(const c: THSLAPixel): TGSBAPixel;
+begin
+  result := ExpandedToGSBA(HSLAToExpanded(c));
+end;
+
+{ TBGRAPixelBasicHelper }
+
+function TBGRAPixelBasicHelper.ToExpanded: TExpandedPixel;
 begin
   result := GammaExpansion(self);
 end;
 
-procedure TBGRAPixelHelper.FromExpanded(const AValue: TExpandedPixel);
+procedure TBGRAPixelBasicHelper.FromExpanded(const AValue: TExpandedPixel);
 begin
   Self := GammaCompression(AValue);
 end;
 
-function TBGRAPixelHelper.ToHSLAPixel: THSLAPixel;
+function TBGRAPixelBasicHelper.ToHSLAPixel: THSLAPixel;
 begin
   result := BGRAToHSLA(Self);
 end;
 
-procedure TBGRAPixelHelper.FromHSLAPixel(const AValue: THSLAPixel);
+procedure TBGRAPixelBasicHelper.FromHSLAPixel(const AValue: THSLAPixel);
 begin
   Self := HSLAToBGRA(AValue);
 end;
 
-function TBGRAPixelHelper.ToGSBAPixel: TGSBAPixel;
+function TBGRAPixelBasicHelper.ToGSBAPixel: TGSBAPixel;
 begin
   result := BGRAToGSBA(Self);
 end;
 
-procedure TBGRAPixelHelper.FromGSBAPixel(const AValue: TGSBAPixel);
+procedure TBGRAPixelBasicHelper.FromGSBAPixel(const AValue: TGSBAPixel);
 begin
   Self := GSBAToBGRA(AValue);
 end;
 
-function TBGRAPixelHelper.ToColorF(AGammaExpansion: boolean): TColorF;
+procedure TBGRAPixelBasicHelper.FromGSBAPixel(const AValue: THSLAPixel);
+begin
+  Self := GSBAToBGRA(AValue);
+end;
+
+function TBGRAPixelBasicHelper.ToColorF(AGammaExpansion: boolean): TColorF;
 begin
   result := BGRAToColorF(Self,AGammaExpansion);
 end;
 
-procedure TBGRAPixelHelper.FromColorF(const AValue: TColorF;
+procedure TBGRAPixelBasicHelper.FromColorF(const AValue: TColorF;
     AGammaCompression: boolean);
 begin
   Self := ColorFToBGRA(AValue,AGammaCompression);
 end;
 
-{ TExpandedPixelHelper }
+{ TExpandedPixelBasicHelper }
 
-function TExpandedPixelHelper.ToBGRAPixel: TBGRAPixel;
+function TExpandedPixelBasicHelper.ToFPColor(AGammaCompression: boolean): TFPColor;
+begin
+  if AGammaCompression then
+  begin
+    result.red := GammaCompressionW(self.red);
+    result.green := GammaCompressionW(self.green);
+    result.blue := GammaCompressionW(self.blue);
+  end else
+  begin
+    result.red := self.red;
+    result.green := self.green;
+    result.blue := self.blue;
+  end;
+  result.alpha := self.alpha;
+end;
+
+procedure TExpandedPixelBasicHelper.FromFPColor(const AValue: TFPColor;
+  AGammaExpansion: boolean);
+begin
+  if AGammaExpansion then
+  begin
+    self.red := GammaExpansionW(AValue.red);
+    self.green := GammaExpansionW(AValue.green);
+    self.blue := GammaExpansionW(AValue.blue);
+  end else
+  begin
+    self.red := AValue.red;
+    self.green := AValue.green;
+    self.blue := AValue.blue;
+  end;
+  self.alpha := AValue.alpha;
+end;
+
+function TExpandedPixelBasicHelper.ToColor: TColor;
+begin
+  result := BGRAToColor(GammaCompression(self));
+end;
+
+procedure TExpandedPixelBasicHelper.FromColor(const AValue: TColor);
+begin
+  self := GammaExpansion(ColorToBGRA(AValue));
+end;
+
+function TExpandedPixelBasicHelper.ToBGRAPixel: TBGRAPixel;
 begin
   result := GammaCompression(Self);
 end;
 
-procedure TExpandedPixelHelper.FromBGRAPixel(AValue: TBGRAPixel);
+procedure TExpandedPixelBasicHelper.FromBGRAPixel(AValue: TBGRAPixel);
 begin
   Self := GammaExpansion(AValue);
 end;
 
-function TExpandedPixelHelper.ToHSLAPixel: THSLAPixel;
+function TExpandedPixelBasicHelper.ToHSLAPixel: THSLAPixel;
 begin
   result := ExpandedToHSLA(Self);
 end;
 
-procedure TExpandedPixelHelper.FromHSLAPixel(AValue: THSLAPixel);
+procedure TExpandedPixelBasicHelper.FromHSLAPixel(const AValue: THSLAPixel);
 begin
   Self := HSLAToExpanded(AValue);
 end;
 
-operator :=(Source: TExpandedPixel): TBGRAPixel;
+function TExpandedPixelBasicHelper.ToGSBAPixel: TGSBAPixel;
+begin
+  result := ExpandedToGSBA(Self);
+end;
+
+procedure TExpandedPixelBasicHelper.FromGSBAPixel(const AValue: TGSBAPixel);
+begin
+  Self := GSBAToExpanded(AValue);
+end;
+
+procedure TExpandedPixelBasicHelper.FromGSBAPixel(const AValue: THSLAPixel);
+begin
+  Self := GSBAToExpanded(AValue);
+end;
+
+operator := (const AValue: TExpandedPixel): TColor;
+begin Result := BGRAToColor(GammaCompression(AValue)); end;
+
+operator := (const AValue: TColor): TExpandedPixel;
+begin Result := GammaExpansion(ColorToBGRA(ColorToRGB(AValue))) end;
+
+operator :=(const Source: TExpandedPixel): TBGRAPixel;
 begin
   result := GammaCompression(Source);
 end;
 
-{ THSLAPixelHelper }
+operator :=(const Source: TBGRAPixel): TExpandedPixel;
+begin
+  result := GammaExpansion(Source);
+end;
 
-function THSLAPixelHelper.ToBGRAPixel: TBGRAPixel;
+{ TFPColorBasicHelper }
+
+function TFPColorBasicHelper.ToColor: TColor;
+begin
+  result := FPColorToTColor(self);
+end;
+
+procedure TFPColorBasicHelper.FromColor(const AValue: TColor);
+begin
+  self := TColorToFPColor(AValue);
+end;
+
+function TFPColorBasicHelper.ToBGRAPixel: TBGRAPixel;
+begin
+  result := FPColorToBGRA(self);
+end;
+
+procedure TFPColorBasicHelper.FromBGRAPixel(AValue: TBGRAPixel);
+begin
+  self := BGRAToFPColor(AValue);
+end;
+
+function TFPColorBasicHelper.ToExpanded(AGammaExpansion: boolean): TExpandedPixel;
+begin
+  result.FromFPColor(self, AGammaExpansion);
+end;
+
+procedure TFPColorBasicHelper.FromExpanded(const AValue: TExpandedPixel;
+  AGammaCompression: boolean);
+begin
+  self := AValue.ToFPColor(AGammaCompression);
+end;
+
+function TFPColorBasicHelper.ToHSLAPixel(AGammaExpansion: boolean): THSLAPixel;
+begin
+  result.FromFPColor(self, AGammaExpansion);
+end;
+
+procedure TFPColorBasicHelper.FromHSLAPixel(const AValue: THSLAPixel;
+  AGammaCompression: boolean);
+begin
+  FromExpanded(AValue.ToExpanded, AGammaCompression);
+end;
+
+function TFPColorBasicHelper.ToGSBAPixel(AGammaExpansion: boolean): TGSBAPixel;
+begin
+  result.FromFPColor(self, AGammaExpansion);
+end;
+
+procedure TFPColorBasicHelper.FromGSBAPixel(const AValue: TGSBAPixel;
+  AGammaCompression: boolean);
+begin
+  FromExpanded(AValue.ToExpanded, AGammaCompression);
+end;
+
+procedure TFPColorBasicHelper.FromGSBAPixel(const AValue: THSLAPixel;
+  AGammaCompression: boolean);
+begin
+  FromExpanded(AValue.ToExpanded, AGammaCompression);
+end;
+
+{ THSLAPixelBasicHelper }
+
+function THSLAPixelBasicHelper.ToColor: TColor;
+begin
+  result := BGRAToColor(HSLAToBGRA(self));
+end;
+
+procedure THSLAPixelBasicHelper.FromColor(const AValue: TColor);
+begin
+  self := BGRAToHSLA(ColorToBGRA(AValue));
+end;
+
+function THSLAPixelBasicHelper.ToBGRAPixel: TBGRAPixel;
 begin
   result := HSLAToBGRA(self);
 end;
 
-procedure THSLAPixelHelper.FromBGRAPixel(AValue: TBGRAPixel);
+procedure THSLAPixelBasicHelper.FromBGRAPixel(AValue: TBGRAPixel);
 begin
   self := BGRAToHSLA(AValue);
 end;
 
-function THSLAPixelHelper.ToExpanded: TExpandedPixel;
+function THSLAPixelBasicHelper.ToGSBAPixel: TGSBAPixel;
+begin
+  result := HSLAToGSBA(self);
+end;
+
+procedure THSLAPixelBasicHelper.FromGSBAPixel(AValue: TGSBAPixel);
+begin
+  self := GSBAToHSLA(AValue);
+end;
+
+function THSLAPixelBasicHelper.ToExpanded: TExpandedPixel;
 begin
   result := HSLAToExpanded(Self);
 end;
 
-procedure THSLAPixelHelper.FromExpanded(AValue: TExpandedPixel);
+procedure THSLAPixelBasicHelper.FromExpanded(AValue: TExpandedPixel);
 begin
   Self := ExpandedToHSLA(AValue);
+end;
+
+function THSLAPixelBasicHelper.ToFPColor(AGammaCompression: boolean): TFPColor;
+begin
+  result.FromExpanded(self.ToExpanded, AGammaCompression);
+end;
+
+procedure THSLAPixelBasicHelper.FromFPColor(AValue: TFPColor;
+  AGammaExpansion: boolean);
+begin
+  FromExpanded(AValue.ToExpanded(AGammaExpansion));
+end;
+
+operator :=(const Source: THSLAPixel): TBGRAPixel;
+begin
+  result := HSLAToBGRA(Source);
+end;
+
+operator :=(const Source: TBGRAPixel): THSLAPixel;
+begin
+  result := BGRAToHSLA(Source);
+end;
+
+operator :=(const Source: THSLAPixel): TExpandedPixel;
+begin
+  result := HSLAToExpanded(Source);
+end;
+
+operator:=(const Source: TExpandedPixel): THSLAPixel;
+begin
+  result := ExpandedToHSLA(Source);
+end;
+
+operator := (const AValue: TColor): THSLAPixel;
+begin Result := BGRAToHSLA(ColorToBGRA(ColorToRGB(AValue))) end;
+
+operator := (const AValue: THSLAPixel): TColor;
+begin Result := BGRAToColor(HSLAToBGRA(AValue)) end;
+
+{ TGSBAPixelBasicHelper }
+
+function TGSBAPixelBasicHelper.ToColor: TColor;
+begin
+  result := BGRAToColor(GSBAToBGRA(self));
+end;
+
+procedure TGSBAPixelBasicHelper.FromColor(const AValue: TColor);
+begin
+  self := BGRAToGSBA(ColorToBGRA(AValue));
+end;
+
+function TGSBAPixelBasicHelper.ToBGRAPixel: TBGRAPixel;
+begin
+  result := GSBAToBGRA(self);
+end;
+
+procedure TGSBAPixelBasicHelper.FromBGRAPixel(AValue: TBGRAPixel);
+begin
+  self := BGRAToGSBA(AValue);
+end;
+
+function TGSBAPixelBasicHelper.ToHSLAPixel: THSLAPixel;
+begin
+  result := GSBAToHSLA(self);
+end;
+
+procedure TGSBAPixelBasicHelper.FromHSLAPixel(AValue: THSLAPixel);
+begin
+  self := HSLAToGSBA(AValue);
+end;
+
+function TGSBAPixelBasicHelper.ToExpanded: TExpandedPixel;
+begin
+  result := GSBAToExpanded(self);
+end;
+
+procedure TGSBAPixelBasicHelper.FromExpanded(AValue: TExpandedPixel);
+begin
+  self := ExpandedToGSBA(AValue);
+end;
+
+function TGSBAPixelBasicHelper.ToFPColor(AGammaCompression: boolean): TFPColor;
+begin
+  result.FromGSBAPixel(self, AGammaCompression);
+end;
+
+procedure TGSBAPixelBasicHelper.FromFPColor(AValue: TFPColor;
+  AGammaExpansion: boolean);
+begin
+  FromExpanded(AValue.ToExpanded(AGammaExpansion));
+end;
+
+operator :=(const Source: TGSBAPixel): TBGRAPixel;
+begin
+  result := GSBAToBGRA(Source);
+end;
+
+operator :=(const Source: TBGRAPixel): TGSBAPixel;
+begin
+  result := BGRAToGSBA(Source);
+end;
+
+operator :=(const Source: TGSBAPixel): TExpandedPixel;
+begin
+  result := GSBAToExpanded(Source);
+end;
+
+operator:=(const Source: TExpandedPixel): TGSBAPixel;
+begin
+  result := ExpandedToGSBA(Source);
+end;
+
+operator := (const AValue: TColor): TGSBAPixel;
+begin Result := BGRAToGSBA(ColorToBGRA(ColorToRGB(AValue))) end;
+
+operator := (const AValue: TGSBAPixel): TColor;
+begin Result := BGRAToColor(GSBAToBGRA(AValue)) end;
+
+operator :=(const Source: TGSBAPixel): THSLAPixel;
+begin
+  result := THSLAPixel(Pointer(@Source)^);
+end;
+
+operator:=(const Source: THSLAPixel): TGSBAPixel;
+begin
+  result := TGSBAPixel(Pointer(@Source)^);
 end;
 {$ENDIF}

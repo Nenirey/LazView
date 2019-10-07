@@ -1,12 +1,12 @@
 object frmain: Tfrmain
-  Left = 325
-  Height = 609
-  Top = 135
+  Left = 302
+  Height = 544
+  Top = 186
   Width = 902
   ActiveControl = ShellTreeView1
   AllowDropFiles = True
   Caption = 'LazView'
-  ClientHeight = 589
+  ClientHeight = 524
   ClientWidth = 902
   KeyPreview = True
   Menu = MainMenu1
@@ -25,12 +25,13 @@ object frmain: Tfrmain
   OnResize = FormResize
   OnShow = FormShow
   OnWindowStateChange = FormWindowStateChange
+  PopupMenu = PopupMenu1
   Position = poDesktopCenter
-  LCLVersion = '1.8.4.0'
+  LCLVersion = '2.0.4.0'
   object StatusBar1: TStatusBar
     Left = 0
     Height = 23
-    Top = 566
+    Top = 501
     Width = 902
     Panels = <    
       item
@@ -67,7 +68,7 @@ object frmain: Tfrmain
     AnchorSideBottom.Control = Splitter1
     AnchorSideBottom.Side = asrBottom
     Left = 0
-    Height = 542
+    Height = 477
     Top = 24
     Width = 0
     TabStop = False
@@ -78,6 +79,7 @@ object frmain: Tfrmain
     Color = clDefault
     Font.Color = clWhite
     FileSortType = fstNone
+    HotTrack = True
     Images = ImageList1
     ParentFont = False
     ReadOnly = True
@@ -88,7 +90,7 @@ object frmain: Tfrmain
     OnChange = ShellTreeView1Change
     OnEnter = ShellTreeView1Enter
     OnExpanded = ShellTreeView1Expanded
-    Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoThemedDraw]
+    Options = [tvoAutoItemHeight, tvoHideSelection, tvoHotTrack, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoThemedDraw]
     ObjectTypes = [otFolders, otHidden]
   end
   object Splitter1: TSplitter
@@ -96,7 +98,7 @@ object frmain: Tfrmain
     AnchorSideTop.Side = asrBottom
     AnchorSideBottom.Control = StatusBar1
     Left = 2
-    Height = 542
+    Height = 477
     Top = 24
     Width = 5
     Align = alNone
@@ -110,10 +112,9 @@ object frmain: Tfrmain
     AnchorSideTop.Side = asrBottom
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    AnchorSideBottom.Control = Splitter2
-    AnchorSideBottom.Side = asrBottom
+    AnchorSideBottom.Control = TrackBar1
     Left = 5
-    Height = 462
+    Height = 383
     Top = 24
     Width = 897
     HorzScrollBar.Increment = 37
@@ -128,13 +129,16 @@ object frmain: Tfrmain
     BorderSpacing.Left = 3
     BorderSpacing.Bottom = 3
     BorderStyle = bsNone
-    ClientHeight = 462
+    ClientHeight = 383
     ClientWidth = 897
     Enabled = False
     Color = clBlack
     ParentColor = False
+    PopupMenu = PopupMenu1
     TabOrder = 4
     TabStop = True
+    OnClick = Image1Click
+    OnDblClick = Image1DblClick
     OnMouseDown = FormMouseDown
     OnMouseMove = FormMouseMove
     OnMouseUp = Image1MouseUp
@@ -142,7 +146,7 @@ object frmain: Tfrmain
     OnPaint = ScrollBox1Paint
     object Image1: TImage
       Left = 0
-      Height = 462
+      Height = 383
       Top = 0
       Width = 897
       AntialiasingMode = amOn
@@ -222,8 +226,8 @@ object frmain: Tfrmain
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = StatusBar1
     Left = 2
-    Height = 77
-    Top = 489
+    Height = 66
+    Top = 435
     Width = 900
     HorzScrollBar.Increment = 1
     HorzScrollBar.Page = 1
@@ -252,7 +256,7 @@ object frmain: Tfrmain
     Cursor = crVSplit
     Left = 2
     Height = 3
-    Top = 486
+    Top = 432
     Width = 900
     Align = alNone
     Anchors = [akLeft, akRight]
@@ -610,6 +614,27 @@ object frmain: Tfrmain
       Caption = 'ToolButton2'
       Style = tbsSeparator
     end
+  end
+  object TrackBar1: TTrackBar
+    AnchorSideLeft.Control = Splitter1
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Splitter2
+    AnchorSideBottom.Side = asrBottom
+    Left = 2
+    Height = 25
+    Top = 410
+    Width = 900
+    OnChange = TrackBar1Change
+    Position = 0
+    ShowSelRange = False
+    TickStyle = tsNone
+    Anchors = [akLeft, akRight, akBottom]
+    OnClick = TrackBar1Click
+    OnMouseDown = TrackBar1MouseDown
+    OnMouseUp = TrackBar1MouseUp
+    TabOrder = 7
+    Visible = False
   end
   object ImageList1: TImageList
     left = 8
@@ -1835,6 +1860,7 @@ object frmain: Tfrmain
     }
   end
   object MainMenu1: TMainMenu
+    Images = ImageList1
     OwnerDraw = True
     left = 40
     top = 208
@@ -2152,7 +2178,7 @@ object frmain: Tfrmain
         OnClick = mnuRealModeClick
       end
       object mnuCache: TMenuItem
-        Caption = 'Use cahe (experimental but faster)'
+        Caption = 'Use RAM cache (experimental but faster)'
         OnClick = mnuCacheClick
       end
       object mnuStrech: TMenuItem
@@ -2181,7 +2207,7 @@ object frmain: Tfrmain
     end
   end
   object OpenPictureDialog1: TOpenPictureDialog
-    Filter = 'Gráfico (*.png;*.xpm;*.bmp;*.cur;*.ico;*.icns;*.jpeg;*.jpg;*.jpe;*.jfif;*.tif;*.tiff;*.gif;*.pbm;*.pgm;*.ppm;*.gif;*.pcx;*.psd)|*.png;*.xpm;*.bmp;*.cur;*.ico;*.icns;*.jpeg;*.jpg;*.jpe;*.jfif;*.tif;*.tiff;*.gif;*.pbm;*.pgm;*.ppm;*.gif;*.pcx;*.psd|Portable Network Graphic (*.png)|*.png|Pixmap (*.xpm)|*.xpm|Bitmaps (*.bmp)|*.bmp|Cursor (*.cur)|*.cur|Icon (*.ico)|*.ico|Mac OS X Icon (*.icns)|*.icns|Joint Picture Expert Group (*.jpeg;*.jpg;*.jpe;*.jfif)|*.jpeg;*.jpg;*.jpe;*.jfif|Tagged Image File Format (*.tif;*.tiff)|*.tif;*.tiff|Graphics Interchange Format (*.gif)|*.gif|Portable PixMap (*.pbm;*.pgm;*.ppm)|*.pbm;*.pgm;*.ppm'
+    Filter = 'Gráfico (*.png;*.xpm;*.bmp;*.cur;*.ico;*.icns;*.jpeg;*.jpg;*.jpe;*.jfif;*.tif;*.tiff;*.gif;*.pbm;*.pgm;*.ppm;*.gif;*.pcx;*.psd)|*.png;*.xpm;*.bmp;*.cur;*.ico;*.icns;*.jpeg;*.jpg;*.jpe;*.jfif;*.tif;*.tiff;*.gif;*.pbm;*.pgm;*.ppm;*.gif;*.pcx;*.psd|Portable Network Graphic (*.png)|*.png|Pixmap (*.xpm)|*.xpm|Bitmaps (*.bmp)|*.bmp|Cursor (*.cur)|*.cur|Icon (*.ico)|*.ico|Mac OS X Icon (*.icns)|*.icns|Joint Picture Expert Group (*.jpeg;*.jpg;*.jpe;*.jfif)|*.jpeg;*.jpg;*.jpe;*.jfif|Tagged Image File Format (*.tif;*.tiff)|*.tif;*.tiff|Graphics Interchange Format (*.gif)|*.gif|Portable PixMap (*.pbm;*.pgm;*.ppm)|*.pbm;*.pgm;*.ppm|Video (*.AVI;*.MP4;*.WEBM;*.3GP;*.MPG;*.MKV;*.WMV;*.FLV;*.TS)|*.AVI;*.MP4;*.WEBM;*.3GP;*.MPG;*.MKV;*.WMV;*.FLV;*.TS'
     left = 72
     top = 208
   end
@@ -2237,6 +2263,18 @@ object frmain: Tfrmain
     Interval = 100
     OnTimer = cacheTimerTimer
     left = 448
+    top = 206
+  end
+  object AbUnZipper1: TAbUnZipper
+    OnNeedPassword = AbUnZipper1NeedPassword
+    left = 529
+    top = 206
+  end
+  object VideoTimer: TTimer
+    Enabled = False
+    Interval = 50
+    OnTimer = VideoTimerTimer
+    left = 608
     top = 206
   end
 end

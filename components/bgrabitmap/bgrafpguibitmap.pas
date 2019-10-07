@@ -32,8 +32,8 @@ type
     procedure NotAvailable;
   public
     destructor Destroy; override;
-    class procedure AddFreeTypeFontFolder(ADirectory: string; AUTF8: boolean = false);
-    class procedure AddFreeTypeFontFile(AFilename: string; AUTF8: boolean = false);
+    class procedure AddFreeTypeFontFolder(ADirectory: string; AUTF8: boolean = false); static;
+    class procedure AddFreeTypeFontFile(AFilename: string; AUTF8: boolean = false); static;
     procedure Draw(ACanvas: TCanvas; x, y: integer; {%H-}Opaque: boolean=True); override;
     procedure Draw(ACanvas: TCanvas; Rect: TRect; {%H-}Opaque: boolean=True); override;
     procedure Draw(ACanvas: TGUICanvas; x, y: integer; {%H-}Opaque: boolean=True); overload;
@@ -45,8 +45,8 @@ type
       ALineOrder: TRawImageLineOrder; AWidth, AHeight: integer); override;
     procedure TakeScreenshot({%H-}ARect: TRect); override; //not available
     procedure TakeScreenshotOfPrimaryMonitor; override; //not available
-    procedure LoadFromDevice({%H-}DC: System.THandle); override; //not available
-    procedure LoadFromDevice({%H-}DC: System.THandle; {%H-}ARect: TRect); override; //not available
+    procedure LoadFromDevice({%H-}DC: HDC); override; //not available
+    procedure LoadFromDevice({%H-}DC: HDC; {%H-}ARect: TRect); override; //not available
     property BitmapTransparent: boolean read GetBitmapTransparent write SetBitmapTransparent;
     property Canvas: TBGRACanvas read GetPseudoCanvas;
   end;
@@ -152,7 +152,7 @@ procedure TBGRAfpGUIBitmap.ReallocData;
 begin
   FBitmap.Width := Width;
   FBitmap.Height:= Height;
-  FData := FBitmap.RawImage.ImageData;
+  FDataByte := PByte(FBitmap.RawImage.ImageData);
   InvalidateBitmap;
   FScanPtr := nil;
 end;
@@ -253,12 +253,12 @@ begin
   NotAvailable;
 end;
 
-procedure TBGRAfpGUIBitmap.LoadFromDevice(DC: System.THandle);
+procedure TBGRAfpGUIBitmap.LoadFromDevice(DC: HDC);
 begin
   NotAvailable;
 end;
 
-procedure TBGRAfpGUIBitmap.LoadFromDevice(DC: System.THandle; ARect: TRect);
+procedure TBGRAfpGUIBitmap.LoadFromDevice(DC: HDC; ARect: TRect);
 begin
   NotAvailable;
 end;

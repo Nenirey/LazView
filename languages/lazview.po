@@ -226,7 +226,7 @@ msgid "Invert color (RGB)-(BRG)"
 msgstr ""
 
 #: tfrmain.mnucache.caption
-msgid "Use cahe (experimental but faster)"
+msgid "Use RAM cache (experimental but faster)"
 msgstr ""
 
 #: tfrmain.mnucompact.caption
@@ -712,6 +712,14 @@ msgstr ""
 
 #: tfrmain.toolbutton25.caption
 msgid "ToolButton25"
+msgstr ""
+
+#: tfrpass.caption
+msgid "Enter password"
+msgstr ""
+
+#: tfrpass.label1.caption
+msgid "Password:"
 msgstr ""
 
 #: tfrprint.caption

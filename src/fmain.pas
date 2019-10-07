@@ -7,16 +7,18 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, ComCtrls,
   StdCtrls, Menus, ExtDlgs, LazFileUtils, FileUtil, IntfGraphics,
   types, LCLType, ShellCtrls, FPImage, fresize, fquality, feffects, fgoto, fthumbsize,
-  LazUTF8, print{$IFDEF WINDOWS}, Registry, Windows, Windirs{$ENDIF},
-  BGRABitmapTypes, BGRABitmap, BGRAThumbnail, {BGRAAnimatedGif,}
-  DateUtils, Math, ImgSize, {BGRAGifFormat,} Printers, LCLintf, fexif, INIFiles, LCLTranslator,
-  Imaging, ImagingClasses, ImagingComponents, ImagingTypes, ImagingCanvases, Variants, Clipbrd;
+  LazUTF8, lclvlc, print{$IFDEF WINDOWS}, Registry, Windows, Windirs{$ENDIF},
+  BGRABitmapTypes, BGRABitmap, BGRAThumbnail, BGRASVG, {BGRAAnimatedGif,}
+  DateUtils, Math, ImgSize, Printers, LCLintf, fexif, INIFiles, LCLTranslator,
+  Imaging, ImagingClasses, ImagingComponents, ImagingTypes, ImagingCanvases,
+  Variants, Clipbrd, AbZBrows, AbUnZper, AbArcTyp, AbBrowse, fpass, LMessages;
 
 type
 
   { Tfrmain }
 
   Tfrmain = class(TForm)
+    AbUnZipper1: TAbUnZipper;
     Image1: TImage;
     ImageList1: TImageList;
     Label1: TLabel;
@@ -120,6 +122,8 @@ type
     Timer4: TTimer;
     Timer5: TTimer;
     cacheTimer: TTimer;
+    TrackBar1: TTrackBar;
+    VideoTimer: TTimer;
     ToolBar1: TToolBar;
     tbPrevImage: TToolButton;
     tbZoomOut: TToolButton;
@@ -156,6 +160,8 @@ type
     tbRotateRight: TToolButton;
     tbExit: TToolButton;
     tbZoomIn: TToolButton;
+    procedure AbUnZipper1NeedPassword(Sender: TObject;
+      var NewPassword: AnsiString);
     procedure cacheTimerTimer(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
@@ -309,11 +315,20 @@ type
     procedure tbExitClick(Sender: TObject);
     procedure tbZoomInClick(Sender: TObject);
     procedure mnuLanguageClick(Sender:TObject);
+    procedure TrackBar1Change(Sender: TObject);
+    procedure TrackBar1Click(Sender: TObject);
+    procedure TrackBar1MouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure TrackBar1MouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure VideoTimerTimer(Sender: TObject);
+
   private
     { private declarations }
+    FPlayer : TLCLVlcPlayer;
+
   public
     { public declarations }
-
   end;
 
 type tthumbimage = class(Extctrls.TImage)
@@ -361,7 +376,7 @@ Const
 
 var
   frmain: Tfrmain;
-  full,ifgif,ifapng,startdraw,startselect,compactmode:boolean;
+  full,ifgif,ifapng,ifzip,ifvideo,startdraw,startselect,compactmode:boolean;
   flist:TStringList;
   nfile,ifile,ndir,idir:LongInt;
   carpeta:string;
@@ -384,7 +399,7 @@ var
   mosaicmouseposition:integer;
   title:string;
   ifallthumbs:boolean;
-  realimgwidth,realimgheight:LongInt;
+  realimgwidth,realimgheight:LongWord;
   inprocessanim:boolean;
   puntos:array of int64;
   creados:array of boolean;
@@ -404,6 +419,9 @@ var
   shaperect:TRect;
   validx,validy,validw,validh:integer;
   mainwindowstate:string;
+  zippass:string='';
+  Arepeat,Brepeat:int64;
+  lastmposx,lastmposy:integer;
   procedure rendermosaic;
   procedure fullsc;
   procedure compact;
@@ -421,6 +439,14 @@ uses
 {$R *.lfm}
 
 { Tfrmain }
+procedure deletetempfile;
+begin
+  if ifvideo then
+    frmain.FPlayer.Stop;
+  if ifzip and FileExistsUTF8(carpeta+flist[ifile]) then
+    DeleteFileUTF8(carpeta+flist[ifile]);
+end;
+
 procedure sethistory;
 var
    i:integer;
@@ -622,6 +648,9 @@ begin
   iniconfigfile.WriteBool('Config','backgroundmosaic',frmain.mnuMosaic.Checked);
   iniconfigfile.WriteInteger('Config','thumbpanelsize',thumbsize);
   iniconfigfile.WriteBool('Config','cachebitmap',frmain.mnuCache.Checked);
+  iniconfigfile.WriteBool('Config','autorotatewexiff',frmain.mnuAutoRotate.Checked);
+  iniconfigfile.WriteBool('Config','showmenu',frmain.mnuMenus.Checked);
+  iniconfigfile.WriteBool('Config','showtoolbar',frmain.mnuToolBar.Checked);
   iniconfigfile.UpdateFile;
   //iniconfigfile.Free;
   FreeAndNil(iniconfigfile);
@@ -638,8 +667,29 @@ begin
     iniconfigfile:=TMEMINIFile.Create(ExtractFilePath(Application.Params[0])+'lazview.ini')
   else
     iniconfigfile:=TMEMINIFile.Create(GetAppConfigDir(false)+'lazview.ini');
-    if iniconfigfile.ReadBool('Config','compactmode',compactmode) then
-      compact;
+  frmain.mnuMenus.Checked:=iniconfigfile.ReadBool('Config','showmenu',true);
+  if frmain.mnuMenus.Checked=false then
+    showmainmenu(false);
+  if iniconfigfile.ReadBool('Config','showtoolbar',true) then
+  begin
+    frmain.ToolBar1.Visible:=true;
+    frmain.ScrollBox1.AnchorSideTop.Control:=frmain.ToolBar1;
+    frmain.ScrollBox1.AnchorSideTop.Side:=asrBottom;
+    frmain.Splitter1.AnchorSideTop.Control:=frmain.ToolBar1;
+    frmain.Splitter1.AnchorSideTop.Side:=asrBottom;
+    frmain.mnuToolBar.Checked:=true;
+  end
+  else
+  begin
+    frmain.ToolBar1.Visible:=false;
+    frmain.ScrollBox1.AnchorSideTop.Control:=frmain;
+    frmain.ScrollBox1.AnchorSideTop.Side:=asrTop;
+    frmain.Splitter1.AnchorSideTop.Control:=frmain;
+    frmain.Splitter1.AnchorSideTop.Side:=asrTop;
+    frmain.mnuToolBar.Checked:=false;
+  end;
+  if iniconfigfile.ReadBool('Config','compactmode',compactmode) then
+    compact;
   if iniconfigfile.ReadBool('Config','showthumbs',showthumbs) then
   begin
     frmain.mnuShowThumbs.Checked:=true;
@@ -712,6 +762,7 @@ begin
     end;
   end;
   frmain.mnuCache.Checked:=iniconfigfile.ReadBool('Config','cachebitmap',false);
+  frmain.mnuAutoRotate.Checked:=iniconfigfile.ReadBool('Config','autorotatewexiff',true);
   FreeAndNil(iniconfigfile);
 end;
 
@@ -1140,8 +1191,18 @@ var
    Item: TMetadataItem;
    Orientation:string='Horizontal (normal)';
    vmp:ImagingClasses.TSingleImage;
+   lastcursor:TCursor;
 begin
-  //frmain.Image1.Picture.Bitmap.Clear;
+  frmain.VideoTimer.Enabled:=false;
+  frmain.FPlayer.Stop;
+  frmain.TrackBar1.Visible:=false;
+  lastcursor:=Screen.Cursor;
+  Screen.Cursor:=crHourGlass;
+  frmain.AbUnZipper1.Password:=zippass;
+  if ifzip then
+  begin
+    frmain.AbUnZipper1.ExtractFiles(ExtractFileName(fimagen));
+  end;
   {$IFDEF WINDOWS}
   wimagen:=UTF16LongName(fimagen);
   {$ELSE}
@@ -1214,6 +1275,7 @@ begin
       '.PNG','.APNG','.MNG','.GIF':
       begin
         ifgif:=false;
+        ifvideo:=false;
         SetLength(APNGDelays,0);
         GlobalMetadata.ClearMetaItems;
         APNGImage:=ImagingClasses.TMultiImage.Create;
@@ -1275,10 +1337,11 @@ begin
           frmain.StatusBar1.Panels[2].Text:='';
         end;
       end;
-      '.JPG','.JPEG','.JPE','.JFIF','.BMP','.XPM','.PBM','.PPM','.PCX','.ICNS','.TIF','.TIFF':
+      '.JPG','.JPEG','.JPE','.JFIF','.BMP','.XPM','.PBM','.PPM','.PCX','.ICNS','.TIF','.TIFF','.SVG':
       begin
         ifgif:=false;
         ifapng:=false;
+        ifvideo:=false;
         streamimage:=TFileStream.Create(wimagen,fmOpenRead or fmShareDenyNone);
         bgcolor.alpha:=255;
         bgcolor.blue:=0;
@@ -1352,7 +1415,7 @@ begin
           '.jpg','.jpe','.jpeg':ImgSize.GetJPGSize(streamimage,iw,ih);
           '.png','.pne':ImgSize.GetPNGSize(streamimage,iw,ih);
           '.bmp':ImgSize.GetBMPSize(streamimage,iw,ih);
-          '.pcx'://Force thumb while found a pcx read way
+          '.pcx','.svg'://Force thumb while found a pcx and svg read way
           begin
             iw:=Screen.Width+1;
             ih:=Screen.Height+1;
@@ -1446,7 +1509,7 @@ begin
                 end;
               end;
             end;
-            if LowerCase(ExtractFileExt(fimagen))='.pcx' then
+            if (LowerCase(ExtractFileExt(fimagen))='.pcx') or (LowerCase(ExtractFileExt(fimagen))='.svg') then
               modethumb:=false
             else
               modethumb:=true;
@@ -1506,6 +1569,9 @@ begin
       end;
       '.ICO':
       begin
+        ifgif:=false;
+        ifapng:=false;
+        ifvideo:=false;
         frmain.Image1.Picture.LoadFromFile(wimagen);
         frmain.StatusBar1.Panels.Items[1].Text:='Resolution:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
         modethumb:=false;
@@ -1514,6 +1580,9 @@ begin
       end;
       '.TGA','.PSD','.XWD','.CUR':
       begin
+        ifgif:=false;
+        ifapng:=false;
+        ifvideo:=false;
         BGRAImage:=BGRABitmap.TBGRABitmap.Create(wimagen);
         frmain.Image1.Picture.Assign(BGRAImage);
         frmain.StatusBar1.Panels.Items[1].Text:='Resolution:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
@@ -1523,8 +1592,26 @@ begin
         //BGRAImage.Destroy;
         FreeAndNil(BGRAImage);
       end;
+      '.AVI','.MP4','.WEBM','.3GP','.MPG','.MKV','.WMV','.FLV','.TS','.VOB','.MP3','.M4A','.WAV','.WMA':
+      begin
+        ifvideo:=true;
+        ifgif:=false;
+        ifapng:=false;
+        frmain.Fplayer.PlayFile(fimagen);
+        frmain.FPlayer.FullScreenMode:=false;
+        frmain.TrackBar1.Max:=frmain.Fplayer.VideoLength;
+        frmain.tbSlowAnim.Enabled:=true;
+        frmain.tbPrevFrame.Enabled:=true;
+        frmain.tbPauseAnim.Enabled:=true;
+        frmain.tbNextFrame.Enabled:=true;
+        frmain.tbFastAnim.Enabled:=true;
+        frmain.VideoTimer.Enabled:=true;
+        frmain.TrackBar1.Visible:=true;
+        frmain.StatusBar1.Panels.Items[1].Text:='Duration: '+timetostr(frmain.FPlayer.VideoDuration);
+      end;
       else/////Try to load as Image
       begin
+        ifvideo:=false;
         streamimage:=TFileStream.Create(wimagen,fmOpenRead or fmShareDenyNone);
         frmain.Image1.Picture.LoadFromStream(streamimage);
         frmain.StatusBar1.Panels.Items[1].Text:='Resolution:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
@@ -1601,6 +1688,7 @@ begin
       //////////////
     end;
   end;
+  Screen.Cursor:=lastcursor;
   historyindex:=0;
   //Free history images;
   for i:=0 to 1 do
@@ -1782,6 +1870,7 @@ procedure nextfile();
 begin
   if nfile > 0 then
   begin
+    deletetempfile;
     if ifile+1 < nfile then
       Inc(ifile)
     else
@@ -1797,6 +1886,7 @@ procedure prevfile();
 begin
   if nfile > 0 then
   begin
+    deletetempfile;
     if ifile > 0 then
       ifile:=ifile-1
     else
@@ -2786,9 +2876,15 @@ var
    finfo:TSearchRec;
    contador:LongInt;
    flisttmp:TStringList;
-   nfiletmp:integer;
+   nfiletmp,i:integer;
    wplace:UnicodeString;
 begin
+  frmain.FPlayer.Stop;
+  if Assigned(cachebitmap) then
+  begin
+    for i:=0 to Length(cachebitmap)-1 do
+        FreeAndNil(cachebitmap[i]);
+  end;
   {$IFDEF WINDOWS}
   wplace:=UTF16LongName(place);
   {$ELSE}
@@ -2803,35 +2899,63 @@ begin
   contador:=0;
   nfiletmp:=0;
   flisttmp:=TStringList.Create;
-  if FindFirst(wplace+'*',faAnyFile,finfo)=0 then
-  begin
-    repeat
-      Inc(contador);
-      with finfo do
+
+  case UpperCase(ExtractFileExt(fname)) of
+    '.ZIP','.7Z','.TAR','.TXZ','.GZ','.TGZ','.CAB':
+    begin
+      ifzip:=true;
+      frmain.AbUnZipper1.FileName:=place+fname;
+      if not DirectoryExistsUTF8(GetAppConfigDir(false)+'temp')  then
+        CreateDirUTF8(GetAppConfigDir(false)+'temp');
+      frmain.AbUnZipper1.BaseDirectory:=GetAppConfigDir(false)+'temp'+pathdelim;
+      carpeta:=GetAppConfigDir(false)+'temp'+pathdelim;
+      for i:=0 to frmain.AbUnZipper1.Count-1 do
       begin
-        if (Attr and faDirectory)<>faDirectory then
-        begin
-          case UpperCase(ExtractFileExt(Name)) of
-            '.JPG','.JPEG','.JPE','.JFIF','.BMP','.GIF','.PNG','.APNG','.MNG','.ICO','.XPM','.PBM','.PPM','.ICNS','.CUR','.TIF','.TIFF','.PCX','.TGA','.PSD','.XWD':
-            begin
-              flisttmp.Add(Name);
-              Inc(nfiletmp);
-            end;
-            else
-            begin
-              ///Add the file name and the same files width this extencion to try to view
-              if ((Name=fname) or (UpperCase(ExtractFileExt(Name))=UpperCase(ExtractFileExt(fname)))) and (fname<>'') then
-              begin
-                flisttmp.Add(Name);
-                Inc(nfiletmp);
-              end;
-            end;
+        case UpperCase(ExtractFileExt(frmain.AbUnZipper1.Items[i].FileName)) of
+          '.JPG','.JPEG','.JPE','.JFIF','.BMP','.GIF','.PNG','.APNG','.MNG','.ICO','.XPM','.PBM','.PPM','.ICNS','.CUR','.TIF','.TIFF','.PCX','.TGA','.PSD','.XWD','.SVG','.AVI','.MP4','.WEBM','.3GP','.MPG','.MKV','.WMV','.FLV','.TS','.VOB','.MP3','.M4A','.WAV','.WMA':
+          begin
+            Inc(contador);
+            flisttmp.Add(ExtractFileName(frmain.AbUnZipper1.Items[i].FileName));
+            Inc(nfiletmp);
           end;
         end;
       end;
-    until FindNextUTF8(finfo)<>0 ;
+    end;
+    else
+    begin
+      ifzip:=false;
+      if FindFirst(wplace+'*',faAnyFile,finfo)=0 then
+      begin
+        repeat
+          Inc(contador);
+          with finfo do
+          begin
+            if (Attr and faDirectory)<>faDirectory then
+            begin
+              case UpperCase(ExtractFileExt(Name)) of
+                '.JPG','.JPEG','.JPE','.JFIF','.BMP','.GIF','.PNG','.APNG','.MNG','.ICO','.XPM','.PBM','.PPM','.ICNS','.CUR','.TIF','.TIFF','.PCX','.TGA','.PSD','.XWD','.SVG','.AVI','.MP4','.WEBM','.3GP','.MPG','.MKV','.WMV','.FLV','.TS','.VOB','.MP3','.M4A','.WAV','.WMA':
+                begin
+                  flisttmp.Add(Name);
+                  Inc(nfiletmp);
+                end;
+                else
+                begin
+                  ///Add the file name and the same files width this extencion to try to view
+                  if ((Name=fname) or (UpperCase(ExtractFileExt(Name))=UpperCase(ExtractFileExt(fname)))) and (fname<>'') then
+                  begin
+                    flisttmp.Add(Name);
+                    Inc(nfiletmp);
+                  end;
+                end;
+              end;
+            end;
+          end;
+        until FindNextUTF8(finfo)<>0 ;
+      end;
+      SysUtils.FindClose(finfo);
+    end;
   end;
-  SysUtils.FindClose(finfo);
+
   if nfiletmp>0 then
   begin
     nfile:=nfiletmp;
@@ -2841,9 +2965,10 @@ begin
       flist:=TStringList.Create;
     flist.Assign(flisttmp);
 
-    carpeta:=place;
+    if not ifzip then
+      carpeta:=place;
 
-    if nombre <> '' then
+    if (nombre <> '') and not ifzip then
     begin
       ifile:=flist.IndexOf(nombre);
       if starting=false then
@@ -2855,7 +2980,6 @@ begin
       if (ifile<flist.Count) {and (starting=false)} then
         loadpicture(place+flist[ifile]);
     end;
-
     starting:=false;
     if (frmain.mnuShowThumbs.Checked) then
     begin
@@ -2868,6 +2992,7 @@ begin
   //flisttmp.Destroy;
   FreeAndNil(flisttmp);
 end;
+
 procedure Tfrmain.FormCreate(Sender: TObject);
 var
    i:integer;
@@ -2876,6 +3001,8 @@ var
    itemfile:TSearchRec;
    mitem:TMenuItem;
 begin
+  FPlayer:=TLCLVLCPlayer.Create(Self);
+  FPlayer.ParentWindow:=ScrollBox1;
   if FindFirst(ExtractFilePath(UTF8ToSys(Application.Params[0]))+pathdelim+'languages'+pathdelim+'lazview.*.po',faAnyFile,itemfile)=0 then
   begin
     Repeat
@@ -2921,12 +3048,15 @@ end;
 
 procedure Tfrmain.FormDestroy(Sender: TObject);
 begin
+  if Fplayer.Playing then
+    Fplayer.Stop;
   if Assigned(flist) then
     FreeAndNil(flist);
     //flist.Destroy;
   refreshthumbs;
   if frmain.Image1.Picture.Bitmap.Empty=false then
     frmain.Image1.Picture.Clear;
+  FreeAndNil(FPlayer);
 end;
 
 procedure Tfrmain.FormDragDrop(Sender, Source: TObject; X, Y: Integer);
@@ -2951,9 +3081,7 @@ end;
 
 procedure Tfrmain.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 begin
-  if Assigned(ththumbs) then
-    ththumbs.stop;
-  saveconfig;
+  frmain.tbExitClick(nil);
   CanClose:=true;
 end;
 
@@ -2963,6 +3091,17 @@ begin
   thcahe:=cachethread.Create(true);
   thcahe.Start;
   frmain.cacheTimer.Enabled:=false;
+end;
+
+procedure Tfrmain.AbUnZipper1NeedPassword(Sender: TObject;
+  var NewPassword: AnsiString);
+begin
+  frpass.ShowModal;
+  if frpass.ModalResult=1 then
+    zippass:=frpass.edtPass.Text
+  else
+    exit;
+  loadpicture(carpeta+flist[ifile]);
 end;
 
 procedure Tfrmain.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState
@@ -3012,23 +3151,14 @@ begin
     end;
   27://Escape
     begin
-      if frmain.Shape1.Visible then
-        frmain.Shape1.Visible:=false
+      frmain.tbExitClick(nil);
+    end;
+  65://Letra A
+    begin
+      if frmain.FPlayer.AspectRatio='4:3' then
+        frmain.FPlayer.AspectRatio:='16:9'
       else
-      begin
-        if frmain.tbSelect.Down then
-        begin
-          frmain.tbSelect.Down:=false;
-          frmain.Image1.Cursor:=crDefault;
-        end
-        else
-        begin
-          if Assigned(ththumbs) then
-            ththumbs.stop;
-          saveconfig;
-          Application.Terminate;
-        end;
-      end;
+        frmain.FPlayer.AspectRatio:='4:3';
     end;
   67://Letra C
     begin
@@ -3048,10 +3178,7 @@ begin
     end;
   81://Letra Q
     begin
-      if Assigned(ththumbs) then
-        ththumbs.stop;
-      saveconfig;
-      Application.Terminate;
+      frmain.tbExitClick(nil);
     end;
   86://Letra V
     begin
@@ -3080,6 +3207,15 @@ begin
     begin
       zoomoriginal();
     end;
+  112://Tecla F1
+  begin
+   Arepeat:=FPlayer.VideoPosition;
+   Brepeat:=0;
+  end;
+  113://Tecla F2
+  begin
+   Brepeat:=FPlayer.VideoPosition;
+  end;
   79://Tecla O
     begin
       osd();
@@ -3151,7 +3287,13 @@ begin
   else
     frmain.Image1.Cursor:=crDefault;}
 
-  if frmain.mnuToolBarInFull.Checked then
+  if ifvideo and (full or compactmode) then
+  begin
+    hidetoolbardelay:=5;
+    frmain.TrackBar1.Visible:=true;
+  end;
+
+  if frmain.mnuToolBarInFull.Checked or ifvideo then
   begin
     hidetoolbardelay:=5;
     if frmain.mnuShowThumbs.Checked then
@@ -3161,8 +3303,11 @@ begin
 
     frmain.ToolBar1.Left:=Round((screen.Width-frmain.ToolBar1.Width)/2);
 
-    if full and (frmain.ToolBar1.Visible=false) then
+    if full then
       frmain.ToolBar1.Visible:=true;
+
+    if frmain.TrackBar1.Visible then
+      frmain.ToolBar1.Top:=frmain.TrackBar1.Top-frmain.ToolBar1.Height;
   end;
 
   if startdraw and (not startselect) then
@@ -3201,13 +3346,13 @@ begin
       frmain.mnuCrop.Enabled:=true;
     end;
   end;
-  if (compactmode or full) and (frmain.Image1.Align=alClient) and (frmain.tbSelect.Down=false) then
+  if (compactmode or full or (frmain.ToolBar1.Visible=false)) and (frmain.Image1.Align=alClient) and (frmain.tbSelect.Down=false) and (ifvideo=false) then
   begin
-    if x>(frmain.Width/3)*2 then
+    if (x>(frmain.Width/3)*2) then
     begin
       Screen.Cursor:=2;
     end;
-    if x<(frmain.Width/3) then
+    if (x<(frmain.Width/3)) then
     begin
       Screen.Cursor:=1;
     end;
@@ -3259,28 +3404,40 @@ begin
 end;
 
 procedure Tfrmain.FormShow(Sender: TObject);
+var
+   vpos:int64=0;
 begin
   loadconfig;
   if Assigned(flist) then
   begin
+    if ifvideo then
+      vpos:=frmain.FPlayer.VideoPosition;
     if (ifile<flist.Count) then
       loadpicture(carpeta+flist[ifile]);
+    if ifvideo then
+      frmain.FPlayer.VideoPosition:=vpos;
   end;
 end;
 
 procedure Tfrmain.FormWindowStateChange(Sender: TObject);
+var
+   vpos:int64=0;
 begin
-  if Assigned(flist) and modethumb and frmain.Image1.Visible and (ifgif=false) then
+  if Assigned(flist) and modethumb and frmain.Image1.Visible and (ifgif=false) and (ifvideo=false) then
   begin
+    if ifvideo then
+      vpos:=frmain.FPlayer.VideoPosition;
     if (frmain.mnuCompact.Checked=false) and ((frmain.WindowState=wsMaximized) or (frmain.WindowState=wsNormal) or (frmain.WindowState=wsFullScreen)) then
       loadpicture(carpeta+flist[ifile],false);
+    if ifvideo then
+      frmain.FPlayer.VideoPosition:=vpos;
   end;
   frmain.FormResize(nil);
 end;
 
 procedure Tfrmain.Image1Click(Sender: TObject);
 begin
-  if (compactmode or full) and (frmain.Image1.Align=alClient) and (startselect=false) then
+  if (compactmode or full or (frmain.ToolBar1.Visible=false)) and (frmain.Image1.Align=alClient) and (startselect=false) then
   begin
     if Screen.Cursor=2 then
     begin
@@ -3338,6 +3495,7 @@ end;
 procedure Tfrmain.mnuAutoRotateClick(Sender: TObject);
 begin
   frmain.mnuAutoRotate.Checked:=not frmain.mnuAutoRotate.Checked;
+  loadpicture(carpeta+flist[ifile]);
 end;
 
 procedure Tfrmain.mnuCacheClick(Sender: TObject);
@@ -3855,8 +4013,7 @@ end;
 
 procedure Tfrmain.mnuExitClick(Sender: TObject);
 begin
-  saveconfig;
-  Application.Terminate;
+  frmain.tbExitClick(nil);
 end;
 
 procedure Tfrmain.mnuHighlightGreenClick(Sender: TObject);
@@ -3982,8 +4139,9 @@ begin
    begin
     if (isgo=true) and (strtoint(frgoto.Edit1.Text)<=flist.Count) and (strtoint(frgoto.Edit1.Text)>0) then
     begin
-    ifile:=strtoint(frgoto.Edit1.Text)-1;
-    loadpicture(carpeta+flist[ifile]);
+      deletetempfile;
+      ifile:=strtoint(frgoto.Edit1.Text)-1;
+      loadpicture(carpeta+flist[ifile]);
     end;
    end;
 end;
@@ -4129,7 +4287,7 @@ end;
 
 procedure Tfrmain.mnuAboutClick(Sender: TObject);
 begin
-  ShowMessage('Imagen viewer: LazView'+#13#10+'Version: 0.1'+#13#10+'Created by: nenirey@gmail.com'+#13#10+'CopyLeft: 2019'+lineending+lineending+'Thanks to the creators of the next libraries used by the project:'+lineending+lineending+'BGRABitmap by circular at operamail.com'+lineending+lineending+'Vampyre Imaging Library by Marek Mauder (marekmauder@gmail.com)'+lineending+lineending+'dEXIF by Gerry McGuire (mcguirez@hotmail.com)');
+  ShowMessage('Imagen viewer: LazView'+#13#10+'Version: 0.2'+#13#10+'Created by: nenirey@gmail.com'+#13#10+'CopyLeft: 2019'+lineending+lineending+'Thanks to the creators of the next libraries used by the project:'+lineending+lineending+'BGRABitmap by circular at operamail.com ('+BGRABitmapVersion.ToString+')'+lineending+lineending+'Vampyre Imaging Library by Marek Mauder (marekmauder@gmail.com)'+lineending+lineending+'dEXIF by Gerry McGuire (mcguirez@hotmail.com)');
 end;
 
 procedure Tfrmain.mnuToolBarClick(Sender: TObject);
@@ -4137,9 +4295,7 @@ begin
   if frmain.ToolBar1.Visible then
   begin
     frmain.ToolBar1.Visible:=false;
-    //frmain.psVertical.AnchorSideTop.Control:=frmain;
     frmain.ScrollBox1.AnchorSideTop.Control:=frmain;
-    //frmain.psVertical.AnchorSideTop.Side:=asrTop;
     frmain.ScrollBox1.AnchorSideTop.Side:=asrTop;
     frmain.Splitter1.AnchorSideTop.Control:=frmain;
     frmain.Splitter1.AnchorSideTop.Side:=asrTop;
@@ -4147,9 +4303,7 @@ begin
   else
   begin
     frmain.ToolBar1.Visible:=true;
-    //frmain.psVertical.AnchorSideTop.Control:=frmain.ToolBar1;
     frmain.ScrollBox1.AnchorSideTop.Control:=frmain.ToolBar1;
-    //frmain.psVertical.AnchorSideTop.Side:=asrBottom;
     frmain.ScrollBox1.AnchorSideTop.Side:=asrBottom;
     frmain.Splitter1.AnchorSideTop.Control:=frmain.ToolBar1;
     frmain.Splitter1.AnchorSideTop.Side:=asrBottom;
@@ -4163,17 +4317,13 @@ begin
   frmain.mnuStatusBar.Checked:=frmain.StatusBar1.Visible;
   if frmain.StatusBar1.Visible then
   begin
-    //frmain.psVertical.AnchorSideBottom.Control:=frmain.StatusBar1;
-   frmain.sboxthumb.AnchorSideBottom.Control:=frmain.StatusBar1;
-    //frmain.psVertical.AnchorSideBottom.Side:=asrTop;
+    frmain.sboxthumb.AnchorSideBottom.Control:=frmain.StatusBar1;
     frmain.sboxthumb.AnchorSideBottom.Side:=asrTop;
     frmain.Splitter2.Top:=frmain.Splitter2.Top-frmain.StatusBar1.Height;
   end
   else
   begin
-    //frmain.psVertical.AnchorSideBottom.Control:=frmain;
     frmain.sboxthumb.AnchorSideBottom.Control:=frmain;
-    //frmain.psVertical.AnchorSideBottom.Side:=asrBottom;
     frmain.sboxthumb.AnchorSideBottom.Side:=asrBottom;
     frmain.Splitter2.Top:=frmain.Splitter2.Top+frmain.StatusBar1.Height;
   end;
@@ -4674,6 +4824,7 @@ procedure Tfrmain.tbFirstImageClick(Sender: TObject);
 begin
   if Assigned(flist) then
   begin
+    deletetempfile;
     ifile:=0;
     loadpicture(carpeta+flist[0]);
   end;
@@ -4688,6 +4839,7 @@ procedure Tfrmain.tbLastImageClick(Sender: TObject);
 begin
   if Assigned(flist) then
   begin
+    deletetempfile;
     ifile:=flist.Count-1;
     loadpicture(carpeta+flist[flist.Count-1]);
   end;
@@ -4708,6 +4860,7 @@ procedure Tfrmain.Timer1Timer(Sender: TObject);
 begin
   if nfile>0 then
   begin
+    deletetempfile;
     if aleatorio then
     begin
       ifile:=Round(Random(nfile-1));
@@ -4734,10 +4887,12 @@ procedure Tfrmain.Timer2Timer(Sender: TObject);
 begin
   if hidetoolbardelay>0 then
     Dec(hidetoolbardelay);
-  if full and (hidetoolbardelay=0) and (Screen.Cursor=crDefault) and (frmain.Image1.Cursor=crDefault) and (frmain.PopupMenu1.Tag<>1) then
+  if (full or compactmode) and (hidetoolbardelay=0) and (Screen.Cursor=crDefault) and (frmain.Image1.Cursor=crDefault) and (frmain.PopupMenu1.Tag<>1) then
   begin
     frmain.ToolBar1.Visible:=false;
-    Screen.Cursor:=crNone;
+    frmain.TrackBar1.Visible:=false;
+    if ifvideo=false then
+      Screen.Cursor:=crNone;
   end;
 end;
 
@@ -4902,6 +5057,12 @@ begin
     frmain.tbPauseAnim.ImageIndex:=21;
     frmain.Timer5Timer(nil);
   end;
+  if ifvideo then
+  begin
+    if frmain.FPlayer.Playing then
+      frmain.FPlayer.Pause;
+    frmain.FPlayer.VideoFractionalPosition:=frmain.FPlayer.VideoFractionalPosition-0.00001;
+  end;;
 end;
 
 procedure Tfrmain.tbPrevImageClick(Sender: TObject);
@@ -4927,6 +5088,11 @@ begin
     frmain.Timer5.Enabled:=false;
     frmain.tbPauseAnim.ImageIndex:=21;
     frmain.Timer5Timer(self);
+  end;
+  //ShowMessage(floattostr(frmain.FPlayer.VideoFractionalPosition));
+  if ifvideo then
+  begin
+    frmain.FPlayer.NextFrame;
   end;
 end;
 
@@ -4959,6 +5125,21 @@ begin
       frmain.Timer5.Enabled:=false;
     end;
   end;
+  if ifvideo then
+  begin
+    if frmain.FPlayer.Playing=false then
+    begin
+      frmain.tbPauseAnim.ImageIndex:=21;
+      frmain.FPlayer.Play;
+      frmain.VideoTimer.Enabled:=true;
+    end
+    else
+    begin
+      frmain.tbPauseAnim.ImageIndex:=22;
+      frmain.FPlayer.Pause;
+      frmain.VideoTimer.Enabled:=false;
+    end;
+  end;
 end;
 
 procedure Tfrmain.tbStrechClick(Sender: TObject);
@@ -4985,6 +5166,10 @@ begin
     for i:=0 to Length(APNGDelays)-1 do
       APNGDelays[i]:= APNGDelays[i]+10;
   end;
+  if ifvideo then
+  begin
+    frmain.FPlayer.VideoFractionalPosition:=frmain.FPlayer.VideoFractionalPosition-0.01;
+  end;
 end;
 
 procedure Tfrmain.tbFastAnimClick(Sender: TObject);
@@ -5010,6 +5195,10 @@ begin
       if APNGDelays[i]>1 then
         APNGDelays[i]:=APNGDelays[i]-1;
     end;
+  end;
+  if ifvideo then
+  begin
+    frmain.FPlayer.VideoFractionalPosition:=frmain.FPlayer.VideoFractionalPosition+0.01;
   end;
 end;
 
@@ -5115,9 +5304,13 @@ end;
 
 procedure Tfrmain.tbExitClick(Sender: TObject);
 begin
+ deletetempfile;
+ saveconfig;
+ if frmain.FPlayer.Playing then
+   frmain.FPlayer.Stop;
+ FreeANdNil(FPlayer);
   if Assigned(ththumbs) then
     ththumbs.stop;
-  saveconfig;
   Application.Terminate;
 end;
 
@@ -5134,6 +5327,59 @@ begin
     frmain.mnuLanguage.Items[i].Checked:=false;
   (Sender as TMenuItem).Checked:=true;
   SetDefaultLang((Sender as TMenuItem).Caption);
+end;
+
+procedure Tfrmain.TrackBar1Change(Sender: TObject);
+begin
+  if ifvideo then
+  begin
+    frmain.FPlayer.VideoPosition:=TrackBar1.Position;
+  end;
+end;
+
+procedure Tfrmain.TrackBar1Click(Sender: TObject);
+begin
+
+end;
+
+procedure Tfrmain.TrackBar1MouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+
+end;
+
+procedure Tfrmain.TrackBar1MouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+
+end;
+
+procedure Tfrmain.VideoTimerTimer(Sender: TObject);
+var
+   shst:TShiftState=[];
+begin
+  if ifvideo then
+  begin
+    frmain.StatusBar1.Panels.Items[2].Text:=inttostr(frmain.FPlayer.VideoPosition)+'/'+inttostr(frmain.FPlayer.VideoLength);
+    if frmain.TrackBar1.Max<>frmain.Fplayer.VideoLength then
+      frmain.TrackBar1.Max:=frmain.Fplayer.VideoLength;
+    frmain.TrackBar1.OnChange:=nil;
+    frmain.TrackBar1.Position:=Fplayer.VideoPosition;
+    frmain.TrackBar1.OnChange:=@frmain.TrackBar1Change;
+    if Brepeat>Arepeat then
+    begin
+      if FPlayer.VideoPosition>=Brepeat then
+        Fplayer.VideoPosition:=Arepeat;
+    end;
+    if (Fplayer.VideoPosition>=Fplayer.VideoLength) and (Fplayer.VideoLength>0) then
+      nextfile;
+    if (lastmposx<>mouse.CursorPos.x) or (lastmposy<>mouse.CursorPos.y) then
+    begin
+      frmain.FormMouseMove(nil, shst, mouse.CursorPos.x,mouse.CursorPos.y);
+      lastmposx:=mouse.CursorPos.x;
+      lastmposy:=mouse.CursorPos.y;
+    end;
+  end;
 end;
 
 Constructor thumbsthread.Create(CreateSuspended:Boolean);
@@ -5812,26 +6058,29 @@ var
 const
    r=2;
 begin
-  for i:=0 to Length(cachebitmap)-1 do
+  if flist.Count>100 then
   begin
-    //if (i>=ifile+r) or (i<=ifile-r) then
-      FreeAndNil(cachebitmap[i]);
+    for i:=0 to Length(cachebitmap)-1 do
+    begin
+      if (i>=ifile+r) or (i<=ifile-r) then
+        FreeAndNil(cachebitmap[i]);
+    end;
   end;
-  for i:=1 to r do
+  for i:=0 to r do
   begin
     if (flist.Count>i) and (ifile<flist.Count-i) then
     begin
-      //if (Assigned(cachebitmap[ifile+1])=false) then
+      if (Assigned(cachebitmap[ifile+i])=false) then
         cachepicture(ifile+i,false,false,false);
     end;
     if ifile>i then
     begin
-      //if (Assigned(cachebitmap[ifile-1])=false) then
+      if (Assigned(cachebitmap[ifile-i])=false) then
         cachepicture(ifile-i,false,false,false)
     end
     else
     begin
-      if (flist.Count>i) then
+      if (flist.Count>i) and (Assigned(cachebitmap[flist.Count-i])=false) then
         cachepicture(flist.Count-i,false,false,false);
     end;
   end;
@@ -5839,6 +6088,7 @@ end;
 
 procedure tthumbimage.thumbclick(Sender:TObject);
 begin
+  deletetempfile;
   ifile:=self.Tag;
   loadpicture(carpeta+flist[self.Tag],true,false);
 end;

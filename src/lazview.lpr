@@ -7,7 +7,7 @@ uses
   cthreads, cmem,
   {$ENDIF}
   Forms, Interfaces, fmain, fresize, fquality, feffects,
-  fgoto, fthumbsize, print, fexif;
+  fgoto, fthumbsize, print, fexif, fpass;
 
 {$R *.res}
 
@@ -23,6 +23,7 @@ begin
   Application.CreateForm(Tfrthumbsize, frthumbsize);
   Application.CreateForm(Tfrprint, frprint);
   Application.CreateForm(Tfrexif, frexif);
+  Application.CreateForm(Tfrpass, frpass);
   Application.Run;
 end.
 

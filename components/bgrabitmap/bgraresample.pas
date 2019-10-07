@@ -52,8 +52,8 @@ type
   TSplineKernel = class(TWideKernelFilter)
   public
     Coeff: single;
-    constructor Create;
-    constructor Create(ACoeff: single);
+    constructor Create; overload;
+    constructor Create(ACoeff: single); overload;
     function Interpolation(t: single): single; override;
     function ShouldCheckRange: boolean; override;
     function KernelWidth: single; override;
@@ -619,7 +619,7 @@ begin
       begin
         psrci := psrc[iy];
         for ix := factorX-1 downto 0 do
-          asum += (psrci+ix)^.alpha;
+          inc(asum, (psrci+ix)^.alpha);
       end;
       if asum = maxsum then
       begin
@@ -632,9 +632,9 @@ begin
           begin
             with psrc[iy]^ do
             begin
-              r += red;
-              g += green;
-              b += blue;
+              inc(r, red);
+              inc(g, green);
+              inc(b, blue);
             end;
             inc(psrc[iy]);
           end;
@@ -661,9 +661,9 @@ begin
             begin
               with psrc[iy]^ do
               begin
-                r += red*alpha;
-                g += green*alpha;
-                b += blue*alpha;
+                inc(r, red*alpha);
+                inc(g, green*alpha);
+                inc(b, blue*alpha);
               end;
               inc(psrc[iy]);
             end;
@@ -1202,6 +1202,7 @@ begin
     ssOutside: result := TSplineKernel.Create(0.5);
     ssRoundOutside: result := TSplineKernel.Create(0.75);
     ssVertexToSide: result := TSplineKernel.Create(1);
+    ssEasyBezier: raise Exception.Create('EasyBezier does not have an interpolator');
   else
     raise Exception.Create('Unknown spline style');
   end;
