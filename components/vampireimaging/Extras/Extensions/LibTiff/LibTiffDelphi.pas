@@ -8,15 +8,14 @@
 
 unit LibTiffDelphi;
 
-{$ifdef FPC}
+{$IFDEF FPC}
   {$MODE OBJFPC}
-  {$define VER403} // libtiff 4.0.3
-{$endif}
-
-{$ifndef FPC}
-{$Align 8}
-{$MINENUMSIZE 1}
-{$endif}
+  {$DEFINE VER403} // libtiff 4.0.3
+{$ELSE}
+  {$DEFINE DCC}
+  {$ALIGN 8}
+  {$MINENUMSIZE 1}
+{$ENDIF}
 
 interface
 
@@ -33,9 +32,9 @@ type
   // problems as pointers to client data are passed in thandle_t vars.
   thandle_t = THandle;
   tdata_t = Pointer;
-  ttag_t = LongWord;
+  ttag_t = UInt32;
   tdir_t = Word;
-  tstrip_t = LongWord;
+  tstrip_t = UInt32;
 
 const
   TIFF_NOTYPE                           = 0;
@@ -636,7 +635,12 @@ procedure SetUserMessageHandlers(ErrorHandler, WarningHandler: TUserTiffErrorHan
 implementation
 
 uses
-  Math, LibJpegDelphi, ZLibDelphi;
+  Math,
+{$IF Defined(DCC) and (CompilerVersion < 20)}
+  Windows,
+{$IFEND}
+  LibJpegDelphi,
+  ZLibDelphi;
 
 var
   { For FPC 3.0+ these must be marked as exported  }
@@ -889,8 +893,10 @@ begin
 end;
 
 function strlen(s: Pointer): Cardinal; cdecl;
+{$ifndef fpc}
 var
   m: PByte;
+{$endif}
 begin
   {$ifdef fpc}
   Result:=system.strlen(s);
@@ -973,7 +979,7 @@ procedure _TIFFSwab32BitData(tif: Pointer; buf: Pointer; cc: Integer); cdecl; ex
 procedure _TIFFSwab64BitData(tif: Pointer; buf: Pointer; cc: Integer); cdecl; external;
 procedure _TIFFNoPostDecode(tif: Pointer; buf: Pointer; cc: Integer); cdecl; external;
 function  TIFFReadTile(tif: Pointer; buf: Pointer; x: Cardinal; y: Cardinal; z: Cardinal; s: Word): tmsize_t; cdecl; external;
-function TIFFFillTile(tif: Pointer; tile: longword):integer; cdecl; external; //DW 3.8.2
+function TIFFFillTile(tif: Pointer; tile: UInt32):integer; cdecl; external; //DW 3.8.2
 
 {tif_dirinfo}
 
@@ -1262,7 +1268,7 @@ begin
 end;
 
 function  TIFFInitJPEG(tif: PTIFF; scheme: Integer): Integer; cdecl; external;
-function  TIFFFillStrip(tif : PTIFF; Len : longword): integer; cdecl; external; //DW 3.8.2
+function  TIFFFillStrip(tif : PTIFF; Len : UInt32): integer; cdecl; external; //DW 3.8.2
 
 {tif_luv}
 
@@ -1352,22 +1358,22 @@ const
 
 function TIFFFileSizeProc(Fd: THandle): {$ifdef VER403}int64{$else}Cardinal{$endif}; cdecl;
 begin
-  Result:=FileSeek(fd, 0, SEEK_END);
+  Result := FileSeek(fd, 0, SEEK_END);
   {$ifndef VER403}
-  if Result<>longword(-1) then
-    Result:=0;
+  if Result <> UInt32(-1) then
+    Result := 0;
   {$endif}
   //Result:=GetFileSize(Fd,nil);
 end;
 
 function TIFFFileSeekProc(Fd: THandle; Off: {$ifdef VER403}int64{$else}Cardinal{$endif}; Whence: Integer): {$ifdef VER403}int64{$else}Cardinal{$endif}; cdecl;
 begin
-  if Off=longword(-1) then
+  if Off = UInt32(-1) then
   begin
-    Result:=longword(-1);
+    Result := UInt32(-1);
     exit;
   end;
-  Result:=FileSeek(Fd,Off,Whence);
+  Result := FileSeek(Fd,Off,Whence);
 end;
 
 function TIFFFileReadProc(Fd: THandle; Buffer: Pointer; Size: Integer): Integer; cdecl;

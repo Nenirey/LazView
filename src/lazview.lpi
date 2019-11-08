@@ -22,7 +22,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="2"/>
-      <BuildNr Value="4180"/>
+      <BuildNr Value="4278"/>
       <StringTable Comments="Pequeño visor de imagenes" CompanyName="Independiente" FileDescription="Visor de imágenes LazView" InternalName="lazview" LegalCopyright="R.Mir" LegalTrademarks="Reinier Romero Mir (c)" OriginalFilename="lazview" ProductName="LazView" ProductVersion="0.1"/>
     </VersionInfo>
     <BuildModes Count="2">
@@ -35,12 +35,11 @@
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir);../components/vampireimaging/Source"/>
-            <OtherUnitFiles Value="../components/bgrabitmap;../components/vampireimaging/Extras/Extensions;../components/vampireimaging/Extras/Extensions/LibTiff"/>
+            <OtherUnitFiles Value="../components/bgrabitmap;../components/vampireimaging/Extras/Extensions;../components/vampireimaging/Extras/Extensions/LibTiff;../components/Abbrevia/source"/>
             <UnitOutputDirectory Value="../units/$(TargetCPU)-$(TargetOS)-$(LCLWidgetType)"/>
           </SearchPaths>
           <CodeGeneration>
             <SmartLinkUnit Value="True"/>
-            <TargetCPU Value="x86_64"/>
             <Optimizations>
               <OptimizationLevel Value="3"/>
             </Optimizations>
@@ -69,13 +68,13 @@
     </PublishOptions>
     <RunParams>
       <local>
-        <CommandLineParams Value="d:/Fondos/Fondos+pass.zip"/>
+        <CommandLineParams Value="d:/Films/HD/The.Conjuring.2013.bluray-latino-e-ingles.mp4"/>
       </local>
       <FormatVersion Value="2"/>
       <Modes Count="1">
         <Mode0 Name="default">
           <local>
-            <CommandLineParams Value="d:/Fondos/Fondos+pass.zip"/>
+            <CommandLineParams Value="d:/Films/HD/The.Conjuring.2013.bluray-latino-e-ingles.mp4"/>
           </local>
         </Mode0>
       </Modes>

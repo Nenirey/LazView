@@ -176,7 +176,7 @@ type
     procedure HorzLineInternal(X1, X2, Y: LongInt; Color: Pointer; Bpp: LongInt); virtual;
     procedure CopyPixelInternal(X, Y: LongInt; Pixel: Pointer; Bpp: LongInt); {$IFDEF USE_INLINE}inline;{$ENDIF}
     procedure DrawInternal(const SrcRect: TRect; DestCanvas: TImagingCanvas;
-      DestX, DestY: Integer; SrcFactor, DestFactor: TBlendingFactor; PixelWriteProc: TPixelWriteProc);
+      DestX, DestY: LongInt; SrcFactor, DestFactor: TBlendingFactor; PixelWriteProc: TPixelWriteProc);
     procedure StretchDrawInternal(const SrcRect: TRect; DestCanvas: TImagingCanvas;
       const DestRect: TRect; SrcFactor, DestFactor: TBlendingFactor;
       Filter: TResizeFilter; PixelWriteProc: TPixelWriteProc);
@@ -227,13 +227,13 @@ type
       Resulting destination pixel color is:
         SrcColor * SrcFactor +  DstColor * DstFactor}
     procedure DrawBlend(const SrcRect: TRect; DestCanvas: TImagingCanvas;
-      DestX, DestY: Integer; SrcFactor, DestFactor: TBlendingFactor);
+      DestX, DestY: LongInt; SrcFactor, DestFactor: TBlendingFactor);
     { Draws contents of this canvas onto another one with typical alpha
       blending (Src 'over' Dest, factors are bfSrcAlpha and bfOneMinusSrcAlpha.)}
-    procedure DrawAlpha(const SrcRect: TRect; DestCanvas: TImagingCanvas; DestX, DestY: Integer); virtual;
+    procedure DrawAlpha(const SrcRect: TRect; DestCanvas: TImagingCanvas; DestX, DestY: LongInt); virtual;
     { Draws contents of this canvas onto another one using additive blending
       (source and dest factors are bfOne).}
-    procedure DrawAdd(const SrcRect: TRect; DestCanvas: TImagingCanvas; DestX, DestY: Integer);
+    procedure DrawAdd(const SrcRect: TRect; DestCanvas: TImagingCanvas; DestX, DestY: LongInt);
     { Draws stretched and filtered contents of this canvas onto another canvas
       with pixel blending. Blending factors are chosen using TBlendingFactor parameters.
       Resulting destination pixel color is:
@@ -376,7 +376,7 @@ type
 
     procedure UpdateCanvasState; override;
 
-    procedure DrawAlpha(const SrcRect: TRect; DestCanvas: TImagingCanvas; DestX, DestY: Integer); override;
+    procedure DrawAlpha(const SrcRect: TRect; DestCanvas: TImagingCanvas; DestX, DestY: LongInt); override;
     procedure StretchDrawAlpha(const SrcRect: TRect; DestCanvas: TImagingCanvas;
       const DestRect: TRect; Filter: TResizeFilter = rfBilinear); override;
     procedure InvertColors; override;
@@ -392,7 +392,8 @@ const
     Kernel: ((1, 1, 1),
              (1, 1, 1),
              (1, 1, 1));
-    Divisor: 9);
+    Divisor: 9;
+    Bias:    0);
 
   { Kernel for 5x5 average smoothing filter.}
   FilterAverage5x5: TConvolutionFilter5x5 = (
@@ -401,14 +402,16 @@ const
              (1, 1, 1, 1, 1),
              (1, 1, 1, 1, 1),
              (1, 1, 1, 1, 1));
-    Divisor: 25);
+    Divisor: 25;
+    Bias:     0);
 
   { Kernel for 3x3 Gaussian smoothing filter.}
   FilterGaussian3x3: TConvolutionFilter3x3 = (
     Kernel: ((1, 2, 1),
              (2, 4, 2),
              (1, 2, 1));
-    Divisor: 16);
+    Divisor: 16;
+    Bias:     0);
 
   { Kernel for 5x5 Gaussian smoothing filter.}
   FilterGaussian5x5: TConvolutionFilter5x5 = (
@@ -417,49 +420,56 @@ const
              (6, 24, 36, 24, 6),
              (4, 16, 24, 16, 4),
              (1,  4,  6,  4, 1));
-    Divisor: 256);
+    Divisor: 256;
+    Bias:     0);
 
   { Kernel for 3x3 Sobel horizontal edge detection filter (1st derivative approximation).}
   FilterSobelHorz3x3: TConvolutionFilter3x3 = (
     Kernel: (( 1,  2,  1),
              ( 0,  0,  0),
              (-1, -2, -1));
-    Divisor: 1);
+    Divisor: 1;
+    Bias:    0);
 
   { Kernel for 3x3 Sobel vertical edge detection filter (1st derivative approximation).}
   FilterSobelVert3x3: TConvolutionFilter3x3 = (
     Kernel: ((-1, 0, 1),
              (-2, 0, 2),
              (-1, 0, 1));
-    Divisor: 1);
+    Divisor: 1;
+    Bias:    0);
 
   { Kernel for 3x3 Prewitt horizontal edge detection filter.}
   FilterPrewittHorz3x3: TConvolutionFilter3x3 = (
     Kernel: (( 1,  1,  1),
              ( 0,  0,  0),
              (-1, -1, -1));
-    Divisor: 1);
+    Divisor: 1;
+    Bias:    0);
 
   { Kernel for 3x3 Prewitt vertical edge detection filter.}
   FilterPrewittVert3x3: TConvolutionFilter3x3 = (
     Kernel: ((-1, 0, 1),
              (-1, 0, 1),
              (-1, 0, 1));
-    Divisor: 1);
+    Divisor: 1;
+    Bias:    0);
 
   { Kernel for 3x3 Kirsh horizontal edge detection filter.}
   FilterKirshHorz3x3: TConvolutionFilter3x3 = (
     Kernel: (( 5,  5,  5),
              (-3,  0, -3),
              (-3, -3, -3));
-    Divisor: 1);
+    Divisor: 1;
+    Bias:    0);
 
   { Kernel for 3x3 Kirsh vertical edge detection filter.}
   FilterKirshVert3x3: TConvolutionFilter3x3 = (
     Kernel: ((5, -3, -3),
              (5,  0, -3),
              (5, -3, -3));
-    Divisor: 1);
+    Divisor: 1;
+    Bias:    0);
 
   { Kernel for 3x3 Laplace omni-directional edge detection filter
     (2nd derivative approximation).}
@@ -467,7 +477,8 @@ const
     Kernel: ((-1, -1, -1),
              (-1,  8, -1),
              (-1, -1, -1));
-    Divisor: 1);
+    Divisor: 1;
+    Bias:    0);
 
   { Kernel for 5x5 Laplace omni-directional edge detection filter
     (2nd derivative approximation).}
@@ -477,14 +488,16 @@ const
              (-1, -1, 24, -1, -1),
              (-1, -1, -1, -1, -1),
              (-1, -1, -1, -1, -1));
-    Divisor: 1);
+    Divisor: 1;
+    Bias:    0);
 
   { Kernel for 3x3 spharpening filter (Laplacian + original color).}
   FilterSharpen3x3: TConvolutionFilter3x3 = (
     Kernel: ((-1, -1, -1),
              (-1,  9, -1),
              (-1, -1, -1));
-    Divisor: 1);
+    Divisor: 1;
+    Bias:    0);
 
   { Kernel for 5x5 spharpening filter (Laplacian + original color).}
   FilterSharpen5x5: TConvolutionFilter5x5 = (
@@ -493,7 +506,8 @@ const
              (-1, -1, 25, -1, -1),
              (-1, -1, -1, -1, -1),
              (-1, -1, -1, -1, -1));
-    Divisor: 1);
+    Divisor: 1;
+    Bias:    0);
 
   { Kernel for 5x5 glow filter.}
   FilterGlow5x5: TConvolutionFilter5x5 = (
@@ -502,14 +516,16 @@ const
              ( 2, 0, -20, 0, 2),
              ( 2, 0,   0, 0, 2),
              ( 1, 2,   2, 2, 1));
-    Divisor: 8);
+    Divisor: 8;
+    Bias:    0);
 
   { Kernel for 3x3 edge enhancement filter.}
   FilterEdgeEnhance3x3: TConvolutionFilter3x3 = (
     Kernel: ((-1, -2, -1),
              (-2, 16, -2),
              (-1, -2, -1));
-    Divisor: 4);
+    Divisor: 4;
+    Bias:    0);
 
   { Kernel for 3x3 contour enhancement filter.}
   FilterTraceControur3x3: TConvolutionFilter3x3 = (
@@ -613,6 +629,8 @@ begin
     bfOneMinusDstAlpha: FSrc := ColorFP(1 - DestPix.A, 1 - DestPix.A, 1 - DestPix.A, 1 - DestPix.A);
     bfDstColor:         FSrc := ColorFP(DestPix.A, DestPix.R, DestPix.G, DestPix.B);
     bfOneMinusDstColor: FSrc := ColorFP(1 - DestPix.A, 1 - DestPix.R, 1 - DestPix.G, 1 - DestPix.B);
+  else
+    Assert(False);
   end;
   case DestFactor of
     bfZero:             FDst := ColorFP(0, 0, 0, 0);
@@ -623,6 +641,8 @@ begin
     bfOneMinusDstAlpha: FDst := ColorFP(1 - DestPix.A, 1 - DestPix.A, 1 - DestPix.A, 1 - DestPix.A);
     bfSrcColor:         FDst := ColorFP(SrcPix.A, SrcPix.R, SrcPix.G, SrcPix.B);
     bfOneMinusSrcColor: FDst := ColorFP(1 - SrcPix.A, 1 - SrcPix.R, 1 - SrcPix.G, 1 - SrcPix.B);
+  else
+    Assert(False);
   end;
   // Compute blending formula
   DestPix.R := SrcPix.R * FSrc.R + DestPix.R * FDst.R;
@@ -906,8 +926,7 @@ end;
 procedure TImagingCanvas.SetClipRect(const Value: TRect);
 begin
   FClipRect := Value;
-  SwapMin(FClipRect.Left, FClipRect.Right);
-  SwapMin(FClipRect.Top, FClipRect.Bottom);
+  NormalizeRect(FClipRect);
   IntersectRect(FClipRect, FClipRect, Rect(0, 0, FPData.Width, FPData.Height));
 end;
 
@@ -987,7 +1006,7 @@ begin
     case Bpp of
       1: FillMemoryByte(PixelPtr, WidthBytes, PByte(Color)^);
       2: FillMemoryWord(PixelPtr, WidthBytes, PWord(Color)^);
-      4: FillMemoryLongWord(PixelPtr, WidthBytes, PLongWord(Color)^);
+      4: FillMemoryUInt32(PixelPtr, WidthBytes, PUInt32(Color)^);
     else
       for I := X1 to X2 do
       begin
@@ -1354,10 +1373,10 @@ begin
 end;
 
 procedure TImagingCanvas.DrawInternal(const SrcRect: TRect;
-  DestCanvas: TImagingCanvas; DestX, DestY: Integer; SrcFactor,
+  DestCanvas: TImagingCanvas; DestX, DestY: LongInt; SrcFactor,
   DestFactor: TBlendingFactor; PixelWriteProc: TPixelWriteProc);
 var
-  X, Y, SrcX, SrcY, Width, Height, SrcBpp, DestBpp: Integer;
+  X, Y, SrcX, SrcY, Width, Height, SrcBpp, DestBpp: LongInt;
   PSrc: TColorFPRec;
   SrcPointer, DestPointer: PByte;
 begin
@@ -1391,19 +1410,19 @@ begin
 end;
 
 procedure TImagingCanvas.DrawBlend(const SrcRect: TRect; DestCanvas: TImagingCanvas;
-  DestX, DestY: Integer; SrcFactor, DestFactor: TBlendingFactor);
+  DestX, DestY: LongInt; SrcFactor, DestFactor: TBlendingFactor);
 begin
   DrawInternal(SrcRect, DestCanvas, DestX, DestY, SrcFactor, DestFactor, PixelBlendProc);
 end;
 
 procedure TImagingCanvas.DrawAlpha(const SrcRect: TRect; DestCanvas: TImagingCanvas;
-  DestX, DestY: Integer);
+  DestX, DestY: LongInt);
 begin
   DrawInternal(SrcRect, DestCanvas, DestX, DestY, bfIgnore, bfIgnore, PixelAlphaProc);
 end;
 
 procedure TImagingCanvas.DrawAdd(const SrcRect: TRect;
-  DestCanvas: TImagingCanvas; DestX, DestY: Integer);
+  DestCanvas: TImagingCanvas; DestX, DestY: LongInt);
 begin
   DrawInternal(SrcRect, DestCanvas, DestX, DestY, bfIgnore, bfIgnore, PixelAddProc);
 end;
@@ -1416,11 +1435,11 @@ const
   FilterMapping: array[TResizeFilter] of TSamplingFilter =
     (sfNearest, sfLinear, DefaultCubicFilter, sfLanczos);
 var
-  X, Y, I, J, SrcX, SrcY, SrcWidth, SrcHeight: Integer;
-  DestX, DestY, DestWidth, DestHeight, SrcBpp, DestBpp: Integer;
+  X, Y, I, J, SrcX, SrcY, SrcWidth, SrcHeight: LongInt;
+  DestX, DestY, DestWidth, DestHeight, SrcBpp, DestBpp: LongInt;
   SrcPix: TColorFPRec;
   MapX, MapY: TMappingTable;
-  XMinimum, XMaximum: Integer;
+  XMinimum, XMaximum: LongInt;
   LineBuffer: array of TColorFPRec;
   ClusterX, ClusterY: TCluster;
   Weight, AccumA, AccumR, AccumG, AccumB: Single;
@@ -1575,7 +1594,7 @@ begin
             // Get pixels from neighbourhood of current pixel and add their
             // colors to accumulators weighted by filter kernel values
             Pixel := FFormatInfo.GetPixelFP(SrcPointer, @FFormatInfo, TempImage.Palette);
-            KernelValue := PLongIntArray(Kernel)[J * KernelSize + I];
+            KernelValue := PUInt32Array(Kernel)[J * KernelSize + I];
 
             R := R + Pixel.R * KernelValue;
             G := G + Pixel.G * KernelValue;
@@ -1852,9 +1871,9 @@ begin
 end;
 
 procedure TFastARGB32Canvas.DrawAlpha(const SrcRect: TRect;
-  DestCanvas: TImagingCanvas; DestX, DestY: Integer);
+  DestCanvas: TImagingCanvas; DestX, DestY: LongInt);
 var
-  X, Y, SrcX, SrcY, Width, Height: Integer;
+  X, Y, SrcX, SrcY, Width, Height: LongInt;
   SrcPix, DestPix: PColor32Rec;
 begin
   if DestCanvas.ClassType <> Self.ClassType then
@@ -1902,8 +1921,8 @@ procedure TFastARGB32Canvas.StretchDrawAlpha(const SrcRect: TRect;
 var
   X, Y, ScaleX, ScaleY, Yp, Xp, Weight1, Weight2, Weight3, Weight4, InvFracY, T1, T2: Integer;
   FracX, FracY: Cardinal;
-  SrcX, SrcY, SrcWidth, SrcHeight: Integer;
-  DestX, DestY, DestWidth, DestHeight: Integer;
+  SrcX, SrcY, SrcWidth, SrcHeight: LongInt;
+  DestX, DestY, DestWidth, DestHeight: LongInt;
   SrcLine, SrcLine2: PColor32RecArray;
   DestPix: PColor32Rec;
   Accum: TColor32Rec;
@@ -2012,7 +2031,7 @@ end;
 procedure TFastARGB32Canvas.UpdateCanvasState;
 var
   I: LongInt;
-  ScanPos: PLongWord;
+  ScanPos: PUInt32;
 begin
   inherited UpdateCanvasState;
 

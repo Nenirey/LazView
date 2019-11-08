@@ -1,7 +1,7 @@
 object frmain: Tfrmain
-  Left = 302
+  Left = 268
   Height = 544
-  Top = 186
+  Top = 104
   Width = 902
   ActiveControl = ShellTreeView1
   AllowDropFiles = True
@@ -114,7 +114,7 @@ object frmain: Tfrmain
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = TrackBar1
     Left = 5
-    Height = 383
+    Height = 360
     Top = 24
     Width = 897
     HorzScrollBar.Increment = 37
@@ -129,7 +129,7 @@ object frmain: Tfrmain
     BorderSpacing.Left = 3
     BorderSpacing.Bottom = 3
     BorderStyle = bsNone
-    ClientHeight = 383
+    ClientHeight = 360
     ClientWidth = 897
     Enabled = False
     Color = clBlack
@@ -146,7 +146,7 @@ object frmain: Tfrmain
     OnPaint = ScrollBox1Paint
     object Image1: TImage
       Left = 0
-      Height = 383
+      Height = 360
       Top = 0
       Width = 897
       AntialiasingMode = amOn
@@ -617,19 +617,21 @@ object frmain: Tfrmain
   end
   object TrackBar1: TTrackBar
     AnchorSideLeft.Control = Splitter1
+    AnchorSideTop.Side = asrBottom
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = Splitter2
     AnchorSideBottom.Side = asrBottom
     Left = 2
-    Height = 25
-    Top = 410
+    Height = 43
+    Top = 387
     Width = 900
     OnChange = TrackBar1Change
     Position = 0
     ShowSelRange = False
     TickStyle = tsNone
     Anchors = [akLeft, akRight, akBottom]
+    BorderSpacing.Bottom = 5
     OnClick = TrackBar1Click
     OnMouseDown = TrackBar1MouseDown
     OnMouseUp = TrackBar1MouseUp
@@ -2193,6 +2195,10 @@ object frmain: Tfrmain
       object mnuAlwaysOnTop: TMenuItem
         Caption = 'Always on top'
         OnClick = mnuAlwaysOnTopClick
+      end
+      object mnuVideoSupport: TMenuItem
+        Caption = 'Video support'
+        OnClick = mnuVideoSupportClick
       end
       object mnuLanguage: TMenuItem
         Caption = 'Language'

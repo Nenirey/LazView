@@ -58,7 +58,7 @@ type
 { Initializes image (all is set to zeroes). Call this for each image
   before using it (before calling every other function) to be sure there
   are no random-filled bytes (which would cause errors later).}
-procedure InitImage(var Image: TImageData);
+procedure InitImage(out Image: TImageData);
 { Creates empty image of given dimensions and format. Image is filled with
   transparent black color (A=0, R=0, G=0, B=0).}
 function NewImage(Width, Height: LongInt; Format: TImageFormat;
@@ -638,7 +638,7 @@ var
 function GetFormatName(Format: TImageFormat): string;
 { Returns string with information about given Image.}
 function ImageToStr(const Image: TImageData): string;
-{ Returns Imaging version string in format 'Major.Minor.Patch'.}
+{ Returns Imaging version string in format 'Major.Minor'.}
 function GetVersionStr: string;
 { If Condition is True then TruePart is retured, otherwise FalsePart is returned.}
 function IffFormat(Condition: Boolean; const TruePart, FalsePart: TImageFormat): TImageFormat;
@@ -697,6 +697,7 @@ const
 implementation
 
 uses
+{$IFNDEF DONT_LINK_FILE_FORMATS}
 {$IFNDEF DONT_LINK_BITMAP}
   ImagingBitmap,
 {$ENDIF}
@@ -723,6 +724,7 @@ uses
 {$ENDIF}
 {$IFNDEF DONT_LINK_EXTRAS}
   ImagingExtras,
+{$ENDIF}
 {$ENDIF}
   //ImagingDebug,
   ImagingFormats, ImagingUtility, ImagingIO, Variants;
@@ -867,7 +869,7 @@ end;
 
 { General Functions }
 
-procedure InitImage(var Image: TImageData);
+procedure InitImage(out Image: TImageData);
 begin
   FillChar(Image, SizeOf(Image), 0);
 end;
@@ -1859,6 +1861,7 @@ var
   NotOnEdge: Boolean;
   Info: PImageFormatInfo;
   OldFmt: TImageFormat;
+
 begin
   Assert((ChunkWidth > 0) and (ChunkHeight > 0));
   Result := False;
@@ -1875,8 +1878,8 @@ begin
     ChunkWidth := ClampInt(ChunkWidth, 0, Image.Width);
     ChunkHeight := ClampInt(ChunkHeight, 0, Image.Height);
     // Number of chunks along X and Y axes is computed
-    XChunks := Trunc(Ceil(Image.Width / ChunkWidth));
-    YChunks := Trunc(Ceil(Image.Height / ChunkHeight));
+    XChunks := Ceil(Image.Width / ChunkWidth);
+    YChunks := Ceil(Image.Height / ChunkHeight);
     SetLength(Chunks, XChunks * YChunks);
 
     // For every chunk we create new image and copy a portion of
@@ -2350,7 +2353,7 @@ begin
         case Bpp of
           1: FillMemoryByte(LinePointer, RectWidthBytes, PByte(FillColor)^);
           2: FillMemoryWord(LinePointer, RectWidthBytes, PWord(FillColor)^);
-          4: FillMemoryLongWord(LinePointer, RectWidthBytes, PLongWord(FillColor)^);
+          4: FillMemoryUInt32(LinePointer, RectWidthBytes, PUInt32(FillColor)^);
         else
           PixPointer := LinePointer;
           for J := 0 to Width - 1 do
@@ -2781,7 +2784,7 @@ end;
 { Raw Image IO Functions }
 
 procedure ReadRawImage(Handle: TImagingHandle;  Width, Height: Integer;
-  Format: TImageFormat; out Image: TImageData; Offset, RowLength: Integer);
+  Format: TImageFormat; var Image: TImageData; Offset, RowLength: Integer);
 var
   WidthBytes, I: Integer;
   Info: PImageFormatInfo;
@@ -3114,7 +3117,7 @@ end;
 
 function GetVersionStr: string;
 begin
-  Result := Format('%.1d.%.2d.', [ImagingVersionMajor, ImagingVersionMinor]);
+  Result := Format('%.1d.%.2d', [ImagingVersionMajor, ImagingVersionMinor]);
 end;
 
 function IffFormat(Condition: Boolean; const TruePart, FalsePart: TImageFormat): TImageFormat;
@@ -3171,6 +3174,10 @@ var
   I: LongInt;
 begin
   Result := nil;
+
+  if FileName = '' then
+    Exit;
+
   for I := ImageFileFormats.Count - 1 downto 0 do
     if TImageFileFormat(ImageFileFormats[I]).TestFileName(FileName) then
     begin
@@ -3453,7 +3460,7 @@ begin
 end;
 
 function TImageFileFormat.PrepareSave(Handle: TImagingHandle;
-  const Images: TDynImageDataArray; var Index: Integer): Boolean;
+  const Images: TDynImageDataArray; var Index: LongInt): Boolean;
 var
   Len, I: LongInt;
 begin

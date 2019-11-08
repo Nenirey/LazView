@@ -7,11 +7,11 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, ComCtrls,
   StdCtrls, Menus, ExtDlgs, LazFileUtils, FileUtil, IntfGraphics,
   types, LCLType, ShellCtrls, FPImage, fresize, fquality, feffects, fgoto, fthumbsize,
-  LazUTF8, lclvlc, print{$IFDEF WINDOWS}, Registry, Windows, Windirs{$ENDIF},
+  LazUTF8, lclvlc, print{$IFDEF WINDOWS}, Registry, Windows, Windirs, uThumbnailProvider {$ENDIF},
   BGRABitmapTypes, BGRABitmap, BGRAThumbnail, BGRASVG, {BGRAAnimatedGif,}
   DateUtils, Math, ImgSize, Printers, LCLintf, fexif, INIFiles, LCLTranslator,
   Imaging, ImagingClasses, ImagingComponents, ImagingTypes, ImagingCanvases,
-  Variants, Clipbrd, AbZBrows, AbUnZper, AbArcTyp, AbBrowse, fpass, LMessages;
+  Variants, Clipbrd, AbZBrows, AbUnzper, AbArcTyp, AbBrowse, fpass;
 
 type
 
@@ -26,6 +26,7 @@ type
     MainMenu1: TMainMenu;
     MenuItem1: TMenuItem;
     MenuItem2: TMenuItem;
+    mnuVideoSupport: TMenuItem;
     mnuCache: TMenuItem;
     mnuSave: TMenuItem;
     mnuToolBarInFull: TMenuItem;
@@ -228,6 +229,7 @@ type
     procedure mnuThumbCustomClick(Sender: TObject);
     procedure mnuStrechClick(Sender: TObject);
     procedure mnuUndoClick(Sender: TObject);
+    procedure mnuVideoSupportClick(Sender: TObject);
     procedure mnuWindowEffectsClick(Sender: TObject);
     procedure mnuNegativeClick(Sender: TObject);
     procedure mnuSmoothClick(Sender: TObject);
@@ -422,6 +424,7 @@ var
   zippass:string='';
   Arepeat,Brepeat:int64;
   lastmposx,lastmposy:integer;
+  origenplace:string;
   procedure rendermosaic;
   procedure fullsc;
   procedure compact;
@@ -619,16 +622,16 @@ begin
     iniconfigfile:=TMEMINIFile.Create(ExtractFilePath(Application.Params[0])+'lazview.ini')
   else
     iniconfigfile:=TMEMINIFile.Create(GetAppConfigDir(false)+'lazview.ini');
-  case mainwindowstate of
-  'wsFullScreen':
+  case frmain.WindowState of
+  wsFullScreen:
     begin
       iniconfigfile.WriteString('Config','mainwindowstate','wsFullScreen');
     end;
-  'wsMaximized':
+  wsMaximized:
     begin
       iniconfigfile.WriteString('Config','mainwindowstate','wsMaximized');
     end;
-  'wsNormal':
+  wsNormal:
     begin
       iniconfigfile.WriteString('Config','mainwindowstate','wsNormal');
       iniconfigfile.WriteInteger('Config','mainwindowxpos',frmain.Left);
@@ -651,6 +654,7 @@ begin
   iniconfigfile.WriteBool('Config','autorotatewexiff',frmain.mnuAutoRotate.Checked);
   iniconfigfile.WriteBool('Config','showmenu',frmain.mnuMenus.Checked);
   iniconfigfile.WriteBool('Config','showtoolbar',frmain.mnuToolBar.Checked);
+  iniconfigfile.WriteBool('Config','videosupport',frmain.mnuVideoSupport.Checked);
   iniconfigfile.UpdateFile;
   //iniconfigfile.Free;
   FreeAndNil(iniconfigfile);
@@ -696,6 +700,7 @@ begin
     frmain.tbShowThumbs.Down:=true;
     showthumbs:=true;
     frmain.sboxthumb.Visible:=true;
+
     if frmain.StatusBar1.Visible then
       frmain.Splitter2.Top:=frmain.StatusBar1.Top-frmain.Splitter2.Height+frmain.StatusBar1.Height-iniconfigfile.ReadInteger('Config','thumbpanelsize',64)
     else
@@ -763,6 +768,7 @@ begin
   end;
   frmain.mnuCache.Checked:=iniconfigfile.ReadBool('Config','cachebitmap',false);
   frmain.mnuAutoRotate.Checked:=iniconfigfile.ReadBool('Config','autorotatewexiff',true);
+  frmain.mnuVideoSupport.Checked:=iniconfigfile.ReadBool('Config','videosupport',false);
   FreeAndNil(iniconfigfile);
 end;
 
@@ -1192,6 +1198,7 @@ var
    Orientation:string='Horizontal (normal)';
    vmp:ImagingClasses.TSingleImage;
    lastcursor:TCursor;
+   ts:TSize;
 begin
   frmain.VideoTimer.Enabled:=false;
   frmain.FPlayer.Stop;
@@ -1592,6 +1599,13 @@ begin
         //BGRAImage.Destroy;
         FreeAndNil(BGRAImage);
       end;
+      {$IFDEF WINDOWS}
+      '.WEBP':
+      begin
+        ts:=TSize.Create(frmain.Image1.Width,frmain.Image1.Height);
+        frmain.Image1.Picture.Assign(uThumbnailProvider.GetThumbnail(fimagen,ts));
+      end;
+      {$ENDIF}
       '.AVI','.MP4','.WEBM','.3GP','.MPG','.MKV','.WMV','.FLV','.TS','.VOB','.MP3','.M4A','.WAV','.WMA':
       begin
         ifvideo:=true;
@@ -1648,44 +1662,54 @@ begin
     /////
   except on e:Exception do
     begin
-      frmain.Timer3.Enabled:=false;
-      frmain.Image1.Visible:=true;
-      ebitmap:=Graphics.TBitmap.Create;
-      ebitmap.Width:=frmain.Image1.Width;
-      ebitmap.Height:=frmain.Image1.Height;
-      ebitmap.Canvas.Brush.Color:=clWhite;
-      ebitmap.Canvas.Pen.Color:=clRed;
-      ebitmap.Canvas.Font.Size:=12;
-      ebitmap.Canvas.Font.Color:=clRed;
-      th:=ebitmap.Canvas.TextHeight('Error al cargar la imagen:'+e.ToString);
-      tw:=ebitmap.Canvas.TextWidth('Error al cargar la imagen:'+e.ToString);
-      ebitmap.Canvas.TextOut(Round((frmain.Image1.Width-tw)/2),Round((frmain.Image1.Height-th)/2),'Error al cargar la imagen:'+e.ToString);
-      frmain.Image1.Picture.Bitmap.Assign(ebitmap);
-      //ebitmap.Destroy;
-      FreeAndNil(ebitmap);
-      /////////*****Update buttons and menus****///////////////////
-     frmain.tbFlipHorizontal.Enabled:=false;
-    frmain.tbFlipVertical.Enabled:=false;
-    frmain.tbRotateLeft.Enabled:=false;
-    frmain.tbRotateRight.Enabled:=false;
-    frmain.tbZoomIn.Enabled:=false;
-    frmain.tbZoomOut.Enabled:=false;
-    frmain.tbZoom100.Enabled:=false;
-    frmain.tbReload.Enabled:=false;
-    frmain.tbAdjust.Enabled:=false;
-    frmain.tbStrech.Enabled:=false;
-    frmain.mnuSaveAs.Enabled:=false;
-    frmain.mnuCopy.Enabled:=false;
-    frmain.mnuFlipH.Enabled:=false;
-    frmain.mnuFlipV.Enabled:=false;
-    frmain.mnuRotateL.Enabled:=false;
-    frmain.mnuRotateR.Enabled:=false;
-    frmain.mnuEffects.Enabled:=false;
-    frmain.mnuStrech.Enabled:=false;
-    frmain.mnuGoTo.Enabled:=false;
-    frmain.mnuDeleteFile.Enabled:=false;
-    frmain.mnuDesktopImage.Enabled:=false;
-      //////////////
+      {$IFDEF WINDOWS}
+      try
+        ts:=TSize.Create(frmain.Image1.Width,frmain.Image1.Height);
+        frmain.Image1.Picture.Assign(uThumbnailProvider.GetThumbnail(fimagen,ts));
+      finally
+      end;
+      {$ENDIF}
+      if frmain.Image1.Picture.Bitmap.Empty then
+      begin
+        frmain.Timer3.Enabled:=false;
+        frmain.Image1.Visible:=true;
+        ebitmap:=Graphics.TBitmap.Create;
+        ebitmap.Width:=frmain.Image1.Width;
+        ebitmap.Height:=frmain.Image1.Height;
+        ebitmap.Canvas.Brush.Color:=clWhite;
+        ebitmap.Canvas.Pen.Color:=clRed;
+        ebitmap.Canvas.Font.Size:=12;
+        ebitmap.Canvas.Font.Color:=clRed;
+        th:=ebitmap.Canvas.TextHeight('Error al cargar la imagen:'+e.ToString);
+        tw:=ebitmap.Canvas.TextWidth('Error al cargar la imagen:'+e.ToString);
+        ebitmap.Canvas.TextOut(Round((frmain.Image1.Width-tw)/2),Round((frmain.Image1.Height-th)/2),'Error al cargar la imagen:'+e.ToString);
+        frmain.Image1.Picture.Bitmap.Assign(ebitmap);
+        //ebitmap.Destroy;
+        FreeAndNil(ebitmap);
+        /////////*****Update buttons and menus****///////////////////
+        frmain.tbFlipHorizontal.Enabled:=false;
+        frmain.tbFlipVertical.Enabled:=false;
+        frmain.tbRotateLeft.Enabled:=false;
+        frmain.tbRotateRight.Enabled:=false;
+        frmain.tbZoomIn.Enabled:=false;
+        frmain.tbZoomOut.Enabled:=false;
+        frmain.tbZoom100.Enabled:=false;
+        frmain.tbReload.Enabled:=false;
+        frmain.tbAdjust.Enabled:=false;
+        frmain.tbStrech.Enabled:=false;
+        frmain.mnuSaveAs.Enabled:=false;
+        frmain.mnuCopy.Enabled:=false;
+        frmain.mnuFlipH.Enabled:=false;
+        frmain.mnuFlipV.Enabled:=false;
+        frmain.mnuRotateL.Enabled:=false;
+        frmain.mnuRotateR.Enabled:=false;
+        frmain.mnuEffects.Enabled:=false;
+        frmain.mnuStrech.Enabled:=false;
+        frmain.mnuGoTo.Enabled:=false;
+        frmain.mnuDeleteFile.Enabled:=false;
+        frmain.mnuDesktopImage.Enabled:=false;
+        //////////////
+      end;
     end;
   end;
   Screen.Cursor:=lastcursor;
@@ -2879,6 +2903,7 @@ var
    nfiletmp,i:integer;
    wplace:UnicodeString;
 begin
+  origenplace:=place+fname;
   frmain.FPlayer.Stop;
   if Assigned(cachebitmap) then
   begin
@@ -2901,7 +2926,7 @@ begin
   flisttmp:=TStringList.Create;
 
   case UpperCase(ExtractFileExt(fname)) of
-    '.ZIP','.7Z','.TAR','.TXZ','.GZ','.TGZ','.CAB':
+    '.ZIP','.7Z','.TAR','.TXZ','.GZ','.TGZ','.CAB','.APK','.EXE':
     begin
       ifzip:=true;
       frmain.AbUnZipper1.FileName:=place+fname;
@@ -2912,11 +2937,20 @@ begin
       for i:=0 to frmain.AbUnZipper1.Count-1 do
       begin
         case UpperCase(ExtractFileExt(frmain.AbUnZipper1.Items[i].FileName)) of
-          '.JPG','.JPEG','.JPE','.JFIF','.BMP','.GIF','.PNG','.APNG','.MNG','.ICO','.XPM','.PBM','.PPM','.ICNS','.CUR','.TIF','.TIFF','.PCX','.TGA','.PSD','.XWD','.SVG','.AVI','.MP4','.WEBM','.3GP','.MPG','.MKV','.WMV','.FLV','.TS','.VOB','.MP3','.M4A','.WAV','.WMA':
+          '.JPG','.JPEG','.JPE','.JFIF','.BMP','.GIF','.PNG','.APNG','.MNG','.ICO','.XPM','.PBM','.PPM','.ICNS','.CUR','.TIF','.TIFF','.PCX','.TGA','.PSD','.XWD','.SVG'{$IFDEF WINDOWS},'.WEBP'{$ENDIF}:
           begin
             Inc(contador);
             flisttmp.Add(ExtractFileName(frmain.AbUnZipper1.Items[i].FileName));
             Inc(nfiletmp);
+          end;
+          '.AVI','.MP4','.WEBM','.3GP','.MPG','.MKV','.WMV','.FLV','.TS','.VOB','.MP3','.M4A','.WAV','.WMA':
+          begin
+            if frmain.mnuVideoSupport.Checked then
+            begin
+              Inc(contador);
+              flisttmp.Add(ExtractFileName(frmain.AbUnZipper1.Items[i].FileName));
+              Inc(nfiletmp);
+            end;
           end;
         end;
       end;
@@ -2933,10 +2967,18 @@ begin
             if (Attr and faDirectory)<>faDirectory then
             begin
               case UpperCase(ExtractFileExt(Name)) of
-                '.JPG','.JPEG','.JPE','.JFIF','.BMP','.GIF','.PNG','.APNG','.MNG','.ICO','.XPM','.PBM','.PPM','.ICNS','.CUR','.TIF','.TIFF','.PCX','.TGA','.PSD','.XWD','.SVG','.AVI','.MP4','.WEBM','.3GP','.MPG','.MKV','.WMV','.FLV','.TS','.VOB','.MP3','.M4A','.WAV','.WMA':
+                '.JPG','.JPEG','.JPE','.JFIF','.BMP','.GIF','.PNG','.APNG','.MNG','.ICO','.XPM','.PBM','.PPM','.ICNS','.CUR','.TIF','.TIFF','.PCX','.TGA','.PSD','.XWD','.SVG':
                 begin
                   flisttmp.Add(Name);
                   Inc(nfiletmp);
+                end;
+                '.AVI','.MP4','.WEBM','.3GP','.MPG','.MKV','.WMV','.FLV','.TS','.VOB','.MP3','.M4A','.WAV','.WMA':
+                begin
+                  if frmain.mnuVideoSupport.Checked or (((Name=fname) or (UpperCase(ExtractFileExt(Name))=UpperCase(ExtractFileExt(fname)))) and (fname<>'')) then
+                  begin
+                    flisttmp.Add(Name);
+                    Inc(nfiletmp);
+                  end;
                 end;
                 else
                 begin
@@ -2968,9 +3010,9 @@ begin
     if not ifzip then
       carpeta:=place;
 
-    if (nombre <> '') and not ifzip then
+    if (fname<>'') and (ifzip=false) then
     begin
-      ifile:=flist.IndexOf(nombre);
+      ifile:=flist.IndexOf(fname);
       if starting=false then
         loadpicture(place+nombre);
     end
@@ -2978,7 +3020,7 @@ begin
     begin
       ifile:=0;
       if (ifile<flist.Count) {and (starting=false)} then
-        loadpicture(place+flist[ifile]);
+        loadpicture(carpeta+flist[ifile]);
     end;
     starting:=false;
     if (frmain.mnuShowThumbs.Checked) then
@@ -2996,7 +3038,6 @@ end;
 procedure Tfrmain.FormCreate(Sender: TObject);
 var
    i:integer;
-   ruta:string;
    curleft,curright:TCursorImage;
    itemfile:TSearchRec;
    mitem:TMenuItem;
@@ -3016,15 +3057,10 @@ begin
       end;
     Until FindNext(itemfile)<>0;
   end;
+  //loadconfig;
   frmain.Image1.Width:=frmain.ScrollBox1.Width;
   frmain.Image1.Height:=frmain.ScrollBox1.Height;
-  ruta:=ExtractFilePath(Application.Params[1]);
-  if Application.Params[1] <> '' then
-  begin
-    loadfiles(ruta,ExtractFileName(Application.Params[1]));
-    if DirectoryExists(ruta) then
-      frmain.ShellTreeView1.Path:=ruta;
-  end;
+
   frmain.ShellTreeView1.Items.AddFirst(nil,'Documents').StateIndex:=29;
   frmain.ShellTreeView1.Items.AddFirst(nil,'Pictures').StateIndex:=27;
   frmain.ShellTreeView1.Items.AddFirst(nil,'Desktop').StateIndex:=28;
@@ -3406,14 +3442,24 @@ end;
 procedure Tfrmain.FormShow(Sender: TObject);
 var
    vpos:int64=0;
+   ruta:string;
 begin
   loadconfig;
+  ruta:=ExtractFilePath(Application.Params[1]);
+  if Application.Params[1] <> '' then
+  begin
+    loadfiles(ruta,ExtractFileName(Application.Params[1]));
+    frmain.ShellTreeView1.OnSelectionChanged:=nil;
+    if DirectoryExists(ruta) then
+      frmain.ShellTreeView1.Path:=ruta;
+    frmain.ShellTreeView1.OnSelectionChanged:=@ShellTreeView1SelectionChanged;
+  end;
   if Assigned(flist) then
   begin
     if ifvideo then
       vpos:=frmain.FPlayer.VideoPosition;
-    if (ifile<flist.Count) then
-      loadpicture(carpeta+flist[ifile]);
+    //if (ifile<flist.Count) then
+      //loadpicture(carpeta+flist[ifile]);
     if ifvideo then
       frmain.FPlayer.VideoPosition:=vpos;
   end;
@@ -4228,6 +4274,17 @@ begin
   end;
 end;
 
+procedure Tfrmain.mnuVideoSupportClick(Sender: TObject);
+begin
+  if frmain.mnuVideoSupport.Checked then
+    frmain.mnuVideoSupport.Checked:=false
+  else
+    frmain.mnuVideoSupport.Checked:=true;
+  frmain.VideoTimer.Enabled:=false;
+  frmain.FPlayer.Stop;
+  loadfiles(carpeta,'');
+end;
+
 procedure Tfrmain.mnuWindowEffectsClick(Sender: TObject);
 begin
   freffect.Show;
@@ -4287,7 +4344,7 @@ end;
 
 procedure Tfrmain.mnuAboutClick(Sender: TObject);
 begin
-  ShowMessage('Imagen viewer: LazView'+#13#10+'Version: 0.2'+#13#10+'Created by: nenirey@gmail.com'+#13#10+'CopyLeft: 2019'+lineending+lineending+'Thanks to the creators of the next libraries used by the project:'+lineending+lineending+'BGRABitmap by circular at operamail.com ('+BGRABitmapVersion.ToString+')'+lineending+lineending+'Vampyre Imaging Library by Marek Mauder (marekmauder@gmail.com)'+lineending+lineending+'dEXIF by Gerry McGuire (mcguirez@hotmail.com)');
+  ShowMessage('Imagen viewer: LazView'+#13#10+'Version: 0.2'+#13#10+'Created by: nenirey@gmail.com'+#13#10+'CopyLeft: 2019'+lineending+lineending+'Thanks to the creators of the next libraries used by the project:'+lineending+lineending+'BGRABitmap by circular at operamail.com ('+BGRABitmapVersion.ToString+')'+lineending+lineending+'Vampyre Imaging Library by Marek Mauder (marekmauder@gmail.com)'+lineending+lineending+'dEXIF by Gerry McGuire (mcguirez@hotmail.com)'+lineending+lineending+'Abbrevia 5.0 (http://tpabbrevia.sourceforge.net/)');
 end;
 
 procedure Tfrmain.mnuToolBarClick(Sender: TObject);
@@ -5304,8 +5361,8 @@ end;
 
 procedure Tfrmain.tbExitClick(Sender: TObject);
 begin
- deletetempfile;
  saveconfig;
+ deletetempfile;
  if frmain.FPlayer.Playing then
    frmain.FPlayer.Stop;
  FreeANdNil(FPlayer);
@@ -5371,8 +5428,11 @@ begin
       if FPlayer.VideoPosition>=Brepeat then
         Fplayer.VideoPosition:=Arepeat;
     end;
-    if (Fplayer.VideoPosition>=Fplayer.VideoLength) and (Fplayer.VideoLength>0) then
-      nextfile;
+    if ((Fplayer.VideoPosition>=Fplayer.VideoLength) and (Fplayer.VideoLength>0)) or (Fplayer.Playing=false) then
+    begin
+      Fplayer.VideoPosition:=0;
+      Fplayer.Resume;
+    end;
     if (lastmposx<>mouse.CursorPos.x) or (lastmposy<>mouse.CursorPos.y) then
     begin
       frmain.FormMouseMove(nil, shst, mouse.CursorPos.x,mouse.CursorPos.y);
@@ -5416,7 +5476,8 @@ end;
 procedure thumbsthread.showthumbs;
 var
    thumbtmp:TPicture;
-   streamimage:TFileStream;
+   streamimage:TMemoryStream;
+   fstream:TFileStream;
    bgcolor:TBGRAPixel;
    th,tw:integer;
    wthumb:UnicodeString;
@@ -5425,6 +5486,7 @@ var
    BGRAImage:BGRABitMap.TBGRABitmap;
    vmp:ImagingClasses.TSingleImage;
    ebitmap:Graphics.TBitmap;
+   ts:TSize;
 begin
   wthumb:=UTF16LongName(carpeta+iname);
   {$IFDEF WINDOWS}
@@ -5439,118 +5501,189 @@ begin
   try
     ////EXIF information
     ImgData:= TImgData.Create();
-    if ImgData.ProcessFile(wthumb) then
-    begin
-      if ImgData.HasEXIF then
+    case UpperCase(ExtractFileExt(wthumb)) of
+    '.JPG','.JPEG','.JPE','.JFIF','.BMP','.GIF','.PNG','.APNG','.MNG','.ICO','.XPM','.PBM','.PPM','.ICNS','.CUR','.TIF','.TIFF','.PCX','.TGA','.PSD','.XWD','.SVG':
       begin
-        Orientation:=ImgData.ExifObj.TagByName['Orientation'].Data;
-      end
-      else
-        Orientation:='Horizontal (normal)';
-    end;
-    //ImgData.Destroy;
-    FreeAndNil(ImgData);
-    thumb:=Graphics.TBitMap.Create;
-    thumb.Width:=thumbsize;
-    thumb.Height:=thumbsize;
-    thumbtmp:=TPicture.Create();
-    streamimage:=TFileStream.Create(wthumb, fmOpenRead or fmShareDenyNone);
-        //*******Implement orientation image********
-    case Orientation of
-    'Rotate 90 CW':
-    begin
-      BGRAImage:=BGRABitMap.TBGRABitmap.Create;
-      GetStreamThumbnail(streamimage,thumbsize,thumbsize, bgcolor, false,'',BGRAImage);
-      ebitmap:=Graphics.TBitmap.Create;
-      ebitmap.Assign(BGRAImage);
-      FreeAndNil(BGRAImage);
-      vmp:=ImagingClasses.TSingleImage.Create;
-      ImagingComponents.ConvertBitmapToImage(ebitmap,vmp);
-      vmp.Rotate(270);
-      ImagingComponents.ConvertImageToBitmap(vmp,ebitmap);
-      FreeAndNil(vmp);
-      thumbtmp.Bitmap.Assign(ebitmap);
-      FreeAndNil(ebitmap);
-    end;
-    'Rotate 270 CW':
-    begin
-      BGRAImage:=BGRABitMap.TBGRABitmap.Create;
-      GetStreamThumbnail(streamimage,thumbsize,thumbsize, bgcolor, false,'',BGRAImage);
-      ebitmap:=Graphics.TBitmap.Create;
-      ebitmap.Assign(BGRAImage);
-      FreeAndNil(BGRAImage);
-      vmp:=ImagingClasses.TSingleImage.Create;
-      ImagingComponents.ConvertBitmapToImage(ebitmap,vmp);
-      vmp.Rotate(90);
-      ImagingComponents.ConvertImageToBitmap(vmp,ebitmap);
-      FreeAndNil(vmp);
-      thumbtmp.Bitmap.Assign(ebitmap);
-      FreeAndNil(ebitmap);
-    end;
-    'Rotate 180 CW':
-    begin
-      BGRAImage:=BGRABitMap.TBGRABitmap.Create(GetStreamThumbnail(streamimage,thumbsize,thumbsize, bgcolor, false));
-      BGRAImage.HorizontalFlip;
-      thumbtmp.Bitmap.Assign(BGRAImage);
-      FreeAndNil(BGRAImage);
-    end;
-    'Rotate 180':
-    begin
-      BGRAImage:=BGRABitMap.TBGRABitmap.Create;
-      GetStreamThumbnail(streamimage,thumbsize,thumbsize, bgcolor, false,'',BGRAImage);
-      ebitmap:=Graphics.TBitmap.Create;
-      ebitmap.Assign(BGRAImage);
-      FreeAndNil(BGRAImage);
-      vmp:=ImagingClasses.TSingleImage.Create;
-      ImagingComponents.ConvertBitmapToImage(ebitmap,vmp);
-      vmp.Rotate(180);
-      ImagingComponents.ConvertImageToBitmap(vmp,ebitmap);
-      FreeAndNil(vmp);
-      thumbtmp.Bitmap.Assign(ebitmap);
-      FreeAndNil(ebitmap);
-    end;
-      else
-      begin
-        case UpperCase(ExtractFileExt(wthumb)) of
-        '.TIF','.TIFF':
+        if ifzip then
         begin
-          thumbtmp.LoadFromStream(streamimage);
+          streamimage:=TMemoryStream.Create;
+          frmain.AbUnZipper1.ExtractToStream(iname,streamimage);
+          streamimage.Position:=0;
+          if ImgData.ReadJpegSections(streamimage) then
+          begin
+            if ImgData.HasEXIF then
+            begin
+              Orientation:=ImgData.ExifObj.TagByName['Orientation'].Data;
+            end
+            else
+              Orientation:='Horizontal (normal)';
+          end;
+          streamimage.Position:=0;
+        end
+        else
+        begin
+          if ImgData.ProcessFile(wthumb) then
+          begin
+            if ImgData.HasEXIF then
+            begin
+              Orientation:=ImgData.ExifObj.TagByName['Orientation'].Data;
+            end
+            else
+              Orientation:='Horizontal (normal)';
+          end;
+          fstream:=TFileStream.Create(wthumb, fmOpenRead or fmShareDenyNone);
+        end;
+        FreeAndNil(ImgData);
+        thumb:=Graphics.TBitMap.Create;
+        thumb.Width:=thumbsize;
+        thumb.Height:=thumbsize;
+        thumbtmp:=TPicture.Create();
+            //*******Implement orientation image********
+        case Orientation of
+        'Rotate 90 CW':
+        begin
+          BGRAImage:=BGRABitMap.TBGRABitmap.Create;
+          if ifzip then
+            GetStreamThumbnail(streamimage,thumbsize,thumbsize, bgcolor, false,'',BGRAImage)
+          else
+            GetStreamThumbnail(fstream,thumbsize,thumbsize, bgcolor, false,'',BGRAImage);
           ebitmap:=Graphics.TBitmap.Create;
-          ebitmap.Assign(thumbtmp.Bitmap);
+          ebitmap.Assign(BGRAImage);
+          FreeAndNil(BGRAImage);
           vmp:=ImagingClasses.TSingleImage.Create;
           ImagingComponents.ConvertBitmapToImage(ebitmap,vmp);
-          vmp.Resize(thumbsize,thumbsize,rfLanczos);
-          ebitmap.Width:=thumbsize;
-          ebitmap.Height:=thumbsize;
+          vmp.Rotate(270);
           ImagingComponents.ConvertImageToBitmap(vmp,ebitmap);
           FreeAndNil(vmp);
           thumbtmp.Bitmap.Assign(ebitmap);
           FreeAndNil(ebitmap);
         end;
-        else
-          thumbtmp.Bitmap.Assign(GetStreamThumbnail(streamimage,thumbsize,thumbsize, bgcolor, false));
+        'Rotate 270 CW':
+        begin
+          BGRAImage:=BGRABitMap.TBGRABitmap.Create;
+          if ifzip then
+            GetStreamThumbnail(streamimage,thumbsize,thumbsize, bgcolor, false,'',BGRAImage)
+          else
+            GetStreamThumbnail(fstream,thumbsize,thumbsize, bgcolor, false,'',BGRAImage);
+          ebitmap:=Graphics.TBitmap.Create;
+          ebitmap.Assign(BGRAImage);
+          FreeAndNil(BGRAImage);
+          vmp:=ImagingClasses.TSingleImage.Create;
+          ImagingComponents.ConvertBitmapToImage(ebitmap,vmp);
+          vmp.Rotate(90);
+          ImagingComponents.ConvertImageToBitmap(vmp,ebitmap);
+          FreeAndNil(vmp);
+          thumbtmp.Bitmap.Assign(ebitmap);
+          FreeAndNil(ebitmap);
         end;
+        'Rotate 180 CW':
+        begin
+          if ifzip then
+            BGRAImage:=BGRABitMap.TBGRABitmap.Create(GetStreamThumbnail(streamimage,thumbsize,thumbsize, bgcolor, false))
+          else
+            BGRAImage:=BGRABitMap.TBGRABitmap.Create(GetStreamThumbnail(fstream,thumbsize,thumbsize, bgcolor, false));
+          BGRAImage.HorizontalFlip;
+          thumbtmp.Bitmap.Assign(BGRAImage);
+          FreeAndNil(BGRAImage);
+        end;
+        'Rotate 180':
+        begin
+          BGRAImage:=BGRABitMap.TBGRABitmap.Create;
+          if ifzip then
+            GetStreamThumbnail(streamimage,thumbsize,thumbsize, bgcolor, false,'',BGRAImage)
+          else
+            GetStreamThumbnail(fstream,thumbsize,thumbsize, bgcolor, false,'',BGRAImage);
+          ebitmap:=Graphics.TBitmap.Create;
+          ebitmap.Assign(BGRAImage);
+          FreeAndNil(BGRAImage);
+          vmp:=ImagingClasses.TSingleImage.Create;
+          ImagingComponents.ConvertBitmapToImage(ebitmap,vmp);
+          vmp.Rotate(180);
+          ImagingComponents.ConvertImageToBitmap(vmp,ebitmap);
+          FreeAndNil(vmp);
+          thumbtmp.Bitmap.Assign(ebitmap);
+          FreeAndNil(ebitmap);
+        end;
+          else
+          begin
+            case UpperCase(ExtractFileExt(wthumb)) of
+            '.TIF','.TIFF':
+            begin
+              if ifzip then
+                thumbtmp.LoadFromStream(streamimage)
+              else
+                thumbtmp.LoadFromStream(fstream);
+              ebitmap:=Graphics.TBitmap.Create;
+              ebitmap.Assign(thumbtmp.Bitmap);
+              vmp:=ImagingClasses.TSingleImage.Create;
+              ImagingComponents.ConvertBitmapToImage(ebitmap,vmp);
+              vmp.Resize(thumbsize,thumbsize,rfLanczos);
+              ebitmap.Width:=thumbsize;
+              ebitmap.Height:=thumbsize;
+              ImagingComponents.ConvertImageToBitmap(vmp,ebitmap);
+              FreeAndNil(vmp);
+              thumbtmp.Bitmap.Assign(ebitmap);
+              FreeAndNil(ebitmap);
+            end;
+            else
+            begin
+              if ifzip then
+                thumbtmp.Bitmap.Assign(GetStreamThumbnail(streamimage,thumbsize,thumbsize, bgcolor, false))
+              else
+                thumbtmp.Bitmap.Assign(GetStreamThumbnail(fstream,thumbsize,thumbsize, bgcolor, false));
+            end;
+            end;
+          end;
+        end;
+        if ifzip then
+          FreeAndNil(streamimage)
+        else
+          FreeAndNil(fstream);
+        thumb.Canvas.Rectangle(0,0,thumbsize,thumbsize);
+        thumb.Canvas.CopyRect(Types.Rect(2,2,thumbsize-2,thumbsize-2),thumbtmp.Bitmap.Canvas,Types.Rect(0,0,thumbtmp.Bitmap.Width,thumbtmp.Bitmap.Height));
+        FreeAndNil(thumbtmp);
+        {ShowMessage('Imagen #: '+inttostr(thumbindex)+#13+
+        'Left: '+inttostr((frmain.sboxthumb.Controls[thumbindex] as TImage).Left)+#13+
+        'Scroll: '+inttostr(frmain.sboxthumb.HorzScrollBar.Position)+#13+
+        'Scroll+Form width: '+inttostr(frmnain.sboxthumb.HorzScrollBar.Position+frmain.Width));}
+        //ShowMessage(inttostr(thumbindex)+'   '+inttostr(ifile));
+        //frmain.StatusBar1.Panels[5].Text:=inttostr(frmain.sboxthumb.ControlCount);
+        (frmain.sboxthumb.Controls[thumbindex] as TImage).Picture.Bitmap.Assign(thumb);
+        FreeAndNil(thumb);
+        //This is wrong but is workin for linux and windows
+        {$IFDEF LINUX}
+        Application.ProcessMessages;
+        {$ENDIF}
+      end;
+      '.AVI','.MP4','.WEBM','.3GP','.MPG','.MKV','.WMV','.FLV','.TS','.VOB','.MP3','.M4A','.WAV','.WMA':
+      begin
+        thumb:=Graphics.TBitMap.Create;
+        thumb.Width:=thumbsize;
+        thumb.Height:=thumbsize;
+        thumb.Canvas.Pen.Color:=clWhite;
+        thumb.Canvas.Rectangle(2,2,thumbsize-2,thumbsize-2);
+        thumb.Canvas.Brush.Color:=clWhite;
+        thumb.Canvas.Pen.Color:=clBlack;
+        thumb.Canvas.Font.Size:=12;
+        thumb.Canvas.Font.Bold:=true;
+        thumb.Canvas.Font.Color:=clBlack;
+        th:=thumb.Canvas.TextHeight(Copy(ExtractFileExt(wthumb),2,Length(ExtractFileExt(wthumb))));
+        tw:=thumb.Canvas.TextWidth(Copy(ExtractFileExt(wthumb),2,Length(ExtractFileExt(wthumb))));
+        thumb.Canvas.TextOut(Round((thumbsize-tw)/2),Round((thumbsize-th)/2),Copy(ExtractFileExt(wthumb),2,Length(ExtractFileExt(wthumb))));
+        (frmain.sboxthumb.Controls[thumbindex] as TImage).Picture.Bitmap.Assign(thumb);
+        FreeAndNil(thumb);
+        {$IFDEF WINDOWS}
+        try
+          if ifzip=false then
+          begin
+            ts:=TSize.Create(thumbsize,thumbsize);
+            (frmain.sboxthumb.Controls[thumbindex] as TImage).Picture.Assign(uThumbnailProvider.GetThumbnail(carpeta+iname,ts));
+          end;
+        finally
+        end;
+        {$ENDIF}
       end;
     end;
-    //streamimage.Destroy;
-    FreeAndNil(streamimage);
-    thumb.Canvas.Rectangle(0,0,thumbsize,thumbsize);
-    thumb.Canvas.CopyRect(Types.Rect(2,2,thumbsize-2,thumbsize-2),thumbtmp.Bitmap.Canvas,Types.Rect(0,0,thumbtmp.Bitmap.Width,thumbtmp.Bitmap.Height));
-    //thumbtmp.Destroy;
-    FreeAndNil(thumbtmp);
-    {ShowMessage('Imagen #: '+inttostr(thumbindex)+#13+
-    'Left: '+inttostr((frmain.sboxthumb.Controls[thumbindex] as TImage).Left)+#13+
-    'Scroll: '+inttostr(frmain.sboxthumb.HorzScrollBar.Position)+#13+
-    'Scroll+Form width: '+inttostr(frmnain.sboxthumb.HorzScrollBar.Position+frmain.Width));}
-    //ShowMessage(inttostr(thumbindex)+'   '+inttostr(ifile));
-    //frmain.StatusBar1.Panels[5].Text:=inttostr(frmain.sboxthumb.ControlCount);
-    (frmain.sboxthumb.Controls[thumbindex] as TImage).Picture.Bitmap.Assign(thumb);
-    //thumb.Destroy;
-    FreeAndNil(thumb);
-    //This is wrong but is workin for linux and windows
-    {$IFDEF LINUX}
-    Application.ProcessMessages;
-    {$ENDIF}
     except on e:exception do
     begin
       thumb:=Graphics.TBitMap.Create;
@@ -5565,6 +5698,13 @@ begin
       thumb.Canvas.TextOut(Round((thumbsize-tw)/2),Round((thumbsize-th)/2),'Error:'+e.ToString);
       (frmain.sboxthumb.Controls[thumbindex] as TImage).Picture.Bitmap.Assign(thumb);
       FreeAndNil(thumb);
+      {$IFDEF WINDOWS}
+      try
+        ts:=TSize.Create(thumbsize,thumbsize);
+        (frmain.sboxthumb.Controls[thumbindex] as TImage).Picture.Assign(uThumbnailProvider.GetThumbnail(carpeta+iname,ts));
+      finally
+      end;
+      {$ENDIF}
     end;
     end;
   //end;

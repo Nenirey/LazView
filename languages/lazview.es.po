@@ -481,6 +481,10 @@ msgstr "TV"
 msgid "Undo"
 msgstr "Deshacer"
 
+#: tfrmain.mnuvideosupport.caption
+msgid "Video support"
+msgstr ""
+
 #: tfrmain.mnuview.caption
 msgid "&View"
 msgstr "&Ver"

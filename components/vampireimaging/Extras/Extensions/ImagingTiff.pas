@@ -30,6 +30,13 @@ type
   end;
 
 const
+  TiffCompressionOptionNone        = 0;
+  TiffCompressionOptionLzw         = 1;
+  TiffCompressionOptionPackbitsRle = 2;
+  TiffCompressionOptionDeflate     = 3;
+  TiffCompressionOptionJpeg        = 4;
+  TiffCompressionOptionGroup4      = 5;
+
   { Read only metadata info - name of compression scheme (LZW, none, JPEG, G4, ...)
     used in last loaded TIFF. }
   SMetaTiffCompressionName = 'TiffCompressionName';
@@ -41,11 +48,29 @@ const
 
 implementation
 
+{$IFNDEF DONT_LINK_FILE_FORMATS}
+
 // So far we have only one TIFF support implementation - libtiff
-{$IF (Defined(DELPHI) and not Defined(CPUX64)) or (Defined(FPC) and not Defined(CPUARM)))}
+{$DEFINE USE_LIBTIFF}
+
+// libtiff for FPC ARM is disabled by default due to potential hardfp/softfp
+// ABI problems (without linking to any lib FPC generated binary does not call "ld"
+// and hardfp exe can run on softfp target). If you know what you're doing enable it.
+{$IF Defined(FPC) and Defined(CPUARM)}
+  {$UNDEF USE_LIBTIFF}
+{$IFEND}
+
+// Not even dynamic linking works at the moment
+{$IF Defined(DELPHI) and Defined(MACOS))}
+  {$UNDEF USE_LIBTIFF}
+{$IFEND}
+
+{$IFDEF USE_LIBTIFF}
 uses
   ImagingTiffLib;
-{$IFEND}
+{$ENDIF}
+
+{$ENDIF}
 
 const
   STiffFormatName = 'Tagged Image File Format';

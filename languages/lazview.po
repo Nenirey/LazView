@@ -480,6 +480,10 @@ msgstr ""
 msgid "Undo"
 msgstr ""
 
+#: tfrmain.mnuvideosupport.caption
+msgid "Video support"
+msgstr ""
+
 #: tfrmain.mnuview.caption
 msgid "&View"
 msgstr ""

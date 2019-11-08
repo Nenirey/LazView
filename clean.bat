@@ -8,6 +8,8 @@
 @rmdir /S /Q components\bgrabitmap\lib4nogui\
 @rmdir /S /Q components\dexif\lib
 @rmdir /S /Q components\vampireimaging\bin
+@rmdir /S /Q components\Abbrevia\packages\Lazarus\lib\
+
 @del /Q win32\lazview.dbg
 @del /Q win32\lazview*.exe
 @del /Q win64\lazview*.exe

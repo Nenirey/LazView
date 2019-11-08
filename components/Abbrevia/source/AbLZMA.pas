@@ -37,7 +37,7 @@ unit AbLZMA;
 interface
 
 uses
-  Classes, Windows, SysUtils, AbCrtl, AbUtils;
+  Classes, {Windows,} SysUtils{, AbCrtl, AbUtils};
 
 { Raw LZMA decompression =================================================== }
 
