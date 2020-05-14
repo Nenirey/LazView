@@ -121,7 +121,7 @@ begin
                                        IShellItemImageFactory, ShellItemImage);
   if Succeeded(Result) then
   begin
-    Result:= ShellItemImage.GetImage(aSize, SIIGBF_THUMBNAILONLY, Bitmap);
+    Result:= ShellItemImage.GetImage(aSize, SIIGBF_THUMBNAILONLY+SIIGBF_BIGGERSIZEOK, Bitmap);
   end;
 end;
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <Compiler Value="/usr/bin/fpc" Date="1526926378"/>
-  <Params Value=" -MObjFPC -Scghi -Cg -O1 -g -gl -l -vewnhibq -Fu/home/reinier/.lazarus/lib/units/x86_64-linux -Fu/home/reinier/.lazarus/lib/LazUtils/lib/x86_64-linux -Fu/home/reinier/.lazarus/lib/LCLBase/units/x86_64-linux -Fu/home/reinier/.lazarus/lib/units/x86_64-linux/qt5 -Fu/home/reinier/LazView/components/vlc/ -FU/home/reinier/LazView/components/vlc/lib/x86_64-linux/ -dLCL -dLCLgtk2 lazvlc.pas"/>
+  <Params Value=" -MObjFPC -Scghi -Cg -O1 -g -gl -l -vewnhibq -Fu/usr/share/lazarus/2.0.4/packager/units/x86_64-linux -Fu/usr/share/lazarus/2.0.4/components/lazutils/lib/x86_64-linux -Fu/usr/share/lazarus/2.0.4/lcl/units/x86_64-linux -Fu/usr/share/lazarus/2.0.4/lcl/units/x86_64-linux/gtk2 -Fu/home/reinier/LazView/components/vlc/ -FU/home/reinier/LazView/components/vlc/lib/x86_64-linux/ -dLCL -dLCLgtk2 lazvlc.pas"/>
 </CONFIG>

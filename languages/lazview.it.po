@@ -1,0 +1,753 @@
+﻿msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+#: tform3.caption
+msgid "Quality"
+msgstr "Qualita"
+
+#: tform3.label1.caption
+msgid "100"
+msgstr "100"
+
+#: tfreffect.button1.caption
+msgctxt "tfreffect.button1.caption"
+msgid "Grayscale"
+msgstr "Scala di grigi"
+
+#: tfreffect.button10.caption
+msgid "RGB -> BRG"
+msgstr "RGB -> BRG"
+
+#: tfreffect.button11.caption
+msgctxt "tfreffect.button11.caption"
+msgid "Smooth"
+msgstr "Liscio"
+
+#: tfreffect.button12.caption
+msgid "Sharpen"
+msgstr "Affilare"
+
+#: tfreffect.button13.caption
+msgctxt "tfreffect.button13.caption"
+msgid "Negative"
+msgstr "Negativo"
+
+#: tfreffect.button14.caption
+msgid "Plane (slow)"
+msgstr "Piano (lento)"
+
+#: tfreffect.button15.caption
+msgid "Contour"
+msgstr "Contorno"
+
+#: tfreffect.button16.caption
+msgid "Cylinder"
+msgstr "Cilindro"
+
+#: tfreffect.button17.caption
+msgid "Emboss"
+msgstr "Goffratura"
+
+#: tfreffect.button18.caption
+msgid "Emboss high light"
+msgstr "Rilievo evidenziare"
+
+#: tfreffect.button19.caption
+msgid "Normalize"
+msgstr "Normalizzare"
+
+#: tfreffect.button2.caption
+msgctxt "tfreffect.button2.caption"
+msgid "Highlight red"
+msgstr "Evidenziare rosso"
+
+#: tfreffect.button20.caption
+msgid "Sphere"
+msgstr "Sfera"
+
+#: tfreffect.button21.caption
+msgid "Median"
+msgstr "Mediano"
+
+#: tfreffect.button22.caption
+msgid "Smart zoom 3"
+msgstr "Smart zoom 3"
+
+#: tfreffect.button23.caption
+msgid "Twirl"
+msgstr "Volteggiare"
+
+#: tfreffect.button24.caption
+msgid "Pixelate"
+msgstr "Pixelated"
+
+#: tfreffect.button25.caption
+msgid "Fade"
+msgstr "Dissolvenza"
+
+#: tfreffect.button26.caption
+msgctxt "tfreffect.button26.caption"
+msgid "-"
+msgstr "-"
+
+#: tfreffect.button27.caption
+msgctxt "tfreffect.button27.caption"
+msgid "+"
+msgstr "+"
+
+#: tfreffect.button28.caption
+msgctxt "tfreffect.button28.caption"
+msgid "-"
+msgstr "-"
+
+#: tfreffect.button29.caption
+msgctxt "tfreffect.button29.caption"
+msgid "+"
+msgstr "+"
+
+#: tfreffect.button3.caption
+msgctxt "tfreffect.button3.caption"
+msgid "Highlight green"
+msgstr "Evidenziare verde"
+
+#: tfreffect.button30.caption
+msgctxt "tfreffect.button30.caption"
+msgid "-"
+msgstr "-"
+
+#: tfreffect.button31.caption
+msgctxt "tfreffect.button31.caption"
+msgid "+"
+msgstr "+"
+
+#: tfreffect.button4.caption
+msgctxt "tfreffect.button4.caption"
+msgid "Highlight blue"
+msgstr "Evidenziare blu"
+
+#: tfreffect.button5.caption
+msgctxt "tfreffect.button5.caption"
+msgid "Reload image"
+msgstr "Ricarica immagine"
+
+#: tfreffect.button6.caption
+msgid "RGB -> BGR"
+msgstr "RGB -> BGR"
+
+#: tfreffect.button7.caption
+msgid "RGB -> RBG"
+msgstr "RGB -> RBG"
+
+#: tfreffect.button8.caption
+msgid "RGB -> GRB"
+msgstr "RGB -> GRB"
+
+#: tfreffect.button9.caption
+msgid "RGB -> GBR"
+msgstr "RB -> GBR"
+
+#: tfreffect.caption
+msgctxt "tfreffect.caption"
+msgid "Effects"
+msgstr "Effettos"
+
+#: tfreffect.groupbox1.caption
+msgid "Change colors"
+msgstr "Cambia colori"
+
+#: tfreffect.groupbox2.caption
+msgid "Levels"
+msgstr "Livello"
+
+#: tfreffect.label1.caption
+#, fuzzy
+#| msgid "Brightness"
+msgid "Brightnes"
+msgstr "Luminosità"
+
+#: tfreffect.label2.caption
+msgid "Contrast"
+msgstr "Contrasto"
+
+#: tfreffect.label3.caption
+msgid "Gamma"
+msgstr "Gamma"
+
+#: tfrexif.caption
+msgctxt "tfrexif.caption"
+msgid "EXIF"
+msgstr "EXIF"
+
+#: tfrgoto.caption
+msgid "Go to image number..."
+msgstr "Vai al numero immagine..."
+
+#: tfrgoto.edit1.text
+msgid "0"
+msgstr "0"
+
+#: tfrgoto.label1.caption
+msgid "Go to image number:"
+msgstr "Vai al numero dell'immagine:"
+
+#: tfrmain.caption
+msgid "LazView"
+msgstr "LazView"
+
+#: tfrmain.label1.caption
+msgctxt "tfrmain.label1.caption"
+msgid "0/0"
+msgstr "0/0"
+
+#: tfrmain.label2.caption
+msgctxt "tfrmain.label2.caption"
+msgid "0/0"
+msgstr "0/0"
+
+#: tfrmain.mnuabout.caption
+msgid "About..."
+msgstr "Su..."
+
+#: tfrmain.mnualwaysontop.caption
+msgid "Always on top"
+msgstr "Sempre in cima"
+
+#: tfrmain.mnuantialiasing.caption
+msgid "Antialiasing"
+msgstr "Antialiasing"
+
+#: tfrmain.mnuautorotate.caption
+msgid "Auto rotate (EXIF)"
+msgstr "Rotazione automatica (EXIF)"
+
+#: tfrmain.mnubgr.caption
+msgid "Invert color (RGB)-(BGR)"
+msgstr "Inverti colore (RGB)-(BGR)"
+
+#: tfrmain.mnubrg.caption
+msgid "Invert color (RGB)-(BRG)"
+msgstr "Inverti colore (RGB) - (BRG)"
+
+#: tfrmain.mnucache.caption
+msgid "Use RAM cache (experimental but faster)"
+msgstr "Usa la cache RAM (sperimentale ma più veloce)"
+
+#: tfrmain.mnucompact.caption
+msgid "Compact mode"
+msgstr "Modalità compatta"
+
+#: tfrmain.mnucopy.caption
+msgid "Copy"
+msgstr "Copia"
+
+#: tfrmain.mnucrop.caption
+msgid "Crop"
+msgstr "Crop"
+
+#: tfrmain.mnudeletefile.caption
+msgid "Delete"
+msgstr "Eliminare"
+
+#: tfrmain.mnudesktopcenter.caption
+msgid "Center"
+msgstr "Centro"
+
+#: tfrmain.mnudesktopexpand.caption
+msgid "Expand"
+msgstr "Espandere"
+
+#: tfrmain.mnudesktopimage.caption
+msgid "Set as desktop image"
+msgstr "Imposta come Immagine desktop"
+
+#: tfrmain.mnudesktopmosaic.caption
+msgid "Mosaic"
+msgstr "Mosaico"
+
+#: tfrmain.mnudesktopstrech.caption
+#, fuzzy
+#| msgid "Stretch"
+msgid "Strech"
+msgstr "Stirare"
+
+#: tfrmain.mnuedit.caption
+msgid "&Edit"
+msgstr "&Modificare"
+
+#: tfrmain.mnueffects.caption
+msgctxt "tfrmain.mnueffects.caption"
+msgid "Effects"
+msgstr "Effettos"
+
+#: tfrmain.mnuexif.caption
+msgctxt "tfrmain.mnuexif.caption"
+msgid "EXIF"
+msgstr "EXIF"
+
+#: tfrmain.mnuexit.caption
+msgctxt "tfrmain.mnuexit.caption"
+msgid "Exit"
+msgstr "Uscita"
+
+#: tfrmain.mnufile.caption
+msgid "&File"
+msgstr "&File"
+
+#: tfrmain.mnufliph.caption
+msgctxt "tfrmain.mnufliph.caption"
+msgid "Flip horizontal"
+msgstr "Flip orizzontale"
+
+#: tfrmain.mnuflipv.caption
+msgctxt "tfrmain.mnuflipv.caption"
+msgid "Flip vertical"
+msgstr "Capovolgi verticale"
+
+#: tfrmain.mnugbr.caption
+msgid "Invert color (RGB)-(GBR)"
+msgstr "Inverti colore (RGB)-(GBR)"
+
+#: tfrmain.mnugoto.caption
+msgid "Go to number image..."
+msgstr "Vai al numero immagine..."
+
+#: tfrmain.mnugrayscale.caption
+#, fuzzy
+#| msgid "Grayscale"
+msgctxt "tfrmain.mnugrayscale.caption"
+msgid "Greyscale"
+msgstr "Scala di grigi"
+
+#: tfrmain.mnugrb.caption
+msgid "Invert color (RGB)-(GRB)"
+msgstr "Inverti colore (RGB)-(GRB)"
+
+#: tfrmain.mnuhelp.caption
+msgid "&Help"
+msgstr "&Aiutare"
+
+#: tfrmain.mnuhighlightblue.caption
+msgctxt "tfrmain.mnuhighlightblue.caption"
+msgid "Highlight blue"
+msgstr "Evidenziare blu"
+
+#: tfrmain.mnuhighlightgreen.caption
+msgctxt "tfrmain.mnuhighlightgreen.caption"
+msgid "Highlight green"
+msgstr "Evidenziare verde"
+
+#: tfrmain.mnuhighlightred.caption
+msgctxt "tfrmain.mnuhighlightred.caption"
+msgid "Highlight red"
+msgstr "Evidenziare rosso"
+
+#: tfrmain.mnulanguage.caption
+msgid "Language"
+msgstr "Lingua"
+
+#: tfrmain.mnumenus.caption
+msgid "Menus"
+msgstr "Menus"
+
+#: tfrmain.mnumosaic.caption
+msgid "Mosaic background"
+msgstr "Sfondo mosaico"
+
+#: tfrmain.mnunegative.caption
+msgctxt "tfrmain.mnunegative.caption"
+msgid "Negative"
+msgstr "Negativo"
+
+#: tfrmain.mnunoise.caption
+msgid "Noise"
+msgstr "Rumore"
+
+#: tfrmain.mnuopen.caption
+msgid "Open"
+msgstr "Aprire"
+
+#: tfrmain.mnupaste.caption
+msgid "Paste"
+msgstr "Incollare"
+
+#: tfrmain.mnuprint.caption
+msgctxt "tfrmain.mnuprint.caption"
+msgid "Print"
+msgstr "Stampa"
+
+#: tfrmain.mnuquitblue.caption
+msgid "Quit blue"
+msgstr "Andare in pensione blu"
+
+#: tfrmain.mnuquitgreen.caption
+msgid "Quit green"
+msgstr "Andare in pensione verde"
+
+#: tfrmain.mnuquitred.caption
+msgid "Quit red"
+msgstr "Andare in pensione rosso"
+
+#: tfrmain.mnurbg.caption
+msgid "Invert color (RGB)-(RBG)"
+msgstr "Inverti colore (RGB)-(RBG)"
+
+#: tfrmain.mnurealmode.caption
+msgid "Real mode"
+msgstr "Modalità reale"
+
+#: tfrmain.mnuredo.caption
+msgid "Redo"
+msgstr "Rifare"
+
+#: tfrmain.mnuresize.caption
+msgid "Resize..."
+msgstr "Ridimensionare..."
+
+#: tfrmain.mnurotatel.caption
+msgid "Rotate left"
+msgstr "Ruota a sinistra"
+
+#: tfrmain.mnurotater.caption
+msgid "Rotate right"
+msgstr "Ruota a destra"
+
+#: tfrmain.mnusave.caption
+msgid "Save"
+msgstr "Salvare"
+
+#: tfrmain.mnusaveas.caption
+msgid "Save as..."
+msgstr "Salvare con nome..."
+
+#: tfrmain.mnuselect.caption
+msgid "Select"
+msgstr "Selezionare"
+
+#: tfrmain.mnushowthumbs.caption
+msgid "Thumbail panel"
+msgstr "Pannello delle miniature"
+
+#: tfrmain.mnusmooth.caption
+msgctxt "tfrmain.mnusmooth.caption"
+msgid "Smooth"
+msgstr "Liscio"
+
+#: tfrmain.mnustatusbar.caption
+msgid "Status bar"
+msgstr "Barra di stato"
+
+#: tfrmain.mnustrech.caption
+#, fuzzy
+#| msgid "Stretch image"
+msgid "Strech image"
+msgstr "Immagine Sticada"
+
+#: tfrmain.mnuswirl.caption
+msgid "Swirl"
+msgstr "Turbinio"
+
+#: tfrmain.mnuthumb128.caption
+msgid "128x128"
+msgstr "128x128"
+
+#: tfrmain.mnuthumb32.caption
+msgid "32x32"
+msgstr "32x32"
+
+#: tfrmain.mnuthumb64.caption
+msgid "64x64"
+msgstr "64x64"
+
+#: tfrmain.mnuthumbcustom.caption
+msgid "Custom..."
+msgstr "Personalizzato..."
+
+#: tfrmain.mnuthumbsize.caption
+msgid "Thumbail size"
+msgstr "Dimensione miniatura"
+
+#: tfrmain.mnutoolbar.caption
+#, fuzzy
+#| msgid "Toolbar"
+msgid "Tool bar"
+msgstr "Barra degli strumenti"
+
+#: tfrmain.mnutoolbarinfull.caption
+msgid "Tool bar in fullscreen"
+msgstr "Barra degli strumenti a schermo intero\""
+
+#: tfrmain.mnutools.caption
+msgid "Image"
+msgstr "Immagine"
+
+#: tfrmain.mnutreeview.caption
+msgid "Tree view"
+msgstr "Vista ad albero"
+
+#: tfrmain.mnutv.caption
+msgid "TV"
+msgstr "TV"
+
+#: tfrmain.mnuundo.caption
+msgid "Undo"
+msgstr "Annullare"
+
+#: tfrmain.mnuvideosupport.caption
+msgid "Video support"
+msgstr "Supporto Video"
+
+#: tfrmain.mnuview.caption
+msgid "&View"
+msgstr "&Mostra"
+
+#: tfrmain.mnuwindoweffects.caption
+msgid "Effects window"
+msgstr "Finestra Effetti"
+
+#: tfrmain.statusbar1.panels[0].text
+msgctxt "tfrmain.statusbar1.panels[0].text"
+msgid "0/0"
+msgstr "0/0"
+
+#: tfrmain.statusbar1.panels[1].text
+msgid "Resolution: 0x0"
+msgstr "Risoluzione: 0x0"
+
+#: tfrmain.statusbar1.panels[2].text
+msgid "Frame 0/0"
+msgstr "Telaio 0/0"
+
+#: tfrmain.statusbar1.panels[3].text
+msgid "Size: 0"
+msgstr "Dimensioni: 0"
+
+#: tfrmain.statusbar1.panels[4].text
+msgid "Time: 0ms"
+msgstr "Tempo: 0 ms"
+
+#: tfrmain.statusbar1.panels[5].text
+msgid "EXIF:"
+msgstr "EXIF"
+
+#: tfrmain.statusbar1.simpletext
+msgid "Marco 1.0"
+msgstr "Marco 1.0"
+
+#: tfrmain.tbadjust.hint
+msgid "Adjust image"
+msgstr "Regola immagine"
+
+#: tfrmain.tbarepeat.caption
+msgid "A"
+msgstr ""
+
+#: tfrmain.tbarepeat.hint
+msgid "A repeat"
+msgstr ""
+
+#: tfrmain.tbbrepeat.caption
+msgid "B"
+msgstr ""
+
+#: tfrmain.tbbrepeat.hint
+msgid "B repeat"
+msgstr ""
+
+#: tfrmain.tbexit.hint
+msgctxt "tfrmain.tbexit.hint"
+msgid "Exit"
+msgstr "Uscita"
+
+#: tfrmain.tbfastanim.hint
+msgid "Speed up"
+msgstr "Accelerare"
+
+#: tfrmain.tbfirstimage.hint
+msgid "First image"
+msgstr "Prima immagine"
+
+#: tfrmain.tbfliphorizontal.hint
+msgctxt "tfrmain.tbfliphorizontal.hint"
+msgid "Flip horizontal"
+msgstr "Flip orizzontale"
+
+#: tfrmain.tbflipvertical.hint
+msgctxt "tfrmain.tbflipvertical.hint"
+msgid "Flip vertical"
+msgstr "Capovolgi verticale"
+
+#: tfrmain.tbfullscreen.hint
+msgid "Full screen"
+msgstr "Schermo intero"
+
+#: tfrmain.tbinformation.hint
+msgid "Information"
+msgstr "Informazione"
+
+#: tfrmain.tblastimage.hint
+msgid "Last image"
+msgstr "Ultima immagine"
+
+#: tfrmain.tbnextframe.hint
+msgid "Next frame"
+msgstr "Fotogramma successivo"
+
+#: tfrmain.tbnextimage.hint
+msgid "Next image"
+msgstr "Immagine successiva"
+
+#: tfrmain.tbopen.hint
+msgid "Open image"
+msgstr "Apri immagine"
+
+#: tfrmain.tbpauseanim.hint
+#, fuzzy
+#| msgid "Play / Pause animation"
+msgid "Play/Pause animation"
+msgstr "Riproduzione / pausa animazione"
+
+#: tfrmain.tbplayshow.hint
+msgid "Start presentation"
+msgstr "Avvia presentazione"
+
+#: tfrmain.tbprevframe.hint
+#, fuzzy
+#| msgid "Previous frame"
+msgid "Prev frame"
+msgstr "Frame precedente"
+
+#: tfrmain.tbprevimage.hint
+#, fuzzy
+#| msgid "Previous image"
+msgid "Prev image"
+msgstr "Immagine precedente"
+
+#: tfrmain.tbprint.hint
+msgctxt "tfrmain.tbprint.hint"
+msgid "Print"
+msgstr "Stampa"
+
+#: tfrmain.tbrandom.hint
+msgid "Random presentation"
+msgstr "Presentazione casuale"
+
+#: tfrmain.tbreload.hint
+msgctxt "tfrmain.tbreload.hint"
+msgid "Reload image"
+msgstr "Ricarica immagine"
+
+#: tfrmain.tbrotateleft.hint
+msgid "Flip left"
+msgstr "Capovolgi a sinistra"
+
+#: tfrmain.tbrotateright.hint
+msgid "Flip right"
+msgstr "Capovolgi a destra"
+
+#: tfrmain.tbsave.hint
+msgid "Save image"
+msgstr "Salva immagine"
+
+#: tfrmain.tbselect.hint
+msgid "Selection tool"
+msgstr "Strumento di selezione"
+
+#: tfrmain.tbshowthumbs.hint
+msgid "Show miniatures"
+msgstr "Mostra miniatures"
+
+#: tfrmain.tbshowtreeview.hint
+msgid "Show tree view"
+msgstr "Mostra vista ad albero"
+
+#: tfrmain.tbslowanim.hint
+msgid "Speed down"
+msgstr "Velocità giù"
+
+#: tfrmain.tbstrech.hint
+msgid "Large"
+msgstr "Grande"
+
+#: tfrmain.tbzoom100.hint
+msgid "Zoom 100%"
+msgstr "Zoom 100%"
+
+#: tfrmain.tbzoomin.hint
+msgid "Zoom +"
+msgstr "Zoom +"
+
+#: tfrmain.tbzoomout.hint
+msgid "Zoom -"
+msgstr "Zoom -"
+
+#: tfrpass.caption
+msgid "Enter password"
+msgstr "Inserire la password"
+
+#: tfrpass.label1.caption
+msgid "Password:"
+msgstr "Password:"
+
+#: tfrprint.caption
+msgctxt "tfrprint.caption"
+msgid "Print"
+msgstr "Stampa"
+
+#: tfrprint.lblcopys.caption
+#, fuzzy
+#| msgid "Copy:"
+msgid "Copys:"
+msgstr "Copia:"
+
+#: tfrprint.lblprint.caption
+msgid "Printer:"
+msgstr "Stampante"
+
+#: tfrprint.lblsheel.caption
+msgid "Sheel:"
+msgstr "Shell"
+
+#: tfrprint.rbhorizontal.caption
+msgid "Horizontal"
+msgstr "Orizzontale"
+
+#: tfrprint.rbvertical.caption
+msgid "Vertical"
+msgstr "Verticale"
+
+#: tfrresize.caption
+msgid "Resize"
+msgstr "Resizee"
+
+#: tfrresize.cbfilter.text
+msgid "Lanczos"
+msgstr "Lanczos"
+
+#: tfrresize.label1.caption
+msgid "Width:"
+msgstr "Larghezza:"
+
+#: tfrresize.label2.caption
+msgid "Height:"
+msgstr "Altezza:"
+
+#: tfrresize.lblfilter.caption
+msgid "Filter:"
+msgstr "Filtro:"
+
+#: tfrresize.togglebox1.caption
+msgid "]"
+msgstr "]"
+
+#: tfrresize.togglebox1.hint
+msgid "keep aspect ratio"
+msgstr "mantieni le proporzioni"
+
+#: tfrthumbsize.caption
+msgid "Thumbnail size"
+msgstr "Dimensione miniatura"
+
+#: tfrthumbsize.label1.caption
+msgid "Thumbnail size (with x height)"
+msgstr "Dimensione miniatura (Larghezza x altezza)"
+

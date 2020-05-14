@@ -1,0 +1,759 @@
+﻿msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+#: tform3.caption
+msgid "Quality"
+msgstr "质量"
+
+#: tform3.label1.caption
+msgid "100"
+msgstr "100"
+
+#: tfreffect.button1.caption
+msgctxt "tfreffect.button1.caption"
+msgid "Grayscale"
+msgstr "灰度"
+
+#: tfreffect.button10.caption
+msgid "RGB -> BRG"
+msgstr "RGB -> BRG"
+
+#: tfreffect.button11.caption
+msgctxt "tfreffect.button11.caption"
+msgid "Smooth"
+msgstr "光滑"
+
+#: tfreffect.button12.caption
+msgid "Sharpen"
+msgstr "锐化"
+
+#: tfreffect.button13.caption
+msgctxt "tfreffect.button13.caption"
+msgid "Negative"
+msgstr "负"
+
+#: tfreffect.button14.caption
+msgid "Plane (slow)"
+msgstr "飞机 （慢)"
+
+#: tfreffect.button15.caption
+msgid "Contour"
+msgstr "轮廓"
+
+#: tfreffect.button16.caption
+msgid "Cylinder"
+msgstr "缸\""
+
+#: tfreffect.button17.caption
+msgid "Emboss"
+msgstr "浮雕"
+
+#: tfreffect.button18.caption
+msgid "Emboss high light"
+msgstr "浮雕亮点"
+
+#: tfreffect.button19.caption
+msgid "Normalize"
+msgstr "正常化"
+
+#: tfreffect.button2.caption
+msgctxt "tfreffect.button2.caption"
+msgid "Highlight red"
+msgstr "突出显示红色"
+
+#: tfreffect.button20.caption
+msgid "Sphere"
+msgstr "球体"
+
+#: tfreffect.button21.caption
+msgid "Median"
+msgstr "中位数"
+
+#: tfreffect.button22.caption
+msgid "Smart zoom 3"
+msgstr "智能变焦 3"
+
+#: tfreffect.button23.caption
+msgid "Twirl"
+msgstr "旋转"
+
+#: tfreffect.button24.caption
+msgid "Pixelate"
+msgstr "像素化"
+
+#: tfreffect.button25.caption
+msgid "Fade"
+msgstr "淡出"
+
+#: tfreffect.button26.caption
+msgctxt "tfreffect.button26.caption"
+msgid "-"
+msgstr "-"
+
+#: tfreffect.button27.caption
+msgctxt "tfreffect.button27.caption"
+msgid "+"
+msgstr "+"
+
+#: tfreffect.button28.caption
+msgctxt "tfreffect.button28.caption"
+msgid "-"
+msgstr "-"
+
+#: tfreffect.button29.caption
+msgctxt "tfreffect.button29.caption"
+msgid "+"
+msgstr "+"
+
+#: tfreffect.button3.caption
+msgctxt "tfreffect.button3.caption"
+msgid "Highlight green"
+msgstr "突出显示绿色"
+
+#: tfreffect.button30.caption
+msgctxt "tfreffect.button30.caption"
+msgid "-"
+msgstr "-"
+
+#: tfreffect.button31.caption
+msgctxt "tfreffect.button31.caption"
+msgid "+"
+msgstr "+"
+
+#: tfreffect.button4.caption
+msgctxt "tfreffect.button4.caption"
+msgid "Highlight blue"
+msgstr "突出显示蓝色"
+
+#: tfreffect.button5.caption
+msgctxt "tfreffect.button5.caption"
+msgid "Reload image"
+msgstr "重新加载图像"
+
+#: tfreffect.button6.caption
+msgid "RGB -> BGR"
+msgstr "RGB -> BGR"
+
+#: tfreffect.button7.caption
+msgid "RGB -> RBG"
+msgstr "RGB -> RBG"
+
+#: tfreffect.button8.caption
+msgid "RGB -> GRB"
+msgstr "RGB -> GRB"
+
+#: tfreffect.button9.caption
+msgid "RGB -> GBR"
+msgstr "RGB -> GBR"
+
+#: tfreffect.caption
+msgctxt "tfreffect.caption"
+msgid "Effects"
+msgstr "效果"
+
+#: tfreffect.groupbox1.caption
+msgid "Change colors"
+msgstr "改变颜色"
+
+#: tfreffect.groupbox2.caption
+msgid "Levels"
+msgstr "级别"
+
+#: tfreffect.label1.caption
+#, fuzzy
+#| msgid "Brightness"
+msgid "Brightnes"
+msgstr "亮度"
+
+#: tfreffect.label2.caption
+msgid "Contrast"
+msgstr "对比"
+
+#: tfreffect.label3.caption
+msgid "Gamma"
+msgstr "伽玛"
+
+#: tfrexif.caption
+msgctxt "tfrexif.caption"
+msgid "EXIF"
+msgstr "EXIF"
+
+#: tfrgoto.caption
+msgid "Go to image number..."
+msgstr "转到图像编号。.."
+
+#: tfrgoto.edit1.text
+msgid "0"
+msgstr "0"
+
+#: tfrgoto.label1.caption
+msgid "Go to image number:"
+msgstr "转到图像编号:"
+
+#: tfrmain.caption
+msgid "LazView"
+msgstr "LazView"
+
+#: tfrmain.label1.caption
+msgctxt "tfrmain.label1.caption"
+msgid "0/0"
+msgstr "0/0"
+
+#: tfrmain.label2.caption
+msgctxt "tfrmain.label2.caption"
+msgid "0/0"
+msgstr "0/0"
+
+#: tfrmain.mnuabout.caption
+msgid "About..."
+msgstr "关于。.."
+
+#: tfrmain.mnualwaysontop.caption
+msgid "Always on top"
+msgstr "总是在上面"
+
+#: tfrmain.mnuantialiasing.caption
+msgid "Antialiasing"
+msgstr "抗锯齿"
+
+#: tfrmain.mnuautorotate.caption
+msgid "Auto rotate (EXIF)"
+msgstr "自动旋转 (EXIF)"
+
+#: tfrmain.mnubgr.caption
+msgid "Invert color (RGB)-(BGR)"
+msgstr "反转颜色（RGB）-（BGR)"
+
+#: tfrmain.mnubrg.caption
+msgid "Invert color (RGB)-(BRG)"
+msgstr "反转颜色（RGB）-（BRG)"
+
+#: tfrmain.mnucache.caption
+msgid "Use RAM cache (experimental but faster)"
+msgstr "使用RAM缓存（实验性但速度更快)"
+
+#: tfrmain.mnucompact.caption
+msgid "Compact mode"
+msgstr "紧凑模式"
+
+#: tfrmain.mnucopy.caption
+msgid "Copy"
+msgstr "复制"
+
+#: tfrmain.mnucrop.caption
+msgid "Crop"
+msgstr "作物"
+
+#: tfrmain.mnudeletefile.caption
+msgid "Delete"
+msgstr "删除"
+
+#: tfrmain.mnudesktopcenter.caption
+msgid "Center"
+msgstr "中心"
+
+#: tfrmain.mnudesktopexpand.caption
+msgid "Expand"
+msgstr "展开"
+
+#: tfrmain.mnudesktopimage.caption
+msgid "Set as desktop image"
+msgstr "设置为桌面映像"
+
+#: tfrmain.mnudesktopmosaic.caption
+msgid "Mosaic"
+msgstr "马赛克"
+
+#: tfrmain.mnudesktopstrech.caption
+#, fuzzy
+#| msgid "Stretch"
+msgid "Strech"
+msgstr "伸展"
+
+#: tfrmain.mnuedit.caption
+msgid "&Edit"
+msgstr "编辑(e)"
+
+#: tfrmain.mnueffects.caption
+msgctxt "tfrmain.mnueffects.caption"
+msgid "Effects"
+msgstr "效果"
+
+#: tfrmain.mnuexif.caption
+msgctxt "tfrmain.mnuexif.caption"
+msgid "EXIF"
+msgstr "EXIF"
+
+#: tfrmain.mnuexit.caption
+msgctxt "tfrmain.mnuexit.caption"
+msgid "Exit"
+msgstr "退出"
+
+#: tfrmain.mnufile.caption
+msgid "&File"
+msgstr "文件(f)"
+
+#: tfrmain.mnufliph.caption
+msgctxt "tfrmain.mnufliph.caption"
+msgid "Flip horizontal"
+msgstr "水平翻转"
+
+#: tfrmain.mnuflipv.caption
+msgctxt "tfrmain.mnuflipv.caption"
+msgid "Flip vertical"
+msgstr "垂直翻转"
+
+#: tfrmain.mnugbr.caption
+msgid "Invert color (RGB)-(GBR)"
+msgstr "反转颜色（RGB）-（GBR)"
+
+#: tfrmain.mnugoto.caption
+msgid "Go to number image..."
+msgstr "转到数字图像。.."
+
+#: tfrmain.mnugrayscale.caption
+#, fuzzy
+#| msgid "Grayscale"
+msgctxt "tfrmain.mnugrayscale.caption"
+msgid "Greyscale"
+msgstr "灰度"
+
+#: tfrmain.mnugrb.caption
+msgid "Invert color (RGB)-(GRB)"
+msgstr "反转颜色（RGB）-（GRB)"
+
+#: tfrmain.mnuhelp.caption
+msgid "&Help"
+msgstr "帮助(h)"
+
+#: tfrmain.mnuhighlightblue.caption
+msgctxt "tfrmain.mnuhighlightblue.caption"
+msgid "Highlight blue"
+msgstr "突出显示蓝色"
+
+#: tfrmain.mnuhighlightgreen.caption
+msgctxt "tfrmain.mnuhighlightgreen.caption"
+msgid "Highlight green"
+msgstr "突出显示绿色"
+
+#: tfrmain.mnuhighlightred.caption
+msgctxt "tfrmain.mnuhighlightred.caption"
+msgid "Highlight red"
+msgstr "突出显示红色"
+
+#: tfrmain.mnulanguage.caption
+msgid "Language"
+msgstr "语言"
+
+#: tfrmain.mnumenus.caption
+msgid "Menus"
+msgstr "菜单"
+
+#: tfrmain.mnumosaic.caption
+msgid "Mosaic background"
+msgstr "马赛克背景"
+
+#: tfrmain.mnunegative.caption
+msgctxt "tfrmain.mnunegative.caption"
+msgid "Negative"
+msgstr "负"
+
+#: tfrmain.mnunoise.caption
+msgid "Noise"
+msgstr "噪音"
+
+#: tfrmain.mnuopen.caption
+msgid "Open"
+msgstr "打开"
+
+#: tfrmain.mnupaste.caption
+msgid "Paste"
+msgstr "粘贴"
+
+#: tfrmain.mnuprint.caption
+msgctxt "tfrmain.mnuprint.caption"
+msgid "Print"
+msgstr "打印"
+
+#: tfrmain.mnuquitblue.caption
+msgid "Quit blue"
+msgstr "退休蓝色"
+
+#: tfrmain.mnuquitgreen.caption
+msgid "Quit green"
+msgstr "退休绿色"
+
+#: tfrmain.mnuquitred.caption
+msgid "Quit red"
+msgstr "红色退休"
+
+#: tfrmain.mnurbg.caption
+msgid "Invert color (RGB)-(RBG)"
+msgstr "反转颜色（RGB）-（RBG)"
+
+#: tfrmain.mnurealmode.caption
+msgid "Real mode"
+msgstr "实模式"
+
+#: tfrmain.mnuredo.caption
+msgid "Redo"
+msgstr "重做"
+
+#: tfrmain.mnuresize.caption
+msgid "Resize..."
+msgstr "调整大小。.."
+
+#: tfrmain.mnurotatel.caption
+msgid "Rotate left"
+msgstr "向左旋转"
+
+#: tfrmain.mnurotater.caption
+msgid "Rotate right"
+msgstr "向右旋转"
+
+#: tfrmain.mnusave.caption
+msgid "Save"
+msgstr "保存"
+
+#: tfrmain.mnusaveas.caption
+msgid "Save as..."
+msgstr "另存为..."
+
+#: tfrmain.mnuselect.caption
+msgid "Select"
+msgstr "选择"
+
+#: tfrmain.mnushowthumbs.caption
+#, fuzzy
+#| msgid "Thumbnail panel"
+msgid "Thumbail panel"
+msgstr "缩略图面板"
+
+#: tfrmain.mnusmooth.caption
+msgctxt "tfrmain.mnusmooth.caption"
+msgid "Smooth"
+msgstr "光滑"
+
+#: tfrmain.mnustatusbar.caption
+msgid "Status bar"
+msgstr "状态栏"
+
+#: tfrmain.mnustrech.caption
+#, fuzzy
+#| msgid "Stretch image"
+msgid "Strech image"
+msgstr "拉伸图像"
+
+#: tfrmain.mnuswirl.caption
+msgid "Swirl"
+msgstr "漩涡"
+
+#: tfrmain.mnuthumb128.caption
+msgid "128x128"
+msgstr "128x128"
+
+#: tfrmain.mnuthumb32.caption
+msgid "32x32"
+msgstr "32x32"
+
+#: tfrmain.mnuthumb64.caption
+msgid "64x64"
+msgstr "64x64"
+
+#: tfrmain.mnuthumbcustom.caption
+msgid "Custom..."
+msgstr "自定义..."
+
+#: tfrmain.mnuthumbsize.caption
+#, fuzzy
+#| msgid "Thumbnail size"
+msgctxt "tfrmain.mnuthumbsize.caption"
+msgid "Thumbail size"
+msgstr "缩略图大小"
+
+#: tfrmain.mnutoolbar.caption
+#, fuzzy
+#| msgid "Toolbar"
+msgid "Tool bar"
+msgstr "工具栏"
+
+#: tfrmain.mnutoolbarinfull.caption
+msgid "Tool bar in fullscreen"
+msgstr "全屏工具栏"
+
+#: tfrmain.mnutools.caption
+msgid "Image"
+msgstr "图像"
+
+#: tfrmain.mnutreeview.caption
+msgid "Tree view"
+msgstr "树视图"
+
+#: tfrmain.mnutv.caption
+msgid "TV"
+msgstr "TV"
+
+#: tfrmain.mnuundo.caption
+msgid "Undo"
+msgstr "撤消"
+
+#: tfrmain.mnuvideosupport.caption
+msgid "Video support"
+msgstr "视频支持"
+
+#: tfrmain.mnuview.caption
+msgid "&View"
+msgstr "查看(v)"
+
+#: tfrmain.mnuwindoweffects.caption
+msgid "Effects window"
+msgstr "效果窗口"
+
+#: tfrmain.statusbar1.panels[0].text
+msgctxt "tfrmain.statusbar1.panels[0].text"
+msgid "0/0"
+msgstr "0/0"
+
+#: tfrmain.statusbar1.panels[1].text
+msgid "Resolution: 0x0"
+msgstr "分辨率： 0x0"
+
+#: tfrmain.statusbar1.panels[2].text
+msgid "Frame 0/0"
+msgstr "帧 0/0"
+
+#: tfrmain.statusbar1.panels[3].text
+msgid "Size: 0"
+msgstr "大小 ：0"
+
+#: tfrmain.statusbar1.panels[4].text
+msgid "Time: 0ms"
+msgstr "时间： 0ms"
+
+#: tfrmain.statusbar1.panels[5].text
+msgid "EXIF:"
+msgstr "EXIF"
+
+#: tfrmain.statusbar1.simpletext
+msgid "Marco 1.0"
+msgstr "Marco 1.0"
+
+#: tfrmain.tbadjust.hint
+msgid "Adjust image"
+msgstr "调整图像"
+
+#: tfrmain.tbarepeat.caption
+msgid "A"
+msgstr ""
+
+#: tfrmain.tbarepeat.hint
+msgid "A repeat"
+msgstr ""
+
+#: tfrmain.tbbrepeat.caption
+msgid "B"
+msgstr ""
+
+#: tfrmain.tbbrepeat.hint
+msgid "B repeat"
+msgstr ""
+
+#: tfrmain.tbexit.hint
+msgctxt "tfrmain.tbexit.hint"
+msgid "Exit"
+msgstr "退出"
+
+#: tfrmain.tbfastanim.hint
+msgid "Speed up"
+msgstr "加速"
+
+#: tfrmain.tbfirstimage.hint
+msgid "First image"
+msgstr "第一张图片"
+
+#: tfrmain.tbfliphorizontal.hint
+msgctxt "tfrmain.tbfliphorizontal.hint"
+msgid "Flip horizontal"
+msgstr "水平翻转"
+
+#: tfrmain.tbflipvertical.hint
+msgctxt "tfrmain.tbflipvertical.hint"
+msgid "Flip vertical"
+msgstr "垂直翻转"
+
+#: tfrmain.tbfullscreen.hint
+msgid "Full screen"
+msgstr "全屏"
+
+#: tfrmain.tbinformation.hint
+msgid "Information"
+msgstr "信息"
+
+#: tfrmain.tblastimage.hint
+msgid "Last image"
+msgstr "最后的图像"
+
+#: tfrmain.tbnextframe.hint
+msgid "Next frame"
+msgstr "下一帧"
+
+#: tfrmain.tbnextimage.hint
+msgid "Next image"
+msgstr "下一张图片"
+
+#: tfrmain.tbopen.hint
+msgid "Open image"
+msgstr "打开图像"
+
+#: tfrmain.tbpauseanim.hint
+#, fuzzy
+#| msgid "Play / Pause animation"
+msgid "Play/Pause animation"
+msgstr "播放 / 暂停动画"
+
+#: tfrmain.tbplayshow.hint
+msgid "Start presentation"
+msgstr "开始演示"
+
+#: tfrmain.tbprevframe.hint
+#, fuzzy
+#| msgid "Previous frame"
+msgid "Prev frame"
+msgstr "上一帧"
+
+#: tfrmain.tbprevimage.hint
+#, fuzzy
+#| msgid "Previous image"
+msgid "Prev image"
+msgstr "上一张图片"
+
+#: tfrmain.tbprint.hint
+msgctxt "tfrmain.tbprint.hint"
+msgid "Print"
+msgstr "打印"
+
+#: tfrmain.tbrandom.hint
+msgid "Random presentation"
+msgstr "随机呈现"
+
+#: tfrmain.tbreload.hint
+msgctxt "tfrmain.tbreload.hint"
+msgid "Reload image"
+msgstr "重新加载图像"
+
+#: tfrmain.tbrotateleft.hint
+msgid "Flip left"
+msgstr "向左翻转"
+
+#: tfrmain.tbrotateright.hint
+msgid "Flip right"
+msgstr "向右翻转"
+
+#: tfrmain.tbsave.hint
+msgid "Save image"
+msgstr "保存图像"
+
+#: tfrmain.tbselect.hint
+msgid "Selection tool"
+msgstr "选择工具"
+
+#: tfrmain.tbshowthumbs.hint
+msgid "Show miniatures"
+msgstr "显示缩影"
+
+#: tfrmain.tbshowtreeview.hint
+msgid "Show tree view"
+msgstr "显示树视图"
+
+#: tfrmain.tbslowanim.hint
+msgid "Speed down"
+msgstr "加速"
+
+#: tfrmain.tbstrech.hint
+msgid "Large"
+msgstr "大"
+
+#: tfrmain.tbzoom100.hint
+msgid "Zoom 100%"
+msgstr "Zoom 100%"
+
+#: tfrmain.tbzoomin.hint
+msgid "Zoom +"
+msgstr "+"
+
+#: tfrmain.tbzoomout.hint
+msgid "Zoom -"
+msgstr "Zoom -"
+
+#: tfrpass.caption
+msgid "Enter password"
+msgstr "输入密码"
+
+#: tfrpass.label1.caption
+msgid "Password:"
+msgstr "密码:"
+
+#: tfrprint.caption
+msgctxt "tfrprint.caption"
+msgid "Print"
+msgstr "打印"
+
+#: tfrprint.lblcopys.caption
+#, fuzzy
+#| msgid "Copy:"
+msgid "Copys:"
+msgstr "复制:"
+
+#: tfrprint.lblprint.caption
+msgid "Printer:"
+msgstr "打印机:"
+
+#: tfrprint.lblsheel.caption
+msgid "Sheel:"
+msgstr "Shell"
+
+#: tfrprint.rbhorizontal.caption
+msgid "Horizontal"
+msgstr "水平"
+
+#: tfrprint.rbvertical.caption
+msgid "Vertical"
+msgstr "垂直"
+
+#: tfrresize.caption
+msgid "Resize"
+msgstr "调整大小"
+
+#: tfrresize.cbfilter.text
+msgid "Lanczos"
+msgstr "Lanczos"
+
+#: tfrresize.label1.caption
+msgid "Width:"
+msgstr "宽度:"
+
+#: tfrresize.label2.caption
+msgid "Height:"
+msgstr "高度:"
+
+#: tfrresize.lblfilter.caption
+msgid "Filter:"
+msgstr "过滤器:"
+
+#: tfrresize.togglebox1.caption
+msgid "]"
+msgstr "]"
+
+#: tfrresize.togglebox1.hint
+msgid "keep aspect ratio"
+msgstr "保持纵横比"
+
+#: tfrthumbsize.caption
+msgctxt "tfrthumbsize.caption"
+msgid "Thumbnail size"
+msgstr "缩略图大小"
+
+#: tfrthumbsize.label1.caption
+msgid "Thumbnail size (with x height)"
+msgstr "缩略图大小（宽x高)"
+

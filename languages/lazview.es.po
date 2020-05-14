@@ -526,22 +526,30 @@ msgstr ""
 msgid "Adjust image"
 msgstr "Ajustar imagen"
 
+#: tfrmain.tbarepeat.caption
+msgid "A"
+msgstr ""
+
+#: tfrmain.tbarepeat.hint
+msgid "A repeat"
+msgstr ""
+
+#: tfrmain.tbbrepeat.caption
+msgid "B"
+msgstr ""
+
+#: tfrmain.tbbrepeat.hint
+msgid "B repeat"
+msgstr ""
+
 #: tfrmain.tbexit.hint
 msgctxt "tfrmain.tbexit.hint"
 msgid "Exit"
 msgstr "Salir"
 
-#: tfrmain.tbfastanim.caption
-msgid "tbFastAnim"
-msgstr ""
-
 #: tfrmain.tbfastanim.hint
 msgid "Speed up"
 msgstr "Aumentar velocidad"
-
-#: tfrmain.tbfirstimage.caption
-msgid "tbFirstImage"
-msgstr ""
 
 #: tfrmain.tbfirstimage.hint
 msgid "First image"
@@ -561,25 +569,13 @@ msgstr "Voltear verticalmente"
 msgid "Full screen"
 msgstr "Pantalla completa"
 
-#: tfrmain.tbinformation.caption
-msgid "tbInformation"
-msgstr ""
-
 #: tfrmain.tbinformation.hint
 msgid "Information"
 msgstr "Informacion"
 
-#: tfrmain.tblastimage.caption
-msgid "tbLastImage"
-msgstr ""
-
 #: tfrmain.tblastimage.hint
 msgid "Last image"
 msgstr "Ultima imagen"
-
-#: tfrmain.tbnextframe.caption
-msgid "tbNextFrame"
-msgstr ""
 
 #: tfrmain.tbnextframe.hint
 msgid "Next frame"
@@ -589,17 +585,9 @@ msgstr "Fotograma siguiente"
 msgid "Next image"
 msgstr "Imagen siguiente"
 
-#: tfrmain.tbopen.caption
-msgid "tbOpen"
-msgstr ""
-
 #: tfrmain.tbopen.hint
 msgid "Open image"
 msgstr "Abrir imagen"
-
-#: tfrmain.tbpauseanim.caption
-msgid "tbPauseAnim"
-msgstr ""
 
 #: tfrmain.tbpauseanim.hint
 msgid "Play/Pause animation"
@@ -609,10 +597,6 @@ msgstr "Iniciar/Detener animacion"
 msgid "Start presentation"
 msgstr "Iniciar precentacion"
 
-#: tfrmain.tbprevframe.caption
-msgid "tbPrevFrame"
-msgstr ""
-
 #: tfrmain.tbprevframe.hint
 msgid "Prev frame"
 msgstr "Fotograma anterior"
@@ -620,10 +604,6 @@ msgstr "Fotograma anterior"
 #: tfrmain.tbprevimage.hint
 msgid "Prev image"
 msgstr "Imagen anterior"
-
-#: tfrmain.tbprint.caption
-msgid "tbPrint"
-msgstr ""
 
 #: tfrmain.tbprint.hint
 msgctxt "tfrmain.tbprint.hint"
@@ -647,17 +627,9 @@ msgstr "Rotar a la izquierda"
 msgid "Flip right"
 msgstr "Rotar a la derecha"
 
-#: tfrmain.tbsave.caption
-msgid "tbSave"
-msgstr ""
-
 #: tfrmain.tbsave.hint
 msgid "Save image"
 msgstr "Guardar imagen"
-
-#: tfrmain.tbselect.caption
-msgid "tbSelect"
-msgstr ""
 
 #: tfrmain.tbselect.hint
 msgid "Selection tool"
@@ -671,17 +643,9 @@ msgstr "Mostrar miniaturas"
 msgid "Show tree view"
 msgstr "Mostrar arbol de directorios"
 
-#: tfrmain.tbslowanim.caption
-msgid "tbSlowAnim"
-msgstr ""
-
 #: tfrmain.tbslowanim.hint
 msgid "Speed down"
 msgstr "Menos velocidad"
-
-#: tfrmain.tbstrech.caption
-msgid "tbStrech"
-msgstr ""
 
 #: tfrmain.tbstrech.hint
 msgid "Large"
@@ -698,26 +662,6 @@ msgstr "Zoom +"
 #: tfrmain.tbzoomout.hint
 msgid "Zoom -"
 msgstr "Zoom -"
-
-#: tfrmain.toolbutton1.caption
-msgid "ToolButton1"
-msgstr ""
-
-#: tfrmain.toolbutton2.caption
-msgid "ToolButton2"
-msgstr ""
-
-#: tfrmain.toolbutton22.caption
-msgid "ToolButton22"
-msgstr ""
-
-#: tfrmain.toolbutton23.caption
-msgid "ToolButton23"
-msgstr ""
-
-#: tfrmain.toolbutton25.caption
-msgid "ToolButton25"
-msgstr ""
 
 #: tfrpass.caption
 msgid "Enter password"

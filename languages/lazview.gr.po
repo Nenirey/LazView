@@ -1,0 +1,762 @@
+﻿msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+#: tform3.caption
+msgid "Quality"
+msgstr "Ποιότητα"
+
+#: tform3.label1.caption
+msgid "100"
+msgstr "100"
+
+#: tfreffect.button1.caption
+msgctxt "tfreffect.button1.caption"
+msgid "Grayscale"
+msgstr "Γκρι"
+
+#: tfreffect.button10.caption
+msgid "RGB -> BRG"
+msgstr "RGB -> BRG"
+
+#: tfreffect.button11.caption
+msgctxt "tfreffect.button11.caption"
+msgid "Smooth"
+msgstr "Ομαλή"
+
+#: tfreffect.button12.caption
+msgid "Sharpen"
+msgstr "Όξυνση"
+
+#: tfreffect.button13.caption
+msgctxt "tfreffect.button13.caption"
+msgid "Negative"
+msgstr "Αρνητικό"
+
+#: tfreffect.button14.caption
+msgid "Plane (slow)"
+msgstr "επίπεδο (αργή)"
+
+#: tfreffect.button15.caption
+msgid "Contour"
+msgstr "Περιγράμματος"
+
+#: tfreffect.button16.caption
+msgid "Cylinder"
+msgstr "Κύλινδρος"
+
+#: tfreffect.button17.caption
+msgid "Emboss"
+msgstr "Ανάγλυφο"
+
+#: tfreffect.button18.caption
+#, fuzzy
+#| msgid "Emboss highlight"
+msgid "Emboss high light"
+msgstr "Ανάγλυφη επισήμανση"
+
+#: tfreffect.button19.caption
+msgid "Normalize"
+msgstr "Κανονικοποίηση"
+
+#: tfreffect.button2.caption
+msgctxt "tfreffect.button2.caption"
+msgid "Highlight red"
+msgstr "Επισημάνετε το κόκκινο"
+
+#: tfreffect.button20.caption
+msgid "Sphere"
+msgstr "Σφαίρα"
+
+#: tfreffect.button21.caption
+msgid "Median"
+msgstr "Μέση"
+
+#: tfreffect.button22.caption
+msgid "Smart zoom 3"
+msgstr "Έξυπνο ζουμ 3"
+
+#: tfreffect.button23.caption
+msgid "Twirl"
+msgstr "Στριφογύρισμα"
+
+#: tfreffect.button24.caption
+msgid "Pixelate"
+msgstr "Pixelate"
+
+#: tfreffect.button25.caption
+msgid "Fade"
+msgstr "Εξασθενίσει"
+
+#: tfreffect.button26.caption
+msgctxt "tfreffect.button26.caption"
+msgid "-"
+msgstr "-"
+
+#: tfreffect.button27.caption
+msgctxt "tfreffect.button27.caption"
+msgid "+"
+msgstr "+"
+
+#: tfreffect.button28.caption
+msgctxt "tfreffect.button28.caption"
+msgid "-"
+msgstr "-"
+
+#: tfreffect.button29.caption
+msgctxt "tfreffect.button29.caption"
+msgid "+"
+msgstr "+"
+
+#: tfreffect.button3.caption
+msgctxt "tfreffect.button3.caption"
+msgid "Highlight green"
+msgstr "Επισημάνετε πράσινο"
+
+#: tfreffect.button30.caption
+msgctxt "tfreffect.button30.caption"
+msgid "-"
+msgstr "-"
+
+#: tfreffect.button31.caption
+msgctxt "tfreffect.button31.caption"
+msgid "+"
+msgstr "+"
+
+#: tfreffect.button4.caption
+msgctxt "tfreffect.button4.caption"
+msgid "Highlight blue"
+msgstr "Επισημάνετε το μπλε"
+
+#: tfreffect.button5.caption
+msgctxt "tfreffect.button5.caption"
+msgid "Reload image"
+msgstr "Επαναφόρτωση εικόνας"
+
+#: tfreffect.button6.caption
+msgid "RGB -> BGR"
+msgstr "RGB -> BGR"
+
+#: tfreffect.button7.caption
+msgid "RGB -> RBG"
+msgstr "RGB -> RBG"
+
+#: tfreffect.button8.caption
+msgid "RGB -> GRB"
+msgstr "RGB -> GRB"
+
+#: tfreffect.button9.caption
+msgid "RGB -> GBR"
+msgstr "RGB -> GBR"
+
+#: tfreffect.caption
+msgctxt "tfreffect.caption"
+msgid "Effects"
+msgstr "Παρενέργειες"
+
+#: tfreffect.groupbox1.caption
+msgid "Change colors"
+msgstr "Αλλαγή χρωμάτων"
+
+#: tfreffect.groupbox2.caption
+msgid "Levels"
+msgstr "Επίπεδα"
+
+#: tfreffect.label1.caption
+#, fuzzy
+#| msgid "Brightness"
+msgid "Brightnes"
+msgstr "Φωτεινότητα"
+
+#: tfreffect.label2.caption
+msgid "Contrast"
+msgstr "Αντίθεση"
+
+#: tfreffect.label3.caption
+msgid "Gamma"
+msgstr "Γάμα"
+
+#: tfrexif.caption
+msgctxt "tfrexif.caption"
+msgid "EXIF"
+msgstr "EXIF"
+
+#: tfrgoto.caption
+msgid "Go to image number..."
+msgstr "Μεταβείτε στον αριθμό εικόνας..."
+
+#: tfrgoto.edit1.text
+msgid "0"
+msgstr "0"
+
+#: tfrgoto.label1.caption
+msgid "Go to image number:"
+msgstr "Μετάβαση στον αριθμό εικόνας:"
+
+#: tfrmain.caption
+msgid "LazView"
+msgstr "LazView"
+
+#: tfrmain.label1.caption
+msgctxt "tfrmain.label1.caption"
+msgid "0/0"
+msgstr "0/0"
+
+#: tfrmain.label2.caption
+msgctxt "tfrmain.label2.caption"
+msgid "0/0"
+msgstr "0/0"
+
+#: tfrmain.mnuabout.caption
+msgid "About..."
+msgstr "Για..."
+
+#: tfrmain.mnualwaysontop.caption
+msgid "Always on top"
+msgstr "Πάντα στην κορυφή"
+
+#: tfrmain.mnuantialiasing.caption
+msgid "Antialiasing"
+msgstr "Εξομάλυνση"
+
+#: tfrmain.mnuautorotate.caption
+msgid "Auto rotate (EXIF)"
+msgstr "Αυτόματη περιστροφή (EXIF)"
+
+#: tfrmain.mnubgr.caption
+msgid "Invert color (RGB)-(BGR)"
+msgstr "Αντιστροφή χρώματος (RGB)-(BGR)"
+
+#: tfrmain.mnubrg.caption
+msgid "Invert color (RGB)-(BRG)"
+msgstr "Αντιστροφή χρώματος (RGB)-(BRG)"
+
+#: tfrmain.mnucache.caption
+msgid "Use RAM cache (experimental but faster)"
+msgstr "Χρησιμοποιήστε την προσωρινή μνήμη RAM (πειραματική αλλά ταχύτερη)"
+
+#: tfrmain.mnucompact.caption
+msgid "Compact mode"
+msgstr "Συμπαγής λειτουργία"
+
+#: tfrmain.mnucopy.caption
+msgid "Copy"
+msgstr "Αντιγραφή"
+
+#: tfrmain.mnucrop.caption
+msgid "Crop"
+msgstr "Crop"
+
+#: tfrmain.mnudeletefile.caption
+msgid "Delete"
+msgstr "Διαγράψετε"
+
+#: tfrmain.mnudesktopcenter.caption
+msgid "Center"
+msgstr "Κέντρο"
+
+#: tfrmain.mnudesktopexpand.caption
+msgid "Expand"
+msgstr "Αναπτύξτε"
+
+#: tfrmain.mnudesktopimage.caption
+msgid "Set as desktop image"
+msgstr "Ορισμός ως εικόνα επιφάνειας εργασίας"
+
+#: tfrmain.mnudesktopmosaic.caption
+msgid "Mosaic"
+msgstr "Ψηφιδωτό"
+
+#: tfrmain.mnudesktopstrech.caption
+#, fuzzy
+#| msgid "Stretch"
+msgid "Strech"
+msgstr "Εκτείνεται"
+
+#: tfrmain.mnuedit.caption
+msgid "&Edit"
+msgstr "&Επεξεργασία"
+
+#: tfrmain.mnueffects.caption
+msgctxt "tfrmain.mnueffects.caption"
+msgid "Effects"
+msgstr "Παρενέργειες"
+
+#: tfrmain.mnuexif.caption
+msgctxt "tfrmain.mnuexif.caption"
+msgid "EXIF"
+msgstr "EXIF"
+
+#: tfrmain.mnuexit.caption
+msgctxt "tfrmain.mnuexit.caption"
+msgid "Exit"
+msgstr "Έξοδος"
+
+#: tfrmain.mnufile.caption
+msgid "&File"
+msgstr "&Αρχείο"
+
+#: tfrmain.mnufliph.caption
+msgctxt "tfrmain.mnufliph.caption"
+msgid "Flip horizontal"
+msgstr "Αναστροφή οριζόντια"
+
+#: tfrmain.mnuflipv.caption
+msgctxt "tfrmain.mnuflipv.caption"
+msgid "Flip vertical"
+msgstr "Αναστροφή κάθετη"
+
+#: tfrmain.mnugbr.caption
+msgid "Invert color (RGB)-(GBR)"
+msgstr "Αντιστροφή χρώματος (RGB)-(GBR)"
+
+#: tfrmain.mnugoto.caption
+msgid "Go to number image..."
+msgstr "Μεταβείτε στην εικόνα αριθμού..."
+
+#: tfrmain.mnugrayscale.caption
+#, fuzzy
+#| msgid "Grayscale"
+msgctxt "tfrmain.mnugrayscale.caption"
+msgid "Greyscale"
+msgstr "Γκρι"
+
+#: tfrmain.mnugrb.caption
+msgid "Invert color (RGB)-(GRB)"
+msgstr "Αντιστροφή χρώματος (RGB)-(GRB)"
+
+#: tfrmain.mnuhelp.caption
+msgid "&Help"
+msgstr "&Βοηθήσει"
+
+#: tfrmain.mnuhighlightblue.caption
+#, fuzzy
+msgctxt "tfrmain.mnuhighlightblue.caption"
+msgid "Highlight blue"
+msgstr "Επισημάνετε το μπλε"
+
+#: tfrmain.mnuhighlightgreen.caption
+msgctxt "tfrmain.mnuhighlightgreen.caption"
+msgid "Highlight green"
+msgstr "Επισημάνετε το μπλε"
+
+#: tfrmain.mnuhighlightred.caption
+msgctxt "tfrmain.mnuhighlightred.caption"
+msgid "Highlight red"
+msgstr "Επισημάνετε το κόκκινο"
+
+#: tfrmain.mnulanguage.caption
+msgid "Language"
+msgstr "Γλώσσα"
+
+#: tfrmain.mnumenus.caption
+msgid "Menus"
+msgstr "Μενού"
+
+#: tfrmain.mnumosaic.caption
+msgid "Mosaic background"
+msgstr "Μωσαϊκό φόντο"
+
+#: tfrmain.mnunegative.caption
+msgctxt "tfrmain.mnunegative.caption"
+msgid "Negative"
+msgstr "Αρνητικό"
+
+#: tfrmain.mnunoise.caption
+msgid "Noise"
+msgstr "Θορύβου"
+
+#: tfrmain.mnuopen.caption
+msgid "Open"
+msgstr "Ανοίξετε"
+
+#: tfrmain.mnupaste.caption
+msgid "Paste"
+msgstr "Επικολλήστε"
+
+#: tfrmain.mnuprint.caption
+msgctxt "tfrmain.mnuprint.caption"
+msgid "Print"
+msgstr "Εκτύπωση"
+
+#: tfrmain.mnuquitblue.caption
+msgid "Quit blue"
+msgstr "Συνταξιοδοτηθείτε μπλε"
+
+#: tfrmain.mnuquitgreen.caption
+msgid "Quit green"
+msgstr "Αποσυρθείτε πράσινο"
+
+#: tfrmain.mnuquitred.caption
+msgid "Quit red"
+msgstr "Αποσυρθείτε κόκκινο"
+
+#: tfrmain.mnurbg.caption
+msgid "Invert color (RGB)-(RBG)"
+msgstr "Αντιστροφή χρώματος (RGB)-(RBG)"
+
+#: tfrmain.mnurealmode.caption
+msgid "Real mode"
+msgstr "Πραγματική λειτουργία"
+
+#: tfrmain.mnuredo.caption
+msgid "Redo"
+msgstr "Επανάληψη"
+
+#: tfrmain.mnuresize.caption
+msgid "Resize..."
+msgstr "Μέγεθος..."
+
+#: tfrmain.mnurotatel.caption
+msgid "Rotate left"
+msgstr "Περιστροφή αριστερά"
+
+#: tfrmain.mnurotater.caption
+msgid "Rotate right"
+msgstr "Περιστροφή δεξιά"
+
+#: tfrmain.mnusave.caption
+msgid "Save"
+msgstr "Αποθηκεύσετε"
+
+#: tfrmain.mnusaveas.caption
+msgid "Save as..."
+msgstr "Αποθήκευση ως..."
+
+#: tfrmain.mnuselect.caption
+msgid "Select"
+msgstr "Επιλέξτε"
+
+#: tfrmain.mnushowthumbs.caption
+#, fuzzy
+#| msgid "Thumbnail panel"
+msgid "Thumbail panel"
+msgstr "Πίνακας μικρογραφιών"
+
+#: tfrmain.mnusmooth.caption
+msgctxt "tfrmain.mnusmooth.caption"
+msgid "Smooth"
+msgstr "Ομαλή"
+
+#: tfrmain.mnustatusbar.caption
+msgid "Status bar"
+msgstr "Γραμμή κατάστασης"
+
+#: tfrmain.mnustrech.caption
+#, fuzzy
+#| msgid "Stretch image"
+msgid "Strech image"
+msgstr "Τεντώστε την εικόνα"
+
+#: tfrmain.mnuswirl.caption
+msgid "Swirl"
+msgstr "Δίνη"
+
+#: tfrmain.mnuthumb128.caption
+msgid "128x128"
+msgstr "128x128"
+
+#: tfrmain.mnuthumb32.caption
+msgid "32x32"
+msgstr "32x32"
+
+#: tfrmain.mnuthumb64.caption
+msgid "64x64"
+msgstr "64x64"
+
+#: tfrmain.mnuthumbcustom.caption
+msgid "Custom..."
+msgstr "Προσαρμοσμένη..."
+
+#: tfrmain.mnuthumbsize.caption
+#, fuzzy
+#| msgid "Thumbnail size"
+msgctxt "tfrmain.mnuthumbsize.caption"
+msgid "Thumbail size"
+msgstr "Μέγεθος μικρογραφίας"
+
+#: tfrmain.mnutoolbar.caption
+#, fuzzy
+#| msgid "Toolbar"
+msgid "Tool bar"
+msgstr "Εργαλείων"
+
+#: tfrmain.mnutoolbarinfull.caption
+msgid "Tool bar in fullscreen"
+msgstr "Γραμμή εργαλείων σε πλήρη οθόνη"
+
+#: tfrmain.mnutools.caption
+msgid "Image"
+msgstr "Εικόνα"
+
+#: tfrmain.mnutreeview.caption
+msgid "Tree view"
+msgstr "Προβολή δέντρου"
+
+#: tfrmain.mnutv.caption
+msgid "TV"
+msgstr "TV"
+
+#: tfrmain.mnuundo.caption
+msgid "Undo"
+msgstr "αναιρέσετε"
+
+#: tfrmain.mnuvideosupport.caption
+msgid "Video support"
+msgstr "Υποστήριξη βίντεο"
+
+#: tfrmain.mnuview.caption
+msgid "&View"
+msgstr "&Προβολή"
+
+#: tfrmain.mnuwindoweffects.caption
+msgid "Effects window"
+msgstr "Παράθυρο Εφέ"
+
+#: tfrmain.statusbar1.panels[0].text
+msgctxt "tfrmain.statusbar1.panels[0].text"
+msgid "0/0"
+msgstr "0/0"
+
+#: tfrmain.statusbar1.panels[1].text
+msgid "Resolution: 0x0"
+msgstr "Ανάλυση: 0x0"
+
+#: tfrmain.statusbar1.panels[2].text
+msgid "Frame 0/0"
+msgstr "Πλαίσιο 0/0"
+
+#: tfrmain.statusbar1.panels[3].text
+msgid "Size: 0"
+msgstr "Μέγεθος: 0"
+
+#: tfrmain.statusbar1.panels[4].text
+msgid "Time: 0ms"
+msgstr "Χρόνος: 0ms"
+
+#: tfrmain.statusbar1.panels[5].text
+msgid "EXIF:"
+msgstr "EXIF"
+
+#: tfrmain.statusbar1.simpletext
+msgid "Marco 1.0"
+msgstr "Marco 1.0"
+
+#: tfrmain.tbadjust.hint
+msgid "Adjust image"
+msgstr "Προσαρμογή εικόνας"
+
+#: tfrmain.tbarepeat.caption
+msgid "A"
+msgstr ""
+
+#: tfrmain.tbarepeat.hint
+msgid "A repeat"
+msgstr ""
+
+#: tfrmain.tbbrepeat.caption
+msgid "B"
+msgstr ""
+
+#: tfrmain.tbbrepeat.hint
+msgid "B repeat"
+msgstr ""
+
+#: tfrmain.tbexit.hint
+msgctxt "tfrmain.tbexit.hint"
+msgid "Exit"
+msgstr "Έξοδος"
+
+#: tfrmain.tbfastanim.hint
+msgid "Speed up"
+msgstr "Επιταχύνει"
+
+#: tfrmain.tbfirstimage.hint
+msgid "First image"
+msgstr "Πρώτη εικόνα"
+
+#: tfrmain.tbfliphorizontal.hint
+msgctxt "tfrmain.tbfliphorizontal.hint"
+msgid "Flip horizontal"
+msgstr "Αναστροφή οριζόντια"
+
+#: tfrmain.tbflipvertical.hint
+msgctxt "tfrmain.tbflipvertical.hint"
+msgid "Flip vertical"
+msgstr "Αναστροφή κάθετη"
+
+#: tfrmain.tbfullscreen.hint
+msgid "Full screen"
+msgstr "Πλήρης οθόνη"
+
+#: tfrmain.tbinformation.hint
+msgid "Information"
+msgstr "Πληροφορία"
+
+#: tfrmain.tblastimage.hint
+msgid "Last image"
+msgstr "Τελευταία εικόνα"
+
+#: tfrmain.tbnextframe.hint
+msgid "Next frame"
+msgstr "Επόμενο πλαίσιο"
+
+#: tfrmain.tbnextimage.hint
+msgid "Next image"
+msgstr "Επόμενη εικόνα"
+
+#: tfrmain.tbopen.hint
+msgid "Open image"
+msgstr "Άνοιγμα εικόνας"
+
+#: tfrmain.tbpauseanim.hint
+#, fuzzy
+#| msgid "Play / Pause animation"
+msgid "Play/Pause animation"
+msgstr "Αναπαραγωγή / παύση κινούμενων εικόνων"
+
+#: tfrmain.tbplayshow.hint
+msgid "Start presentation"
+msgstr "Έναρξη παρουσίασης"
+
+#: tfrmain.tbprevframe.hint
+#, fuzzy
+#| msgid "Previous frame"
+msgid "Prev frame"
+msgstr "Προηγούμενο πλαίσιο"
+
+#: tfrmain.tbprevimage.hint
+#, fuzzy
+#| msgid "Previous image"
+msgid "Prev image"
+msgstr "Προηγούμενη εικόνα"
+
+#: tfrmain.tbprint.hint
+msgctxt "tfrmain.tbprint.hint"
+msgid "Print"
+msgstr "Εκτύπωση"
+
+#: tfrmain.tbrandom.hint
+msgid "Random presentation"
+msgstr "Τυχαία παρουσίαση"
+
+#: tfrmain.tbreload.hint
+msgctxt "tfrmain.tbreload.hint"
+msgid "Reload image"
+msgstr "Επαναφόρτωση εικόνας"
+
+#: tfrmain.tbrotateleft.hint
+msgid "Flip left"
+msgstr "Αναστροφή αριστερά"
+
+#: tfrmain.tbrotateright.hint
+msgid "Flip right"
+msgstr "Αναστροφή δεξιά"
+
+#: tfrmain.tbsave.hint
+msgid "Save image"
+msgstr "Αποθήκευση εικόνας"
+
+#: tfrmain.tbselect.hint
+msgid "Selection tool"
+msgstr "Εργαλείο επιλογής"
+
+#: tfrmain.tbshowthumbs.hint
+msgid "Show miniatures"
+msgstr "Εμφάνιση μινιατούρων"
+
+#: tfrmain.tbshowtreeview.hint
+msgid "Show tree view"
+msgstr "Εμφάνιση προβολής δέντρου"
+
+#: tfrmain.tbslowanim.hint
+msgid "Speed down"
+msgstr "Ταχύτητα κάτω"
+
+#: tfrmain.tbstrech.hint
+msgid "Large"
+msgstr "Μεγάλος"
+
+#: tfrmain.tbzoom100.hint
+msgid "Zoom 100%"
+msgstr "Ζουμ 100%"
+
+#: tfrmain.tbzoomin.hint
+msgid "Zoom +"
+msgstr "+"
+
+#: tfrmain.tbzoomout.hint
+msgid "Zoom -"
+msgstr "-"
+
+#: tfrpass.caption
+msgid "Enter password"
+msgstr "Εισαγωγή κωδικού πρόσβασης"
+
+#: tfrpass.label1.caption
+msgid "Password:"
+msgstr "Κωδικός:"
+
+#: tfrprint.caption
+msgctxt "tfrprint.caption"
+msgid "Print"
+msgstr "Εκτύπωση"
+
+#: tfrprint.lblcopys.caption
+#, fuzzy
+#| msgid "Copy:"
+msgid "Copys:"
+msgstr "Αντιγραφή:"
+
+#: tfrprint.lblprint.caption
+msgid "Printer:"
+msgstr "Εκτυπωτής:"
+
+#: tfrprint.lblsheel.caption
+msgid "Sheel:"
+msgstr "Shell"
+
+#: tfrprint.rbhorizontal.caption
+msgid "Horizontal"
+msgstr "Οριζόντιος"
+
+#: tfrprint.rbvertical.caption
+msgid "Vertical"
+msgstr "Κάθετη"
+
+#: tfrresize.caption
+msgid "Resize"
+msgstr "Μέγεθος"
+
+#: tfrresize.cbfilter.text
+msgid "Lanczos"
+msgstr "Lanczos"
+
+#: tfrresize.label1.caption
+msgid "Width:"
+msgstr "Πλάτος:"
+
+#: tfrresize.label2.caption
+msgid "Height:"
+msgstr "Ύψος:"
+
+#: tfrresize.lblfilter.caption
+msgid "Filter:"
+msgstr "Φίλτρο:"
+
+#: tfrresize.togglebox1.caption
+msgid "]"
+msgstr "]"
+
+#: tfrresize.togglebox1.hint
+msgid "keep aspect ratio"
+msgstr "διατηρήστε την αναλογία διαστάσεων"
+
+#: tfrthumbsize.caption
+msgctxt "tfrthumbsize.caption"
+msgid "Thumbnail size"
+msgstr "Μέγεθος μικρογραφίας"
+
+#: tfrthumbsize.label1.caption
+msgid "Thumbnail size (with x height)"
+msgstr "Μέγεθος μικρογραφίας (πλάτος x ύψος)"
+

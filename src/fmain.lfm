@@ -1,7 +1,7 @@
 object frmain: Tfrmain
-  Left = 268
+  Left = 312
   Height = 544
-  Top = 104
+  Top = 106
   Width = 902
   ActiveControl = ShellTreeView1
   AllowDropFiles = True
@@ -68,8 +68,8 @@ object frmain: Tfrmain
     AnchorSideBottom.Control = Splitter1
     AnchorSideBottom.Side = asrBottom
     Left = 0
-    Height = 477
-    Top = 24
+    Height = 475
+    Top = 26
     Width = 0
     TabStop = False
     Anchors = [akTop, akLeft, akRight, akBottom]
@@ -98,8 +98,8 @@ object frmain: Tfrmain
     AnchorSideTop.Side = asrBottom
     AnchorSideBottom.Control = StatusBar1
     Left = 2
-    Height = 477
-    Top = 24
+    Height = 475
+    Top = 26
     Width = 5
     Align = alNone
     Anchors = [akTop, akBottom]
@@ -114,22 +114,22 @@ object frmain: Tfrmain
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = TrackBar1
     Left = 5
-    Height = 360
-    Top = 24
+    Height = 381
+    Top = 26
     Width = 897
-    HorzScrollBar.Increment = 37
-    HorzScrollBar.Page = 377
+    HorzScrollBar.Increment = 20
+    HorzScrollBar.Page = 201
     HorzScrollBar.Smooth = True
     HorzScrollBar.Tracking = True
-    VertScrollBar.Increment = 16
-    VertScrollBar.Page = 161
+    VertScrollBar.Increment = 21
+    VertScrollBar.Page = 217
     VertScrollBar.Smooth = True
     VertScrollBar.Tracking = True
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Left = 3
     BorderSpacing.Bottom = 3
     BorderStyle = bsNone
-    ClientHeight = 360
+    ClientHeight = 381
     ClientWidth = 897
     Enabled = False
     Color = clBlack
@@ -146,7 +146,7 @@ object frmain: Tfrmain
     OnPaint = ScrollBox1Paint
     object Image1: TImage
       Left = 0
-      Height = 360
+      Height = 381
       Top = 0
       Width = 897
       AntialiasingMode = amOn
@@ -205,9 +205,9 @@ object frmain: Tfrmain
       WordWrap = True
     end
     object Shape1: TShape
-      Left = 312
+      Left = 136
       Height = 65
-      Top = 96
+      Top = 152
       Width = 65
       Pen.Mode = pmNotXor
       Pen.Style = psDash
@@ -272,35 +272,41 @@ object frmain: Tfrmain
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     Left = 0
-    Height = 24
+    Height = 26
     Top = 0
     Width = 902
     Anchors = [akTop]
     AutoSize = True
+    ButtonHeight = 24
+    ButtonWidth = 20
+    Font.Style = [fsBold]
     Images = ImageList1
+    List = True
+    ParentFont = False
+    ShowCaptions = True
     TabOrder = 0
     OnMouseLeave = ToolBar1MouseLeave
     OnMouseMove = ToolBar1MouseMove
     object tbPrevImage: TToolButton
-      Left = 393
+      Left = 435
       Hint = 'Prev image'
       Top = 2
-      ImageIndex = 0
+      ImageIndex = 34
       OnClick = tbPrevImageClick
       ParentShowHint = False
       ShowHint = True
     end
     object tbNextImage: TToolButton
-      Left = 439
+      Left = 487
       Hint = 'Next image'
       Top = 2
-      ImageIndex = 1
+      ImageIndex = 33
       OnClick = tbNextImageClick
       ParentShowHint = False
       ShowHint = True
     end
     object tbFullScreen: TToolButton
-      Left = 224
+      Left = 251
       Hint = 'Full screen'
       Top = 2
       ImageIndex = 2
@@ -309,7 +315,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbFlipHorizontal: TToolButton
-      Left = 132
+      Left = 147
       Hint = 'Flip horizontal'
       Top = 2
       Enabled = False
@@ -319,7 +325,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbFlipVertical: TToolButton
-      Left = 155
+      Left = 173
       Hint = 'Flip vertical'
       Top = 2
       Enabled = False
@@ -329,7 +335,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbRotateLeft: TToolButton
-      Left = 178
+      Left = 199
       Hint = 'Flip left'
       Top = 2
       Enabled = False
@@ -339,7 +345,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbRotateRight: TToolButton
-      Left = 201
+      Left = 225
       Hint = 'Flip right'
       Top = 2
       Enabled = False
@@ -349,7 +355,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbExit: TToolButton
-      Left = 708
+      Left = 829
       Hint = 'Exit'
       Top = 2
       ImageIndex = 7
@@ -358,7 +364,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbZoomIn: TToolButton
-      Left = 247
+      Left = 277
       Hint = 'Zoom +'
       Top = 2
       Enabled = False
@@ -368,7 +374,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbZoomOut: TToolButton
-      Left = 270
+      Left = 303
       Hint = 'Zoom -'
       Top = 2
       Enabled = False
@@ -378,7 +384,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbAdjust: TToolButton
-      Left = 316
+      Left = 349
       Hint = 'Adjust image'
       Top = 2
       Enabled = False
@@ -388,7 +394,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbPlayShow: TToolButton
-      Left = 416
+      Left = 461
       Hint = 'Start presentation'
       Top = 2
       ImageIndex = 13
@@ -397,7 +403,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbRandom: TToolButton
-      Left = 485
+      Left = 539
       Hint = 'Random presentation'
       Top = 2
       ImageIndex = 11
@@ -406,7 +412,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbZoom100: TToolButton
-      Left = 293
+      Left = 329
       Hint = 'Zoom 100%'
       Top = 2
       Enabled = False
@@ -417,7 +423,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbReload: TToolButton
-      Left = 531
+      Left = 591
       Hint = 'Reload image'
       Top = 2
       Enabled = False
@@ -436,7 +442,7 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbShowThumbs: TToolButton
-      Left = 24
+      Left = 27
       Hint = 'Show miniatures'
       Top = 2
       ImageIndex = 18
@@ -445,20 +451,18 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbSelect: TToolButton
-      Left = 508
+      Left = 565
       Hint = 'Selection tool'
       Top = 2
-      Caption = 'tbSelect'
       ImageIndex = 23
       OnClick = tbSelectClick
       ParentShowHint = False
       ShowHint = True
     end
     object tbPrevFrame: TToolButton
-      Left = 608
+      Left = 717
       Hint = 'Prev frame'
       Top = 2
-      Caption = 'tbPrevFrame'
       Enabled = False
       ImageIndex = 19
       OnClick = tbPrevFrameClick
@@ -466,10 +470,9 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbNextFrame: TToolButton
-      Left = 654
+      Left = 769
       Hint = 'Next frame'
       Top = 2
-      Caption = 'tbNextFrame'
       Enabled = False
       ImageIndex = 20
       OnClick = tbNextFrameClick
@@ -477,10 +480,9 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbPauseAnim: TToolButton
-      Left = 631
+      Left = 743
       Hint = 'Play/Pause animation'
       Top = 2
-      Caption = 'tbPauseAnim'
       Enabled = False
       ImageIndex = 21
       OnClick = tbPauseAnimClick
@@ -488,41 +490,36 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object ToolButton22: TToolButton
-      Left = 577
-      Height = 22
+      Left = 643
+      Height = 24
       Top = 2
-      Caption = 'ToolButton22'
       Style = tbsSeparator
     end
     object ToolButton23: TToolButton
-      Left = 700
-      Height = 22
+      Left = 821
+      Height = 24
       Top = 2
-      Caption = 'ToolButton23'
       Style = tbsSeparator
     end
     object tbStrech: TToolButton
-      Left = 339
+      Left = 375
       Hint = 'Large'
       Top = 2
-      Caption = 'tbStrech'
       ImageIndex = 24
       OnClick = tbStrechClick
       ParentShowHint = False
       ShowHint = True
     end
     object ToolButton25: TToolButton
-      Left = 362
-      Height = 22
+      Left = 401
+      Height = 24
       Top = 2
-      Caption = 'ToolButton25'
       Style = tbsSeparator
     end
     object tbSlowAnim: TToolButton
-      Left = 585
+      Left = 691
       Hint = 'Speed down'
       Top = 2
-      Caption = 'tbSlowAnim'
       Enabled = False
       ImageIndex = 25
       OnClick = tbSlowAnimClick
@@ -530,10 +527,9 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbFastAnim: TToolButton
-      Left = 677
+      Left = 795
       Hint = 'Speed up'
       Top = 2
-      Caption = 'tbFastAnim'
       Enabled = False
       ImageIndex = 26
       OnClick = tbFastAnimClick
@@ -541,78 +537,90 @@ object frmain: Tfrmain
       ShowHint = True
     end
     object tbPrint: TToolButton
-      Left = 101
+      Left = 113
       Hint = 'Print'
       Top = 2
-      Caption = 'tbPrint'
       ImageIndex = 30
       OnClick = tbPrintClick
       ParentShowHint = False
       ShowHint = True
     end
     object tbFirstImage: TToolButton
-      Left = 370
+      Left = 409
       Hint = 'First image'
       Top = 2
-      Caption = 'tbFirstImage'
       ImageIndex = 31
       OnClick = tbFirstImageClick
       ParentShowHint = False
       ShowHint = True
     end
     object tbLastImage: TToolButton
-      Left = 462
+      Left = 513
       Hint = 'Last image'
       Top = 2
-      Caption = 'tbLastImage'
       ImageIndex = 32
       OnClick = tbLastImageClick
       ParentShowHint = False
       ShowHint = True
     end
     object tbInformation: TToolButton
-      Left = 554
+      Left = 617
       Hint = 'Information'
       Top = 2
-      Caption = 'tbInformation'
       ImageIndex = 35
       OnClick = tbInformationClick
       ParentShowHint = False
       ShowHint = True
     end
     object tbSave: TToolButton
-      Left = 78
+      Left = 87
       Hint = 'Save image'
       Top = 2
-      Caption = 'tbSave'
       ImageIndex = 36
       OnClick = tbSaveClick
       ParentShowHint = False
       ShowHint = True
     end
     object ToolButton1: TToolButton
-      Left = 124
-      Height = 22
+      Left = 139
+      Height = 24
       Top = 2
-      Caption = 'ToolButton1'
       Style = tbsSeparator
     end
     object tbOpen: TToolButton
-      Left = 55
+      Left = 61
       Hint = 'Open image'
       Top = 2
-      Caption = 'tbOpen'
       ImageIndex = 37
       OnClick = tbOpenClick
       ParentShowHint = False
       ShowHint = True
     end
     object ToolButton2: TToolButton
-      Left = 47
-      Height = 22
+      Left = 53
+      Height = 24
       Top = 2
-      Caption = 'ToolButton2'
       Style = tbsSeparator
+    end
+    object tbARepeat: TToolButton
+      Left = 651
+      Hint = 'A repeat'
+      Top = 2
+      Caption = 'A'
+      Enabled = False
+      OnClick = tbARepeatClick
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object tbBRepeat: TToolButton
+      Left = 671
+      Hint = 'B repeat'
+      Top = 2
+      Caption = 'B'
+      Enabled = False
+      OnClick = tbBRepeatClick
+      ParentShowHint = False
+      ShowHint = True
     end
   end
   object TrackBar1: TTrackBar
@@ -623,18 +631,20 @@ object frmain: Tfrmain
     AnchorSideBottom.Control = Splitter2
     AnchorSideBottom.Side = asrBottom
     Left = 2
-    Height = 43
-    Top = 387
+    Height = 22
+    Top = 410
     Width = 900
     OnChange = TrackBar1Change
+    PageSize = 1
     Position = 0
-    ShowSelRange = False
+    TickMarks = tmBoth
     TickStyle = tsNone
     Anchors = [akLeft, akRight, akBottom]
-    BorderSpacing.Bottom = 5
+    BorderSpacing.Bottom = 3
     OnClick = TrackBar1Click
     OnMouseDown = TrackBar1MouseDown
     OnMouseUp = TrackBar1MouseUp
+    ParentColor = False
     TabOrder = 7
     Visible = False
   end
@@ -642,7 +652,7 @@ object frmain: Tfrmain
     left = 8
     top = 207
     Bitmap = {
-      4C69260000001000000010000000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      4C69280000001000000010000000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF0004733A6404753BC5FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF0004733A0C04743BAC298B59F604733AFFFFFFFF00FFFF
@@ -1858,7 +1868,71 @@ object frmain: Tfrmain
       F3FF8ED8F3FF86D7F3FF7FD4F2FF79D3F2FF72D2F1FF6CD0F1FF69CFF1FFC2EA
       F8FE338ED9F0FFFFFF00FFFFFF002C86D8002D88D8A62D87D8EA2D88D8F72D88
       D8F72D88D8F72D88D8F72D88D8F72D88D8F72D88D8F72D88D8F72D87D8F72D88
-      D8F12C86D893FFFFFF00FFFFFF00
+      D8F12C86D893FFFFFF00FFFFFF00000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000BF804008C3783C11C3783C11C3783C11D1742E0B000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000C870378FC87137FBC87137FFC87137FFC87137FFC87137C4000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000C8723782C87137CCC97136EAC87137FFC87137FFC87137F3FF8000020000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000CC77330FC87137E6C87137F3C87137E8C87137FFC67339280000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000C7713893C87137FFC7723872C87137ACC87137FFC97036590000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000C8733733C87137FCC87137D2CC663305C772387BC87137FFC871378A0000
+      000000000000000000000000000000000000000000000000000000000000FF80
+      0002C87137C8C87137FDC970363900000000C7703849C87137FFC87137BB0000
+      000000000000000000000000000000000000000000000000000000000000C871
+      376AC87137FFC87137FAC87137DDC87137DDC87137E3C87137FFC87137EC0000
+      0000000000000000000000000000000000000000000000000000C86F3717C871
+      37EFC87137FFC87137FFC87137FFC87137FFC87137FFC87137FFC87137FFCC6F
+      331E000000000000000000000000000000000000000000000000C77138A5C871
+      37FFC870375D00000000000000000000000000000000C87037B1C87137FFC871
+      374F00000000000000000000000000000000C6713936C87137CDC87137FFC871
+      37FFC87137D5C770384900000000C671392DC87137C4C87137F1C87137FFC871
+      37E3C9713651000000000000000000000000C9713663C87137F7C87137FFC871
+      37FFC87137E7C672393A00000000C9703659C87137F6C87137FFC87137FFC871
+      37E8CA7235430000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000000FFFF
+      FF75F9F9F9F7F3F3F2FFF3F3F2FFFBFBFAF6FFFFFFDBFFFFFF9EFFFFFF1F0000
+      000000000000000000000000000000000000000000000000000000000000FFFF
+      FFEA555245FF484537FF484537FF484537FF59574AFF9C9A93FFFCFCFCE8FFFF
+      FF1900000000000000000000000000000000000000000000000000000000FFFF
+      FFF1484537FF484537FFA8A7A0FF9C9A93FF585548FF484537FFAAA8A2FFFFFF
+      FF8100000000000000000000000000000000000000000000000000000000FFFF
+      FFF1484537FF484537FFFCFCFCF9FFFFFFA0B5B4AEFF484537FF848278FFFFFF
+      FFA200000000000000000000000000000000000000000000000000000000FFFF
+      FFF1484537FF484537FFFCFCFCFEFEFEFEEA908F86FF484537FFA8A7A0FFFFFF
+      FF7C00000000000000000000000000000000000000000000000000000000FFFF
+      FFF1484537FF484537FF605D51FF535144FF484537FF6F6C61FFF9F8F8FFFFFF
+      FF4900000000000000000000000000000000000000000000000000000000FFFF
+      FFF1484537FF484537FF908E85FF8B8980FF5F5C50FF484537FF757368FFFEFE
+      FDDCFFFFFF05000000000000000000000000000000000000000000000000FFFF
+      FFF1484537FF484537FFFCFCFCFAFFFFFF94F6F6F4F2545144FF484537FFD5D4
+      D1FFFFFFFF2D000000000000000000000000000000000000000000000000FFFF
+      FFF1484537FF484537FFFCFCFCFAFFFFFF79FBFBFBE859574AFF484537FFD2D1
+      CEFFFFFFFF31000000000000000000000000000000000000000000000000FFFF
+      FFF1484537FF484537FF9C9A93FF9D9B94FF726F64FF484537FF615F52FFFAFA
+      FAEAFFFFFF08000000000000000000000000000000000000000000000000FFFF
+      FFEA555245FF484537FF484537FF484537FF524F42FF88867DFFE9E9E7FBFFFF
+      FF5400000000000000000000000000000000000000000000000000000000FFFF
+      FF77F9F9F9F7F3F3F2FFF3F3F2FFF7F7F6FCFFFFFFE6FFFFFFAAFFFFFF350000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000
     }
   end
   object MainMenu1: TMainMenu
@@ -1875,6 +1949,7 @@ object frmain: Tfrmain
       end
       object mnuSave: TMenuItem
         Caption = 'Save'
+        Enabled = False
         ShortCut = 16455
         OnClick = mnuSaveClick
       end
@@ -1886,6 +1961,7 @@ object frmain: Tfrmain
       end
       object mnuPrint: TMenuItem
         Caption = 'Print'
+        Enabled = False
         ShortCut = 16464
         OnClick = tbPrintClick
       end
@@ -1894,6 +1970,7 @@ object frmain: Tfrmain
       end
       object mnuDeleteFile: TMenuItem
         Caption = 'Delete'
+        Enabled = False
         ShortCut = 8238
         OnClick = mnuDeleteFileClick
       end
@@ -1909,11 +1986,13 @@ object frmain: Tfrmain
       Caption = '&Edit'
       object mnuUndo: TMenuItem
         Caption = 'Undo'
+        Enabled = False
         ShortCut = 16474
         OnClick = mnuUndoClick
       end
       object mnuRedo: TMenuItem
         Caption = 'Redo'
+        Enabled = False
         ShortCut = 24666
         OnClick = mnuRedoClick
       end
@@ -1980,6 +2059,7 @@ object frmain: Tfrmain
       end
       object mnuResize: TMenuItem
         Caption = 'Resize...'
+        Enabled = False
         OnClick = mnuResizeClick
       end
       object mnuEffects: TMenuItem
@@ -2078,6 +2158,7 @@ object frmain: Tfrmain
       end
       object mnuDesktopImage: TMenuItem
         Caption = 'Set as desktop image'
+        Enabled = False
         object mnuDesktopStrech: TMenuItem
           Caption = 'Strech'
           OnClick = mnuDesktopStrechClick
@@ -2097,6 +2178,7 @@ object frmain: Tfrmain
       end
       object mnuEXIF: TMenuItem
         Caption = 'EXIF'
+        Enabled = False
         OnClick = mnuEXIFClick
       end
     end
@@ -2181,6 +2263,7 @@ object frmain: Tfrmain
       end
       object mnuCache: TMenuItem
         Caption = 'Use RAM cache (experimental but faster)'
+        Checked = True
         OnClick = mnuCacheClick
       end
       object mnuStrech: TMenuItem

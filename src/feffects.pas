@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  ComCtrls;
+  ComCtrls{, uxtheme, darkmodeclasses};
 
 type
 
@@ -83,6 +83,8 @@ type
     procedure Button7Click(Sender: TObject);
     procedure Button8Click(Sender: TObject);
     procedure Button9Click(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     { private declarations }
   public
@@ -232,7 +234,8 @@ end;
 
 procedure Tfreffect.Button5Click(Sender: TObject);
 begin
-  loadpicture(carpeta+flist[ifile]);
+  if Assigned(flist) and (flist.Count>0) then
+    loadpicture(carpeta+flist[ifile]);
 end;
 
 procedure Tfreffect.Button6Click(Sender: TObject);
@@ -253,6 +256,51 @@ end;
 procedure Tfreffect.Button9Click(Sender: TObject);
 begin
   efectimagen(9);
+end;
+
+procedure Tfreffect.FormActivate(Sender: TObject);
+var
+  i:integer;
+begin
+  for i:=0 to freffect.ControlCount-1 do
+    freffect.Controls[i].Enabled:=not frmain.Image1.Picture.Bitmap.Empty;
+end;
+
+procedure Tfreffect.FormCreate(Sender: TObject);
+//var
+  //i,x:integer;
+begin
+  {AllowDarkModeForApp(true);
+  AllowDarkModeForWindow(freffect.Handle,true);
+  UxTheme.SetWindowTheme(freffect.Handle,'DarkMode_Explorer',nil);
+  for i:=0 to freffect.ControlCount-1 do
+  begin
+    case freffect.Controls[i].ToString of
+      'TButton':UxTheme.SetWindowTheme((freffect.Controls[i] as TButton).Handle,'DarkMode_Explorer',nil);
+      'TToolBar':UxTheme.SetWindowTheme((freffect.Controls[i] as TToolBar).Handle,'DarkMode_Explorer',nil);
+      'TStatusBar':UxTheme.SetWindowTheme((freffect.Controls[i] as TStatusBar).Handle,'DarkMode_Explorer',nil);
+      //'TShellTreeView':UxTheme.SetWindowTheme((frmain.Controls[i] as TShellTreeView).Handle,'DarkMode_Explorer',nil);
+      //'TSplitter':UxTheme.SetWindowTheme((freffect.Controls[i] as TSplitter).Handle,'DarkMode_Explorer',nil);
+      'TScrollBox':UxTheme.SetWindowTheme((freffect.Controls[i] as TScrollBox).Handle,'DarkMode_Explorer',nil);
+      'TTrackBar':UxTheme.SetWindowTheme((freffect.Controls[i] as TTrackBar).Handle,'DarkMode_Explorer',nil);
+
+      'TGroupBox':
+        begin
+          UxTheme.SetWindowTheme((freffect.Controls[i] as TGroupBox).Handle,'DarkMode_Explorer',nil);
+          for x:=0 to (freffect.Controls[i] as TGroupBox).ControlCount-1 do
+          begin
+            case (freffect.Controls[i] as TGroupBox).Controls[x].ToString of
+              'TButton': UxTheme.SetWindowTheme(((freffect.Controls[i] as TGroupBox).Controls[x] as TButton).Handle,'DarkMode_Explorer',nil);
+              'TLabel': ;
+              else
+                ShowMessage((freffect.Controls[i] as TGroupBox).Controls[x].ToString);
+            end;
+          end;
+        end;
+      else
+        ShowMessage(freffect.Controls[i].ToString);
+    end;
+  end;}
 end;
 
 

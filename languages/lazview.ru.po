@@ -1,0 +1,735 @@
+﻿msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+#: tform3.caption
+msgid "Quality"
+msgstr "Качество"
+
+#: tform3.label1.caption
+msgid "100"
+msgstr "100"
+
+#: tfreffect.button1.caption
+msgid "Grayscale"
+msgstr "Полутоновый"
+
+#: tfreffect.button10.caption
+msgid "RGB -> BRG"
+msgstr "RGB -> BRG"
+
+#: tfreffect.button11.caption
+msgctxt "tfreffect.button11.caption"
+msgid "Smooth"
+msgstr "Гладкий"
+
+#: tfreffect.button12.caption
+msgid "Sharpen"
+msgstr "Заточить"
+
+#: tfreffect.button13.caption
+msgctxt "tfreffect.button13.caption"
+msgid "Negative"
+msgstr "Отрицательный"
+
+#: tfreffect.button14.caption
+msgid "Plane (slow)"
+msgstr "Самолет (Медленный)"
+
+#: tfreffect.button15.caption
+msgid "Contour"
+msgstr "Контур"
+
+#: tfreffect.button16.caption
+msgid "Cylinder"
+msgstr "Цилиндр"
+
+#: tfreffect.button17.caption
+msgid "Emboss"
+msgstr "Выбивать"
+
+#: tfreffect.button18.caption
+msgid "Emboss high light"
+msgstr "Тиснение подсветки"
+
+#: tfreffect.button19.caption
+msgid "Normalize"
+msgstr "Нормализовать"
+
+#: tfreffect.button2.caption
+msgctxt "tfreffect.button2.caption"
+msgid "Highlight red"
+msgstr "Выделите красный цвет"
+
+#: tfreffect.button20.caption
+msgid "Sphere"
+msgstr "Сфера"
+
+#: tfreffect.button21.caption
+msgid "Median"
+msgstr "Срединный"
+
+#: tfreffect.button22.caption
+msgid "Smart zoom 3"
+msgstr "Интеллектуальный зум 3"
+
+#: tfreffect.button23.caption
+msgid "Twirl"
+msgstr "Вертеть"
+
+#: tfreffect.button24.caption
+msgid "Pixelate"
+msgstr "Пикселизация"
+
+#: tfreffect.button25.caption
+msgid "Fade"
+msgstr "Увядать"
+
+#: tfreffect.button26.caption
+msgctxt "tfreffect.button26.caption"
+msgid "-"
+msgstr ""
+
+#: tfreffect.button27.caption
+msgctxt "tfreffect.button27.caption"
+msgid "+"
+msgstr ""
+
+#: tfreffect.button28.caption
+msgctxt "tfreffect.button28.caption"
+msgid "-"
+msgstr ""
+
+#: tfreffect.button29.caption
+msgctxt "tfreffect.button29.caption"
+msgid "+"
+msgstr ""
+
+#: tfreffect.button3.caption
+msgctxt "tfreffect.button3.caption"
+msgid "Highlight green"
+msgstr "Выделите зеленый цвет"
+
+#: tfreffect.button30.caption
+msgctxt "tfreffect.button30.caption"
+msgid "-"
+msgstr ""
+
+#: tfreffect.button31.caption
+msgctxt "tfreffect.button31.caption"
+msgid "+"
+msgstr ""
+
+#: tfreffect.button4.caption
+msgctxt "tfreffect.button4.caption"
+msgid "Highlight blue"
+msgstr "Выделите синий цвет"
+
+#: tfreffect.button5.caption
+msgctxt "tfreffect.button5.caption"
+msgid "Reload image"
+msgstr "Обновить изображение"
+
+#: tfreffect.button6.caption
+msgid "RGB -> BGR"
+msgstr "RGB -> BGR"
+
+#: tfreffect.button7.caption
+msgid "RGB -> RBG"
+msgstr "RGB -> RGB"
+
+#: tfreffect.button8.caption
+msgid "RGB -> GRB"
+msgstr "RGB -> GRB"
+
+#: tfreffect.button9.caption
+msgid "RGB -> GBR"
+msgstr "RGB -> GBR"
+
+#: tfreffect.caption
+msgctxt "tfreffect.caption"
+msgid "Effects"
+msgstr "Эффекты"
+
+#: tfreffect.groupbox1.caption
+msgid "Change colors"
+msgstr "Менять цвета"
+
+#: tfreffect.groupbox2.caption
+msgid "Levels"
+msgstr "Уровни"
+
+#: tfreffect.label1.caption
+msgid "Brightnes"
+msgstr "Яркость"
+
+#: tfreffect.label2.caption
+msgid "Contrast"
+msgstr "Контраст"
+
+#: tfreffect.label3.caption
+msgid "Gamma"
+msgstr "Гамма"
+
+#: tfrexif.caption
+msgctxt "tfrexif.caption"
+msgid "EXIF"
+msgstr "EXIF"
+
+#: tfrgoto.caption
+msgid "Go to image number..."
+msgstr "Перейти к номеру изображения..."
+
+#: tfrgoto.edit1.text
+msgid "0"
+msgstr "0"
+
+#: tfrgoto.label1.caption
+msgid "Go to image number:"
+msgstr "Перейти к номеру изображения:"
+
+#: tfrmain.caption
+msgid "LazView"
+msgstr "LazView"
+
+#: tfrmain.label1.caption
+msgctxt "tfrmain.label1.caption"
+msgid "0/0"
+msgstr "0/0"
+
+#: tfrmain.label2.caption
+msgctxt "tfrmain.label2.caption"
+msgid "0/0"
+msgstr "0/0"
+
+#: tfrmain.mnuabout.caption
+msgid "About..."
+msgstr "об..."
+
+#: tfrmain.mnualwaysontop.caption
+msgid "Always on top"
+msgstr "Всегда на высоте"
+
+#: tfrmain.mnuantialiasing.caption
+msgid "Antialiasing"
+msgstr "Сглаживание"
+
+#: tfrmain.mnuautorotate.caption
+msgid "Auto rotate (EXIF)"
+msgstr "Автоматический поворот (EXIF)"
+
+#: tfrmain.mnubgr.caption
+msgid "Invert color (RGB)-(BGR)"
+msgstr "Инвертировать цвет (RGB)-(BGR)"
+
+#: tfrmain.mnubrg.caption
+msgid "Invert color (RGB)-(BRG)"
+msgstr "Инвертировать цвет (RGB)-(BRG)"
+
+#: tfrmain.mnucache.caption
+msgid "Use RAM cache (experimental but faster)"
+msgstr "Используйте кэш оперативной памяти * * экспериментально, но быстрее"
+
+#: tfrmain.mnucompact.caption
+msgid "Compact mode"
+msgstr "Компактный режим"
+
+#: tfrmain.mnucopy.caption
+msgid "Copy"
+msgstr "Копировать"
+
+#: tfrmain.mnucrop.caption
+msgid "Crop"
+msgstr "Урожай"
+
+#: tfrmain.mnudeletefile.caption
+msgid "Delete"
+msgstr "Удалить"
+
+#: tfrmain.mnudesktopcenter.caption
+msgid "Center"
+msgstr "Центр"
+
+#: tfrmain.mnudesktopexpand.caption
+msgid "Expand"
+msgstr "Расширять"
+
+#: tfrmain.mnudesktopimage.caption
+msgid "Set as desktop image"
+msgstr "Установить в качестве изображения рабочего стола"
+
+#: tfrmain.mnudesktopmosaic.caption
+msgid "Mosaic"
+msgstr "Мозаика"
+
+#: tfrmain.mnudesktopstrech.caption
+msgid "Strech"
+msgstr "Протяжение"
+
+#: tfrmain.mnuedit.caption
+msgid "&Edit"
+msgstr "&Редактировать"
+
+#: tfrmain.mnueffects.caption
+msgctxt "tfrmain.mnueffects.caption"
+msgid "Effects"
+msgstr "Эффекты"
+
+#: tfrmain.mnuexif.caption
+#, fuzzy
+msgctxt "tfrmain.mnuexif.caption"
+msgid "EXIF"
+msgstr "EXIF"
+
+#: tfrmain.mnuexit.caption
+msgctxt "tfrmain.mnuexit.caption"
+msgid "Exit"
+msgstr "Выход"
+
+#: tfrmain.mnufile.caption
+msgid "&File"
+msgstr "&Файл"
+
+#: tfrmain.mnufliph.caption
+msgctxt "tfrmain.mnufliph.caption"
+msgid "Flip horizontal"
+msgstr "Сальто горизонтальное"
+
+#: tfrmain.mnuflipv.caption
+msgctxt "tfrmain.mnuflipv.caption"
+msgid "Flip vertical"
+msgstr "Сальто по вертикали"
+
+#: tfrmain.mnugbr.caption
+msgid "Invert color (RGB)-(GBR)"
+msgstr "Инвертировать цвет (RGB)-(GBR)"
+
+#: tfrmain.mnugoto.caption
+msgid "Go to number image..."
+msgstr "Перейти к изображению номера..."
+
+#: tfrmain.mnugrayscale.caption
+msgid "Greyscale"
+msgstr "Полутоновый"
+
+#: tfrmain.mnugrb.caption
+msgid "Invert color (RGB)-(GRB)"
+msgstr "Инвертировать цвет (RGB)-(GRB)"
+
+#: tfrmain.mnuhelp.caption
+msgid "&Help"
+msgstr "&Помогите"
+
+#: tfrmain.mnuhighlightblue.caption
+msgctxt "tfrmain.mnuhighlightblue.caption"
+msgid "Highlight blue"
+msgstr "Выделите синий цвет"
+
+#: tfrmain.mnuhighlightgreen.caption
+msgctxt "tfrmain.mnuhighlightgreen.caption"
+msgid "Highlight green"
+msgstr "Выделите зеленый цвет"
+
+#: tfrmain.mnuhighlightred.caption
+msgctxt "tfrmain.mnuhighlightred.caption"
+msgid "Highlight red"
+msgstr "Выделите красный цвет"
+
+#: tfrmain.mnulanguage.caption
+msgid "Language"
+msgstr "Язык"
+
+#: tfrmain.mnumenus.caption
+msgid "Menus"
+msgstr "Меню"
+
+#: tfrmain.mnumosaic.caption
+msgid "Mosaic background"
+msgstr "Мозаичный фон"
+
+#: tfrmain.mnunegative.caption
+msgctxt "tfrmain.mnunegative.caption"
+msgid "Negative"
+msgstr "Отрицательный"
+
+#: tfrmain.mnunoise.caption
+msgid "Noise"
+msgstr "Шум"
+
+#: tfrmain.mnuopen.caption
+msgid "Open"
+msgstr "Открыть"
+
+#: tfrmain.mnupaste.caption
+msgid "Paste"
+msgstr "Вставить"
+
+#: tfrmain.mnuprint.caption
+msgctxt "tfrmain.mnuprint.caption"
+msgid "Print"
+msgstr "Печать"
+
+#: tfrmain.mnuquitblue.caption
+msgid "Quit blue"
+msgstr "На пенсию синий"
+
+#: tfrmain.mnuquitgreen.caption
+msgid "Quit green"
+msgstr "Отставка Верде"
+
+#: tfrmain.mnuquitred.caption
+msgid "Quit red"
+msgstr "На пенсию красный"
+
+#: tfrmain.mnurbg.caption
+msgid "Invert color (RGB)-(RBG)"
+msgstr "Инвертировать цвет (RGB)-(RBG)"
+
+#: tfrmain.mnurealmode.caption
+msgid "Real mode"
+msgstr "Реальный режим"
+
+#: tfrmain.mnuredo.caption
+msgid "Redo"
+msgstr "Переделывать"
+
+#: tfrmain.mnuresize.caption
+msgid "Resize..."
+msgstr "Изменить размер..."
+
+#: tfrmain.mnurotatel.caption
+msgid "Rotate left"
+msgstr "Поворот влево"
+
+#: tfrmain.mnurotater.caption
+msgid "Rotate right"
+msgstr "Поверните направо"
+
+#: tfrmain.mnusave.caption
+msgid "Save"
+msgstr "Сохранить"
+
+#: tfrmain.mnusaveas.caption
+msgid "Save as..."
+msgstr "Сохранить как..."
+
+#: tfrmain.mnuselect.caption
+msgid "Select"
+msgstr "Выбрать"
+
+#: tfrmain.mnushowthumbs.caption
+msgid "Thumbail panel"
+msgstr "Панель миниатюр"
+
+#: tfrmain.mnusmooth.caption
+#, fuzzy
+msgctxt "tfrmain.mnusmooth.caption"
+msgid "Smooth"
+msgstr "Гладкий"
+
+#: tfrmain.mnustatusbar.caption
+msgid "Status bar"
+msgstr "Строка состояния"
+
+#: tfrmain.mnustrech.caption
+msgid "Strech image"
+msgstr "Растягивание изображения"
+
+#: tfrmain.mnuswirl.caption
+msgid "Swirl"
+msgstr "Вихрь"
+
+#: tfrmain.mnuthumb128.caption
+msgid "128x128"
+msgstr "128x128"
+
+#: tfrmain.mnuthumb32.caption
+msgid "32x32"
+msgstr "32x32"
+
+#: tfrmain.mnuthumb64.caption
+msgid "64x64"
+msgstr "64x64"
+
+#: tfrmain.mnuthumbcustom.caption
+msgid "Custom..."
+msgstr "Обычай..."
+
+#: tfrmain.mnuthumbsize.caption
+msgid "Thumbail size"
+msgstr "Размер миниатюры"
+
+#: tfrmain.mnutoolbar.caption
+msgid "Tool bar"
+msgstr "Панель инструментов"
+
+#: tfrmain.mnutoolbarinfull.caption
+msgid "Tool bar in fullscreen"
+msgstr "Панель инструментов в полноэкранном режиме"
+
+#: tfrmain.mnutools.caption
+msgid "Image"
+msgstr "Изображение"
+
+#: tfrmain.mnutreeview.caption
+msgid "Tree view"
+msgstr "Древовидное представление"
+
+#: tfrmain.mnutv.caption
+msgid "TV"
+msgstr "ТВ"
+
+#: tfrmain.mnuundo.caption
+msgid "Undo"
+msgstr "Отменить"
+
+#: tfrmain.mnuvideosupport.caption
+msgid "Video support"
+msgstr "Поддержка видео"
+
+#: tfrmain.mnuview.caption
+msgid "&View"
+msgstr "&Смотреть"
+
+#: tfrmain.mnuwindoweffects.caption
+msgid "Effects window"
+msgstr "Окно эффектов"
+
+#: tfrmain.statusbar1.panels[0].text
+msgctxt "tfrmain.statusbar1.panels[0].text"
+msgid "0/0"
+msgstr "0/0"
+
+#: tfrmain.statusbar1.panels[1].text
+msgid "Resolution: 0x0"
+msgstr "Разрешение: 0x0"
+
+#: tfrmain.statusbar1.panels[2].text
+msgid "Frame 0/0"
+msgstr "Рамка 0/0"
+
+#: tfrmain.statusbar1.panels[3].text
+msgid "Size: 0"
+msgstr "Размер: 0"
+
+#: tfrmain.statusbar1.panels[4].text
+msgid "Time: 0ms"
+msgstr "Время: 0 ms"
+
+#: tfrmain.statusbar1.panels[5].text
+msgid "EXIF:"
+msgstr "EXIF"
+
+#: tfrmain.statusbar1.simpletext
+msgid "Marco 1.0"
+msgstr "Marco 1.0"
+
+#: tfrmain.tbadjust.hint
+msgid "Adjust image"
+msgstr "Настройка изображения"
+
+#: tfrmain.tbarepeat.caption
+msgid "A"
+msgstr ""
+
+#: tfrmain.tbarepeat.hint
+msgid "A repeat"
+msgstr ""
+
+#: tfrmain.tbbrepeat.caption
+msgid "B"
+msgstr ""
+
+#: tfrmain.tbbrepeat.hint
+msgid "B repeat"
+msgstr ""
+
+#: tfrmain.tbexit.hint
+msgctxt "tfrmain.tbexit.hint"
+msgid "Exit"
+msgstr "Выход"
+
+#: tfrmain.tbfastanim.hint
+msgid "Speed up"
+msgstr "Ускорение"
+
+#: tfrmain.tbfirstimage.hint
+msgid "First image"
+msgstr "Первое изображение"
+
+#: tfrmain.tbfliphorizontal.hint
+msgctxt "tfrmain.tbfliphorizontal.hint"
+msgid "Flip horizontal"
+msgstr "Отразить по горизонтали"
+
+#: tfrmain.tbflipvertical.hint
+msgctxt "tfrmain.tbflipvertical.hint"
+msgid "Flip vertical"
+msgstr "Сальто по вертикали"
+
+#: tfrmain.tbfullscreen.hint
+msgid "Full screen"
+msgstr "Полноэкранный режим"
+
+#: tfrmain.tbinformation.hint
+msgid "Information"
+msgstr "Информация"
+
+#: tfrmain.tblastimage.hint
+msgid "Last image"
+msgstr "Последнее изображение"
+
+#: tfrmain.tbnextframe.hint
+msgid "Next frame"
+msgstr "Следующий кадр"
+
+#: tfrmain.tbnextimage.hint
+msgid "Next image"
+msgstr "Следующее изображение"
+
+#: tfrmain.tbopen.hint
+msgid "Open image"
+msgstr "Открытое изображение"
+
+#: tfrmain.tbpauseanim.hint
+msgid "Play/Pause animation"
+msgstr "Воспроизведение / пауза анимации"
+
+#: tfrmain.tbplayshow.hint
+msgid "Start presentation"
+msgstr "Начало презентации"
+
+#: tfrmain.tbprevframe.hint
+msgid "Prev frame"
+msgstr "Предыдущий кадр"
+
+#: tfrmain.tbprevimage.hint
+msgid "Prev image"
+msgstr "Предыдущее изображение"
+
+#: tfrmain.tbprint.hint
+msgctxt "tfrmain.tbprint.hint"
+msgid "Print"
+msgstr "Печать"
+
+#: tfrmain.tbrandom.hint
+msgid "Random presentation"
+msgstr "Случайная презентация"
+
+#: tfrmain.tbreload.hint
+msgctxt "tfrmain.tbreload.hint"
+msgid "Reload image"
+msgstr "Обновить изображение"
+
+#: tfrmain.tbrotateleft.hint
+msgid "Flip left"
+msgstr "Флип левый"
+
+#: tfrmain.tbrotateright.hint
+msgid "Flip right"
+msgstr "Переверните вправо"
+
+#: tfrmain.tbsave.hint
+msgid "Save image"
+msgstr "Сохранить изображение"
+
+#: tfrmain.tbselect.hint
+msgid "Selection tool"
+msgstr "Инструмент выделения"
+
+#: tfrmain.tbshowthumbs.hint
+msgid "Show miniatures"
+msgstr "Показать миниатюры"
+
+#: tfrmain.tbshowtreeview.hint
+msgid "Show tree view"
+msgstr "Показать вид дерева"
+
+#: tfrmain.tbslowanim.hint
+msgid "Speed down"
+msgstr "Скорость вниз"
+
+#: tfrmain.tbstrech.hint
+msgid "Large"
+msgstr "Большой"
+
+#: tfrmain.tbzoom100.hint
+msgid "Zoom 100%"
+msgstr "Зум 100%"
+
+#: tfrmain.tbzoomin.hint
+msgid "Zoom +"
+msgstr "Зум +"
+
+#: tfrmain.tbzoomout.hint
+msgid "Zoom -"
+msgstr "Зум -"
+
+#: tfrpass.caption
+msgid "Enter password"
+msgstr "Введите Пароль"
+
+#: tfrpass.label1.caption
+msgid "Password:"
+msgstr "Пароль:"
+
+#: tfrprint.caption
+msgctxt "tfrprint.caption"
+msgid "Print"
+msgstr "Печать"
+
+#: tfrprint.lblcopys.caption
+msgid "Copys:"
+msgstr "Копировать:"
+
+#: tfrprint.lblprint.caption
+msgid "Printer:"
+msgstr "Принтер:"
+
+#: tfrprint.lblsheel.caption
+msgid "Sheel:"
+msgstr "Шеель:"
+
+#: tfrprint.rbhorizontal.caption
+msgid "Horizontal"
+msgstr "Горизонтальный"
+
+#: tfrprint.rbvertical.caption
+msgid "Vertical"
+msgstr "Вертикальный"
+
+#: tfrresize.caption
+msgid "Resize"
+msgstr "Изменить размер"
+
+#: tfrresize.cbfilter.text
+msgid "Lanczos"
+msgstr "Ланцоша"
+
+#: tfrresize.label1.caption
+msgid "Width:"
+msgstr "Ширина:"
+
+#: tfrresize.label2.caption
+msgid "Height:"
+msgstr "Высота:"
+
+#: tfrresize.lblfilter.caption
+msgid "Filter:"
+msgstr "Фильтр:"
+
+#: tfrresize.togglebox1.caption
+msgid "]"
+msgstr "]"
+
+#: tfrresize.togglebox1.hint
+msgid "keep aspect ratio"
+msgstr "Сохранить соотношение сторон"
+
+#: tfrthumbsize.caption
+msgid "Thumbnail size"
+msgstr "Размер миниатюры"
+
+#: tfrthumbsize.label1.caption
+msgid "Thumbnail size (with x height)"
+msgstr "Размер миниатюры (Ширина x высота)"
+

@@ -7,8 +7,8 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, ComCtrls,
   StdCtrls, Menus, ExtDlgs, LazFileUtils, FileUtil, IntfGraphics,
   types, LCLType, ShellCtrls, FPImage, fresize, fquality, feffects, fgoto, fthumbsize,
-  LazUTF8, lclvlc, print{$IFDEF WINDOWS}, Registry, Windows, Windirs, uThumbnailProvider {$ENDIF},
-  BGRABitmapTypes, BGRABitmap, BGRAThumbnail, BGRASVG, {BGRAAnimatedGif,}
+  LazUTF8, lclvlc, print{$IFDEF WINDOWS}, Registry, Windows, Windirs, uThumbnailProvider{, DarkModeClasses, UXTheme} {$ENDIF},
+  BGRABitmapTypes, BGRABitmap, BGRAThumbnail, BGRASVG, BGRAIconCursor,{BGRAAnimatedGif,}
   DateUtils, Math, ImgSize, Printers, LCLintf, fexif, INIFiles, LCLTranslator,
   Imaging, ImagingClasses, ImagingComponents, ImagingTypes, ImagingCanvases,
   Variants, Clipbrd, AbZBrows, AbUnzper, AbArcTyp, AbBrowse, fpass;
@@ -123,6 +123,8 @@ type
     Timer4: TTimer;
     Timer5: TTimer;
     cacheTimer: TTimer;
+    tbARepeat: TToolButton;
+    tbBRepeat: TToolButton;
     TrackBar1: TTrackBar;
     VideoTimer: TTimer;
     ToolBar1: TToolBar;
@@ -279,6 +281,8 @@ type
     procedure ShellTreeView1Enter(Sender: TObject);
     procedure ShellTreeView1Expanded(Sender: TObject; Node: TTreeNode);
     procedure ShellTreeView1SelectionChanged(Sender: TObject);
+    procedure tbARepeatClick(Sender: TObject);
+    procedure tbBRepeatClick(Sender: TObject);
     procedure tbFirstImageClick(Sender: TObject);
     procedure tbInformationClick(Sender: TObject);
     procedure tbLastImageClick(Sender: TObject);
@@ -324,11 +328,9 @@ type
     procedure TrackBar1MouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure VideoTimerTimer(Sender: TObject);
-
   private
     { private declarations }
     FPlayer : TLCLVlcPlayer;
-
   public
     { public declarations }
   end;
@@ -378,7 +380,7 @@ Const
 
 var
   frmain: Tfrmain;
-  full,ifgif,ifapng,ifzip,ifvideo,startdraw,startselect,compactmode:boolean;
+  full,ifgif,ifapng,ifzip,ifvideo,ificoncur,startdraw,startselect,compactmode:boolean;
   flist:TStringList;
   nfile,ifile,ndir,idir:LongInt;
   carpeta:string;
@@ -393,6 +395,8 @@ var
   starting:boolean=true;
   //BGRAgif:TBGRAAnimatedGif;
   APNGImage: ImagingClasses.TMultiImage;
+  BGRAMulti: TBGRAIconCursor;
+  BGRAMultiIndex: integer;
   APNGDelays:Array of integer;
   scrollchange:boolean=true;
   mosaic:Graphics.TBitmap;
@@ -442,6 +446,57 @@ uses
 {$R *.lfm}
 
 { Tfrmain }
+procedure arproc;
+begin
+  if ifvideo then
+  begin
+    if ARepeat<>0 then
+    begin
+      ARepeat:=0;
+      frmain.tbARepeat.Down:=false;
+      frmain.TrackBar1.SelStart:=0;
+      frmain.TrackBar1.SelEnd:=0;
+    end
+    else
+    begin
+      Arepeat:=frmain.FPlayer.VideoPosition;
+      frmain.tbARepeat.Down:=true;
+      frmain.TrackBar1.SelStart:=Arepeat;
+    end;
+    Brepeat:=0;
+  end;
+
+  if ifapng then
+  begin
+    if ARepeat<>0 then
+    begin
+      ARepeat:=0;
+      frmain.tbARepeat.Down:=false;
+    end
+    else
+    begin
+      ARepeat:=APNGImage.ActiveImage;
+      frmain.tbARepeat.Down:=true;
+    end;
+    Brepeat:=APNGImage.ImageCount-1;
+  end;
+
+  frmain.tbBRepeat.Down:=false;
+end;
+
+procedure brproc;
+begin
+  if ifvideo then
+  begin
+     Brepeat:=frmain.FPlayer.VideoPosition;
+     frmain.TrackBar1.SelEnd:=Brepeat;
+  end;
+  if ifapng then
+     BRepeat:=APNGImage.ActiveImage;
+
+  frmain.tbBRepeat.Down:=true;
+end;
+
 procedure deletetempfile;
 begin
   if ifvideo then
@@ -1220,6 +1275,11 @@ begin
   frmain.cacheTimer.Enabled:=false;
   ifgif:=false;
   ifapng:=false;
+  ificoncur:=false;
+  ARepeat:=0;
+  BRepeat:=0;
+  frmain.tbARepeat.Down:=false;
+  frmain.tbBRepeat.Down:=false;
   frmain.StatusBar1.Panels.Items[5].Text:='';
   starttime:=Now();
   if Assigned(APNGImage) then
@@ -1325,12 +1385,15 @@ begin
         if APNGImage.ImageCount>1 then
         begin
           ifapng:=true;
+          BRepeat:=APNGImage.ImageCount-1;
           frmain.Timer5.Enabled:=true;
           frmain.tbSlowAnim.Enabled:=true;
           frmain.tbPrevFrame.Enabled:=true;
           frmain.tbPauseAnim.Enabled:=true;
           frmain.tbNextFrame.Enabled:=true;
           frmain.tbFastAnim.Enabled:=true;
+          frmain.tbARepeat.Enabled:=true;
+          frmain.tbBRepeat.Enabled:=true;
           frmain.StatusBar1.Panels[2].Text:=inttostr(APNGImage.ActiveImage+1)+'/'+inttostr(APNGImage.ImageCount);
         end
         else
@@ -1341,6 +1404,8 @@ begin
           frmain.tbPauseAnim.Enabled:=false;
           frmain.tbNextFrame.Enabled:=false;
           frmain.tbFastAnim.Enabled:=false;
+          frmain.tbARepeat.Enabled:=false;
+          frmain.tbBRepeat.Enabled:=false;
           frmain.StatusBar1.Panels[2].Text:='';
         end;
       end;
@@ -1574,22 +1639,38 @@ begin
         //streamimage.Destroy;
         FreeAndNil(streamimage);
       end;
-      '.ICO':
+      '.ICO','.CUR':
       begin
         ifgif:=false;
         ifapng:=false;
         ifvideo:=false;
-        frmain.Image1.Picture.LoadFromFile(wimagen);
+        try
+          BGRAMulti:=TBGRAIconCursor.Create(wimagen);
+          if BGRAMulti.Count>0 then
+          begin
+            ificoncur:=true;
+            BGRAMultiIndex:=0;
+            frmain.Image1.Picture.Bitmap.Assign(BGRAMulti.GetBitmap(BGRAMultiIndex));
+            frmain.tbPrevFrame.Enabled:=true;
+            frmain.tbNextFrame.Enabled:=true;
+            frmain.StatusBar1.Panels[2].Text:=inttostr(BGRAMultiIndex+1)+'/'+inttostr(BGRAMulti.Count);
+          end
+          else
+            frmain.Image1.Picture.LoadFromFile(wimagen);
+        except on e:exception do
+          frmain.Image1.Picture.LoadFromFile(wimagen);
+        end;
         frmain.StatusBar1.Panels.Items[1].Text:='Resolution:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
         modethumb:=false;
         realimgwidth:=frmain.Image1.Picture.Width;
         realimgheight:=frmain.Image1.Picture.Height;
       end;
-      '.TGA','.PSD','.XWD','.CUR':
+      '.TGA','.PSD','.XWD':
       begin
         ifgif:=false;
         ifapng:=false;
         ifvideo:=false;
+        ificoncur:=false;
         BGRAImage:=BGRABitmap.TBGRABitmap.Create(wimagen);
         frmain.Image1.Picture.Assign(BGRAImage);
         frmain.StatusBar1.Panels.Items[1].Text:='Resolution:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
@@ -1602,8 +1683,9 @@ begin
       {$IFDEF WINDOWS}
       '.WEBP':
       begin
-        ts:=TSize.Create(frmain.Image1.Width,frmain.Image1.Height);
+        ts:=TSize.Create(-1,-1);
         frmain.Image1.Picture.Assign(uThumbnailProvider.GetThumbnail(fimagen,ts));
+        frmain.StatusBar1.Panels.Items[1].Text:='Resolution:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
       end;
       {$ENDIF}
       '.AVI','.MP4','.WEBM','.3GP','.MPG','.MKV','.WMV','.FLV','.TS','.VOB','.MP3','.M4A','.WAV','.WMA':
@@ -1611,6 +1693,7 @@ begin
         ifvideo:=true;
         ifgif:=false;
         ifapng:=false;
+        ificoncur:=false;
         frmain.Fplayer.PlayFile(fimagen);
         frmain.FPlayer.FullScreenMode:=false;
         frmain.TrackBar1.Max:=frmain.Fplayer.VideoLength;
@@ -1621,6 +1704,8 @@ begin
         frmain.tbFastAnim.Enabled:=true;
         frmain.VideoTimer.Enabled:=true;
         frmain.TrackBar1.Visible:=true;
+        frmain.tbARepeat.Enabled:=true;
+        frmain.tbBRepeat.Enabled:=true;
         frmain.StatusBar1.Panels.Items[1].Text:='Duration: '+timetostr(frmain.FPlayer.VideoDuration);
       end;
       else/////Try to load as Image
@@ -1648,7 +1733,13 @@ begin
     frmain.tbReload.Enabled:=true;
     frmain.tbAdjust.Enabled:=true;
     frmain.tbStrech.Enabled:=true;
+    frmain.mnuSave.Enabled:=true;
     frmain.mnuSaveAs.Enabled:=true;
+    frmain.mnuDeleteFile.Enabled:=true;
+    frmain.mnuPrint.Enabled:=true;
+    frmain.mnuResize.Enabled:=true;
+    frmain.mnuDesktopImage.Enabled:=true;
+    frmain.mnuEXIF.Enabled:=true;
     frmain.mnuCopy.Enabled:=true;
     frmain.mnuFlipH.Enabled:=true;
     frmain.mnuFlipV.Enabled:=true;
@@ -1664,8 +1755,9 @@ begin
     begin
       {$IFDEF WINDOWS}
       try
-        ts:=TSize.Create(frmain.Image1.Width,frmain.Image1.Height);
+        ts:=TSize.Create(-1,-1);
         frmain.Image1.Picture.Assign(uThumbnailProvider.GetThumbnail(fimagen,ts));
+        frmain.StatusBar1.Panels.Items[1].Text:='Resolution:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
       finally
       end;
       {$ENDIF}
@@ -1697,7 +1789,13 @@ begin
         frmain.tbReload.Enabled:=false;
         frmain.tbAdjust.Enabled:=false;
         frmain.tbStrech.Enabled:=false;
+        frmain.mnuSave.Enabled:=false;
         frmain.mnuSaveAs.Enabled:=false;
+        frmain.mnuDeleteFile.Enabled:=false;
+        frmain.mnuPrint.Enabled:=false;
+        frmain.mnuResize.Enabled:=false;
+        frmain.mnuDesktopImage.Enabled:=false;
+        frmain.mnuEXIF.Enabled:=false;
         frmain.mnuCopy.Enabled:=false;
         frmain.mnuFlipH.Enabled:=false;
         frmain.mnuFlipV.Enabled:=false;
@@ -1776,6 +1874,9 @@ begin
     frmain.Splitter1.AnchorSideBottom.Control:=frmain;
     frmain.Splitter1.AnchorSideBottom.Side:=asrBottom;
 
+    frmain.ScrollBox1.AnchorSideBottom.Control:=frmain.Splitter2;
+    frmain.ScrollBox1.AnchorSideBottom.Side:=asrTop;
+
     frmain.StatusBar1.Visible:=false;
     frmain.Color:=clBlack;
     frmain.FormStyle:=fsStayOnTop;
@@ -1813,6 +1914,9 @@ begin
     if frmain.mnuTreeView.Checked then
       frmain.Splitter1.Left:=200;
     full:=false;
+
+    frmain.ScrollBox1.AnchorSideBottom.Control:=frmain.TrackBar1;
+    frmain.ScrollBox1.AnchorSideBottom.Side:=asrTop;
 
     if frmain.mnuStatusBar.Checked then
     begin
@@ -2926,7 +3030,7 @@ begin
   flisttmp:=TStringList.Create;
 
   case UpperCase(ExtractFileExt(fname)) of
-    '.ZIP','.7Z','.TAR','.TXZ','.GZ','.TGZ','.CAB','.APK','.EXE':
+    '.ZIP','.7Z','.TAR','.TXZ','.GZ','.TGZ','.CAB','.APK','.EXE','.DEB','.XZ':
     begin
       ifzip:=true;
       frmain.AbUnZipper1.FileName:=place+fname;
@@ -3041,7 +3145,29 @@ var
    curleft,curright:TCursorImage;
    itemfile:TSearchRec;
    mitem:TMenuItem;
+   //LDark: BOOL;
 begin
+  //AllowDarkModeForApp(true);
+  //AllowDarkModeForWindow(frmain.Handle,true);
+  //Ldark:=true;
+  //UxTheme.SetWindowTheme(frmain.Handle,'DarkMode_Explorer',nil);
+  //UxTheme.SetWindowThemeAttribute(frmain.Handle,19,@ldark,SizeOf(ldark));
+  //UxTheme.SetWindowTheme(frmain.MainMenu1.Handle,'DarkMode_Explorer',nil);
+  //UxTheme.SetWindowTheme(frmain.FakePopup.Handle,'DarkMode_Explorer',nil);
+  {for i:=0 to frmain.ControlCount-1 do
+  begin
+    case frmain.Controls[i].ToString of
+      'TButton':UxTheme.SetWindowTheme((frmain.Controls[i] as TButton).Handle,'DarkMode_Explorer',nil);
+      'TToolBar':UxTheme.SetWindowTheme((frmain.Controls[i] as TToolBar).Handle,'DarkMode_Explorer',nil);
+      'TStatusBar':UxTheme.SetWindowTheme((frmain.Controls[i] as TStatusBar).Handle,'DarkMode_Explorer',nil);
+      'TShellTreeView':UxTheme.SetWindowTheme((frmain.Controls[i] as TShellTreeView).Handle,'DarkMode_Explorer',nil);
+      'TSplitter':UxTheme.SetWindowTheme((frmain.Controls[i] as TSplitter).Handle,'DarkMode_Explorer',nil);
+      'TScrollBox':UxTheme.SetWindowTheme((frmain.Controls[i] as TScrollBox).Handle,'DarkMode_Explorer',nil);
+      'TTrackBar':UxTheme.SetWindowTheme((frmain.Controls[i] as TTrackBar).Handle,'DarkMode_Explorer',nil);
+      else
+        ShowMessage(frmain.Controls[i].ToString);
+    end;
+  end;}
   FPlayer:=TLCLVLCPlayer.Create(Self);
   FPlayer.ParentWindow:=ScrollBox1;
   if FindFirst(ExtractFilePath(UTF8ToSys(Application.Params[0]))+pathdelim+'languages'+pathdelim+'lazview.*.po',faAnyFile,itemfile)=0 then
@@ -3245,12 +3371,21 @@ begin
     end;
   112://Tecla F1
   begin
-   Arepeat:=FPlayer.VideoPosition;
-   Brepeat:=0;
+    arproc;
   end;
   113://Tecla F2
   begin
-   Brepeat:=FPlayer.VideoPosition;
+    brproc;
+  end;
+  114://Tecla F3
+  begin
+    if frmain.FPlayer.AudioVolume>0 then
+      frmain.FPlayer.AudioVolume:=frmain.FPlayer.AudioVolume-1;
+  end;
+  115://Tecla F4
+  begin
+    if frmain.FPlayer.AudioVolume<200 then
+      frmain.FPlayer.AudioVolume:=frmain.FPlayer.AudioVolume+1;
   end;
   79://Tecla O
     begin
@@ -3665,7 +3800,13 @@ begin
   frmain.tbReload.Enabled:=true;
   frmain.tbAdjust.Enabled:=true;
   frmain.tbStrech.Enabled:=true;
+  frmain.mnuSave.Enabled:=true;
   frmain.mnuSaveAs.Enabled:=true;
+  frmain.mnuDeleteFile.Enabled:=true;
+  frmain.mnuPrint.Enabled:=true;
+  frmain.mnuResize.Enabled:=true;
+  frmain.mnuDesktopImage.Enabled:=true;
+  frmain.mnuEXIF.Enabled:=true;
   frmain.mnuCopy.Enabled:=true;
   frmain.mnuFlipH.Enabled:=true;
   frmain.mnuFlipV.Enabled:=true;
@@ -4344,7 +4485,17 @@ end;
 
 procedure Tfrmain.mnuAboutClick(Sender: TObject);
 begin
-  ShowMessage('Imagen viewer: LazView'+#13#10+'Version: 0.2'+#13#10+'Created by: nenirey@gmail.com'+#13#10+'CopyLeft: 2019'+lineending+lineending+'Thanks to the creators of the next libraries used by the project:'+lineending+lineending+'BGRABitmap by circular at operamail.com ('+BGRABitmapVersion.ToString+')'+lineending+lineending+'Vampyre Imaging Library by Marek Mauder (marekmauder@gmail.com)'+lineending+lineending+'dEXIF by Gerry McGuire (mcguirez@hotmail.com)'+lineending+lineending+'Abbrevia 5.0 (http://tpabbrevia.sourceforge.net/)');
+  ShowMessage('Imagen viewer: LazView'+lineending
+  +'Version: 0.3'+lineending
+  +'Created by: nenirey@gmail.com'+lineending
+  +'CopyLeft: 2020'+lineending+lineending
+  +'Thanks to the creators of the next libraries used by the project:'+lineending+lineending
+  +'BGRABitmap by circular at operamail.com ('+BGRABitmapVersion.ToString+')'+lineending+lineending
+  +'Vampyre Imaging Library by Marek Mauder (marekmauder@gmail.com)'+lineending+lineending
+  +'dEXIF by Gerry McGuire (mcguirez@hotmail.com)'+lineending+lineending
+  +'Abbrevia 5.0 (http://tpabbrevia.sourceforge.net/)'+lineending+lineending
+  +'Icon made by Smashicons  from www.flaticon.com'+lineending+lineending
+  +'Translations [gr],[it],[cn],[fr],[de],[jp],[ru],[pt_br] Ronaldo Rodrigues Oliveira (morcberry@gmail.com)');
 end;
 
 procedure Tfrmain.mnuToolBarClick(Sender: TObject);
@@ -4600,48 +4751,69 @@ procedure Tfrmain.ScrollBox1MouseWheel(Sender: TObject; Shift: TShiftState;
 var
    lwidth,lheight:integer;
 begin
-   realmode;
-   lwidth:=frmain.Image1.Width;
-   lheight:=frmain.Image1.Height;
-   if frmain.Image1.Align = alClient then
+   if ifvideo then
    begin
-     frmain.ScrollBox1.Enabled:=true;
-     frmain.Image1.Stretch:=true;
-     frmain.tbStrech.Down:=false;
-     frmain.Image1.AutoSize:=false;
-     frmain.Image1.Align:=alNone;
-     frmain.Image1.Width:=lwidth;
-     frmain.Image1.Height:=lheight;
+
+   end
+   else
+   begin
+     realmode;
+     lwidth:=frmain.Image1.Width;
+     lheight:=frmain.Image1.Height;
+     if frmain.Image1.Align = alClient then
+     begin
+       frmain.ScrollBox1.Enabled:=true;
+       frmain.Image1.Stretch:=true;
+       frmain.tbStrech.Down:=false;
+       frmain.Image1.AutoSize:=false;
+       frmain.Image1.Align:=alNone;
+       frmain.Image1.Width:=lwidth;
+       frmain.Image1.Height:=lheight;
+     end;
    end;
   if WheelDelta>0 then
   begin
-    frmain.Image1.Width:=frmain.Image1.Width+20;
-    frmain.Image1.Height:=frmain.Image1.Height+20;
-
-    if MousePos.y>frmain.ScrollBox1.Height/2 then
-      frmain.Image1.Top:=frmain.Image1.Top-18
+    if ifvideo then
+    begin
+      frmain.FPlayer.AudioVolume:=frmain.FPlayer.AudioVolume+1;
+    end
     else
-      frmain.Image1.Top:=frmain.Image1.Top-7;
+    begin
+      frmain.Image1.Width:=frmain.Image1.Width+20;
+      frmain.Image1.Height:=frmain.Image1.Height+20;
 
-    if MousePos.x>frmain.ScrollBox1.Width/2 then
-      frmain.Image1.Left:=frmain.Image1.Left-18
-    else
-      frmain.Image1.Left:=frmain.Image1.Left-7;
+      if MousePos.y>frmain.ScrollBox1.Height/2 then
+        frmain.Image1.Top:=frmain.Image1.Top-18
+      else
+        frmain.Image1.Top:=frmain.Image1.Top-7;
+
+      if MousePos.x>frmain.ScrollBox1.Width/2 then
+        frmain.Image1.Left:=frmain.Image1.Left-18
+      else
+        frmain.Image1.Left:=frmain.Image1.Left-7;
+    end;
   end
   else
   begin
-    frmain.Image1.Width:=frmain.Image1.Width-20;
-    frmain.Image1.Height:=frmain.Image1.Height-20;
-
-    if MousePos.y>frmain.ScrollBox1.Height/2 then
-      frmain.Image1.Top:=frmain.Image1.Top+18
+    if ifvideo then
+    begin
+      frmain.FPlayer.AudioVolume:=frmain.FPlayer.AudioVolume-1;
+    end
     else
-      frmain.Image1.Top:=frmain.Image1.Top+7;
+    begin
+      frmain.Image1.Width:=frmain.Image1.Width-20;
+      frmain.Image1.Height:=frmain.Image1.Height-20;
 
-    if MousePos.x>frmain.ScrollBox1.Width/2 then
-      frmain.Image1.Left:=frmain.Image1.Left+18
-    else
-      frmain.Image1.Left:=frmain.Image1.Left+7;
+      if MousePos.y>frmain.ScrollBox1.Height/2 then
+        frmain.Image1.Top:=frmain.Image1.Top+18
+      else
+        frmain.Image1.Top:=frmain.Image1.Top+7;
+
+      if MousePos.x>frmain.ScrollBox1.Width/2 then
+        frmain.Image1.Left:=frmain.Image1.Left+18
+      else
+        frmain.Image1.Left:=frmain.Image1.Left+7;
+    end;
   end;
 end;
 
@@ -4877,6 +5049,16 @@ begin
   end;
 end;
 
+procedure Tfrmain.tbARepeatClick(Sender: TObject);
+begin
+ arproc;
+end;
+
+procedure Tfrmain.tbBRepeatClick(Sender: TObject);
+begin
+  brproc;
+end;
+
 procedure Tfrmain.tbFirstImageClick(Sender: TObject);
 begin
   if Assigned(flist) then
@@ -4985,10 +5167,10 @@ begin
     begin
       if Sender<>nil then
       begin
-        if APNGImage.ActiveImage<APNGImage.ImageCount-1 then
+        if (APNGImage.ActiveImage<APNGImage.ImageCount-1) and (APNGImage.ActiveImage<BRepeat) then
           APNGImage.ActiveImage:=APNGImage.ActiveImage+1
         else
-          APNGImage.ActiveImage:=0;
+          APNGImage.ActiveImage:=ARepeat;
       end;
       pngrect.Top:=0;
       pngrect.Left:=0;
@@ -5119,7 +5301,19 @@ begin
     if frmain.FPlayer.Playing then
       frmain.FPlayer.Pause;
     frmain.FPlayer.VideoFractionalPosition:=frmain.FPlayer.VideoFractionalPosition-0.00001;
-  end;;
+  end;
+  if ificoncur then
+  begin
+    if BGRAMultiIndex>0 then
+    begin
+      dec(BGRAMultiIndex);
+    end
+    else
+      BGRAMultiIndex:=BGRAMulti.Count-1;
+    frmain.Image1.Picture.Bitmap.Assign(BGRAMulti.GetBitmap(BGRAMultiIndex));
+    frmain.StatusBar1.Panels[2].Text:=inttostr(BGRAMultiIndex+1)+'/'+inttostr(BGRAMulti.Count);
+    frmain.StatusBar1.Panels.Items[1].Text:='Resolution:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
+  end;
 end;
 
 procedure Tfrmain.tbPrevImageClick(Sender: TObject);
@@ -5150,6 +5344,18 @@ begin
   if ifvideo then
   begin
     frmain.FPlayer.NextFrame;
+  end;
+  if ificoncur then
+  begin
+    if BGRAMultiIndex<BGRAMulti.Count-1 then
+    begin
+      inc(BGRAMultiIndex);
+    end
+    else
+      BGRAMultiIndex:=0;
+    frmain.Image1.Picture.Bitmap.Assign(BGRAMulti.GetBitmap(BGRAMultiIndex));
+    frmain.StatusBar1.Panels[2].Text:=inttostr(BGRAMultiIndex+1)+'/'+inttostr(BGRAMulti.Count);
+    frmain.StatusBar1.Panels.Items[1].Text:='Resolution:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
   end;
 end;
 
@@ -5407,8 +5613,11 @@ end;
 
 procedure Tfrmain.TrackBar1MouseUp(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
+var
+   trackpercent:float;
 begin
-
+  trackpercent:=(x/frmain.TrackBar1.Width)*100;
+  frmain.TrackBar1.Position:=Round(trackpercent*0.01*frmain.TrackBar1.Max);
 end;
 
 procedure Tfrmain.VideoTimerTimer(Sender: TObject);
@@ -5427,6 +5636,11 @@ begin
     begin
       if FPlayer.VideoPosition>=Brepeat then
         Fplayer.VideoPosition:=Arepeat;
+    end;
+    if Arepeat=0 then
+    begin
+      frmain.TrackBar1.SelStart:=0;
+      frmain.TrackBar1.SelEnd:=Fplayer.VideoPosition;
     end;
     if ((Fplayer.VideoPosition>=Fplayer.VideoLength) and (Fplayer.VideoLength>0)) or (Fplayer.Playing=false) then
     begin
@@ -5639,6 +5853,16 @@ begin
           FreeAndNil(streamimage)
         else
           FreeAndNil(fstream);
+        {$IFDEF WINDOWS}
+        if thumbtmp.Bitmap.Empty then
+        begin
+          try
+            ts:=TSize.Create(thumbsize,thumbsize);
+            thumbtmp.Assign(uThumbnailProvider.GetThumbnail(carpeta+iname,ts));
+          finally
+          end;
+        end;
+        {$ENDIF}
         thumb.Canvas.Rectangle(0,0,thumbsize,thumbsize);
         thumb.Canvas.CopyRect(Types.Rect(2,2,thumbsize-2,thumbsize-2),thumbtmp.Bitmap.Canvas,Types.Rect(0,0,thumbtmp.Bitmap.Width,thumbtmp.Bitmap.Height));
         FreeAndNil(thumbtmp);
@@ -5683,6 +5907,11 @@ begin
         end;
         {$ENDIF}
       end;
+      else
+      begin
+        ///try if can showthumb with out extension or uknow
+        (frmain.sboxthumb.Controls[thumbindex] as TImage).Picture.Assign(GetFileThumbnail(wthumb,thumbsize,thumbsize, bgcolor, false));
+      end;
     end;
     except on e:exception do
     begin
@@ -5701,7 +5930,7 @@ begin
       {$IFDEF WINDOWS}
       try
         ts:=TSize.Create(thumbsize,thumbsize);
-        (frmain.sboxthumb.Controls[thumbindex] as TImage).Picture.Assign(uThumbnailProvider.GetThumbnail(carpeta+iname,ts));
+        (frmain.sboxthumb.Controls[thumbindex] as TImage).Picture.Bitmap.Assign(uThumbnailProvider.GetThumbnail(carpeta+iname,ts));
       finally
       end;
       {$ENDIF}

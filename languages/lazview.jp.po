@@ -1,0 +1,735 @@
+﻿msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+#: tform3.caption
+msgid "Quality"
+msgstr "品質"
+
+#: tform3.label1.caption
+msgid "100"
+msgstr "100"
+
+#: tfreffect.button1.caption
+msgid "Grayscale"
+msgstr "グレースケール"
+
+#: tfreffect.button10.caption
+msgid "RGB -> BRG"
+msgstr "RGB -> BRG"
+
+#: tfreffect.button11.caption
+msgctxt "tfreffect.button11.caption"
+msgid "Smooth"
+msgstr "スムーズ"
+
+#: tfreffect.button12.caption
+msgid "Sharpen"
+msgstr "シャープ"
+
+#: tfreffect.button13.caption
+msgctxt "tfreffect.button13.caption"
+msgid "Negative"
+msgstr "負"
+
+#: tfreffect.button14.caption
+msgid "Plane (slow)"
+msgstr "平面 (遅い)"
+
+#: tfreffect.button15.caption
+msgid "Contour"
+msgstr "輪郭"
+
+#: tfreffect.button16.caption
+msgid "Cylinder"
+msgstr "シリンダー"
+
+#: tfreffect.button17.caption
+msgid "Emboss"
+msgstr "エンボス"
+
+#: tfreffect.button18.caption
+msgid "Emboss high light"
+msgstr "ハイライトエンボス"
+
+#: tfreffect.button19.caption
+msgid "Normalize"
+msgstr "正規化"
+
+#: tfreffect.button2.caption
+msgctxt "tfreffect.button2.caption"
+msgid "Highlight red"
+msgstr "赤をハイライト"
+
+#: tfreffect.button20.caption
+msgid "Sphere"
+msgstr "球"
+
+#: tfreffect.button21.caption
+msgid "Median"
+msgstr "中央値"
+
+#: tfreffect.button22.caption
+msgid "Smart zoom 3"
+msgstr "スマートズーム 3"
+
+#: tfreffect.button23.caption
+msgid "Twirl"
+msgstr "クルクル回す"
+
+#: tfreffect.button24.caption
+msgid "Pixelate"
+msgstr "ピクセル文字"
+
+#: tfreffect.button25.caption
+msgid "Fade"
+msgstr "フェード"
+
+#: tfreffect.button26.caption
+msgctxt "tfreffect.button26.caption"
+msgid "-"
+msgstr "-"
+
+#: tfreffect.button27.caption
+msgctxt "tfreffect.button27.caption"
+msgid "+"
+msgstr "+"
+
+#: tfreffect.button28.caption
+msgctxt "tfreffect.button28.caption"
+msgid "-"
+msgstr "-"
+
+#: tfreffect.button29.caption
+msgctxt "tfreffect.button29.caption"
+msgid "+"
+msgstr "+"
+
+#: tfreffect.button3.caption
+msgctxt "tfreffect.button3.caption"
+msgid "Highlight green"
+msgstr "ハイライト緑"
+
+#: tfreffect.button30.caption
+msgctxt "tfreffect.button30.caption"
+msgid "-"
+msgstr "-"
+
+#: tfreffect.button31.caption
+msgctxt "tfreffect.button31.caption"
+msgid "+"
+msgstr "+"
+
+#: tfreffect.button4.caption
+msgctxt "tfreffect.button4.caption"
+msgid "Highlight blue"
+msgstr "青をハイライト"
+
+#: tfreffect.button5.caption
+msgctxt "tfreffect.button5.caption"
+msgid "Reload image"
+msgstr "画像を再読み込み"
+
+#: tfreffect.button6.caption
+msgid "RGB -> BGR"
+msgstr "RGB -> BGR"
+
+#: tfreffect.button7.caption
+msgid "RGB -> RBG"
+msgstr "RGB -> RBG"
+
+#: tfreffect.button8.caption
+msgid "RGB -> GRB"
+msgstr "RGB -> GRB"
+
+#: tfreffect.button9.caption
+msgid "RGB -> GBR"
+msgstr "RGB -> GBR"
+
+#: tfreffect.caption
+msgctxt "tfreffect.caption"
+msgid "Effects"
+msgstr "効果"
+
+#: tfreffect.groupbox1.caption
+msgid "Change colors"
+msgstr "色の変更"
+
+#: tfreffect.groupbox2.caption
+msgid "Levels"
+msgstr "レベル"
+
+#: tfreffect.label1.caption
+msgid "Brightnes"
+msgstr "明るさ"
+
+#: tfreffect.label2.caption
+msgid "Contrast"
+msgstr "対比"
+
+#: tfreffect.label3.caption
+msgid "Gamma"
+msgstr "ガンマ"
+
+#: tfrexif.caption
+msgctxt "tfrexif.caption"
+msgid "EXIF"
+msgstr "EXIF"
+
+#: tfrgoto.caption
+msgid "Go to image number..."
+msgstr "画像番号に移動..."
+
+#: tfrgoto.edit1.text
+msgid "0"
+msgstr "0"
+
+#: tfrgoto.label1.caption
+msgid "Go to image number:"
+msgstr "画像番号に移動:"
+
+#: tfrmain.caption
+msgid "LazView"
+msgstr "LazView"
+
+#: tfrmain.label1.caption
+msgctxt "tfrmain.label1.caption"
+msgid "0/0"
+msgstr "0/0"
+
+#: tfrmain.label2.caption
+msgctxt "tfrmain.label2.caption"
+msgid "0/0"
+msgstr "0/0"
+
+#: tfrmain.mnuabout.caption
+msgid "About..."
+msgstr "報..."
+
+#: tfrmain.mnualwaysontop.caption
+msgid "Always on top"
+msgstr "常に上に"
+
+#: tfrmain.mnuantialiasing.caption
+msgid "Antialiasing"
+msgstr "アンチエイリアス"
+
+#: tfrmain.mnuautorotate.caption
+msgid "Auto rotate (EXIF)"
+msgstr "自動回転 (EXIF)"
+
+#: tfrmain.mnubgr.caption
+msgid "Invert color (RGB)-(BGR)"
+msgstr "カラー反転 (RGB)-(BGR)"
+
+#: tfrmain.mnubrg.caption
+msgid "Invert color (RGB)-(BRG)"
+msgstr "色を反転 (RGB)-(BRG)"
+
+#: tfrmain.mnucache.caption
+msgid "Use RAM cache (experimental but faster)"
+msgstr "RAMキャッシュを使用する（実験的だが高速)"
+
+#: tfrmain.mnucompact.caption
+msgid "Compact mode"
+msgstr "密集したモード"
+
+#: tfrmain.mnucopy.caption
+msgid "Copy"
+msgstr "コピー"
+
+#: tfrmain.mnucrop.caption
+msgid "Crop"
+msgstr "クロップ"
+
+#: tfrmain.mnudeletefile.caption
+msgid "Delete"
+msgstr "削除"
+
+#: tfrmain.mnudesktopcenter.caption
+msgid "Center"
+msgstr "中央"
+
+#: tfrmain.mnudesktopexpand.caption
+msgid "Expand"
+msgstr "展開"
+
+#: tfrmain.mnudesktopimage.caption
+msgid "Set as desktop image"
+msgstr "デスクトップ画像として設定"
+
+#: tfrmain.mnudesktopmosaic.caption
+msgid "Mosaic"
+msgstr "モザイク"
+
+#: tfrmain.mnudesktopstrech.caption
+msgid "Strech"
+msgstr "ストレッチ"
+
+#: tfrmain.mnuedit.caption
+msgid "&Edit"
+msgstr "&編集"
+
+#: tfrmain.mnueffects.caption
+msgctxt "tfrmain.mnueffects.caption"
+msgid "Effects"
+msgstr "効果"
+
+#: tfrmain.mnuexif.caption
+#, fuzzy
+msgctxt "tfrmain.mnuexif.caption"
+msgid "EXIF"
+msgstr "EXIF"
+
+#: tfrmain.mnuexit.caption
+msgctxt "tfrmain.mnuexit.caption"
+msgid "Exit"
+msgstr "終了"
+
+#: tfrmain.mnufile.caption
+msgid "&File"
+msgstr "&ファイル"
+
+#: tfrmain.mnufliph.caption
+msgctxt "tfrmain.mnufliph.caption"
+msgid "Flip horizontal"
+msgstr "フリップ水平"
+
+#: tfrmain.mnuflipv.caption
+msgctxt "tfrmain.mnuflipv.caption"
+msgid "Flip vertical"
+msgstr "フリップ垂直"
+
+#: tfrmain.mnugbr.caption
+msgid "Invert color (RGB)-(GBR)"
+msgstr "カラー反転 (RGB)-(GBR)"
+
+#: tfrmain.mnugoto.caption
+msgid "Go to number image..."
+msgstr "番号の画像に移動します。.."
+
+#: tfrmain.mnugrayscale.caption
+msgid "Greyscale"
+msgstr "グレースケール"
+
+#: tfrmain.mnugrb.caption
+msgid "Invert color (RGB)-(GRB)"
+msgstr "カラー反転 (RGB)-(GRB)"
+
+#: tfrmain.mnuhelp.caption
+msgid "&Help"
+msgstr "&助けて！"
+
+#: tfrmain.mnuhighlightblue.caption
+msgctxt "tfrmain.mnuhighlightblue.caption"
+msgid "Highlight blue"
+msgstr "ハイライト青"
+
+#: tfrmain.mnuhighlightgreen.caption
+msgctxt "tfrmain.mnuhighlightgreen.caption"
+msgid "Highlight green"
+msgstr "ハイライト緑"
+
+#: tfrmain.mnuhighlightred.caption
+msgctxt "tfrmain.mnuhighlightred.caption"
+msgid "Highlight red"
+msgstr "ハイライト赤"
+
+#: tfrmain.mnulanguage.caption
+msgid "Language"
+msgstr "言語"
+
+#: tfrmain.mnumenus.caption
+msgid "Menus"
+msgstr "メニュー"
+
+#: tfrmain.mnumosaic.caption
+msgid "Mosaic background"
+msgstr "モザイクの背景"
+
+#: tfrmain.mnunegative.caption
+msgctxt "tfrmain.mnunegative.caption"
+msgid "Negative"
+msgstr "ネガティブ"
+
+#: tfrmain.mnunoise.caption
+msgid "Noise"
+msgstr "ノイズ"
+
+#: tfrmain.mnuopen.caption
+msgid "Open"
+msgstr "開く"
+
+#: tfrmain.mnupaste.caption
+msgid "Paste"
+msgstr "貼り付け"
+
+#: tfrmain.mnuprint.caption
+msgctxt "tfrmain.mnuprint.caption"
+msgid "Print"
+msgstr "印刷"
+
+#: tfrmain.mnuquitblue.caption
+msgid "Quit blue"
+msgstr "退青"
+
+#: tfrmain.mnuquitgreen.caption
+msgid "Quit green"
+msgstr "グリーンを引退"
+
+#: tfrmain.mnuquitred.caption
+msgid "Quit red"
+msgstr "赤引退"
+
+#: tfrmain.mnurbg.caption
+msgid "Invert color (RGB)-(RBG)"
+msgstr "カラー反転 (RGB)-(RBG)"
+
+#: tfrmain.mnurealmode.caption
+msgid "Real mode"
+msgstr "リアルモード"
+
+#: tfrmain.mnuredo.caption
+msgid "Redo"
+msgstr "やり直す"
+
+#: tfrmain.mnuresize.caption
+msgid "Resize..."
+msgstr "サイズを変更。.."
+
+#: tfrmain.mnurotatel.caption
+msgid "Rotate left"
+msgstr "左に回転"
+
+#: tfrmain.mnurotater.caption
+msgid "Rotate right"
+msgstr "右に回転"
+
+#: tfrmain.mnusave.caption
+msgid "Save"
+msgstr "保存"
+
+#: tfrmain.mnusaveas.caption
+msgid "Save as..."
+msgstr "名前を付けて保存..."
+
+#: tfrmain.mnuselect.caption
+msgid "Select"
+msgstr "選択"
+
+#: tfrmain.mnushowthumbs.caption
+msgid "Thumbail panel"
+msgstr "サムネイルパネル"
+
+#: tfrmain.mnusmooth.caption
+#, fuzzy
+msgctxt "tfrmain.mnusmooth.caption"
+msgid "Smooth"
+msgstr "スムーズ"
+
+#: tfrmain.mnustatusbar.caption
+msgid "Status bar"
+msgstr "ステータスバー"
+
+#: tfrmain.mnustrech.caption
+msgid "Strech image"
+msgstr "ストレッチ画像"
+
+#: tfrmain.mnuswirl.caption
+msgid "Swirl"
+msgstr "渦巻き"
+
+#: tfrmain.mnuthumb128.caption
+msgid "128x128"
+msgstr "128x128"
+
+#: tfrmain.mnuthumb32.caption
+msgid "32x32"
+msgstr "32x32"
+
+#: tfrmain.mnuthumb64.caption
+msgid "64x64"
+msgstr "64x64"
+
+#: tfrmain.mnuthumbcustom.caption
+msgid "Custom..."
+msgstr "カスタム..."
+
+#: tfrmain.mnuthumbsize.caption
+msgid "Thumbail size"
+msgstr "サムネイルサイズ"
+
+#: tfrmain.mnutoolbar.caption
+msgid "Tool bar"
+msgstr "ツールバー"
+
+#: tfrmain.mnutoolbarinfull.caption
+msgid "Tool bar in fullscreen"
+msgstr "全画面表示のツールバー"
+
+#: tfrmain.mnutools.caption
+msgid "Image"
+msgstr "画像"
+
+#: tfrmain.mnutreeview.caption
+msgid "Tree view"
+msgstr "ツリービュー"
+
+#: tfrmain.mnutv.caption
+msgid "TV"
+msgstr "テレビ"
+
+#: tfrmain.mnuundo.caption
+msgid "Undo"
+msgstr "元に戻す"
+
+#: tfrmain.mnuvideosupport.caption
+msgid "Video support"
+msgstr "ビデオサポート"
+
+#: tfrmain.mnuview.caption
+msgid "&View"
+msgstr "&ビュー"
+
+#: tfrmain.mnuwindoweffects.caption
+msgid "Effects window"
+msgstr "効果ウィンドウ"
+
+#: tfrmain.statusbar1.panels[0].text
+msgctxt "tfrmain.statusbar1.panels[0].text"
+msgid "0/0"
+msgstr "0/0"
+
+#: tfrmain.statusbar1.panels[1].text
+msgid "Resolution: 0x0"
+msgstr "解像度: 0x0"
+
+#: tfrmain.statusbar1.panels[2].text
+msgid "Frame 0/0"
+msgstr "フレーム"
+
+#: tfrmain.statusbar1.panels[3].text
+msgid "Size: 0"
+msgstr "サイズ: 0"
+
+#: tfrmain.statusbar1.panels[4].text
+msgid "Time: 0ms"
+msgstr "時間: 0 ms"
+
+#: tfrmain.statusbar1.panels[5].text
+msgid "EXIF:"
+msgstr "EXIF"
+
+#: tfrmain.statusbar1.simpletext
+msgid "Marco 1.0"
+msgstr "Marco 1.0"
+
+#: tfrmain.tbadjust.hint
+msgid "Adjust image"
+msgstr "画像を調整する"
+
+#: tfrmain.tbarepeat.caption
+msgid "A"
+msgstr ""
+
+#: tfrmain.tbarepeat.hint
+msgid "A repeat"
+msgstr ""
+
+#: tfrmain.tbbrepeat.caption
+msgid "B"
+msgstr ""
+
+#: tfrmain.tbbrepeat.hint
+msgid "B repeat"
+msgstr ""
+
+#: tfrmain.tbexit.hint
+msgctxt "tfrmain.tbexit.hint"
+msgid "Exit"
+msgstr "終了"
+
+#: tfrmain.tbfastanim.hint
+msgid "Speed up"
+msgstr "スピードアップ"
+
+#: tfrmain.tbfirstimage.hint
+msgid "First image"
+msgstr "最初の画像"
+
+#: tfrmain.tbfliphorizontal.hint
+msgctxt "tfrmain.tbfliphorizontal.hint"
+msgid "Flip horizontal"
+msgstr "フリップ水平"
+
+#: tfrmain.tbflipvertical.hint
+msgctxt "tfrmain.tbflipvertical.hint"
+msgid "Flip vertical"
+msgstr "フリップ垂直"
+
+#: tfrmain.tbfullscreen.hint
+msgid "Full screen"
+msgstr "フルスクリーン"
+
+#: tfrmain.tbinformation.hint
+msgid "Information"
+msgstr "情報"
+
+#: tfrmain.tblastimage.hint
+msgid "Last image"
+msgstr "最後の画像"
+
+#: tfrmain.tbnextframe.hint
+msgid "Next frame"
+msgstr "次のフレーム"
+
+#: tfrmain.tbnextimage.hint
+msgid "Next image"
+msgstr "次の画像"
+
+#: tfrmain.tbopen.hint
+msgid "Open image"
+msgstr "画像を開く"
+
+#: tfrmain.tbpauseanim.hint
+msgid "Play/Pause animation"
+msgstr "再生/一時停止アニメーション"
+
+#: tfrmain.tbplayshow.hint
+msgid "Start presentation"
+msgstr "発表開始"
+
+#: tfrmain.tbprevframe.hint
+msgid "Prev frame"
+msgstr "前のフレーム"
+
+#: tfrmain.tbprevimage.hint
+msgid "Prev image"
+msgstr "前の画像"
+
+#: tfrmain.tbprint.hint
+msgctxt "tfrmain.tbprint.hint"
+msgid "Print"
+msgstr "印刷"
+
+#: tfrmain.tbrandom.hint
+msgid "Random presentation"
+msgstr "ランダム表示"
+
+#: tfrmain.tbreload.hint
+msgctxt "tfrmain.tbreload.hint"
+msgid "Reload image"
+msgstr "画像を再読み込み"
+
+#: tfrmain.tbrotateleft.hint
+msgid "Flip left"
+msgstr "左に反転"
+
+#: tfrmain.tbrotateright.hint
+msgid "Flip right"
+msgstr "フリップ右"
+
+#: tfrmain.tbsave.hint
+msgid "Save image"
+msgstr "画像を保存"
+
+#: tfrmain.tbselect.hint
+msgid "Selection tool"
+msgstr "選択ツール"
+
+#: tfrmain.tbshowthumbs.hint
+msgid "Show miniatures"
+msgstr "ミニチュアを表示"
+
+#: tfrmain.tbshowtreeview.hint
+msgid "Show tree view"
+msgstr "ツリービューを表示"
+
+#: tfrmain.tbslowanim.hint
+msgid "Speed down"
+msgstr "スピードダウン"
+
+#: tfrmain.tbstrech.hint
+msgid "Large"
+msgstr "大"
+
+#: tfrmain.tbzoom100.hint
+msgid "Zoom 100%"
+msgstr "ズーム 100%"
+
+#: tfrmain.tbzoomin.hint
+msgid "Zoom +"
+msgstr "ズーム +"
+
+#: tfrmain.tbzoomout.hint
+msgid "Zoom -"
+msgstr "ズーム -"
+
+#: tfrpass.caption
+msgid "Enter password"
+msgstr "パスワードを入力"
+
+#: tfrpass.label1.caption
+msgid "Password:"
+msgstr "パスワード"
+
+#: tfrprint.caption
+msgctxt "tfrprint.caption"
+msgid "Print"
+msgstr "印刷"
+
+#: tfrprint.lblcopys.caption
+msgid "Copys:"
+msgstr "コピー:"
+
+#: tfrprint.lblprint.caption
+msgid "Printer:"
+msgstr "プリンタ:"
+
+#: tfrprint.lblsheel.caption
+msgid "Sheel:"
+msgstr "シェル:"
+
+#: tfrprint.rbhorizontal.caption
+msgid "Horizontal"
+msgstr "水平"
+
+#: tfrprint.rbvertical.caption
+msgid "Vertical"
+msgstr "垂直"
+
+#: tfrresize.caption
+msgid "Resize"
+msgstr "サイズ変更"
+
+#: tfrresize.cbfilter.text
+msgid "Lanczos"
+msgstr "Lanczos"
+
+#: tfrresize.label1.caption
+msgid "Width:"
+msgstr "幅:"
+
+#: tfrresize.label2.caption
+msgid "Height:"
+msgstr "高さ:"
+
+#: tfrresize.lblfilter.caption
+msgid "Filter:"
+msgstr "フィルタ:"
+
+#: tfrresize.togglebox1.caption
+msgid "]"
+msgstr "]"
+
+#: tfrresize.togglebox1.hint
+msgid "keep aspect ratio"
+msgstr "縦横比を維持"
+
+#: tfrthumbsize.caption
+msgid "Thumbnail size"
+msgstr "サムネイルサイズ"
+
+#: tfrthumbsize.label1.caption
+msgid "Thumbnail size (with x height)"
+msgstr "サムネイルサイズ(幅 x 高さ)"
+

@@ -12,6 +12,7 @@ uses
 {$R *.res}
 
 begin
+  Application.Scaled:=True;
   Application.Title:='LazView';
   RequireDerivedFormResource:=True;
   Application.Initialize;

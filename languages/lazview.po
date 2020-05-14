@@ -525,21 +525,29 @@ msgstr ""
 msgid "Adjust image"
 msgstr ""
 
+#: tfrmain.tbarepeat.caption
+msgid "A"
+msgstr ""
+
+#: tfrmain.tbarepeat.hint
+msgid "A repeat"
+msgstr ""
+
+#: tfrmain.tbbrepeat.caption
+msgid "B"
+msgstr ""
+
+#: tfrmain.tbbrepeat.hint
+msgid "B repeat"
+msgstr ""
+
 #: tfrmain.tbexit.hint
 msgctxt "tfrmain.tbexit.hint"
 msgid "Exit"
 msgstr ""
 
-#: tfrmain.tbfastanim.caption
-msgid "tbFastAnim"
-msgstr ""
-
 #: tfrmain.tbfastanim.hint
 msgid "Speed up"
-msgstr ""
-
-#: tfrmain.tbfirstimage.caption
-msgid "tbFirstImage"
 msgstr ""
 
 #: tfrmain.tbfirstimage.hint
@@ -560,24 +568,12 @@ msgstr ""
 msgid "Full screen"
 msgstr ""
 
-#: tfrmain.tbinformation.caption
-msgid "tbInformation"
-msgstr ""
-
 #: tfrmain.tbinformation.hint
 msgid "Information"
 msgstr ""
 
-#: tfrmain.tblastimage.caption
-msgid "tbLastImage"
-msgstr ""
-
 #: tfrmain.tblastimage.hint
 msgid "Last image"
-msgstr ""
-
-#: tfrmain.tbnextframe.caption
-msgid "tbNextFrame"
 msgstr ""
 
 #: tfrmain.tbnextframe.hint
@@ -588,16 +584,8 @@ msgstr ""
 msgid "Next image"
 msgstr ""
 
-#: tfrmain.tbopen.caption
-msgid "tbOpen"
-msgstr ""
-
 #: tfrmain.tbopen.hint
 msgid "Open image"
-msgstr ""
-
-#: tfrmain.tbpauseanim.caption
-msgid "tbPauseAnim"
 msgstr ""
 
 #: tfrmain.tbpauseanim.hint
@@ -608,20 +596,12 @@ msgstr ""
 msgid "Start presentation"
 msgstr ""
 
-#: tfrmain.tbprevframe.caption
-msgid "tbPrevFrame"
-msgstr ""
-
 #: tfrmain.tbprevframe.hint
 msgid "Prev frame"
 msgstr ""
 
 #: tfrmain.tbprevimage.hint
 msgid "Prev image"
-msgstr ""
-
-#: tfrmain.tbprint.caption
-msgid "tbPrint"
 msgstr ""
 
 #: tfrmain.tbprint.hint
@@ -646,16 +626,8 @@ msgstr ""
 msgid "Flip right"
 msgstr ""
 
-#: tfrmain.tbsave.caption
-msgid "tbSave"
-msgstr ""
-
 #: tfrmain.tbsave.hint
 msgid "Save image"
-msgstr ""
-
-#: tfrmain.tbselect.caption
-msgid "tbSelect"
 msgstr ""
 
 #: tfrmain.tbselect.hint
@@ -670,16 +642,8 @@ msgstr ""
 msgid "Show tree view"
 msgstr ""
 
-#: tfrmain.tbslowanim.caption
-msgid "tbSlowAnim"
-msgstr ""
-
 #: tfrmain.tbslowanim.hint
 msgid "Speed down"
-msgstr ""
-
-#: tfrmain.tbstrech.caption
-msgid "tbStrech"
 msgstr ""
 
 #: tfrmain.tbstrech.hint
@@ -696,26 +660,6 @@ msgstr ""
 
 #: tfrmain.tbzoomout.hint
 msgid "Zoom -"
-msgstr ""
-
-#: tfrmain.toolbutton1.caption
-msgid "ToolButton1"
-msgstr ""
-
-#: tfrmain.toolbutton2.caption
-msgid "ToolButton2"
-msgstr ""
-
-#: tfrmain.toolbutton22.caption
-msgid "ToolButton22"
-msgstr ""
-
-#: tfrmain.toolbutton23.caption
-msgid "ToolButton23"
-msgstr ""
-
-#: tfrmain.toolbutton25.caption
-msgid "ToolButton25"
 msgstr ""
 
 #: tfrpass.caption
