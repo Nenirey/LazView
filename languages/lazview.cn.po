@@ -194,6 +194,10 @@ msgstr "转到图像编号:"
 msgid "LazView"
 msgstr "LazView"
 
+#: tfrmain.fplayer.caption
+msgid "FPlayer"
+msgstr ""
+
 #: tfrmain.label1.caption
 msgctxt "tfrmain.label1.caption"
 msgid "0/0"
@@ -215,6 +219,10 @@ msgstr "总是在上面"
 #: tfrmain.mnuantialiasing.caption
 msgid "Antialiasing"
 msgstr "抗锯齿"
+
+#: tfrmain.mnuaudio.caption
+msgid "Audio"
+msgstr ""
 
 #: tfrmain.mnuautorotate.caption
 msgid "Auto rotate (EXIF)"
@@ -370,6 +378,10 @@ msgstr "打开"
 msgid "Paste"
 msgstr "粘贴"
 
+#: tfrmain.mnuplayback.caption
+msgid "Playback"
+msgstr ""
+
 #: tfrmain.mnuprint.caption
 msgctxt "tfrmain.mnuprint.caption"
 msgid "Print"
@@ -387,6 +399,10 @@ msgstr "退休绿色"
 msgid "Quit red"
 msgstr "红色退休"
 
+#: tfrmain.mnurandom.caption
+msgid "Random"
+msgstr ""
+
 #: tfrmain.mnurbg.caption
 msgid "Invert color (RGB)-(RBG)"
 msgstr "反转颜色（RGB）-（RBG)"
@@ -398,6 +414,14 @@ msgstr "实模式"
 #: tfrmain.mnuredo.caption
 msgid "Redo"
 msgstr "重做"
+
+#: tfrmain.mnurepeatall.caption
+msgid "Repeat All"
+msgstr ""
+
+#: tfrmain.mnurepeatone.caption
+msgid "Repeat one"
+msgstr ""
 
 #: tfrmain.mnuresize.caption
 msgid "Resize..."
@@ -443,6 +467,10 @@ msgstr "状态栏"
 #| msgid "Stretch image"
 msgid "Strech image"
 msgstr "拉伸图像"
+
+#: tfrmain.mnusubtitle.caption
+msgid "Subtitle"
+msgstr ""
 
 #: tfrmain.mnuswirl.caption
 msgid "Swirl"
@@ -496,6 +524,10 @@ msgstr "TV"
 #: tfrmain.mnuundo.caption
 msgid "Undo"
 msgstr "撤消"
+
+#: tfrmain.mnuvideo.caption
+msgid "Video"
+msgstr ""
 
 #: tfrmain.mnuvideosupport.caption
 msgid "Video support"

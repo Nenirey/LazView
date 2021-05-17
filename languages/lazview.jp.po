@@ -191,6 +191,10 @@ msgstr "画像番号に移動:"
 msgid "LazView"
 msgstr "LazView"
 
+#: tfrmain.fplayer.caption
+msgid "FPlayer"
+msgstr ""
+
 #: tfrmain.label1.caption
 msgctxt "tfrmain.label1.caption"
 msgid "0/0"
@@ -212,6 +216,10 @@ msgstr "常に上に"
 #: tfrmain.mnuantialiasing.caption
 msgid "Antialiasing"
 msgstr "アンチエイリアス"
+
+#: tfrmain.mnuaudio.caption
+msgid "Audio"
+msgstr ""
 
 #: tfrmain.mnuautorotate.caption
 msgid "Auto rotate (EXIF)"
@@ -363,6 +371,10 @@ msgstr "開く"
 msgid "Paste"
 msgstr "貼り付け"
 
+#: tfrmain.mnuplayback.caption
+msgid "Playback"
+msgstr ""
+
 #: tfrmain.mnuprint.caption
 msgctxt "tfrmain.mnuprint.caption"
 msgid "Print"
@@ -380,6 +392,10 @@ msgstr "グリーンを引退"
 msgid "Quit red"
 msgstr "赤引退"
 
+#: tfrmain.mnurandom.caption
+msgid "Random"
+msgstr ""
+
 #: tfrmain.mnurbg.caption
 msgid "Invert color (RGB)-(RBG)"
 msgstr "カラー反転 (RGB)-(RBG)"
@@ -391,6 +407,14 @@ msgstr "リアルモード"
 #: tfrmain.mnuredo.caption
 msgid "Redo"
 msgstr "やり直す"
+
+#: tfrmain.mnurepeatall.caption
+msgid "Repeat All"
+msgstr ""
+
+#: tfrmain.mnurepeatone.caption
+msgid "Repeat one"
+msgstr ""
 
 #: tfrmain.mnuresize.caption
 msgid "Resize..."
@@ -433,6 +457,10 @@ msgstr "ステータスバー"
 #: tfrmain.mnustrech.caption
 msgid "Strech image"
 msgstr "ストレッチ画像"
+
+#: tfrmain.mnusubtitle.caption
+msgid "Subtitle"
+msgstr ""
 
 #: tfrmain.mnuswirl.caption
 msgid "Swirl"
@@ -481,6 +509,10 @@ msgstr "テレビ"
 #: tfrmain.mnuundo.caption
 msgid "Undo"
 msgstr "元に戻す"
+
+#: tfrmain.mnuvideo.caption
+msgid "Video"
+msgstr ""
 
 #: tfrmain.mnuvideosupport.caption
 msgid "Video support"

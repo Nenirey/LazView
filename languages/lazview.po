@@ -191,6 +191,10 @@ msgstr ""
 msgid "LazView"
 msgstr ""
 
+#: tfrmain.fplayer.caption
+msgid "FPlayer"
+msgstr ""
+
 #: tfrmain.label1.caption
 msgctxt "tfrmain.label1.caption"
 msgid "0/0"
@@ -211,6 +215,10 @@ msgstr ""
 
 #: tfrmain.mnuantialiasing.caption
 msgid "Antialiasing"
+msgstr ""
+
+#: tfrmain.mnuaudio.caption
+msgid "Audio"
 msgstr ""
 
 #: tfrmain.mnuautorotate.caption
@@ -362,6 +370,10 @@ msgstr ""
 msgid "Paste"
 msgstr ""
 
+#: tfrmain.mnuplayback.caption
+msgid "Playback"
+msgstr ""
+
 #: tfrmain.mnuprint.caption
 msgctxt "tfrmain.mnuprint.caption"
 msgid "Print"
@@ -379,6 +391,10 @@ msgstr ""
 msgid "Quit red"
 msgstr ""
 
+#: tfrmain.mnurandom.caption
+msgid "Random"
+msgstr ""
+
 #: tfrmain.mnurbg.caption
 msgid "Invert color (RGB)-(RBG)"
 msgstr ""
@@ -389,6 +405,14 @@ msgstr ""
 
 #: tfrmain.mnuredo.caption
 msgid "Redo"
+msgstr ""
+
+#: tfrmain.mnurepeatall.caption
+msgid "Repeat All"
+msgstr ""
+
+#: tfrmain.mnurepeatone.caption
+msgid "Repeat one"
 msgstr ""
 
 #: tfrmain.mnuresize.caption
@@ -430,6 +454,10 @@ msgstr ""
 
 #: tfrmain.mnustrech.caption
 msgid "Strech image"
+msgstr ""
+
+#: tfrmain.mnusubtitle.caption
+msgid "Subtitle"
 msgstr ""
 
 #: tfrmain.mnuswirl.caption
@@ -478,6 +506,10 @@ msgstr ""
 
 #: tfrmain.mnuundo.caption
 msgid "Undo"
+msgstr ""
+
+#: tfrmain.mnuvideo.caption
+msgid "Video"
 msgstr ""
 
 #: tfrmain.mnuvideosupport.caption

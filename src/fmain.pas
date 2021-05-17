@@ -5,9 +5,10 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, ComCtrls,
-  StdCtrls, Menus, ExtDlgs, LazFileUtils, FileUtil, IntfGraphics,
-  types, LCLType, ShellCtrls, FPImage, fresize, fquality, feffects, fgoto, fthumbsize,
-  LazUTF8, lclvlc, print{$IFDEF WINDOWS}, Registry, Windows, Windirs, uThumbnailProvider{, DarkModeClasses, UXTheme} {$ENDIF},
+  StdCtrls, Menus, ExtDlgs, LazFileUtils, FileUtil, IntfGraphics, types,
+  LCLType, ShellCtrls, FPImage, fresize, fquality, feffects, fgoto, fthumbsize,
+  LazUTF8, PasLibVlcUnit, PasLibVlcPlayerUnit, PasLibVlcClassUnit, print, {$IFDEF WINDOWS}Registry, Windows, Windirs,
+  uThumbnailProvider{, DarkModeClasses, UXTheme} {$ENDIF},
   BGRABitmapTypes, BGRABitmap, BGRAThumbnail, BGRASVG, BGRAIconCursor,{BGRAAnimatedGif,}
   DateUtils, Math, ImgSize, Printers, LCLintf, fexif, INIFiles, LCLTranslator,
   Imaging, ImagingClasses, ImagingComponents, ImagingTypes, ImagingCanvases,
@@ -19,6 +20,7 @@ type
 
   Tfrmain = class(TForm)
     AbUnZipper1: TAbUnZipper;
+    FPlayer: TPasLibVlcPlayer;
     Image1: TImage;
     ImageList1: TImageList;
     Label1: TLabel;
@@ -26,6 +28,13 @@ type
     MainMenu1: TMainMenu;
     MenuItem1: TMenuItem;
     MenuItem2: TMenuItem;
+    mnuRepeatAll: TMenuItem;
+    mnuRandom: TMenuItem;
+    mnuRepeatOne: TMenuItem;
+    mnuPlayback: TMenuItem;
+    mnuAudio: TMenuItem;
+    mnuSubtitle: TMenuItem;
+    mnuVideo: TMenuItem;
     mnuVideoSupport: TMenuItem;
     mnuCache: TMenuItem;
     mnuSave: TMenuItem;
@@ -181,12 +190,18 @@ type
     procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FormWindowStateChange(Sender: TObject);
+    procedure FPlayerMediaPlayerEndReached(Sender: TObject);
+    procedure FPlayerMediaPlayerPlaying(Sender: TObject);
+    procedure FPlayerMediaPlayerStopped(Sender: TObject);
+    procedure FPlayerMediaPlayerTimeChanged(Sender: TObject; time: Int64);
     procedure Image1Click(Sender: TObject);
     procedure Image1DblClick(Sender: TObject);
     procedure Image1MouseLeave(Sender: TObject);
     procedure Image1MouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure mnuAlwaysOnTopClick(Sender: TObject);
+    procedure mnuAudioMeasureItem(Sender: TObject; ACanvas: TCanvas;
+      var AWidth, AHeight: Integer);
     procedure mnuAutoRotateClick(Sender: TObject);
     procedure mnuCacheClick(Sender: TObject);
     procedure mnuContrastLessClick(Sender: TObject);
@@ -195,7 +210,10 @@ type
     procedure mnuOpenClick(Sender: TObject);
     procedure mnuPasteClick(Sender: TObject);
     procedure mnuCopyClick(Sender: TObject);
+    procedure mnuRandomClick(Sender: TObject);
     procedure mnuRedoClick(Sender: TObject);
+    procedure mnuRepeatAllClick(Sender: TObject);
+    procedure mnuRepeatOneClick(Sender: TObject);
     procedure mnuSaveAsClick(Sender: TObject);
     procedure mnuGrayscaleClick(Sender: TObject);
     procedure mnuBGRClick(Sender: TObject);
@@ -231,6 +249,8 @@ type
     procedure mnuThumbCustomClick(Sender: TObject);
     procedure mnuStrechClick(Sender: TObject);
     procedure mnuUndoClick(Sender: TObject);
+    procedure mnuVideoDrawItem(Sender: TObject; ACanvas: TCanvas; ARect: TRect;
+      AState: TOwnerDrawState);
     procedure mnuVideoSupportClick(Sender: TObject);
     procedure mnuWindowEffectsClick(Sender: TObject);
     procedure mnuNegativeClick(Sender: TObject);
@@ -250,6 +270,8 @@ type
     procedure mnuFlipVClick(Sender: TObject);
     procedure mnuRotateLClick(Sender: TObject);
     procedure mnuRotateRClick(Sender: TObject);
+    procedure mnuAudioTrackClick(Sender: TObject);
+    procedure mnuSubtitleListClick(Sender: TObject);
     procedure PairSplitterSide2Resize(Sender: TObject);
     procedure PairSplitterSide3Resize(Sender: TObject);
     procedure PopupMenu1Close(Sender: TObject);
@@ -322,15 +344,13 @@ type
     procedure tbZoomInClick(Sender: TObject);
     procedure mnuLanguageClick(Sender:TObject);
     procedure TrackBar1Change(Sender: TObject);
-    procedure TrackBar1Click(Sender: TObject);
-    procedure TrackBar1MouseDown(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y: Integer);
+    procedure TrackBar1Enter(Sender: TObject);
     procedure TrackBar1MouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure VideoTimerTimer(Sender: TObject);
   private
     { private declarations }
-    FPlayer : TLCLVlcPlayer;
+    //FPlayer : TLCLVlcPlayer;
   public
     { public declarations }
   end;
@@ -378,9 +398,10 @@ type
 Const
   mosaicsize=10;
 
+
 var
   frmain: Tfrmain;
-  full,ifgif,ifapng,ifzip,ifvideo,ificoncur,startdraw,startselect,compactmode:boolean;
+  full,ifgif,ifapng,ifzip,ifvideo,ificoncur,ifvector,startdraw,startselect,compactmode:boolean;
   flist:TStringList;
   nfile,ifile,ndir,idir:LongInt;
   carpeta:string;
@@ -398,6 +419,7 @@ var
   BGRAMulti: TBGRAIconCursor;
   BGRAMultiIndex: integer;
   APNGDelays:Array of integer;
+  svgstreamimage:TFileStream;
   scrollchange:boolean=true;
   mosaic:Graphics.TBitmap;
   mosaicmousedown:boolean=false;
@@ -405,7 +427,7 @@ var
   mosaicmouseposition:integer;
   title:string;
   ifallthumbs:boolean;
-  realimgwidth,realimgheight:LongWord;
+  realimgwidth,realimgheight:LongInt;
   inprocessanim:boolean;
   puntos:array of int64;
   creados:array of boolean;
@@ -426,9 +448,11 @@ var
   validx,validy,validw,validh:integer;
   mainwindowstate:string;
   zippass:string='';
-  Arepeat,Brepeat:int64;
+  Arepeat,Brepeat,vpos:int64;
   lastmposx,lastmposy:integer;
   origenplace:string;
+  gvol,tmpsubtitleindex:integer;
+  repeatmode:string='';
   procedure rendermosaic;
   procedure fullsc;
   procedure compact;
@@ -446,6 +470,60 @@ uses
 {$R *.lfm}
 
 { Tfrmain }
+procedure reloadaudiotrack;
+var
+  ls1 : TStringList;
+  id1 : Integer;
+  mi:TMenuItem;
+begin
+  ls1 := frmain.FPlayer.GetAudioTrackList();
+  frmain.mnuAudio.Clear;
+  for id1 := 0 to ls1.Count - 1 do
+  begin
+     mi:=TMenuItem.Create(frmain.MainMenu1);
+     mi.Caption:= ls1.Strings[id1];
+     if id1=frmain.FPlayer.GetAudioTrackNo() then
+       mi.Checked:=true;
+     mi.OnClick:=@frmain.mnuAudioTrackClick;
+     frmain.mnuAudio.Add(mi);
+  end;
+  ls1.Free;
+end;
+
+procedure reloadsubtitlelist;
+var
+  ls1 : TStringList;
+  id1 : Integer;
+  mi:TMenuItem;
+begin
+  ls1 := frmain.FPlayer.GetVideoSubtitleList();
+  frmain.mnuSubtitle.Clear;
+  for id1 := 0 to ls1.Count - 1 do
+  begin
+     mi:=TMenuItem.Create(frmain.MainMenu1);
+     mi.Caption:= ls1.Strings[id1];
+     if id1=frmain.FPlayer.GetVideoSubtitleNo() then
+       mi.Checked:=true;
+     mi.OnClick:=@frmain.mnuSubtitleListClick;
+     frmain.mnuSubtitle.Add(mi);
+  end;
+  ls1.Free;
+end;
+
+procedure reloadvector;
+var
+  bmp:TBGRACustomBitmap;
+  BGRAVector:TFPReaderSVG;
+begin
+  svgstreamimage.Position:=0;
+  bmp:=TBGRACustomBitmap.create(frmain.Image1.Width,frmain.Image1.Height);
+  BGRAVector:=TFPReaderSVG.Create;
+  bmp:=BGRAVector.GetBitmapDraft(svgstreamimage,frmain.Image1.Width,frmain.Image1.Height,realimgwidth,realimgheight);
+  frmain.Image1.Picture.Assign(bmp);
+  FreeAndNil(BGRAVector);
+  FreeAndNil(bmp);
+end;
+
 procedure arproc;
 begin
   if ifvideo then
@@ -459,7 +537,7 @@ begin
     end
     else
     begin
-      Arepeat:=frmain.FPlayer.VideoPosition;
+      Arepeat:=frmain.FPlayer.GetVideoPosInMs();
       frmain.tbARepeat.Down:=true;
       frmain.TrackBar1.SelStart:=Arepeat;
     end;
@@ -488,7 +566,7 @@ procedure brproc;
 begin
   if ifvideo then
   begin
-     Brepeat:=frmain.FPlayer.VideoPosition;
+     Brepeat:=frmain.FPlayer.GetVideoPosInMs();
      frmain.TrackBar1.SelEnd:=Brepeat;
   end;
   if ifapng then
@@ -594,10 +672,11 @@ end;
 
 procedure fakemenu;
 var
-   i,s,c:integer;
+   i,s,c,v:integer;
    mi:TMenuItem;
    sm:TMenuItem;
    cm:TMenuItem;
+   vm:TMenuItem;
 begin
    if frmain.FakePopup.Items.Count<2 then
    begin
@@ -625,6 +704,16 @@ begin
            cm.Enabled:=frmain.MainMenu1.Items[i].Items[s].Items[c].Enabled;
            cm.ShortCut:=frmain.MainMenu1.Items[i].Items[s].Items[c].ShortCut;
            frmain.FakePopup.Items[i].Items[s].Add(cm);
+           for v:=0 to frmain.MainMenu1.Items[i].Items[s].Items[c].Count-1 do
+           begin
+             vm:=TMenuItem.Create(frmain.FakePopup);
+             vm.Caption:=frmain.MainMenu1.Items[i].Items[s].Items[c].Items[v].Caption;
+             vm.OnClick:=frmain.MainMenu1.Items[i].Items[s].Items[c].Items[v].OnClick;
+             vm.Checked:=frmain.MainMenu1.Items[i].Items[s].Items[c].Items[v].Checked;
+             vm.Enabled:=frmain.MainMenu1.Items[i].Items[s].Items[c].Items[v].Enabled;
+             vm.ShortCut:=frmain.MainMenu1.Items[i].Items[s].Items[c].Items[v].ShortCut;
+             frmain.FakePopup.Items[i].Items[s].Items[c].Add(vm);
+           end;
          end;
        end;
      end;
@@ -710,6 +799,8 @@ begin
   iniconfigfile.WriteBool('Config','showmenu',frmain.mnuMenus.Checked);
   iniconfigfile.WriteBool('Config','showtoolbar',frmain.mnuToolBar.Checked);
   iniconfigfile.WriteBool('Config','videosupport',frmain.mnuVideoSupport.Checked);
+  iniconfigfile.WriteInteger('Config','videovolume',frmain.FPlayer.GetAudioVolume());
+  iniconfigfile.WriteString('Config','repeatmode',repeatmode);
   iniconfigfile.UpdateFile;
   //iniconfigfile.Free;
   FreeAndNil(iniconfigfile);
@@ -824,6 +915,14 @@ begin
   frmain.mnuCache.Checked:=iniconfigfile.ReadBool('Config','cachebitmap',false);
   frmain.mnuAutoRotate.Checked:=iniconfigfile.ReadBool('Config','autorotatewexiff',true);
   frmain.mnuVideoSupport.Checked:=iniconfigfile.ReadBool('Config','videosupport',false);
+  gvol:=iniconfigfile.ReadInteger('Config','videovolume',frmain.FPlayer.GetAudioVolume());
+  frmain.FPlayer.SetAudioVolume(iniconfigfile.ReadInteger('Config','videovolume',frmain.FPlayer.GetAudioVolume()));
+  repeatmode:=iniconfigfile.ReadString('Config','repeatmode','');
+  case repeatmode of
+  'one':frmain.mnuRepeatOne.Checked:=true;
+  'all':frmain.mnuRepeatAll.Checked:=true;
+  'random':frmain.mnuRandom.Checked:=true;
+  end;
   FreeAndNil(iniconfigfile);
 end;
 
@@ -1211,6 +1310,8 @@ begin
   end;
   frmain.Image1.Width:=frmain.Image1.Width+20;
   frmain.Image1.Height:=frmain.Image1.Height+20;
+  if ifvector then
+    reloadvector;
   frmain.StatusBar1.Panels.Items[1].Text:='Resolution:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
 end;
 
@@ -1233,6 +1334,8 @@ begin
   end;
   frmain.Image1.Width:=frmain.Image1.Width-20;
   frmain.Image1.Height:=frmain.Image1.Height-20;
+  if ifvector then
+    reloadvector;
   frmain.StatusBar1.Panels.Items[1].Text:='Resolution:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
 end;
 
@@ -1240,6 +1343,7 @@ procedure loadpicture(fimagen:string;restorezoom:boolean=true;scrollthumbs:boole
 var
    ebitmap:Graphics.TBitmap;
    bmp:TBGRACustomBitMap;
+   BGRAVector:TFPReaderSVG;
    th,tw,i:integer;
    iw,ih:word;
    streamimage:TFileStream;
@@ -1255,6 +1359,7 @@ var
    lastcursor:TCursor;
    ts:TSize;
 begin
+  frmain.FPlayer.Visible:=false;
   frmain.VideoTimer.Enabled:=false;
   frmain.FPlayer.Stop;
   frmain.TrackBar1.Visible:=false;
@@ -1276,6 +1381,7 @@ begin
   ifgif:=false;
   ifapng:=false;
   ificoncur:=false;
+  ifvector:=false;
   ARepeat:=0;
   BRepeat:=0;
   frmain.tbARepeat.Down:=false;
@@ -1284,6 +1390,8 @@ begin
   starttime:=Now();
   if Assigned(APNGImage) then
     FreeAndNil(APNGImage);
+  if Assigned(svgstreamimage) then
+    FreeAndNil(svgstreamimage);
   try
     frmain.Caption:='LazView '+fimagen;
     frmain.Label1.Caption:=inttostr(ifile+1)+'/'+inttostr(nfile)+'  '+fimagen;
@@ -1409,7 +1517,7 @@ begin
           frmain.StatusBar1.Panels[2].Text:='';
         end;
       end;
-      '.JPG','.JPEG','.JPE','.JFIF','.BMP','.XPM','.PBM','.PPM','.PCX','.ICNS','.TIF','.TIFF','.SVG':
+      '.JPG','.JPEG','.JPE','.JFIF','.BMP','.XPM','.PBM','.PPM','.PCX','.ICNS','.TIF','.TIFF'{,'.SVG'}:
       begin
         ifgif:=false;
         ifapng:=false;
@@ -1487,7 +1595,7 @@ begin
           '.jpg','.jpe','.jpeg':ImgSize.GetJPGSize(streamimage,iw,ih);
           '.png','.pne':ImgSize.GetPNGSize(streamimage,iw,ih);
           '.bmp':ImgSize.GetBMPSize(streamimage,iw,ih);
-          '.pcx','.svg'://Force thumb while found a pcx and svg read way
+          '.pcx'{,'.svg'}://Force thumb while found a pcx and svg read way
           begin
             iw:=Screen.Width+1;
             ih:=Screen.Height+1;
@@ -1581,7 +1689,7 @@ begin
                 end;
               end;
             end;
-            if (LowerCase(ExtractFileExt(fimagen))='.pcx') or (LowerCase(ExtractFileExt(fimagen))='.svg') then
+            if (LowerCase(ExtractFileExt(fimagen))='.pcx') {or (LowerCase(ExtractFileExt(fimagen))='.svg')} then
               modethumb:=false
             else
               modethumb:=true;
@@ -1665,7 +1773,7 @@ begin
         realimgwidth:=frmain.Image1.Picture.Width;
         realimgheight:=frmain.Image1.Picture.Height;
       end;
-      '.TGA','.PSD','.XWD':
+      '.TGA','.PSD','.XWD','.WEBP':
       begin
         ifgif:=false;
         ifapng:=false;
@@ -1680,33 +1788,46 @@ begin
         //BGRAImage.Destroy;
         FreeAndNil(BGRAImage);
       end;
-      {$IFDEF WINDOWS}
-      '.WEBP':
+      '.SVG':
       begin
-        ts:=TSize.Create(-1,-1);
-        frmain.Image1.Picture.Assign(uThumbnailProvider.GetThumbnail(fimagen,ts));
-        frmain.StatusBar1.Panels.Items[1].Text:='Resolution:'+inttostr(frmain.Image1.Picture.Width)+'x'+inttostr(frmain.Image1.Picture.Height)+' '+zoomfactor(frmain.Image1.Picture.Width,frmain.Image1.Picture.Height,frmain.Image1.Width,frmain.Image1.Height)+'%';
+        ifgif:=false;
+        ifapng:=false;
+        ifvideo:=false;
+        ificoncur:=false;
+        ifvector:=true;
+        svgstreamimage:=TFileStream.Create(wimagen,fmOpenRead or fmShareDenyNone);
+        bmp:=TBGRACustomBitmap.create(frmain.Image1.Width,frmain.Image1.Height);
+        BGRAVector:=TFPReaderSVG.Create;
+        bmp:=BGRAVector.GetBitmapDraft(svgstreamimage,frmain.Image1.Width,frmain.Image1.Height,realimgwidth,realimgheight);
+        frmain.Image1.Picture.Assign(bmp);
+        FreeAndNil(BGRAVector);
+        FreeAndNil(bmp);
+        modethumb:=false;
       end;
-      {$ENDIF}
       '.AVI','.MP4','.WEBM','.3GP','.MPG','.MKV','.WMV','.FLV','.TS','.VOB','.MP3','.M4A','.WAV','.WMA':
       begin
         ifvideo:=true;
+        frmain.Image1.Picture.Clear;
+        frmain.FPlayer.SetAudioVolume(gvol);
+        frmain.FPlayer.Visible:=true;
         ifgif:=false;
         ifapng:=false;
         ificoncur:=false;
-        frmain.Fplayer.PlayFile(fimagen);
-        frmain.FPlayer.FullScreenMode:=false;
-        frmain.TrackBar1.Max:=frmain.Fplayer.VideoLength;
+        frmain.Fplayer.Play(fimagen);
+        frmain.FPlayer.SetAudioVolume(gvol);
+        //frmain.FPlayer.FullScreenMode:=false;
+        frmain.TrackBar1.Max:=frmain.Fplayer.GetVideoPosInMs();
         frmain.tbSlowAnim.Enabled:=true;
         frmain.tbPrevFrame.Enabled:=true;
         frmain.tbPauseAnim.Enabled:=true;
         frmain.tbNextFrame.Enabled:=true;
         frmain.tbFastAnim.Enabled:=true;
         frmain.VideoTimer.Enabled:=true;
-        frmain.TrackBar1.Visible:=true;
+        if full=false then
+          frmain.TrackBar1.Visible:=true;
         frmain.tbARepeat.Enabled:=true;
         frmain.tbBRepeat.Enabled:=true;
-        frmain.StatusBar1.Panels.Items[1].Text:='Duration: '+timetostr(frmain.FPlayer.VideoDuration);
+        reloadaudiotrack;
       end;
       else/////Try to load as Image
       begin
@@ -1852,6 +1973,11 @@ end;
 
 procedure fullsc();
 begin
+  if ifvideo then
+  begin
+    vpos:=frmain.FPlayer.GetVideoPosInMs();
+    frmain.FPlayer.Stop();
+  end;
   compactmode:=false;
   if full = false then
   begin
@@ -1977,20 +2103,31 @@ begin
         frmain.Splitter2.Top:=frmain.StatusBar1.Top-frmain.StatusBar1.Height;
     end;
     showmainmenu(frmain.mnuMenus.Checked);
+    frmain.TrackBar1.Visible:=ifvideo;
   end;
+  if ifvideo then
+    frmain.FPlayer.Play(carpeta+flist[ifile]);
 end;
 
 procedure osd();
 begin
-  if frmain.Label1.Visible then
+  if ifvideo then
   begin
-    frmain.Label1.Visible:=false;
-    frmain.Label2.Visible:=false;
+    frmain.FPlayer.MarqueeSetTimeOut(2000);
+    frmain.FPlayer.MarqueeSetText(WideString(inttostr(ifile+1)+'/'+inttostr(flist.count)+' '+flist[ifile]));
   end
   else
   begin
-    frmain.Label1.Visible:=true;
-    frmain.Label2.Visible:=true;
+    if frmain.Label1.Visible then
+    begin
+      frmain.Label1.Visible:=false;
+      frmain.Label2.Visible:=false;
+    end
+    else
+    begin
+      frmain.Label1.Visible:=true;
+      frmain.Label2.Visible:=true;
+    end;
   end;
 end;
 
@@ -3041,7 +3178,7 @@ begin
       for i:=0 to frmain.AbUnZipper1.Count-1 do
       begin
         case UpperCase(ExtractFileExt(frmain.AbUnZipper1.Items[i].FileName)) of
-          '.JPG','.JPEG','.JPE','.JFIF','.BMP','.GIF','.PNG','.APNG','.MNG','.ICO','.XPM','.PBM','.PPM','.ICNS','.CUR','.TIF','.TIFF','.PCX','.TGA','.PSD','.XWD','.SVG'{$IFDEF WINDOWS},'.WEBP'{$ENDIF}:
+          '.JPG','.JPEG','.JPE','.JFIF','.BMP','.GIF','.PNG','.APNG','.MNG','.ICO','.XPM','.PBM','.PPM','.ICNS','.CUR','.TIF','.TIFF','.PCX','.TGA','.PSD','.XWD','.SVG','.WEBP':
           begin
             Inc(contador);
             flisttmp.Add(ExtractFileName(frmain.AbUnZipper1.Items[i].FileName));
@@ -3071,7 +3208,7 @@ begin
             if (Attr and faDirectory)<>faDirectory then
             begin
               case UpperCase(ExtractFileExt(Name)) of
-                '.JPG','.JPEG','.JPE','.JFIF','.BMP','.GIF','.PNG','.APNG','.MNG','.ICO','.XPM','.PBM','.PPM','.ICNS','.CUR','.TIF','.TIFF','.PCX','.TGA','.PSD','.XWD','.SVG':
+                '.JPG','.JPEG','.JPE','.JFIF','.BMP','.GIF','.PNG','.APNG','.MNG','.ICO','.XPM','.PBM','.PPM','.ICNS','.CUR','.TIF','.TIFF','.PCX','.TGA','.PSD','.XWD','.SVG','.WEBP':
                 begin
                   flisttmp.Add(Name);
                   Inc(nfiletmp);
@@ -3168,8 +3305,8 @@ begin
         ShowMessage(frmain.Controls[i].ToString);
     end;
   end;}
-  FPlayer:=TLCLVLCPlayer.Create(Self);
-  FPlayer.ParentWindow:=ScrollBox1;
+  //FPlayer:=TLCLVLCPlayer.Create(Self);
+  //FPlayer.ParentWindow:=ScrollBox1;
   if FindFirst(ExtractFilePath(UTF8ToSys(Application.Params[0]))+pathdelim+'languages'+pathdelim+'lazview.*.po',faAnyFile,itemfile)=0 then
   begin
     Repeat
@@ -3210,7 +3347,7 @@ end;
 
 procedure Tfrmain.FormDestroy(Sender: TObject);
 begin
-  if Fplayer.Playing then
+  if Fplayer.IsPlay() then
     Fplayer.Stop;
   if Assigned(flist) then
     FreeAndNil(flist);
@@ -3281,31 +3418,64 @@ begin
   end;
   38://Flecha arriba
    begin
-     if Shift=[ssAlt] then
-       frmain.Image1.Top:=frmain.Image1.Top+20
+     if ifvideo then
+     begin
+       if frmain.FPlayer.GetAudioVolume()<200 then
+         frmain.FPlayer.SetAudioVolume(FPlayer.GetAudioVolume()+10);
+     end
      else
-       prevfile();
+     begin
+       if Shift=[ssAlt] then
+         frmain.Image1.Top:=frmain.Image1.Top+20
+       else
+         prevfile();
+     end;
    end;
   39,32://Flecha derecha, espacio
    begin
-     if Shift=[ssAlt] then
-       frmain.Image1.Left:=frmain.Image1.Left-20
+     if ifvideo and (frmain.FPlayer.GetVideoPosInMs()<>0) then
+     begin
+       if key=39 then
+         frmain.tbFastAnimClick(nil)
+       else
+         frmain.tbPauseAnimClick(nil);
+     end
      else
-       nextfile();
+     begin
+       if Shift=[ssAlt] then
+         frmain.Image1.Left:=frmain.Image1.Left-20
+       else
+         nextfile();
+     end;
    end;
   40://Flecha abajo
    begin
-     if Shift=[ssAlt] then
-       frmain.Image1.Top:=frmain.Image1.Top-20
+     if ifvideo then
+     begin
+       if frmain.FPlayer.GetAudioVolume()>0 then
+         frmain.FPlayer.SetAudioVolume(FPlayer.GetAudioVolume()-10);
+     end
      else
-       nextfile();
+     begin
+       if Shift=[ssAlt] then
+         frmain.Image1.Top:=frmain.Image1.Top-20
+       else
+         nextfile();
+     end;
    end;
   37,8://Flacha izquierda, BackSpace
     begin
+     if ifvideo and (frmain.FPlayer.GetVideoPosInMs()>=0) and (key=37) then
+     begin
+       frmain.tbSlowAnimClick(nil);
+     end
+     else
+     begin
       if Shift=[ssAlt] then
         frmain.Image1.Left:=frmain.Image1.Left+20
       else
         prevfile();
+     end;
     end;
   13,70,122:
     begin//Enter, F, F11
@@ -3317,10 +3487,29 @@ begin
     end;
   65://Letra A
     begin
-      if frmain.FPlayer.AspectRatio='4:3' then
-        frmain.FPlayer.AspectRatio:='16:9'
-      else
-        frmain.FPlayer.AspectRatio:='4:3';
+      if frmain.FPlayer.GetVideoAspectRatio()='' then
+      begin
+        frmain.FPlayer.SetVideoAspectRatio('16:9');
+        exit;
+      end;
+
+      if frmain.FPlayer.GetVideoAspectRatio()='16:9' then
+      begin
+        frmain.FPlayer.SetVideoAspectRatio('4:3');
+        exit;
+      end;
+
+      if frmain.FPlayer.GetVideoAspectRatio()='4:3' then
+      begin
+        frmain.FPlayer.SetVideoAspectRatio('1:1');
+        exit;
+      end;
+
+      if frmain.FPlayer.GetVideoAspectRatio()='1:1' then
+      begin
+        frmain.FPlayer.SetVideoAspectRatio('');
+        exit;
+      end;
     end;
   67://Letra C
     begin
@@ -3379,13 +3568,13 @@ begin
   end;
   114://Tecla F3
   begin
-    if frmain.FPlayer.AudioVolume>0 then
-      frmain.FPlayer.AudioVolume:=frmain.FPlayer.AudioVolume-1;
+    if frmain.FPlayer.GetAudioVolume()>0 then
+      frmain.FPlayer.SetAudioVolume(FPlayer.GetAudioVolume()-10);
   end;
   115://Tecla F4
   begin
-    if frmain.FPlayer.AudioVolume<200 then
-      frmain.FPlayer.AudioVolume:=frmain.FPlayer.AudioVolume+1;
+    if frmain.FPlayer.GetAudioVolume()<200 then
+      frmain.FPlayer.SetAudioVolume(FPlayer.GetAudioVolume()+10);
   end;
   79://Tecla O
     begin
@@ -3424,6 +3613,11 @@ begin
     begin
       filterimagen(22,10);
       //efectimagen(10);
+    end;
+  54://Tecla 6
+    begin
+      if ifvideo then
+        frmain.FPlayer.SetVideoAdjustSaturation(frmain.FPlayer.GetVideoAdjustSaturation()+0.1);
     end;
  end;
 end;
@@ -3572,6 +3766,7 @@ begin
     else
       frmain.Splitter2.Top:=frmain.Height-frmain.Splitter2.Height+3;
   end;
+  //Fplayer.Repaint;
 end;
 
 procedure Tfrmain.FormShow(Sender: TObject);
@@ -3581,7 +3776,7 @@ var
 begin
   loadconfig;
   ruta:=ExtractFilePath(Application.Params[1]);
-  if Application.Params[1] <> '' then
+  if (Application.Params[1] <> '') and (Assigned(flist)=false) then
   begin
     loadfiles(ruta,ExtractFileName(Application.Params[1]));
     frmain.ShellTreeView1.OnSelectionChanged:=nil;
@@ -3589,31 +3784,53 @@ begin
       frmain.ShellTreeView1.Path:=ruta;
     frmain.ShellTreeView1.OnSelectionChanged:=@ShellTreeView1SelectionChanged;
   end;
-  if Assigned(flist) then
+  if ifvideo then
   begin
-    if ifvideo then
-      vpos:=frmain.FPlayer.VideoPosition;
-    //if (ifile<flist.Count) then
-      //loadpicture(carpeta+flist[ifile]);
-    if ifvideo then
-      frmain.FPlayer.VideoPosition:=vpos;
+    vpos:=frmain.FPlayer.GetVideoPosInMs();
+    frmain.FPlayer.SetVideoPosInMs(vpos);
   end;
 end;
 
 procedure Tfrmain.FormWindowStateChange(Sender: TObject);
-var
-   vpos:int64=0;
 begin
   if Assigned(flist) and modethumb and frmain.Image1.Visible and (ifgif=false) and (ifvideo=false) then
   begin
-    if ifvideo then
-      vpos:=frmain.FPlayer.VideoPosition;
     if (frmain.mnuCompact.Checked=false) and ((frmain.WindowState=wsMaximized) or (frmain.WindowState=wsNormal) or (frmain.WindowState=wsFullScreen)) then
       loadpicture(carpeta+flist[ifile],false);
-    if ifvideo then
-      frmain.FPlayer.VideoPosition:=vpos;
   end;
   frmain.FormResize(nil);
+end;
+
+procedure Tfrmain.FPlayerMediaPlayerEndReached(Sender: TObject);
+begin
+ case repeatmode of
+  'all': nextfile();
+  'one': loadpicture(carpeta+flist[ifile]);
+  'random':
+  begin
+    ifile:=round(random(flist.Count));
+    loadpicture(carpeta+flist[ifile]);
+  end;
+ end;
+end;
+
+procedure Tfrmain.FPlayerMediaPlayerPlaying(Sender: TObject);
+begin
+  if vpos<>0 then
+  begin
+    frmain.Fplayer.SetVideoPosInMs(vpos);
+    vpos:=0;
+  end;
+end;
+
+procedure Tfrmain.FPlayerMediaPlayerStopped(Sender: TObject);
+begin
+  //nextfile();
+end;
+
+procedure Tfrmain.FPlayerMediaPlayerTimeChanged(Sender: TObject; time: Int64);
+begin
+  frmain.StatusBar1.Panels.Items[1].Text:=time2str(TrackBar1.Position) + '/' + time2str(TrackBar1.Max);
 end;
 
 procedure Tfrmain.Image1Click(Sender: TObject);
@@ -3671,6 +3888,12 @@ begin
     frmain.FormStyle:=fsSystemStayOnTop
   else
     frmain.FormStyle:=fsNormal;
+end;
+
+procedure Tfrmain.mnuAudioMeasureItem(Sender: TObject; ACanvas: TCanvas;
+  var AWidth, AHeight: Integer);
+begin
+
 end;
 
 procedure Tfrmain.mnuAutoRotateClick(Sender: TObject);
@@ -3845,6 +4068,17 @@ begin
     Clipboard.Assign(frmain.Image1.Picture.Bitmap);
 end;
 
+procedure Tfrmain.mnuRandomClick(Sender: TObject);
+begin
+  mnuRepeatOne.Checked:=false;
+  mnuRepeatAll.Checked:=false;
+  mnuRandom.Checked:=not mnuRandom.Checked;
+  if mnuRandom.Checked then
+    repeatmode:='random'
+  else
+    repeatmode:='';
+end;
+
 procedure Tfrmain.mnuRedoClick(Sender: TObject);
 begin
   inc(historyindex);
@@ -3859,6 +4093,28 @@ begin
     frmain.mnuRedo.Enabled:=false;
     frmain.mnuUndo.Enabled:=true;
   end;
+end;
+
+procedure Tfrmain.mnuRepeatAllClick(Sender: TObject);
+begin
+  mnuRepeatOne.Checked:=false;
+  mnuRepeatAll.Checked:=not mnuRepeatAll.Checked;
+  mnuRandom.Checked:=false;
+  if mnuRepeatAll.Checked then
+    repeatmode:='all'
+  else
+    repeatmode:='';
+end;
+
+procedure Tfrmain.mnuRepeatOneClick(Sender: TObject);
+begin
+  mnuRepeatOne.Checked:=not mnuRepeatOne.Checked;
+  mnuRepeatAll.Checked:=false;
+  mnuRandom.Checked:=false;
+  if mnuRepeatOne.Checked then
+    repeatmode:='one'
+  else
+    repeatmode:='';
 end;
 
 procedure Tfrmain.mnuSaveAsClick(Sender: TObject);
@@ -4025,17 +4281,26 @@ end;
 
 procedure Tfrmain.mnuBGRClick(Sender: TObject);
 begin
-  efectimagen(5);
+  if ifvideo then
+    frmain.FPlayer.SetVideoAdjustContrast(frmain.FPlayer.GetVideoAdjustContrast()-0.1)
+  else
+    efectimagen(5);
 end;
 
 procedure Tfrmain.mnuRBGClick(Sender: TObject);
 begin
-  efectimagen(6);
+  if ifvideo then
+    frmain.FPlayer.SetVideoAdjustContrast(frmain.FPlayer.GetVideoAdjustContrast()+0.1)
+  else
+    efectimagen(6);
 end;
 
 procedure Tfrmain.mnuGRBClick(Sender: TObject);
 begin
-  efectimagen(7);;
+  if ifvideo then
+    frmain.FPlayer.SetVideoAdjustBrightness(frmain.FPlayer.GetVideoAdjustBrightness()-0.1)
+  else
+    efectimagen(7);
 end;
 
 procedure Tfrmain.mnuQuitRedClick(Sender: TObject);
@@ -4076,7 +4341,13 @@ end;
 
 procedure Tfrmain.mnuToolsClick(Sender: TObject);
 begin
-
+  if ifvideo then
+  begin
+    reloadaudiotrack;
+    reloadsubtitlelist;
+    frmain.FakePopup.Items.Clear;
+    fakemenu;
+  end;
 end;
 
 procedure Tfrmain.mnuDeleteFileClick(Sender: TObject);
@@ -4173,12 +4444,18 @@ end;
 
 procedure Tfrmain.mnuBRGClick(Sender: TObject);
 begin
-  efectimagen(8);
+  if ifvideo then
+    frmain.FPlayer.SetVideoAdjustSaturation(frmain.FPlayer.GetVideoAdjustSaturation()-0.1)
+  else
+    efectimagen(8);
 end;
 
 procedure Tfrmain.mnuGBRClick(Sender: TObject);
 begin
- efectimagen(9);
+  if ifvideo then
+    frmain.FPlayer.SetVideoAdjustBrightness(frmain.FPlayer.GetVideoAdjustBrightness()+0.1)
+ else
+   efectimagen(9);
 end;
 
 procedure Tfrmain.mnuBrightPlusClick(Sender: TObject);
@@ -4316,6 +4593,12 @@ begin
       showmainmenu(true);
     end;
   end;
+  if ifvideo then
+  begin
+    vpos:=frmain.FPlayer.GetVideoPosInMs();
+    frmain.FPlayer.Stop();
+    frmain.FPlayer.Play(WideString(carpeta+flist[ifile]));
+  end;
 end;
 
 procedure Tfrmain.mnuGoToClick(Sender: TObject);
@@ -4415,6 +4698,12 @@ begin
   end;
 end;
 
+procedure Tfrmain.mnuVideoDrawItem(Sender: TObject; ACanvas: TCanvas;
+  ARect: TRect; AState: TOwnerDrawState);
+begin
+
+end;
+
 procedure Tfrmain.mnuVideoSupportClick(Sender: TObject);
 begin
   if frmain.mnuVideoSupport.Checked then
@@ -4488,12 +4777,13 @@ begin
   ShowMessage('Imagen viewer: LazView'+lineending
   +'Version: 0.3'+lineending
   +'Created by: nenirey@gmail.com'+lineending
-  +'CopyLeft: 2020'+lineending+lineending
+  +'CopyLeft: 2021'+lineending+lineending
   +'Thanks to the creators of the next libraries used by the project:'+lineending+lineending
   +'BGRABitmap by circular at operamail.com ('+BGRABitmapVersion.ToString+')'+lineending+lineending
   +'Vampyre Imaging Library by Marek Mauder (marekmauder@gmail.com)'+lineending+lineending
   +'dEXIF by Gerry McGuire (mcguirez@hotmail.com)'+lineending+lineending
   +'Abbrevia 5.0 (http://tpabbrevia.sourceforge.net/)'+lineending+lineending
+  +'PasLibVlc by robert@prog.olsztyn.pl (http://prog.olsztyn.pl/paslibvlc)'+lineending+lineending
   +'Icon made by Smashicons  from www.flaticon.com'+lineending+lineending
   +'Translations [gr],[it],[cn],[fr],[de],[jp],[ru],[pt_br] Ronaldo Rodrigues Oliveira (morcberry@gmail.com)');
 end;
@@ -4631,10 +4921,23 @@ end;
 
 procedure Tfrmain.mnuFlipVClick(Sender: TObject);
 begin
-  if (realimgwidth>256) or ifgif then
-    filterimagen(20)
+  if ifvideo then
+  begin
+    if frmain.FPlayer.GetVideoSubtitleNo()<>0 then
+    begin
+      tmpsubtitleindex:=frmain.FPlayer.GetVideoSubtitleNo();
+      frmain.FPlayer.SetVideoSubtitleByNo(0);
+    end
+    else
+      frmain.FPlayer.SetVideoSubtitleByNo(tmpsubtitleindex);
+  end
   else
-    efectimagen(2);
+  begin
+    if (realimgwidth>256) or ifgif then
+      filterimagen(20)
+    else
+      efectimagen(2);
+  end;
 end;
 
 procedure Tfrmain.mnuRotateLClick(Sender: TObject);
@@ -4651,6 +4954,16 @@ begin
     filterimagen(17)
   else
     efectimagen(4);
+end;
+
+procedure Tfrmain.mnuAudioTrackClick(Sender: TObject);
+begin
+  frmain.FPlayer.SetAudioTrackByNo((Sender as TMenuItem).MenuIndex);
+end;
+
+procedure Tfrmain.mnuSubtitleListClick(Sender: TObject);
+begin
+  frmain.FPlayer.SetVideoSubtitleByNo((Sender as TMenuItem).MenuIndex);
 end;
 
 procedure Tfrmain.PairSplitterSide2Resize(Sender: TObject);
@@ -4682,12 +4995,19 @@ end;
 
 procedure Tfrmain.PopupMenu1Popup(Sender: TObject);
 var
-   i,s,c:integer;
+   i,s,c,v:integer;
    mi:TMenuItem;
    sm:TMenuItem;
    cm:TMenuItem;
+   vm:TMenuItem;
 begin
  frmain.PopupMenu1.Tag:=1;
+ if ifvideo then
+ begin
+   reloadaudiotrack;
+   reloadsubtitlelist;
+   frmain.PopupMenu1.Items.Clear;
+ end;
  if frmain.PopupMenu1.Items.Count<2 then
  begin
    for i:=0 to frmain.MainMenu1.Items.Count-1 do
@@ -4713,6 +5033,16 @@ begin
          cm.Enabled:=frmain.MainMenu1.Items[i].Items[s].Items[c].Enabled;
          cm.ShortCut:=frmain.MainMenu1.Items[i].Items[s].Items[c].ShortCut;
          frmain.PopupMenu1.Items[i].Items[s].Add(cm);
+         for v:=0 to frmain.MainMenu1.Items[i].Items[s].Items[c].Count-1 do
+         begin
+           vm:=TMenuItem.Create(frmain.PopupMenu1);
+           vm.Caption:=frmain.MainMenu1.Items[i].Items[s].Items[c].Items[v].Caption;
+           vm.OnClick:=frmain.MainMenu1.Items[i].Items[s].Items[c].Items[v].OnClick;
+           vm.Checked:=frmain.MainMenu1.Items[i].Items[s].Items[c].Items[v].Checked;
+           vm.Enabled:=frmain.MainMenu1.Items[i].Items[s].Items[c].Items[v].Enabled;
+           vm.ShortCut:=frmain.MainMenu1.Items[i].Items[s].Items[c].Items[v].ShortCut;
+           frmain.PopupMenu1.Items[i].Items[s].Items[c].Add(vm);
+         end;
        end;
      end;
    end;
@@ -4775,7 +5105,11 @@ begin
   begin
     if ifvideo then
     begin
-      frmain.FPlayer.AudioVolume:=frmain.FPlayer.AudioVolume+1;
+      if frmain.FPlayer.GetAudioVolume()<200 then
+        frmain.FPlayer.SetAudioVolume(FPlayer.GetAudioVolume()+10);
+      FPlayer.MarqueeSetTimeOut(2000);
+      gvol:=frmain.FPlayer.GetAudioVolume();
+      FPlayer.MarqueeSetText(WideString('Volume '+inttostr(gvol)));
     end
     else
     begin
@@ -4797,7 +5131,11 @@ begin
   begin
     if ifvideo then
     begin
-      frmain.FPlayer.AudioVolume:=frmain.FPlayer.AudioVolume-1;
+      if frmain.FPlayer.GetAudioVolume()>10 then
+        frmain.FPlayer.SetAudioVolume(FPlayer.GetAudioVolume()-10);
+      FPlayer.MarqueeSetTimeOut(2000);
+      gvol:=frmain.FPlayer.GetAudioVolume();
+      FPlayer.MarqueeSetText(WideString('Volume '+inttostr(gvol)));
     end
     else
     begin
@@ -4815,6 +5153,8 @@ begin
         frmain.Image1.Left:=frmain.Image1.Left+7;
     end;
   end;
+  if ifvector then
+    reloadvector;
 end;
 
 procedure Tfrmain.ScrollBox1Paint(Sender: TObject);
@@ -5130,8 +5470,8 @@ begin
   begin
     frmain.ToolBar1.Visible:=false;
     frmain.TrackBar1.Visible:=false;
-    if ifvideo=false then
-      Screen.Cursor:=crNone;
+    //if ifvideo=false then
+    Screen.Cursor:=crNone;
   end;
 end;
 
@@ -5298,9 +5638,9 @@ begin
   end;
   if ifvideo then
   begin
-    if frmain.FPlayer.Playing then
-      frmain.FPlayer.Pause;
-    frmain.FPlayer.VideoFractionalPosition:=frmain.FPlayer.VideoFractionalPosition-0.00001;
+    if frmain.FPlayer.IsPlay() then
+      frmain.FPlayer.Pause();
+    frmain.FPlayer.SetVideoPosInMs(Fplayer.GetVideoPosInMs()-1);
   end;
   if ificoncur then
   begin
@@ -5390,10 +5730,10 @@ begin
   end;
   if ifvideo then
   begin
-    if frmain.FPlayer.Playing=false then
+    if frmain.FPlayer.IsPlay()=false then
     begin
       frmain.tbPauseAnim.ImageIndex:=21;
-      frmain.FPlayer.Play;
+      frmain.FPlayer.Resume();
       frmain.VideoTimer.Enabled:=true;
     end
     else
@@ -5431,7 +5771,7 @@ begin
   end;
   if ifvideo then
   begin
-    frmain.FPlayer.VideoFractionalPosition:=frmain.FPlayer.VideoFractionalPosition-0.01;
+    frmain.FPlayer.SetVideoPosInMs(FPlayer.GetVideoPosInMs()-10000);
   end;
 end;
 
@@ -5461,7 +5801,7 @@ begin
   end;
   if ifvideo then
   begin
-    frmain.FPlayer.VideoFractionalPosition:=frmain.FPlayer.VideoFractionalPosition+0.01;
+    frmain.FPlayer.SetVideoPosInMs(FPlayer.GetVideoPosInMs()+10000);
   end;
 end;
 
@@ -5569,7 +5909,7 @@ procedure Tfrmain.tbExitClick(Sender: TObject);
 begin
  saveconfig;
  deletetempfile;
- if frmain.FPlayer.Playing then
+ if frmain.FPlayer.IsPlay() then
    frmain.FPlayer.Stop;
  FreeANdNil(FPlayer);
   if Assigned(ththumbs) then
@@ -5596,19 +5936,14 @@ procedure Tfrmain.TrackBar1Change(Sender: TObject);
 begin
   if ifvideo then
   begin
-    frmain.FPlayer.VideoPosition:=TrackBar1.Position;
+    frmain.FPlayer.SetVideoPosInMs(TrackBar1.Position);
   end;
 end;
 
-procedure Tfrmain.TrackBar1Click(Sender: TObject);
+procedure Tfrmain.TrackBar1Enter(Sender: TObject);
 begin
-
-end;
-
-procedure Tfrmain.TrackBar1MouseDown(Sender: TObject; Button: TMouseButton;
-  Shift: TShiftState; X, Y: Integer);
-begin
-
+ frmain.TrackBar1.Enabled:=false;
+ frmain.TrackBar1.Enabled:=true;
 end;
 
 procedure Tfrmain.TrackBar1MouseUp(Sender: TObject; Button: TMouseButton;
@@ -5626,26 +5961,27 @@ var
 begin
   if ifvideo then
   begin
-    frmain.StatusBar1.Panels.Items[2].Text:=inttostr(frmain.FPlayer.VideoPosition)+'/'+inttostr(frmain.FPlayer.VideoLength);
-    if frmain.TrackBar1.Max<>frmain.Fplayer.VideoLength then
-      frmain.TrackBar1.Max:=frmain.Fplayer.VideoLength;
+    frmain.StatusBar1.Panels.Items[2].Text:=inttostr(frmain.FPlayer.GetVideoPosInMs())+'/'+inttostr(frmain.FPlayer.GetVideoLenInMs());
+    if frmain.TrackBar1.Max<>frmain.FPlayer.GetVideoLenInMs() then
+      frmain.TrackBar1.Max:=frmain.FPlayer.GetVideoLenInMs();
     frmain.TrackBar1.OnChange:=nil;
-    frmain.TrackBar1.Position:=Fplayer.VideoPosition;
+    frmain.TrackBar1.Position:=Fplayer.GetVideoPosInMs();
     frmain.TrackBar1.OnChange:=@frmain.TrackBar1Change;
     if Brepeat>Arepeat then
     begin
-      if FPlayer.VideoPosition>=Brepeat then
-        Fplayer.VideoPosition:=Arepeat;
+      if FPlayer.GetVideoPosInMs()>=Brepeat then
+        Fplayer.SetVideoPosInMs(Arepeat);
     end;
     if Arepeat=0 then
     begin
       frmain.TrackBar1.SelStart:=0;
-      frmain.TrackBar1.SelEnd:=Fplayer.VideoPosition;
+      frmain.TrackBar1.SelEnd:=Fplayer.GetVideoPosInMs();
     end;
-    if ((Fplayer.VideoPosition>=Fplayer.VideoLength) and (Fplayer.VideoLength>0)) or (Fplayer.Playing=false) then
+    //Repeat, stop or next at the end video
+    if ((Fplayer.GetVideoPosInMs()>=Fplayer.GetVideoLenInMs()) and (Fplayer.GetVideoLenInMs()>0)) or (Fplayer.IsPlay()=false) then
     begin
-      Fplayer.VideoPosition:=0;
-      Fplayer.Resume;
+      Fplayer.SetVideoPosInMs(0);
+      Fplayer.Pause;
     end;
     if (lastmposx<>mouse.CursorPos.x) or (lastmposy<>mouse.CursorPos.y) then
     begin
@@ -5708,15 +6044,15 @@ begin
   {$ELSE}
   wthumb:=carpeta+iname;
   {$ENDIF}
-  bgcolor.alpha:=255;
-  bgcolor.blue:=0;
-  bgcolor.green:=0;
-  bgcolor.red:=0;
+  bgcolor.alpha:=100;
+  bgcolor.blue:=255;
+  bgcolor.green:=255;
+  bgcolor.red:=255;
   try
     ////EXIF information
     ImgData:= TImgData.Create();
     case UpperCase(ExtractFileExt(wthumb)) of
-    '.JPG','.JPEG','.JPE','.JFIF','.BMP','.GIF','.PNG','.APNG','.MNG','.ICO','.XPM','.PBM','.PPM','.ICNS','.CUR','.TIF','.TIFF','.PCX','.TGA','.PSD','.XWD','.SVG':
+    '.JPG','.JPEG','.JPE','.JFIF','.BMP','.GIF','.PNG','.APNG','.MNG','.ICO','.XPM','.PBM','.PPM','.ICNS','.CUR','.TIF','.TIFF','.PCX','.TGA','.PSD','.XWD','.SVG','.WEBP':
       begin
         if ifzip then
         begin
@@ -5971,6 +6307,7 @@ begin
         thumbimages.AutoSize:=false;
         thumbimages.Hint:=flist[i];
         thumbimages.ShowHint:=true;
+        thumbimages.Transparent:=true;
         thumbimages.Tag:=i;
         thumbimages.Top:=2;
         thumbimages.OnClick:=@thumbimages.thumbclick;

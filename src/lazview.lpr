@@ -6,8 +6,8 @@ uses
   {$IFDEF UNIX}
   cthreads, cmem,
   {$ENDIF}
-  Forms, Interfaces, fmain, fresize, fquality, feffects,
-  fgoto, fthumbsize, print, fexif, fpass;
+  Forms, PasLibVlcPlayer, Interfaces, fmain, fresize, fquality, feffects,
+  fgoto, fthumbsize, print, fexif, fpass, abbrevia;
 
 {$R *.res}
 

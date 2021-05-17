@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: LGPL-3.0-linking-exception
 unit BGRANoGUIBitmap;
 
 {$mode objfpc}{$H+}
@@ -5,7 +6,7 @@ unit BGRANoGUIBitmap;
 interface
 
 uses
-  SysUtils, Classes, BGRAGraphics, BGRABitmapTypes, BGRADefaultBitmap,
+  SysUtils, BGRAClasses, BGRAGraphics, BGRABitmapTypes, BGRADefaultBitmap,
   BGRAFreeType, EasyLazFreeType, LazFreeTypeFontCollection,
   BGRACanvas;
 

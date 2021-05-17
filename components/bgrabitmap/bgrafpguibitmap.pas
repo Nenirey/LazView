@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: LGPL-3.0-linking-exception
 unit BGRAfpGUIBitmap;
 
 {$mode objfpc}{$H+}
@@ -5,7 +6,7 @@ unit BGRAfpGUIBitmap;
 interface
 
 uses
-  SysUtils, Classes, BGRAGraphics, BGRABitmapTypes, BGRADefaultBitmap,
+  SysUtils, BGRAClasses, BGRAGraphics, BGRABitmapTypes, BGRADefaultBitmap,
   BGRAFreeType, EasyLazFreeType, LazFreeTypeFontCollection,
   BGRACanvas;
 
@@ -83,7 +84,7 @@ procedure TBGRAfpGUIBitmap.RebuildBitmap;
 var pmask, pmaskline: PByte;
   pdata: PBGRAPixel;
   raw: TRawImage;
-  x,y,bit,masklinesize,curmaskbyte: NativeUInt;
+  x,y,bit,masklinesize,curmaskbyte: UInt32or64;
 begin
   if FBitmap.Transparent then
   begin
@@ -132,7 +133,7 @@ var
 begin
   if (ARawImage.Width <> Width) or
     (ARawImage.Height <> Height) then
-    raise Exception.Create('Bitmap size is inconsistant');
+    raise Exception.Create('Bitmap size is inconsistent');
 
   lineSize := Width*sizeof(TBGRAPixel);
   for y := 0 to Height-1 do

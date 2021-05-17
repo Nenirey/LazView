@@ -196,6 +196,10 @@ msgstr "Μετάβαση στον αριθμό εικόνας:"
 msgid "LazView"
 msgstr "LazView"
 
+#: tfrmain.fplayer.caption
+msgid "FPlayer"
+msgstr ""
+
 #: tfrmain.label1.caption
 msgctxt "tfrmain.label1.caption"
 msgid "0/0"
@@ -217,6 +221,10 @@ msgstr "Πάντα στην κορυφή"
 #: tfrmain.mnuantialiasing.caption
 msgid "Antialiasing"
 msgstr "Εξομάλυνση"
+
+#: tfrmain.mnuaudio.caption
+msgid "Audio"
+msgstr ""
 
 #: tfrmain.mnuautorotate.caption
 msgid "Auto rotate (EXIF)"
@@ -373,6 +381,10 @@ msgstr "Ανοίξετε"
 msgid "Paste"
 msgstr "Επικολλήστε"
 
+#: tfrmain.mnuplayback.caption
+msgid "Playback"
+msgstr ""
+
 #: tfrmain.mnuprint.caption
 msgctxt "tfrmain.mnuprint.caption"
 msgid "Print"
@@ -390,6 +402,10 @@ msgstr "Αποσυρθείτε πράσινο"
 msgid "Quit red"
 msgstr "Αποσυρθείτε κόκκινο"
 
+#: tfrmain.mnurandom.caption
+msgid "Random"
+msgstr ""
+
 #: tfrmain.mnurbg.caption
 msgid "Invert color (RGB)-(RBG)"
 msgstr "Αντιστροφή χρώματος (RGB)-(RBG)"
@@ -401,6 +417,14 @@ msgstr "Πραγματική λειτουργία"
 #: tfrmain.mnuredo.caption
 msgid "Redo"
 msgstr "Επανάληψη"
+
+#: tfrmain.mnurepeatall.caption
+msgid "Repeat All"
+msgstr ""
+
+#: tfrmain.mnurepeatone.caption
+msgid "Repeat one"
+msgstr ""
 
 #: tfrmain.mnuresize.caption
 msgid "Resize..."
@@ -446,6 +470,10 @@ msgstr "Γραμμή κατάστασης"
 #| msgid "Stretch image"
 msgid "Strech image"
 msgstr "Τεντώστε την εικόνα"
+
+#: tfrmain.mnusubtitle.caption
+msgid "Subtitle"
+msgstr ""
 
 #: tfrmain.mnuswirl.caption
 msgid "Swirl"
@@ -499,6 +527,10 @@ msgstr "TV"
 #: tfrmain.mnuundo.caption
 msgid "Undo"
 msgstr "αναιρέσετε"
+
+#: tfrmain.mnuvideo.caption
+msgid "Video"
+msgstr ""
 
 #: tfrmain.mnuvideosupport.caption
 msgid "Video support"
