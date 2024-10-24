@@ -16,7 +16,7 @@ function pub_build
         lazbuild --add-package-link "${REPLY}"
     done < <(find components -name "*.lpk")
     lazbuild --recursive --build-mode=release 'src/lazview.lpi'
-    #strip 'LazLock/src/lazlock'
+    strip lazview
 )
 
 function priv_main
