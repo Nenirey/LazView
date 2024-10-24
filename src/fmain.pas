@@ -8,7 +8,7 @@ uses
   StdCtrls, Menus, ExtDlgs, LazFileUtils, FileUtil, IntfGraphics, types,
   LCLType, ShellCtrls, FPImage, fresize, fquality, feffects, fgoto, fthumbsize,
   LazUTF8, PasLibVlcUnit, PasLibVlcPlayerUnit, PasLibVlcClassUnit, print, {$IFDEF WINDOWS}Registry, Windows, Windirs,
-  uThumbnailProvider{, DarkModeClasses, UXTheme} {$ENDIF},
+  uThumbnailProvider{, DarkModeClasses, UXTheme}, {$ENDIF}
   BGRABitmapTypes, BGRABitmap, BGRAThumbnail, BGRASVG, BGRAIconCursor,{BGRAAnimatedGif,}
   DateUtils, Math, ImgSize, Printers, LCLintf, fexif, INIFiles, LCLTranslator,
   Imaging, ImagingClasses, ImagingComponents, ImagingTypes, ImagingCanvases,
