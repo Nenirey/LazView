@@ -11,11 +11,11 @@ EOF
 
 function pub_build
 (
-    wget 'https://packages.lazarus-ide.org/Abbrevia.zip'
-    unzip -o 'Abbrevia.zip' -d 'use/Abbrevia'
     git submodule update --init --recursive
-    find 'use' -type 'f' -name '*.lpk' -exec lazbuild --add-package-link {} \;
-    find 'src' -type 'f' -name '*.lpi' -exec lazbuild --recursive --build-mode=release {} \;
+    while read -r; do
+        lazbuild --add-package-link "${REPLY}"
+    done < <(find components -name "*.lpk")
+    lazbuild --recursive --build-mode=release 'src/lazview.lpi'
     strip lazview
 )
 

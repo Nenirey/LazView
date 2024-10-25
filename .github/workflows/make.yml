@@ -31,3 +31,9 @@ jobs:
       if: runner.os == 'Linux'
       shell: bash
       run: bash -x make.sh build
+
+    - name: Archive
+      uses: actions/upload-artifact@v4
+      with:
+        retention-days: 1
+        path: bin/x86_64-linux/Hex
