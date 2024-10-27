@@ -18,9 +18,9 @@ function priv_use
             [out]=$(mktemp)
             [dir]=${item##/*}
         )
-        wget --output-document "VAR[out]" "VAR[url]"
-        unzip -o "VAR[out]" -d "components/${VAR[dir]}"
-        rm --verbose "VAR[out]"
+        wget --output-document "${VAR[out]}" "${VAR[url]}"
+        unzip -o "${VAR[out]}" -d "components/${VAR[dir]}"
+        rm --verbose "${VAR[out]}"
     done
 )
 
