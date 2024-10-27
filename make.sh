@@ -12,11 +12,8 @@ EOF
 function pub_build
 (
     git submodule update --init --recursive
-    while read -r; do
-        lazbuild --add-package-link "${REPLY}"
-    done < <(find components -name "*.lpk")
-    lazbuild --recursive --build-mode=release 'src/lazview.lpi'
-    strip lazview
+    find 'components' -type 'f' -name '*.lpk' -exec lazbuild --add-package-link {} \;
+    find 'src' -type 'f' -name '*.lpi' -exec lazbuild --recursive --build-mode=release {} \;
 )
 
 function priv_main
