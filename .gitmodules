@@ -1,6 +1,6 @@
 [submodule "use/dexif"]
-	path = use/dexif
-	url = https://github.com/cutec-chris/dexif.git
+    path = use/dexif
+    url = https://github.com/cutec-chris/dexif.git
 [submodule "use/imaginglib"]
-	path = use/imaginglib
-	url = https://github.com/galfar/imaginglib.git
+    path = use/imaginglib
+    url = https://github.com/galfar/imaginglib.git
