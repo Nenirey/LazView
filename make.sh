@@ -9,28 +9,25 @@ Options:
 EOF
 )
 
-function pub_build
-(
-    git submodule update --init --recursive
-    find 'components' -type 'f' -name '*.lpk' -exec lazbuild --add-package-link {} \;
-    find 'src' -type 'f' -name '*.lpi' -exec lazbuild --recursive --build-mode=release {} \;
-)
-
 function priv_main
 (
     set -euo pipefail
-    if !(which lazbuild); then
-        source '/etc/os-release'
-        case ${ID:?} in
-            debian | ubuntu)
-                sudo apt-get update
-                sudo apt-get install -y lazarus
-            ;;
-        esac
-    fi
     if ((${#})); then
         case ${1} in
-            build) pub_build 1>&2 ;;
+            build)
+                if !(which lazbuild); then
+                    source '/etc/os-release'
+                    case ${ID:?} in
+                        debian | ubuntu)
+                            sudo apt-get update
+                            sudo apt-get install -y lazarus
+                        ;;
+                    esac
+                fi
+                git submodule update --init --recursive
+                find 'use' -type 'f' -name '*.lpk' -exec lazbuild --add-package-link {} +
+                find 'src' -type 'f' -name '*.lpi' -exec lazbuild --recursive --build-mode=release {} + 1>&2
+                ;;
         esac
     else
         priv_clippit
