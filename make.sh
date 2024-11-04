@@ -24,7 +24,8 @@ function priv_main
                         ;;
                     esac
                 fi
-                git submodule update --init --recursive
+                git submodule update --recursive --init
+                git submodule update --recursive --remote
                 find 'use' -type 'f' -name '*.lpk' -exec lazbuild --add-package-link {} +
                 find 'src' -type 'f' -name '*.lpi' -exec lazbuild --recursive --build-mode=release {} + 1>&2
                 ;;
