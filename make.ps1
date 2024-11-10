@@ -51,21 +51,13 @@ Function Build-Project {
         & git submodule update --recursive --init | Out-Host
         & git submodule update --recursive --remote | Out-Host
         Get-Content -Path 'use\components.txt' | ForEach-Object {
-            If ($_) {
-                Try {
-                    & lazbuild --verbose-pkgsearch $_ | Out-Null
-                } Catch {
-                    Try {
-                        & lazbuild --add-package $_ | Out-Host
-                    } Catch {
-                        If (-not (Test-Path -Path "use\$($_)")) {
-                            $OutFile = Request-File "https://packages.lazarus-ide.org/$($_).zip"
-                            Expand-Archive -Path $OutFile -DestinationPath "use\$($_)" -Force
-                            Remove-Item $OutFile
-                        }
-                    }
+            If ((-not (& lazbuild --verbose-pkgsearch $_)) -and
+                (-not (& lazbuild --add-package $_)) -and
+                (-not (Test-Path -Path 'use\components.txt'))) {
+                    $OutFile = Request-File "https://packages.lazarus-ide.org/$($_).zip"
+                    Expand-Archive -Path $OutFile -DestinationPath "use\$($_)" -Force
+                    Remove-Item $OutFile
                 }
-            }
         }
         Get-ChildItem -Filter '*.lpk' -Recurse -File –Path 'use' | ForEach-Object {
             & lazbuild --add-package-link $_ | Out-Host
