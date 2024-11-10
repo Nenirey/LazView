@@ -1,3 +1,4 @@
 DExif
 VampyreImaging
 BGRABitmap
+Abbrevia

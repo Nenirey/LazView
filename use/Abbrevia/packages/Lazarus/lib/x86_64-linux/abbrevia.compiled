@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CONFIG>
-  <Lazarus Version="3.6"/>
-  <Compiler Value="/usr/bin/fpc" Date="1722038400"/>
-  <Params Value=" -MObjFPC -Scghi -Cg -O1 -g -gl -l -vewnhibq -Fu/home/tux/LazView/use/Abbrevia/source -Fu/home/tux/.lazarus/lib/units/x86_64-linux -Fu/home/tux/.lazarus/lib/LazUtils/lib/x86_64-linux -Fu/home/tux/.lazarus/lib/freetypelaz/lib/x86_64-linux -Fu/home/tux/.lazarus/lib/LCLBase/units/x86_64-linux -Fu/home/tux/.lazarus/lib/units/x86_64-linux/gtk2 -Fu/home/tux/LazView/use/Abbrevia/packages/Lazarus/ -FU/home/tux/LazView/use/Abbrevia/packages/Lazarus/lib/x86_64-linux/ -dLCL -dLCLgtk2 abbrevia.pas"/>
-</CONFIG>
