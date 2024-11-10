@@ -1,1 +1,3 @@
 DExif
+VampyreImaging
+BGRABitmap

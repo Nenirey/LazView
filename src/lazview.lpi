@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <ProjectOptions>
-    <Version Value="11"/>
+    <Version Value="12"/>
     <General>
+      <Flags>
+        <CompatibilityMode Value="True"/>
+      </Flags>
       <SessionStorage Value="InProjectDir"/>
-      <MainUnit Value="0"/>
       <Title Value="LazView"/>
       <Scaled Value="True"/>
       <ResourceType Value="res"/>
@@ -82,25 +84,28 @@
         </Mode0>
       </Modes>
     </RunParams>
-    <RequiredPackages Count="6">
+    <RequiredPackages Count="7">
       <Item1>
-        <PackageName Value="PasLibVlcPlayer"/>
+        <PackageName Value="BGRABitmapPack"/>
       </Item1>
       <Item2>
-        <PackageName Value="Abbrevia"/>
+        <PackageName Value="PasLibVlcPlayer"/>
       </Item2>
       <Item3>
-        <PackageName Value="VampyreImagingPackage"/>
+        <PackageName Value="Abbrevia"/>
       </Item3>
       <Item4>
-        <PackageName Value="dexif_package"/>
+        <PackageName Value="VampyreImagingPackage"/>
       </Item4>
       <Item5>
-        <PackageName Value="Printer4Lazarus"/>
+        <PackageName Value="dexif_package"/>
       </Item5>
       <Item6>
-        <PackageName Value="LCL"/>
+        <PackageName Value="Printer4Lazarus"/>
       </Item6>
+      <Item7>
+        <PackageName Value="LCL"/>
+      </Item7>
     </RequiredPackages>
     <Units Count="13">
       <Unit0>
