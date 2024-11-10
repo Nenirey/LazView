@@ -1,0 +1,4 @@
+DExif
+VampyreImaging
+BGRABitmap
+Abbrevia
