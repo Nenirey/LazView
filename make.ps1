@@ -70,7 +70,7 @@ Function Build-Project {
 
 Function Switch-Action {
     $ErrorActionPreference = 'stop'
-    Set-PSDebug -Strict -Trace 1
+    Set-PSDebug -Strict -Trace 2
     Invoke-ScriptAnalyzer -EnableExit -Path $PSCommandPath
     If ($args.count -gt 0) {
         Switch ($args[0]) {
