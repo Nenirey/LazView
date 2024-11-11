@@ -64,9 +64,7 @@ Function Build-Project {
         }
     }
     Get-ChildItem -Filter '*.lpi' -Recurse -File –Path 'src' | ForEach-Object {
-        If (! (& lazbuild --no-write-project --recursive --build-mode=release $_)) {
-            throw "Error!"
-        }
+        & lazbuild --no-write-project --recursive --build-mode=release $_ | Out-Host
     }
 }
 
