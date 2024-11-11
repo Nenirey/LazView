@@ -24,10 +24,10 @@ Function Install-Program {
     While ($Input.MoveNext()) {
         Switch ((Split-Path -Path $Input.Current -Leaf).Split('.')[-1]) {
             'msi' {
-                & msiexec /passive /package $Input.Current | Out-Host
+                & msiexec /passive /package $Input.Current
             }
             'exe' {
-                & ".\$($Input.Current)" /SP- /VERYSILENT /SUPPRESSMSGBOXES /NORESTART | Out-Host
+                & ".\$($Input.Current)" /SP- /VERYSILENT /SUPPRESSMSGBOXES /NORESTART
             }
         }
         Remove-Item $Input.Current
@@ -48,19 +48,19 @@ Function Build-Project {
         Get-Command $VAR.Cmd
     }
     If ( Test-Path -Path 'use\components.txt' ) {
-        & git submodule update --recursive --init | Out-Host
-        & git submodule update --recursive --remote | Out-Host
+        & git submodule update --recursive --init
+        & git submodule update --recursive --remote
         Get-Content -Path 'use\components.txt' | ForEach-Object {
-            If ((-not (& lazbuild --verbose-pkgsearch $_)) -and
-                (-not (& lazbuild --add-package $_)) -and
-                (-not (Test-Path -Path 'use\components.txt'))) {
+            If ((! (& lazbuild --verbose-pkgsearch $_)) &&
+                (! (& lazbuild --add-package $_)) &&
+                (! (Test-Path -Path 'use\components.txt'))) {
                     $OutFile = Request-File "https://packages.lazarus-ide.org/$($_).zip"
                     Expand-Archive -Path $OutFile -DestinationPath "use\$($_)" -Force
                     Remove-Item $OutFile
                 }
         }
         Get-ChildItem -Filter '*.lpk' -Recurse -File –Path 'use' | ForEach-Object {
-            & lazbuild --add-package-link $_ | Out-Host
+            & lazbuild --add-package-link $_
         }
     }
     Get-ChildItem -Filter '*.lpi' -Recurse -File –Path 'src' | ForEach-Object {
