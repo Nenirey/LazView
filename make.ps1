@@ -64,10 +64,7 @@ Function Build-Project {
         }
     }
     Get-ChildItem -Filter '*.lpi' -Recurse -File –Path 'src' | ForEach-Object {
-        If (& lazbuild --no-write-project --recursive --build-mode=release $_) {
-            $StackTrace | Out-Host
-        } Else {
-            $StackTrace | Out-Host
+        If (! (& lazbuild --no-write-project --recursive --build-mode=release $_)) {
             throw "Error!"
         }
     }
@@ -92,4 +89,4 @@ Function Switch-Action {
 }
 
 ##############################################################################################################
-Switch-Action @args | Out-Null
+Switch-Action @args
