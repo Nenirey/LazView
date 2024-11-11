@@ -24,10 +24,10 @@ Function Install-Program {
     While ($Input.MoveNext()) {
         Switch ((Split-Path -Path $Input.Current -Leaf).Split('.')[-1]) {
             'msi' {
-                & msiexec /passive /package $Input.Current
+                & msiexec /passive /package $Input.Current | Out-Host
             }
             'exe' {
-                & ".\$($Input.Current)" /SP- /VERYSILENT /SUPPRESSMSGBOXES /NORESTART
+                & ".\$($Input.Current)" /SP- /VERYSILENT /SUPPRESSMSGBOXES /NORESTART | Out-Host
             }
         }
         Remove-Item $Input.Current
@@ -48,8 +48,8 @@ Function Build-Project {
         Get-Command $VAR.Cmd
     }
     If ( Test-Path -Path 'use\components.txt' ) {
-        & git submodule update --recursive --init
-        & git submodule update --recursive --remote
+        & git submodule update --recursive --init | Out-Host
+        & git submodule update --recursive --remote | Out-Host
         Get-Content -Path 'use\components.txt' | ForEach-Object {
             If ((! (& lazbuild --verbose-pkgsearch $_)) &&
                 (! (& lazbuild --add-package $_)) &&
@@ -60,17 +60,19 @@ Function Build-Project {
                 }
         }
         Get-ChildItem -Filter '*.lpk' -Recurse -File –Path 'use' | ForEach-Object {
-            & lazbuild --add-package-link $_
+            & lazbuild --add-package-link $_ | Out-Host
         }
     }
     Get-ChildItem -Filter '*.lpi' -Recurse -File –Path 'src' | ForEach-Object {
-        & lazbuild --no-write-project --recursive --build-mode=release $_ | Out-Host
+        If (! (& lazbuild --no-write-project --recursive --build-mode=release $_)) {
+            throw "Error!"
+        }
     }
 }
 
 Function Switch-Action {
     $ErrorActionPreference = 'stop'
-    Set-PSDebug -Strict -Trace 2
+    Set-PSDebug -Strict -Trace 1
     Invoke-ScriptAnalyzer -EnableExit -Path $PSCommandPath
     If ($args.count -gt 0) {
         Switch ($args[0]) {
