@@ -27,7 +27,7 @@ function priv_lazbuild
             if [[ -n "${REPLY}" ]] &&
                 ! (lazbuild --verbose-pkgsearch "${REPLY}") &&
                 ! (lazbuild --add-package "${REPLY}") &&
-                ! [[ -f "use/${REPLY}" ]]; then
+                ! [[ -e "use/${REPLY}" ]]; then
                     declare -A VAR=(
                         [url]="https://packages.lazarus-ide.org/${REPLY}.zip"
                         [out]=$(mktemp)
