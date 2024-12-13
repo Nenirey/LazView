@@ -28,3 +28,4 @@ docs/_build/
 *.bak
 *.ppu
 *.old
+**.compiled
