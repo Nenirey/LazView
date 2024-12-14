@@ -2,6 +2,7 @@
 *.so
 
 # Unit test / coverage reports
+use/*/
 htmlcov/
 .tox/
 .coverage
@@ -27,3 +28,4 @@ docs/_build/
 *.bak
 *.ppu
 *.old
+**.compiled
