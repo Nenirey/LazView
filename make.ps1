@@ -77,7 +77,7 @@ Function Build-Project {
         }
         (Get-ChildItem -Filter '*.lpk' -Recurse -File –Path $Env:Use).FullName |
             ForEach-Object {
-                & lazbuild --add-package-link $_ | Out-Host
+                & lazbuild --add-package-link $_ | Out-Null
                 Return ".... [$($LastExitCode)] add package link $($_)"
             } | Out-Host
     }
