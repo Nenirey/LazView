@@ -52,7 +52,7 @@ Function Build-Project {
         ".... [[$($LastExitCode)]] git submodule update" | Out-Host
     }
     $Env:Ext = '0'
-    $Env:Src = 'source'
+    $Env:Src = 'src'
     $Env:Use = 'use'
     $Env:Pkg = 'use\components.txt'
     If (Test-Path -Path $Env:Use) {

@@ -25,7 +25,7 @@ function priv_lazbuild
     fi
     wait
     declare -rA VAR=(
-        [src]='source'
+        [src]='src'
         [use]='use'
         [pkg]='use/components.txt'
     )
@@ -99,5 +99,4 @@ function priv_main
     fi
 )
 
-clear
 priv_main "${@}" >/dev/null
